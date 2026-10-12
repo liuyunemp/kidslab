@@ -10,7 +10,7 @@
   },
   "category": "math",
   "levels": ["primary"],
-  "grades": ["g1", "g2"],
+  "grades": ["g1", "g2", "g1a"],
   "tags": ["加减法", "计量单位", "益智游戏"],
   "icon": "🪙",
   "order": 14,

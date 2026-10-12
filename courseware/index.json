@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17T02:53:13.932Z",
+  "generatedAt": "2026-10-12T01:16:53.442Z",
   "tags": {
     "3D": {
       "en": "3D",
@@ -7,6 +7,10 @@
     },
     "DNA": {
       "en": "DNA",
+      "kind": "knowledge"
+    },
+    "七巧板": {
+      "en": "Tangram",
       "kind": "knowledge"
     },
     "万有引力": {
@@ -33,8 +37,16 @@
       "en": "Human Body",
       "kind": "knowledge"
     },
+    "人民币": {
+      "en": "Currency (RMB)",
+      "kind": "knowledge"
+    },
     "估算": {
       "en": "Estimation",
+      "kind": "knowledge"
+    },
+    "位置": {
+      "en": "Position & Direction",
       "kind": "knowledge"
     },
     "体积": {
@@ -221,6 +233,10 @@
       "en": "Ohm's Law",
       "kind": "knowledge"
     },
+    "比大小": {
+      "en": "Compare Numbers",
+      "kind": "knowledge"
+    },
     "水循环": {
       "en": "Water Cycle",
       "kind": "knowledge"
@@ -309,6 +325,10 @@
       "en": "Units & Measurement",
       "kind": "knowledge"
     },
+    "识字": {
+      "en": "Character Recognition",
+      "kind": "knowledge"
+    },
     "调试": {
       "en": "Debugging",
       "kind": "knowledge"
@@ -319,6 +339,10 @@
     },
     "质量守恒": {
       "en": "Conservation of Mass",
+      "kind": "knowledge"
+    },
+    "轻重": {
+      "en": "Weight & Balance",
       "kind": "knowledge"
     },
     "运动": {
@@ -442,9 +466,9 @@
         "primary"
       ],
       "grades": [
-        "g3",
+        "g3a",
         "g5",
-        "g6"
+        "g6a"
       ],
       "tags": [
         "分数",
@@ -482,7 +506,8 @@
         "primary"
       ],
       "grades": [
-        "g1"
+        "g1",
+        "g1a"
       ],
       "tags": [
         "加减法",
@@ -696,7 +721,8 @@
       ],
       "grades": [
         "g1",
-        "g2"
+        "g2",
+        "g1a"
       ],
       "tags": [
         "加减法",
@@ -832,7 +858,8 @@
       ],
       "grades": [
         "g1",
-        "g2"
+        "g2",
+        "g1a"
       ],
       "tags": [
         "立体图形",
@@ -1115,7 +1142,8 @@
       ],
       "grades": [
         "g1",
-        "g2"
+        "g2",
+        "g1a"
       ],
       "tags": [
         "时间"
@@ -5632,6 +5660,160 @@
         "three.js"
       ],
       "path": "courseware/microscope-cell-lab/index.html"
+    },
+    {
+      "id": "g1-math",
+      "title": {
+        "zh": "一年级数学闯关",
+        "en": "Grade 1 Math Quest"
+      },
+      "description": {
+        "zh": "和吉祥物小狐一起闯关：数一数、比大小、加减法、认时钟、找规律、比轻重、认方向、认钱币、认图形、玩七巧板。答对有星星和金币，答错只有温柔提示，绝不批评。",
+        "en": "Adventure with Foxy: counting, comparing, add & subtract, clocks, patterns, weight, directions, coins, shapes and tangram. Earn stars and coins; gentle hints, never punished."
+      },
+      "category": "math",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1"
+      ],
+      "tags": [
+        "数的认识",
+        "加减法",
+        "时间",
+        "找规律",
+        "平面图形",
+        "立体图形",
+        "比大小",
+        "轻重",
+        "位置",
+        "人民币",
+        "七巧板"
+      ],
+      "icon": "🧮",
+      "order": 200,
+      "keywords": [
+        "Numbers & Counting",
+        "百数表",
+        "hundred chart",
+        "数序",
+        "number order",
+        "100以内的数",
+        "counting",
+        "Addition & Subtraction",
+        "addition",
+        "subtraction",
+        "凑十法",
+        "make ten",
+        "数的分解",
+        "number bonds",
+        "Time & Clocks",
+        "telling time",
+        "clock",
+        "认识钟表",
+        "整时",
+        "半时",
+        "hours",
+        "minutes",
+        "作息",
+        "Patterns",
+        "patterns",
+        "模式识别",
+        "pattern recognition",
+        "逻辑启蒙",
+        "2D Shapes",
+        "2d shapes",
+        "长方形",
+        "rectangle",
+        "3D Shapes",
+        "3d shapes",
+        "长方体",
+        "圆柱",
+        "cylinder",
+        "圆锥",
+        "cone",
+        "旋转体",
+        "solids of revolution",
+        "voxels",
+        "Compare Numbers",
+        "比大小",
+        "大于",
+        "小于",
+        "等于",
+        "compare numbers",
+        "greater than",
+        "less than",
+        "Weight & Balance",
+        "轻重",
+        "比轻重",
+        "重",
+        "轻",
+        "heavier",
+        "lighter",
+        "weight",
+        "Position & Direction",
+        "位置",
+        "方向",
+        "前后左右",
+        "上下",
+        "position",
+        "direction",
+        "front",
+        "back",
+        "left",
+        "right",
+        "up",
+        "down",
+        "Currency (RMB)",
+        "人民币",
+        "元角分",
+        "钱币",
+        "钱",
+        "money",
+        "coins",
+        "yuan",
+        "jiao",
+        "fen",
+        "Tangram",
+        "七巧板",
+        "tangram",
+        "拼图"
+      ],
+      "path": "courseware/g1-math/index.html"
+    },
+    {
+      "id": "g1-chinese",
+      "title": {
+        "zh": "一年级语文闯关",
+        "en": "Grade 1 Chinese Quest"
+      },
+      "description": {
+        "zh": "和吉祥物小狐一起认生字：天地人、金木水火土、口耳目、日月水火、对韵歌。看图配字、看字配图，答对集星星，答错有温柔提示。",
+        "en": "Adventure with Foxy to learn characters: heaven/earth/person, the five elements, face parts, sun/moon/water/fire, and rhyming couplets. Match picture to character; earn stars, gentle hints."
+      },
+      "category": "chinese",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a"
+      ],
+      "tags": [
+        "识字"
+      ],
+      "icon": "📚",
+      "order": 201,
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters"
+      ],
+      "path": "courseware/g1-chinese/index.html"
     }
   ]
 }

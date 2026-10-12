@@ -1,0 +1,33 @@
+{
+  "id": "g1-math",
+  "title": {
+    "zh": "一年级数学闯关",
+    "en": "Grade 1 Math Quest"
+  },
+  "description": {
+    "zh": "和吉祥物小狐一起闯关：数一数、比大小、加减法、认时钟、找规律、比轻重、认方向、认钱币、认图形、玩七巧板。答对有星星和金币，答错只有温柔提示，绝不批评。",
+    "en": "Adventure with Foxy: counting, comparing, add & subtract, clocks, patterns, weight, directions, coins, shapes and tangram. Earn stars and coins; gentle hints, never punished."
+  },
+  "category": "math",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1"
+  ],
+  "tags": [
+    "数的认识",
+    "加减法",
+    "时间",
+    "找规律",
+    "平面图形",
+    "立体图形",
+    "比大小",
+    "轻重",
+    "位置",
+    "人民币",
+    "七巧板"
+  ],
+  "icon": "🧮",
+  "order": 200
+}

@@ -12,6 +12,7 @@
     accent: 'kidslab.accent',
     level: 'kidslab.level',
     grade: 'kidslab.grade',
+    term: 'kidslab.term',
     collapsed: 'kidslab.sidebar',
   };
   const PROGRESS_PREFIX = 'kidslab.progress.';
@@ -54,6 +55,8 @@
     { id: 'g12', level: 'senior' },
   ];
   const GRADE_IDS = new Set(GRADES.map((g) => g.id));
+  const TERMS = [{ id: 'a' }, { id: 'b' }];
+  const TERM_IDS = new Set(TERMS.map((tm) => tm.id));
   const LEVEL_GRADE_IDS = Object.fromEntries(LEVELS.map((lv) => [lv, new Set(GRADES.filter((g) => g.level === lv).map((g) => g.id))]));
   const CN_GRADES = new Map([
     ['一年级', 'g1'], ['二年级', 'g2'], ['三年级', 'g3'],
@@ -73,9 +76,10 @@
     { id: 'programming', icon: '💻', color: 'var(--c-programming)' },
     { id: 'science',     icon: '🔬', color: 'var(--c-science)' },
     { id: 'logic',       icon: '🧩', color: 'var(--c-logic)' },
+    { id: 'chinese',     icon: '📚', color: 'var(--c-chinese)' },
   ];
   /* 小学只显示这些分类（含两个特殊快捷项） */
-  const PRIMARY_CATS = new Set(['all', 'recent', 'newest', 'math', 'programming', 'science', 'logic']);
+  const PRIMARY_CATS = new Set(['all', 'recent', 'newest', 'math', 'chinese', 'programming', 'science', 'logic']);
   const CAT_IDS = new Set(CATS.map((c) => c.id));
 
   const ACCENTS = [
@@ -95,6 +99,7 @@
       docTitle: 'KidsLab · 互动课件学习乐园',
       secLevel: '学段',
       secGrade: '年级',
+      secTerm: '学期',
       secCats: '分类',
       searchPh: '搜索课件：分数、单摆、编程……',
       heroTitle: {
@@ -127,10 +132,12 @@
         g1: '一年级', g2: '二年级', g3: '三年级', g4: '四年级', g5: '五年级', g6: '六年级',
         g7: '七年级', g8: '八年级', g9: '九年级', g10: '高一', g11: '高二', g12: '高三',
       },
+      termAll: '全部学期',
+      terms: { a: '上册', b: '下册' },
       cats: {
         all: '全部', recent: '最近探索的', newest: '最新创建的',
         math: '数学', physics: '物理', chemistry: '化学',
-        programming: '编程', science: '科学', logic: '逻辑', featured: '精选',
+        programming: '编程', science: '科学', logic: '逻辑', chinese: '语文', featured: '精选',
       },
     },
     en: {
@@ -139,6 +146,7 @@
       docTitle: 'KidsLab · Interactive Courseware Playground',
       secLevel: 'Stage',
       secGrade: 'Grade',
+      secTerm: 'Term',
       secCats: 'Subjects',
       searchPh: 'Search: fractions, pendulum, coding…',
       heroTitle: {
@@ -171,10 +179,12 @@
         g1: 'Grade 1', g2: 'Grade 2', g3: 'Grade 3', g4: 'Grade 4', g5: 'Grade 5', g6: 'Grade 6',
         g7: 'Grade 7', g8: 'Grade 8', g9: 'Grade 9', g10: 'Grade 10', g11: 'Grade 11', g12: 'Grade 12',
       },
+      termAll: 'All terms',
+      terms: { a: 'Fall', b: 'Spring' },
       cats: {
         all: 'All', recent: 'Recently explored', newest: 'Newly created',
         math: 'Math', physics: 'Physics', chemistry: 'Chemistry',
-        programming: 'Coding', science: 'Science', logic: 'Logic', featured: 'Featured',
+        programming: 'Coding', science: 'Science', logic: 'Logic', chinese: 'Chinese', featured: 'Featured',
       },
     },
   };
@@ -187,6 +197,7 @@
     accent: local.get(LS.accent) || 'candy',
     level: params.get('level') || local.get(LS.level) || 'primary',
     grade: params.get('grade') || local.get(LS.grade) || 'all',
+    term: params.get('term') || local.get(LS.term) || 'all',
     cat: params.get('cat') || session.get('kidslab.cat') || 'all',
     q: params.get('q') ?? session.get('kidslab.q') ?? '',
     courses: [],
@@ -194,6 +205,7 @@
   if (!LEVELS.includes(state.level)) state.level = 'primary';
   if (state.grade !== 'all' && !GRADE_IDS.has(state.grade)) state.grade = 'all';
   if (state.grade !== 'all' && !LEVEL_GRADE_IDS[state.level]?.has(state.grade)) state.grade = 'all';
+  if (state.term !== 'all' && (state.grade === 'all' || !TERM_IDS.has(state.term))) state.term = 'all';
   if (!['zh', 'en'].includes(state.lang)) state.lang = 'zh';
   if (!CAT_IDS.has(state.cat)) state.cat = 'all';
   if (!ACCENTS.some((a) => a.id === state.accent)) state.accent = 'candy';
@@ -205,6 +217,7 @@
     app: $('#app'), sidebar: $('#sidebar'), backdrop: $('#backdrop'),
     levelSeg: $('#levelSeg'), catList: $('#catList'), accentRow: $('#accentRow'),
     gradeSec: $('#gradeSec'), gradeList: $('#gradeList'),
+    termSec: $('#termSec'), termList: $('#termList'),
     grid: $('#grid'), empty: $('#emptyBox'), search: $('#searchInput'),
     heroTitle: $('#heroTitle'), crumb: $('#crumb'), countText: $('#countText'),
     courseTotal: $('#courseTotal'), clearProgress: $('#clearProgressBtn'),
@@ -232,11 +245,13 @@
     local.set(LS.accent, state.accent);
     local.set(LS.level, state.level);
     local.set(LS.grade, state.grade);
+    local.set(LS.term, state.term);
     session.set('kidslab.cat', state.cat);
     session.set('kidslab.q', state.q);
     const p = new URLSearchParams();
     if (state.level !== 'primary') p.set('level', state.level);
     if (state.grade !== 'all') p.set('grade', state.grade);
+    if (state.term !== 'all') p.set('term', state.term);
     if (state.cat !== 'all') p.set('cat', state.cat);
     if (state.q) p.set('q', state.q);
     history.replaceState(null, '', p.size ? `?${p}` : location.pathname);
@@ -254,7 +269,7 @@
       b.setAttribute('aria-checked', String(state.level === lv));
       b.addEventListener('click', () => {
         state.level = lv;
-        if (state.grade !== 'all' && !LEVEL_GRADE_IDS[lv]?.has(state.grade)) state.grade = 'all';
+        if (state.grade !== 'all' && !LEVEL_GRADE_IDS[lv]?.has(state.grade)) { state.grade = 'all'; state.term = 'all'; }
         if (lv === 'primary' && !PRIMARY_CATS.has(state.cat)) state.cat = 'all';
         update();
       });
@@ -270,12 +285,17 @@
     const lower = raw.toLowerCase();
     if (GRADE_IDS.has(lower)) return lower;
     const compact = lower.replace(/\s+/g, '');
-    const en = compact.match(/^(?:grade|g)([1-9]|1[0-2])$/);
-    if (en) return `g${en[1]}`;
+    const en = compact.match(/^(?:grade|g)([1-9]|1[0-2])([ab])?$/);
+    if (en) return `g${en[1]}${en[2] || ''}`;
     const ordinal = lower.match(/\b([1-9]|1[0-2])(?:st|nd|rd|th)?\s*grade\b/);
     if (ordinal) return `g${ordinal[1]}`;
     return CN_GRADES.get(raw) || null;
   }
+
+  const splitGrade = (token) => {
+    const m = /^(g(?:[1-9]|1[0-2]))([ab])?$/.exec(String(token || ''));
+    return m ? { grade: m[1], term: m[2] || null } : { grade: null, term: null };
+  };
 
   function courseGrades(c) {
     if (c._gradeSet) return c._gradeSet;
@@ -297,23 +317,38 @@
     return grades;
   }
 
-  const inGrade = (c) => state.grade === 'all' || courseGrades(c).has(state.grade);
+  // 课件是否覆盖某年级（整年级标记或任一册标记都算）
+  const courseHasGrade = (c, gradeId) => {
+    const set = courseGrades(c);
+    return set.has(gradeId) || set.has(`${gradeId}a`) || set.has(`${gradeId}b`);
+  };
+  // 该课件是否为某年级带了具体册标记（用于决定是否展示上下册切换）
+  const courseHasTerm = (c, gradeId) => courseGrades(c).has(`${gradeId}a`) || courseGrades(c).has(`${gradeId}b`);
+
+  function inGrade(c) {
+    if (state.grade === 'all') return true;
+    if (state.term === 'all') return courseHasGrade(c, state.grade);
+    // 选中具体册：整年级标记覆盖全部册，或命中该具体册
+    const set = courseGrades(c);
+    return set.has(state.grade) || set.has(`${state.grade}${state.term}`);
+  }
 
   function availableGrades() {
     return GRADES.filter((g) =>
       g.level === state.level &&
-      state.courses.some((c) => !c.pinned && inLevel(c) && courseGrades(c).has(g.id)));
+      state.courses.some((c) => !c.pinned && inLevel(c) && courseHasGrade(c, g.id)));
   }
 
   function renderGrades() {
     const grades = availableGrades();
     if (!grades.length) {
       state.grade = 'all';
+      state.term = 'all';
       el.gradeList.innerHTML = '';
       el.gradeSec.hidden = true;
       return;
     }
-    if (!gradeInLevel(state.grade) || (state.grade !== 'all' && !grades.some((g) => g.id === state.grade))) state.grade = 'all';
+    if (!gradeInLevel(state.grade) || (state.grade !== 'all' && !grades.some((g) => g.id === state.grade))) { state.grade = 'all'; state.term = 'all'; }
     el.gradeSec.hidden = false;
     el.gradeList.innerHTML = '';
 
@@ -323,7 +358,7 @@
       ...grades.map((g) => ({
         id: g.id,
         label: t().grades[g.id],
-        count: state.courses.filter((c) => inCurrentScope(c) && courseGrades(c).has(g.id)).length,
+        count: state.courses.filter((c) => inCurrentScope(c) && courseHasGrade(c, g.id)).length,
       })),
     ];
 
@@ -335,8 +370,47 @@
       b.innerHTML = '<span class="grade__name"></span><span class="grade__count"></span>';
       b.querySelector('.grade__name').textContent = opt.label;
       b.querySelector('.grade__count').textContent = opt.count;
-      b.addEventListener('click', () => { state.grade = opt.id; closeDrawer(); update(); });
+      b.addEventListener('click', () => { state.grade = opt.id; state.term = 'all'; closeDrawer(); update(); });
       el.gradeList.appendChild(b);
+    }
+  }
+
+  function renderTerms() {
+    if (!el.termSec) return;
+    // 仅当选中具体年级、且该年级下有带册标记的课件时展示上下册切换
+    const hasTermCourses = state.grade !== 'all'
+      && state.courses.some((c) => !c.pinned && inLevel(c) && courseHasTerm(c, state.grade));
+    if (!hasTermCourses) {
+      state.term = 'all';
+      el.termList.innerHTML = '';
+      el.termSec.hidden = true;
+      return;
+    }
+    if (state.term !== 'all' && !TERM_IDS.has(state.term)) state.term = 'all';
+    el.termSec.hidden = false;
+    el.termList.innerHTML = '';
+
+    const inCurrentScope = (c) => !c.pinned && inLevel(c) && matchesCat(c, state.cat) && courseHasGrade(c, state.grade);
+    const countTerm = (termId) => state.courses.filter((c) => {
+      if (!inCurrentScope(c)) return false;
+      const set = courseGrades(c);
+      return set.has(state.grade) || set.has(`${state.grade}${termId}`);
+    }).length;
+    const options = [
+      { id: 'all', label: t().termAll, count: state.courses.filter(inCurrentScope).length },
+      ...TERMS.map((tm) => ({ id: tm.id, label: t().terms[tm.id], count: countTerm(tm.id) })),
+    ];
+
+    for (const opt of options) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.role = 'radio';
+      b.setAttribute('aria-checked', String(state.term === opt.id));
+      b.innerHTML = '<span class="grade__name"></span><span class="grade__count"></span>';
+      b.querySelector('.grade__name').textContent = opt.label;
+      b.querySelector('.grade__count').textContent = opt.count;
+      b.addEventListener('click', () => { state.term = opt.id; closeDrawer(); update(); });
+      el.termList.appendChild(b);
     }
   }
 
@@ -379,7 +453,12 @@
     const hay = [
       c.title?.zh, c.title?.en, c.description?.zh, c.description?.en,
       ...(c.tags || []), ...(c.keywords || []), t().cats[c.category] || c.category,
-      ...Array.from(courseGrades(c)).flatMap((g) => [I18N.zh.grades[g], I18N.en.grades[g], g]),
+      ...Array.from(courseGrades(c)).flatMap((tok) => {
+        const { grade, term } = splitGrade(tok);
+        const base = grade ? [I18N.zh.grades[grade], I18N.en.grades[grade]] : [];
+        const termLabels = term ? [I18N.zh.terms[term], I18N.en.terms[term]] : [];
+        return [...base, ...termLabels, tok];
+      }),
     ].join(' ').toLowerCase();
     return q.toLowerCase().trim().split(/\s+/).every((w) => hay.includes(w));
   }
@@ -507,7 +586,7 @@
     list.forEach((c, i) => el.grid.appendChild(card(c, i)));
     el.empty.hidden = list.length > 0;
     el.countText.textContent = t().count(list.length);
-    el.crumb.innerHTML = `<b>${t().levels[state.level]}</b>${state.grade !== 'all' ? ` · ${t().grades[state.grade]}` : ''} · ${t().cats[state.cat]}${state.q ? ` · “${esc(state.q)}”` : ''}`;
+    el.crumb.innerHTML = `<b>${t().levels[state.level]}</b>${state.grade !== 'all' ? ` · ${t().grades[state.grade]}` : ''}${state.term !== 'all' ? ` · ${t().terms[state.term]}` : ''} · ${t().cats[state.cat]}${state.q ? ` · “${esc(state.q)}”` : ''}`;
     el.courseTotal.textContent = t().total(state.courses.length);
     el.clearProgress.hidden = !local.keys().some((key) => key.startsWith(PROGRESS_PREFIX));
   }
@@ -518,6 +597,7 @@
     applyChrome();
     renderLevels();
     renderGrades();
+    renderTerms();
     renderCats();
     renderAccents();
     renderGrid();
@@ -557,6 +637,7 @@
   $('#resetBtn').addEventListener('click', () => {
     state.q = '';
     state.grade = 'all';
+    state.term = 'all';
     state.cat = 'all';
     el.search.value = '';
     update();

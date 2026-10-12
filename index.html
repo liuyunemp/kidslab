@@ -14,7 +14,7 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="preload" href="assets/fonts/baloo2-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="assets/css/app.css?v=9c57d368" />
+  <link rel="stylesheet" href="assets/css/app.css?v=7cdce5d3" />
 </head>
 <body>
   <div class="app" id="app">
@@ -111,6 +111,11 @@
         <div class="grade-list" id="gradeList" role="radiogroup" aria-label="选择年级"></div>
       </section>
 
+      <section class="grade-filter" id="termSec" hidden>
+        <h2 class="grade-filter__label" data-i18n="secTerm">学期</h2>
+        <div class="grade-list" id="termList" role="radiogroup" aria-label="选择学期"></div>
+      </section>
+
       <section class="hero">
         <h1 class="hero__title" id="heroTitle">嗨，小小探索家！<span class="hero__wave">👋</span></h1>
         <p class="hero__sub"><span id="crumb"></span> · <span id="countText"></span></p>
@@ -185,7 +190,7 @@
     <div class="starmap__status" aria-live="polite"></div>
   </section>
 
-  <script src="assets/js/app.js?v=6bf01dc7"></script>
+  <script src="assets/js/app.js?v=f2eac6c7"></script>
   <script src="assets/js/starmap.js?v=2077e845"></script>
 </body>
 </html>

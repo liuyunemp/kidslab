@@ -72,7 +72,7 @@ cloudflare/analytics/  # 埋点接收 Worker(push 时经 deploy-analytics.yml �
 | `title` / `description` | 必须是 `{ "zh": "...", "en": "..." }` 双语对 |
 | `category` | `featured` `math` `physics` `chemistry` `programming` `science` `logic` 之一 |
 | `levels` | `primary` `junior` `senior` 的非空子集 |
-| `grades` | 可选,`g1`–`g12` 的数组,年级筛选与搜索用 |
+| `grades` | 可选,`g1`–`g12` 的数组,年级筛选与搜索用;年级后可加册后缀 `a`(上册)/`b`(下册),如 `g1a`。不填册即整年级(覆盖上下册)。以人教版学期划分为准 |
 | `tags` | 数组,必须使用 `src/taxonomy.json` 里的 canonical 标签(中文键);英文与同义词通过词表 aliases 自动展开为搜索关键词 |
 | `icon` | 必填,emoji |
 | `order` | 可选,数字小的在前 |

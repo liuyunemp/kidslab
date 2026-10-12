@@ -15,14 +15,14 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateFactsCoverage, validateFactsDocument } from './facts.mjs';
+import { GRADE_RE } from './grades.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
 const OUT = path.join(ROOT, 'courseware');
 
-const CATEGORIES = ['featured', 'math', 'physics', 'chemistry', 'programming', 'science', 'logic'];
+const CATEGORIES = ['featured', 'math', 'physics', 'chemistry', 'programming', 'science', 'logic', 'chinese'];
 const LEVELS = ['primary', 'junior', 'senior'];
-const GRADE_RE = /^g([1-9]|1[0-2])$/;
 
 const fail = (msg) => { console.error(`\x1b[31m✗ ${msg}\x1b[0m`); process.exitCode = 1; };
 const ok = (msg) => console.log(`\x1b[32m✓\x1b[0m ${msg}`);
@@ -85,7 +85,7 @@ function validate(id, meta, taxonomy) {
   if (!Array.isArray(meta.tags)) errs.push('tags 必须是数组');
   else meta.tags.forEach((t) => { if (!taxonomy[t]) errs.push(`标签 "${t}" 不在 src/taxonomy.json 词表中`); });
   if (meta.grades !== undefined && (!Array.isArray(meta.grades) || meta.grades.some((g) => !GRADE_RE.test(g))))
-    errs.push('grades 必须是 g1–g12 的数组');
+    errs.push('grades 必须是 g1–g12（可选 a/b 后缀表示上/下册）的数组');
   if (typeof meta.icon !== 'string' || !meta.icon) errs.push('icon 必填 (emoji)');
   return errs;
 }

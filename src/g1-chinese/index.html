@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>📚 一年级语文闯关 · KidsLab</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="../../scripts/sdk/core.js" data-kidslab-sdk></script>
+  <script>
+    (() => {
+      try {
+        const theme = localStorage.getItem('kidslab.theme')
+          || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const lang = localStorage.getItem('kidslab.lang')
+          || (navigator.language && navigator.language.startsWith('zh') ? 'zh' : 'en');
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+      } catch { /* private mode */ }
+    })();
+  </script>
+</head>
+<body>
+  <header class="bar">
+    <a class="pill" id="backBtn" href="../../index.html">← <span data-t="back">返回</span></a>
+    <h1 class="bar__title">📚 <span>一年级语文</span></h1>
+    <div class="bar__actions">
+      <button class="pill pill--icon" id="muteBtn" type="button" aria-pressed="false">🔊</button>
+      <button class="pill pill--icon" id="themeBtn" type="button" aria-pressed="true">🌙</button>
+      <button class="pill" id="langBtn" type="button">EN</button>
+    </div>
+  </header>
+
+  <button class="nav-toggle" id="navToggle" type="button">🗺️ <span data-t="nav">关卡星图</span></button>
+  <nav class="nav" id="nav" aria-label="关卡星图"></nav>
+
+  <main class="play">
+    <div class="mascot" id="mascot"></div>
+    <p class="coach" id="coach" data-t="go">开始吧！</p>
+    <section class="stage" id="stage" aria-live="polite"></section>
+    <p class="tip" id="tip"></p>
+    <div class="options" id="options"></div>
+  </main>
+
+  <footer class="rewards" id="rewards">
+    <span class="reward"><i>🌟</i><b id="starCount">0</b><span data-t="stars">星星</span></span>
+    <span class="reward"><i>🪙</i><b id="coinCount">0</b><span data-t="coins">金币</span></span>
+    <span class="reward"><i>🔖</i><b id="stickerCount">0</b><span data-t="stickers">贴纸</span></span>
+  </footer>
+
+  <p class="foot-tip" id="footTip" data-t="foot">点一点，认一认，集星星！</p>
+
+  <div class="overlay" id="overlay" hidden>
+    <div class="overlay__card">
+      <div class="overlay__burst">🎉🌟🎊</div>
+      <h2 class="overlay__title">太棒了！</h2>
+      <p class="overlay__text">你认会了好多生字！</p>
+      <button class="btn btn--big" data-act="close" type="button">🏠 <span data-t="back">返回</span></button>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

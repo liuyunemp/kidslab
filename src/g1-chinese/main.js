@@ -1,0 +1,47 @@
+import { initGame } from './engine.js';
+import { levels } from './levels.js';
+
+const messages = {
+  zh: {
+    back: '返回',
+    theme: '主题',
+    lang: 'EN',
+    stars: '星星',
+    coins: '金币',
+    stickers: '贴纸',
+    nav: '关卡星图',
+    foot: '点一点，认一认，集星星！',
+    go: '开始吧！',
+    correct: '答对啦！🌟',
+    wrong: '再试试看～',
+    locked: '先通关前面的关卡吧',
+    doneTitle: '太棒了！',
+    doneText: '你认会了好多生字，集满了小星星！',
+    moneyQ: '这些钱一共是多少？',
+    tangramQ: '缺了哪一块？',
+    opt: { gt: '大于', lt: '小于', eq: '等于', more: '多', less: '少', equal: '同样多', left: '左边重', right: '右边重' },
+    chapters: { match: '识字（一）' },
+  },
+  en: {
+    back: 'Back',
+    theme: 'Theme',
+    lang: '中',
+    stars: 'Stars',
+    coins: 'Coins',
+    stickers: 'Stickers',
+    nav: 'Star Map',
+    foot: 'Tap, learn, collect stars!',
+    go: 'Let’s go!',
+    correct: 'Correct! 🌟',
+    wrong: 'Try again~',
+    locked: 'Finish earlier levels first',
+    doneTitle: 'Awesome!',
+    doneText: 'You learned so many characters and filled the sky with stars!',
+    moneyQ: 'How much is this in total?',
+    tangramQ: 'Which piece is missing?',
+    opt: { gt: '>', lt: '<', eq: '=', more: 'more', less: 'fewer', equal: 'same', left: 'left', right: 'right' },
+    chapters: { match: 'Characters' },
+  },
+};
+
+initGame({ levels, messages });

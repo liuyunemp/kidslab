@@ -1,5 +1,5 @@
 {
-  "_comment": "受控标签词表：course.json 的 tags 必须使用这里的 canonical 键（中文）。en 为英文显示名，aliases 为搜索别名（构建时展开进 index.json 的 keywords 字段）。kind: knowledge=知识点（星图节点）/ form=呈现形式（星图着色维度）。年级不放 tags，写在 course.json 的 grades 字段（g1–g12）。",
+  "_comment": "受控标签词表：course.json 的 tags 必须使用这里的 canonical 键（中文）。en 为英文显示名，aliases 为搜索别名（构建时展开进 index.json 的 keywords 字段）。kind: knowledge=知识点（星图节点）/ form=呈现形式（星图着色维度）。年级不放 tags，写在 course.json 的 grades 字段（g1–g12，可选加册后缀 a=上册/b=下册，如 g1a；不填册即整年级）。",
   "version": 1,
   "tags": {
     "分数": { "en": "Fractions", "kind": "knowledge", "aliases": ["fraction", "fractions", "等值分数", "equivalent fractions", "百分数", "percent", "percentage"] },
@@ -95,6 +95,14 @@
     "3D": { "en": "3D", "kind": "form", "aliases": ["3d", "三维", "three.js"] },
     "音乐": { "en": "Music", "kind": "form", "aliases": ["music", "节奏", "rhythm", "music coding"] },
     "实验": { "en": "Experiment", "kind": "form", "aliases": ["experiment", "simulation", "lab", "模拟"] },
-    "益智游戏": { "en": "Puzzle Game", "kind": "form", "aliases": ["puzzle", "game", "益智", "游戏"] }
+    "益智游戏": { "en": "Puzzle Game", "kind": "form", "aliases": ["puzzle", "game", "益智", "游戏"] },
+    "识字": { "en": "Character Recognition", "kind": "knowledge", "aliases": ["识字", "汉字", "认字", "生字", "character recognition", "chinese characters"] },
+    "拼音": { "en": "Pinyin", "kind": "knowledge", "aliases": ["pinyin", "汉语拼音", "声母", "韵母", "initials", "finals"] },
+    "比多少": { "en": "Comparison (More/Less)", "kind": "knowledge", "aliases": ["比多少", "多和少", "同样多", "more and less", "compare"] },
+    "比大小": { "en": "Compare Numbers", "kind": "knowledge", "aliases": ["比大小", "大于", "小于", "等于", "compare numbers", "greater than", "less than"] },
+    "轻重": { "en": "Weight & Balance", "kind": "knowledge", "aliases": ["轻重", "比轻重", "重", "轻", "heavier", "lighter", "weight"] },
+    "位置": { "en": "Position & Direction", "kind": "knowledge", "aliases": ["位置", "方向", "前后左右", "上下", "position", "direction", "front", "back", "left", "right", "up", "down"] },
+    "人民币": { "en": "Currency (RMB)", "kind": "knowledge", "aliases": ["人民币", "元角分", "钱币", "钱", "money", "coins", "yuan", "jiao", "fen"] },
+    "七巧板": { "en": "Tangram", "kind": "knowledge", "aliases": ["七巧板", "tangram", "拼图"] }
   }
 }

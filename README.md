@@ -77,7 +77,7 @@ kidslab/
 | `id` | 与目录名一致 |
 | `category` | `math` `physics` `chemistry` `programming` `science` `logic` `featured` 之一 |
 | `levels` | `primary` `junior` `senior` 的子集 |
-| `grades` | `g1`–`g12` 的数组(可选,年级筛选用) |
+| `grades` | `g1`–`g12` 的数组(可选,年级筛选用);可加册后缀 `a`上册/`b`下册,如 `g1a`,不填册即整年级 |
 | `tags` | 必须使用 `src/taxonomy.json` 词表中的 canonical 标签 |
 | `icon` | 卡片封面 emoji |
 | `order` | 排序权重(小的在前,可选) |
@@ -243,6 +243,8 @@ gh secret set CLOUDFLARE_ACCOUNT_ID
 | 🎈 打赌派对 | 逻辑 | 小学·初中 |
 | 🕵️ 侦探线索板 | 逻辑 | 小学·初中 |
 | 🦊 狐狸的石子 | 逻辑 | 小学·初中 |
+| 🧮 一年级数学闯关 | 数学 | 小学（一年级） |
+| 📚 一年级语文闯关 | 语文 | 小学（一年级上册） |
 
 > 新课件请从 [`docs/courseware-template/`](docs/courseware-template/) 双语/主题模板起步;课件规划清单见 [`docs/courseware-plan/`](docs/courseware-plan/)。
 

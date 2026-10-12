@@ -1,6 +1,6 @@
 # KidsLab 计划状态清单
 
-最后核验：2026-09-16
+最后核验：2026-10-10
 
 事实来源：`src/*/course.json`、`docs/courseware-plan/*.md`、`README.md`、`AGENTS.md`。本文件负责回答“哪些已完成、哪些未实现、后续 Agent 完成计划后要更新哪里”。
 
@@ -31,7 +31,7 @@ KidsLab 应该是一组孩子打开就想玩的交互课件，而不是题库或
 
 - 主站课程浏览：`index.html`、`assets/js/app.js` 支持学段、年级、分类、搜索、双语、主题、强调色与置顶课件。
 - 静态构建发布：`scripts/build.mjs` 校验 `course.json`、压缩资源、生成 `courseware/index.json`；GitHub Pages workflow 在 `main` 推送后构建发布。
-- 课件源码库：当前 `src/` 下有 106 个课件目录，其中小学规划内按 ID 直接完成 84 个，初高中两轮规划内已上线 16 个。
+- 课件源码库：当前 `src/` 下有 108 个课件目录，其中小学规划内按 ID 直接完成 84 个，初高中两轮规划内已上线 16 个。
 - 小学课件规划：`docs/courseware-plan/` 覆盖数学、编程、逻辑、科学 84 个小学目标课件。
 - 学段战略（方案 B）：初高中入口保持可见，产品语言与小学游戏叙事分开；决策记录在 [`README.md`](./README.md)，初中物理试点路径见 [`junior-physics.md`](./junior-physics.md)。
 - 课件模板：`docs/courseware-template/` 提供双语、主题、静态独立课件起点。
@@ -72,7 +72,7 @@ Agent 每次完成计划项后必须同步更新：
 | 编程 | 15 | 15 | 0 | P0 已完成；规划项已全部完成 |
 | 逻辑 | 15 | 15 | 0 | P0 已完成；规划项已全部完成；`magic-cube`、`huarong-dao` 为规划外补充 |
 | 科学 | 22 | 22 | 0 | `plant-xray`、`creature-workshop`、`eco-island`、`mini-pyramid` 与 `air-garage` 已按规划 ID 上线；`plant-lab` 仍是规划外养成实验 |
-| 合计 | 84 | 84 | 0 | 另有 11 个规划外已上线课件 |
+| 合计 | 84 | 84 | 0 | 另有 13 个规划外已上线课件 |
 
 初高中采用独立规划口径，不计入上方小学汇总。第一轮 26 个见 [`secondary-labs.md`](./secondary-labs.md)；第二轮 20 个见 [`secondary-labs-wave2.md`](./secondary-labs-wave2.md)；合计 46 个目标。
 
@@ -281,6 +281,8 @@ Agent 每次完成计划项后必须同步更新：
 | `ph-lab` 酸碱魔法水 | chemistry | junior/senior · `g8-g10` | 已归属 [`secondary-labs.md`](./secondary-labs.md) 存量化学；3D 观测壳已完成，L3 稀释/中和/滴定仍待做 |
 | `ice-maker-lab` 制冰实验室 | physics | primary/junior | 已升级为全屏 three.js 观测实验：灌水/压缩机/开门对照，热账本 Q_h=Q_c+W；不计入小学 84 项规划 ID |
 | `cpu-lab` 电脑原理实验室 | programming | primary/junior | 计算机组成/冯·诺依曼与取指-译码-执行扩展，不计入小学 84 项规划 ID |
+| `g1-math` 一年级数学闯关 | math | primary · `g1` | 待对齐：不在现有小学数学规划 ID 中；当前选择题关卡需按观测/实验合同重构，不计入规划完成数 |
+| `g1-chinese` 一年级语文闯关 | chinese | primary · `g1a` | 待对齐：当前小学规划尚无语文学科清单，需明确规划位置与玩法方向 |
 
 ## 方向与意图
 
@@ -317,6 +319,8 @@ Agent 每次完成计划项后必须同步更新：
 | 一级功能 | 风险级别 | Happy Path E2E | 失败路径 | 权限角色覆盖 | 失败恢复/回滚 | 证据（测试路径/用例） |
 | --- | --- | --- | --- | --- | --- | --- |
 | 主站浏览与筛选 | 中 | 部分：学段切换 + 搜索/分类 | 缺口：非法筛选组合 | 不适用：纯静态无角色 | 不适用：只读 UI | `tests/e2e/smoke.spec.js`（搜索/分类）；`tests/e2e/stage-strategy.spec.js`（小学问候、初高中实验室问候、三课仍在货架、不标建设中） |
+| 一年级数学闯关 | 中 | 部分：首关数数作答与奖励 | 部分：钱币错答可原地重试；其余题型待补 | 不适用：纯静态无角色 | 部分：重复点按不会重复领奖；整课重载恢复待补 | `tests/e2e/g1-math.spec.js`；`tests/unit/g1-math.test.mjs`；玩法形态仍待按实验合同重构 |
+| 一年级语文闯关 | 中 | 缺口：仅有全课件加载 smoke，尚无核心玩法 E2E | 缺口 | 不适用：纯静态无角色 | 缺口 | `tests/e2e/smoke.spec.js`；需补独立交互验收与规划对齐 |
 | 课件构建与 manifest 生成 | 中 | 部分：`npm run build` | 部分：`scripts/build.mjs` 校验非法 `course.json` | 不适用：本地构建无角色 | 部分：构建失败不应写入错误 manifest，需补回归验证 | `scripts/build.mjs`、`.github/workflows/deploy.yml` |
 | PWA 壳与课件离线缓存 | 高 | 已覆盖：manifest 合法性 + SW 激活预缓存 + cache-on-visit 角标 | 已覆盖：杀死服务器后离线回放已玩课件与主站壳 | 不适用：纯静态无角色 | 已覆盖：断网时 SW 缓存兜底，联网 network-first 自动恢复最新内容 | `tests/e2e/pwa.spec.js` |
 | 电工鼠开放电路实验室 | 高 | 已覆盖：桌面与触屏完成端口接线、合闸点亮、实时电流读数和触屏放置 | 已覆盖：制造短路并显示故障 | 不适用：纯静态无角色 | 已覆盖：撤销短路恢复通路；保存后清空并加载恢复作品 | `tests/e2e/electric-mouse.spec.js`；`tests/unit/electric-lab.test.mjs` |
