@@ -1,12 +1,12 @@
 {
   "id": "g1-math",
   "title": {
-    "zh": "一年级数学闯关",
-    "en": "Grade 1 Math Quest"
+    "zh": "一年级数学游戏地图",
+    "en": "Grade 1 Math Games"
   },
   "description": {
-    "zh": "和吉祥物小狐一起闯关：数一数、比大小、加减法、认时钟、找规律、比轻重、认方向、认钱币、认图形、玩七巧板。答对有星星和金币，答错只有温柔提示，绝不批评。",
-    "en": "Adventure with Foxy: counting, comparing, add & subtract, clocks, patterns, weight, directions, coins, shapes and tangram. Earn stars and coins; gentle hints, never punished."
+    "zh": "选择数字、运算、时钟、钱币、方位和图形等独立游戏；每个游戏完成八道任务才通关。",
+    "en": "Choose independent number, arithmetic, clock, money, direction and shape games. Finish eight tasks in each game."
   },
   "category": "math",
   "levels": [
@@ -29,5 +29,6 @@
     "七巧板"
   ],
   "icon": "🧮",
-  "order": 200
+  "order": 200,
+  "listed": false
 }

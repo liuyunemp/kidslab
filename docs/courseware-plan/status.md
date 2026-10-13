@@ -1,6 +1,6 @@
 # KidsLab 计划状态清单
 
-最后核验：2026-10-10
+最后核验：2026-10-12
 
 事实来源：`src/*/course.json`、`docs/courseware-plan/*.md`、`README.md`、`AGENTS.md`。本文件负责回答“哪些已完成、哪些未实现、后续 Agent 完成计划后要更新哪里”。
 
@@ -31,8 +31,8 @@ KidsLab 应该是一组孩子打开就想玩的交互课件，而不是题库或
 
 - 主站课程浏览：`index.html`、`assets/js/app.js` 支持学段、年级、分类、搜索、双语、主题、强调色与置顶课件。
 - 静态构建发布：`scripts/build.mjs` 校验 `course.json`、压缩资源、生成 `courseware/index.json`；GitHub Pages workflow 在 `main` 推送后构建发布。
-- 课件源码库：当前 `src/` 下有 108 个课件目录，其中小学规划内按 ID 直接完成 84 个，初高中两轮规划内已上线 16 个。
-- 小学课件规划：`docs/courseware-plan/` 覆盖数学、编程、逻辑、科学 84 个小学目标课件。
+- 课件源码库：当前 `src/` 下有 121 个课件目录，其中小学规划内按 ID 直接完成 97 个，初高中两轮规划内已上线 16 个。
+- 小学课件规划：`docs/courseware-plan/` 覆盖数学、语文、编程、逻辑、科学 97 个小学目标课件。
 - 学段战略（方案 B）：初高中入口保持可见，产品语言与小学游戏叙事分开；决策记录在 [`README.md`](./README.md)，初中物理试点路径见 [`junior-physics.md`](./junior-physics.md)。
 - 课件模板：`docs/courseware-template/` 提供双语、主题、静态独立课件起点。
 - 交互音效：当前游戏课件含语义交互音效与静音控制（含新建 `cpu-lab` 与 `mini-pyramid`）；`huarong-dao` 与 `venn-port` 使用 ScoreKit 循环配乐和通关短曲；存量改进优先级见 `docs/courseware-audio-audit.md`。
@@ -64,15 +64,16 @@ Agent 每次完成计划项后必须同步更新：
 
 ## 汇总
 
-小学规划口径：数学 31 个规划项 + 1 个既有课件，编程 14 个规划项 + 1 个既有课件，逻辑 13 个规划项 + 2 个既有课件，科学 21 个规划项 + 1 个既有课件，共 84 个目标课件。
+小学规划口径：数学 38 个规划项 + 1 个既有课件，语文 6 个规划项，编程 14 个规划项 + 1 个既有课件，逻辑 13 个规划项 + 2 个既有课件，科学 21 个规划项 + 1 个既有课件，共 97 个目标课件。旧 `g1-math`、`g1-chinese` 仅作隐藏导航页。
 
 | 学科 | 目标数 | 已完成（按规划 ID） | 未实现 | 备注 |
 | --- | ---: | ---: | ---: | --- |
-| 数学 | 32 | 32 | 0 | P0 已完成；规划项已全部完成 |
+| 数学 | 39 | 39 | 0 | 新增一年级独立游戏 7 款；规划项已全部完成 |
+| 语文 | 6 | 6 | 0 | 一年级上册六款独立游戏，见 `chinese.md` |
 | 编程 | 15 | 15 | 0 | P0 已完成；规划项已全部完成 |
 | 逻辑 | 15 | 15 | 0 | P0 已完成；规划项已全部完成；`magic-cube`、`huarong-dao` 为规划外补充 |
 | 科学 | 22 | 22 | 0 | `plant-xray`、`creature-workshop`、`eco-island`、`mini-pyramid` 与 `air-garage` 已按规划 ID 上线；`plant-lab` 仍是规划外养成实验 |
-| 合计 | 84 | 84 | 0 | 另有 13 个规划外已上线课件 |
+| 合计 | 97 | 97 | 0 | 另有规划外已上线课件；两张旧综合卡隐藏为导航 |
 
 初高中采用独立规划口径，不计入上方小学汇总。第一轮 26 个见 [`secondary-labs.md`](./secondary-labs.md)；第二轮 20 个见 [`secondary-labs-wave2.md`](./secondary-labs-wave2.md)；合计 46 个目标。
 
@@ -102,6 +103,13 @@ Agent 每次完成计划项后必须同步更新：
 - [x] 数字萤火虫 `number-fireflies`
 - [x] 百数地铁 `hundred-metro`
 - [x] 时钟小镇 `clock-town`
+- [x] 比大小桥 `g1-compare-bridge`
+- [x] 加法车站 `g1-addition-depot`
+- [x] 减法车站 `g1-subtraction-depot`
+- [x] 加减接力 `g1-mixed-relay`
+- [x] 轻重天平 `g1-weight-lab`
+- [x] 方位小镇 `g1-direction-town`
+- [x] 图形拼搭 `g1-flat-shapes`
 - [x] 进位工厂 `carry-factory` · M1 · D
 - [x] 立体影子剧场 `shadow-theater`
 - [x] 果园订单 `orchard-orders`
@@ -130,6 +138,15 @@ Agent 每次完成计划项后必须同步更新：
 - [x] 游园会真相 `carnival-truth` · M2 · C
 - [x] 灯笼街 `lantern-lane` · M1 · B
 - [x] 图形裁缝铺 `shape-tailor` · M1 · B
+
+### 语文（一年级上册）
+
+- [x] 汉字寻宝 `g1-character-garden`
+- [x] 拼音轨道 `g1-pinyin-tracks`
+- [x] 笔画工坊 `g1-stroke-workshop`
+- [x] 词语邮局 `g1-word-post`
+- [x] 对韵小剧场 `g1-rhyme-stage`
+- [x] 句子列车 `g1-sentence-train`
 
 ### 编程
 
@@ -279,10 +296,10 @@ Agent 每次完成计划项后必须同步更新：
 | `pendulum-lab` 单摆实验室 | physics | junior/senior · `g8,g11` | 已归属 [`junior-physics.md`](./junior-physics.md) 试点第 1 课 + 第一轮存量；`grades` 已补。升级债：重复测量与拟合 |
 | `optics-lab` 光学实验室 | physics | junior/senior | 已纳入初高中实验规划与初中物理路径；补记录与归纳闭环 |
 | `ph-lab` 酸碱魔法水 | chemistry | junior/senior · `g8-g10` | 已归属 [`secondary-labs.md`](./secondary-labs.md) 存量化学；3D 观测壳已完成，L3 稀释/中和/滴定仍待做 |
-| `ice-maker-lab` 制冰实验室 | physics | primary/junior | 已升级为全屏 three.js 观测实验：灌水/压缩机/开门对照，热账本 Q_h=Q_c+W；不计入小学 84 项规划 ID |
-| `cpu-lab` 电脑原理实验室 | programming | primary/junior | 计算机组成/冯·诺依曼与取指-译码-执行扩展，不计入小学 84 项规划 ID |
-| `g1-math` 一年级数学闯关 | math | primary · `g1` | 待对齐：不在现有小学数学规划 ID 中；当前选择题关卡需按观测/实验合同重构，不计入规划完成数 |
-| `g1-chinese` 一年级语文闯关 | chinese | primary · `g1a` | 待对齐：当前小学规划尚无语文学科清单，需明确规划位置与玩法方向 |
+| `ice-maker-lab` 制冰实验室 | physics | primary/junior | 已升级为全屏 three.js 观测实验：灌水/压缩机/开门对照，热账本 Q_h=Q_c+W；不计入小学 97 项规划 ID |
+| `cpu-lab` 电脑原理实验室 | programming | primary/junior | 计算机组成/冯·诺依曼与取指-译码-执行扩展，不计入小学 97 项规划 ID |
+| `g1-math` 一年级数学游戏地图 | math | primary · `g1` | 旧网址导航页，`listed:false`，不计入规划完成数；旧进度不迁移 |
+| `g1-chinese` 一年级语文游戏地图 | chinese | primary · `g1a` | 旧网址导航页，`listed:false`，不计入规划完成数；旧进度不迁移 |
 
 ## 方向与意图
 
@@ -290,7 +307,7 @@ Agent 每次完成计划项后必须同步更新：
 - `plant-xray` 已按规划玩法单独上线；`plant-lab` 保留为规划外养成实验，不再用它顶替透视园条目。
 - 为主站过滤、课件核心交互和构建发布补充可重复验收证据；当前主要依赖 `npm run build` 与人工走查。
 - 按 `docs/courseware-audio-audit.md` 的 P0 → P1 → P2 顺序补齐交互音效；先消除高频堆叠音源，再统一静音控制，最后分批覆盖无音频课件。
-- 初高中扩展按方案 B：产品语言与小学分开，入口不隐藏。清单仍按 `secondary-labs.md` 与 `secondary-labs-wave2.md` 独立维护，不混入小学 84 项状态。初中物理试点顺序见 `junior-physics.md`。优先完成第一轮剩余 P0；若要先补主站数学/生物空洞，可将第二轮 P0 的一次函数、二次函数、单位圆、光合、孟德尔与第一轮 P0 交错。第二轮 P1 的光电效应、DNA、导数不要插队。实现前同步扩充 taxonomy 与模型单测。
+- 初高中扩展按方案 B：产品语言与小学分开，入口不隐藏。清单仍按 `secondary-labs.md` 与 `secondary-labs-wave2.md` 独立维护，不混入小学 97 项状态。初中物理试点顺序见 `junior-physics.md`。优先完成第一轮剩余 P0；若要先补主站数学/生物空洞，可将第二轮 P0 的一次函数、二次函数、单位圆、光合、孟德尔与第一轮 P0 交错。第二轮 P1 的光电效应、DNA、导数不要插队。实现前同步扩充 taxonomy 与模型单测。
 
 ## 完成的样子
 
@@ -319,8 +336,9 @@ Agent 每次完成计划项后必须同步更新：
 | 一级功能 | 风险级别 | Happy Path E2E | 失败路径 | 权限角色覆盖 | 失败恢复/回滚 | 证据（测试路径/用例） |
 | --- | --- | --- | --- | --- | --- | --- |
 | 主站浏览与筛选 | 中 | 部分：学段切换 + 搜索/分类 | 缺口：非法筛选组合 | 不适用：纯静态无角色 | 不适用：只读 UI | `tests/e2e/smoke.spec.js`（搜索/分类）；`tests/e2e/stage-strategy.spec.js`（小学问候、初高中实验室问候、三课仍在货架、不标建设中） |
-| 一年级数学闯关 | 中 | 部分：首关数数作答与奖励 | 部分：钱币错答可原地重试；其余题型待补 | 不适用：纯静态无角色 | 部分：重复点按不会重复领奖；整课重载恢复待补 | `tests/e2e/g1-math.spec.js`；`tests/unit/g1-math.test.mjs`；玩法形态仍待按实验合同重构 |
-| 一年级语文闯关 | 中 | 缺口：仅有全课件加载 smoke，尚无核心玩法 E2E | 缺口 | 不适用：纯静态无角色 | 缺口 | `tests/e2e/smoke.spec.js`；需补独立交互验收与规划对齐 |
+| 一年级数学独立游戏 | 中 | 13 款新语数游戏中的 7 款数学均由 E2E 完整完成 8 题；找零和七巧板也验收完整 8 单/8 幕 | 每款新游戏首题错答原地恢复；找零错币后调整、七巧板错放后继续 | 不适用：纯静态无角色 | 新游戏第 3 题后重载续玩、重复提交不重复领奖；第 1–7 题不得完成整课 | `tests/e2e/g1-independent-games.spec.js`、`change-vending.spec.js`、`tangram-theater.spec.js`；`tests/unit/g1-independent-games.test.mjs` |
+| 一年级语文独立游戏 | 中 | 六款语文游戏均由 E2E 完整完成 8 题 | 每款首题错答后原地重试 | 不适用：纯静态无角色 | 第 3 题后重载续玩，第 8 题才写整课完成，重玩换题 | `tests/e2e/g1-independent-games.spec.js`；`tests/unit/g1-independent-games.test.mjs` |
+| 旧综合网址导航 | 低 | 数学与语文旧网址可打开并链接独立游戏，旧卡不进入主站清单 | 不适用：只读导航 | 不适用：纯静态无角色 | 不适用：只读导航 | `tests/e2e/g1-math.spec.js` |
 | 课件构建与 manifest 生成 | 中 | 部分：`npm run build` | 部分：`scripts/build.mjs` 校验非法 `course.json` | 不适用：本地构建无角色 | 部分：构建失败不应写入错误 manifest，需补回归验证 | `scripts/build.mjs`、`.github/workflows/deploy.yml` |
 | PWA 壳与课件离线缓存 | 高 | 已覆盖：manifest 合法性 + SW 激活预缓存 + cache-on-visit 角标 | 已覆盖：杀死服务器后离线回放已玩课件与主站壳 | 不适用：纯静态无角色 | 已覆盖：断网时 SW 缓存兜底，联网 network-first 自动恢复最新内容 | `tests/e2e/pwa.spec.js` |
 | 电工鼠开放电路实验室 | 高 | 已覆盖：桌面与触屏完成端口接线、合闸点亮、实时电流读数和触屏放置 | 已覆盖：制造短路并显示故障 | 不适用：纯静态无角色 | 已覆盖：撤销短路恢复通路；保存后清空并加载恢复作品 | `tests/e2e/electric-mouse.spec.js`；`tests/unit/electric-lab.test.mjs` |
@@ -349,3 +367,4 @@ Agent 每次完成计划项后必须同步更新：
 | 双语、主题、移动端适配 | 中 | 部分：华容道、维恩太空港、分数节拍屋、声波乐团、扫地机器人研究所、折纸打孔妙妙屋、煎饼老板、激光镜屋、彩虹舞台、垃圾变形记、数据演播室、密码社、七桥滑冰、机器宠物学校、外星农场、平衡马戏团、因数水晶洞、魔药比例坊、数据包骑士、无人机邮局、游园会真相、灯笼街、图形裁缝铺、四色王国、海盗验金室、打赌派对、电脑原理实验室、荒岛净水师、地层挖掘队、植物透视园与造兽工坊已覆盖中英切换、深浅主题和 1280×800/375×667 布局；生态小岛依据本环境可用能力做了中文演示烟测（DOM 环境，非真实浏览器，双语布局待补 E2E） | 部分：二十课件验证无横纵向溢出及可见按钮最小触控高度 | 不适用：纯静态无角色 | 部分：华容道与维恩太空港验证偏好写入 localStorage 并经重新加载恢复；分数节拍屋、声波乐团、扫地机器人研究所、折纸打孔妙妙屋、煎饼老板、激光镜屋、彩虹舞台、垃圾变形记、数据演播室、密码社、七桥滑冰、机器宠物学校、外星农场、平衡马戏团、因数水晶洞、魔药比例坊、数据包骑士、无人机邮局、游园会真相与灯笼街验证即时切换，无人机邮局等十七课件另验证进度重载恢复 | `tests/e2e/huarong-dao.spec.js`、`tests/e2e/venn-port.spec.js`、`tests/e2e/fraction-beats.spec.js`、`tests/e2e/wave-band.spec.js`、`tests/e2e/vacuum-lab.spec.js`、`tests/e2e/punch-origami.spec.js`、`tests/e2e/pancake-boss.spec.js`、`tests/e2e/laser-mirrors.spec.js`、`tests/e2e/rainbow-stage.spec.js`、`tests/e2e/trash-transform.spec.js`、`tests/e2e/data-studio.spec.js`、`tests/e2e/cipher-club.spec.js`、`tests/e2e/ice-bridges.spec.js`、`tests/e2e/robo-pet-school.spec.js`、`tests/e2e/alien-farm.spec.js`、`tests/e2e/balance-circus.spec.js`、`tests/e2e/crystal-cave.spec.js`、`tests/e2e/potion-ratio.spec.js`、`tests/e2e/packet-knights.spec.js`、`tests/e2e/drone-post.spec.js`、`tests/e2e/carnival-truth.spec.js`、`tests/e2e/lantern-lane.spec.js`、`tests/e2e/shape-tailor.spec.js`、`tests/e2e/four-color-kingdom.spec.js`、`tests/e2e/pirate-scales.spec.js`、`tests/e2e/bet-party.spec.js`、`tests/e2e/cpu-lab.spec.js`、`tests/e2e/island-water.spec.js`、`tests/e2e/strata-dig.spec.js`、`tests/e2e/plant-xray.spec.js`、`tests/e2e/creature-workshop.spec.js`；其余课件仍需补同口径证据 |
 | 行为分析埋点 | 中 | 缺口 | 缺口 | 不适用：无用户身份 | 缺口：endpoint 缺失时应空操作 | `docs/analytics.md`、`scripts/track.js`、`cloudflare/analytics/` |
 | GitHub Pages 发布 | 中 | 部分：workflow 运行 `npm run build` | 缺口 | 不适用：GitHub Actions 权限由仓库配置控制 | 缺口：发布失败回滚依赖 Pages 历史版本 | `.github/workflows/deploy.yml` |
+

@@ -100,8 +100,21 @@
   ];
   const SAVE_KEY = 'kidslab.caterpillar.butterflies';
 
+  const CURRENT_KEY = 'kidslab.pattern-caterpillar.current';
   let levelIndex = 0;
+  try {
+    const saved = Number(localStorage.getItem(CURRENT_KEY));
+    if (Number.isInteger(saved) && saved >= 0 && saved < LEVELS.length) levelIndex = saved;
+  } catch { /* Storage is optional. */ }
+  const PROGRESS_KEY = 'kidslab.pattern-caterpillar.basic-eight';
+  let basicDone = new Set();
+  try {
+    const saved = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]');
+    if (Array.isArray(saved)) basicDone = new Set(saved.filter((n) => Number.isInteger(n) && n >= 0 && n < 8));
+  } catch { /* Storage is optional. */ }
   let bites = 0;
+  let finishing = false;
+  let finishTimer = null;
   let eaten = [];
   let reverseSeq = [];
   let soundOn = store.get('kidslab.caterpillar.sound') !== 'off';
@@ -202,6 +215,7 @@
     $('#patternTrack').innerHTML = seq.map((x) => tokenHTML(x)).join('') + (level().kind === 'reverse' ? '' : tokenHTML({}, true));
   }
   function renderProgress() {
+    $('#basicProgress').textContent = `${lang === 'zh' ? '基础' : 'Basics'} ${basicDone.size}/8`;
     const max = level().bites;
     $('#biteCount').textContent = `${Math.min(bites, max)}/${max}`;
     $('#fullBar').style.width = `${Math.min(100, (bites / max) * 100)}%`;
@@ -224,6 +238,7 @@
   }
 
   function chooseItem(item, btn) {
+    if (finishing || bites >= level().bites) return;
     startAudio();
     if (item.sound && level().kind !== 'reverse') { playTone(item.sound); }
     if (level().kind === 'reverse') {
@@ -234,7 +249,7 @@
       btn?.classList.add('right'); bites++; eaten.push(item); speak(t('yes'), '😋'); playTone('good'); animateCat('happy');
       if (item.action) runAction(item.action);
       render();
-      if (bites >= level().bites) setTimeout(finishLevel, 500);
+      if (bites >= level().bites) { finishing = true; finishTimer = setTimeout(() => { finishTimer = null; finishLevel(); }, 500); }
     } else {
       btn?.classList.add('wrong'); speak(t('no'), '🤪'); playTone('bad'); animateCat('sad');
     }
@@ -271,14 +286,22 @@
   }
 
   function finishLevel() {
+    if (levelIndex < 8 && !basicDone.has(levelIndex)) {
+      basicDone.add(levelIndex);
+      try { localStorage.setItem(PROGRESS_KEY, JSON.stringify([...basicDone])); } catch { /* Storage is optional. */ }
+      window.cool?.stage?.(`basic-${basicDone.size}-of-8`);
+      if (basicDone.size === 8) window.cool?.complete?.();
+    }
+    renderProgress();
     saveButterfly();
+    try { localStorage.setItem(CURRENT_KEY, String((levelIndex + 1) % LEVELS.length)); } catch { /* Storage is optional. */ }
     drawButterfly(eaten);
     $('#modalEmoji').textContent = '🦋'; $('#modalTitle').textContent = t('fullTitle'); $('#modalText').textContent = t('fullText'); $('#modalBtn').textContent = t('next'); $('#modal').hidden = false;
     confetti(); playTone('good');
   }
 
   function nextLevel() {
-    levelIndex = (levelIndex + 1) % LEVELS.length; bites = 0; eaten = []; reverseSeq = []; $('#modal').hidden = true; render();
+    levelIndex = (levelIndex + 1) % LEVELS.length; bites = 0; finishing = false; eaten = []; reverseSeq = []; $('#modal').hidden = true; render();
   }
 
   function inferPeriod(seq) {
@@ -345,7 +368,7 @@
     $('#demoBtn').addEventListener('pointerdown', playDemo);
     $('#muteBtn').addEventListener('pointerdown', () => { soundOn = !soundOn; store.set('kidslab.caterpillar.sound', soundOn ? 'on' : 'off'); render(); });
     $('#gardenBtn').addEventListener('pointerdown', () => { const n = getButterflies().length; $('#modalEmoji').textContent = '🦋'; $('#modalTitle').textContent = t('gardenTitle'); $('#modalText').textContent = t('gardenText')(n); $('#modalBtn').textContent = t('next'); $('#modal').hidden = false; drawButterfly((getButterflies()[0] || {}).items || eaten); });
-    $('#levelStrip').addEventListener('pointerdown', (e) => { const b = e.target.closest('[data-level]'); if (!b) return; levelIndex = Number(b.dataset.level); bites = 0; eaten = []; reverseSeq = []; render(); });
+    $('#levelStrip').addEventListener('pointerdown', (e) => { const b = e.target.closest('[data-level]'); if (!b) return; if (finishTimer) clearTimeout(finishTimer); finishTimer = null; levelIndex = Number(b.dataset.level); bites = 0; finishing = false; eaten = []; reverseSeq = []; try { localStorage.setItem(CURRENT_KEY, String(levelIndex)); } catch { /* Storage is optional. */ } render(); });
     $('#thinkBtn').addEventListener('pointerdown', thinkReverse);
     $('#resetReverseBtn').addEventListener('pointerdown', () => { reverseSeq = []; eaten = []; bites = 0; render(); });
     $('#modalBtn').addEventListener('pointerdown', nextLevel);

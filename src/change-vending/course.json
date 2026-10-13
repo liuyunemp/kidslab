@@ -9,9 +9,17 @@
     "en": "Become a change-making vending machine for animal customers, and exchange one yuan for ten jiao when the coin tubes run short."
   },
   "category": "math",
-  "levels": ["primary"],
-  "grades": ["g1", "g2", "g1a"],
-  "tags": ["加减法", "计量单位", "益智游戏"],
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1b"
+  ],
+  "tags": [
+    "加减法",
+    "计量单位",
+    "益智游戏"
+  ],
   "icon": "🪙",
   "order": 14,
   "badge": "new"

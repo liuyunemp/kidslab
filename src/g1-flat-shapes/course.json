@@ -1,0 +1,24 @@
+{
+  "id": "g1-flat-shapes",
+  "title": {
+    "zh": "图形拼搭",
+    "en": "Shape Workshop"
+  },
+  "description": {
+    "zh": "为小房子、风筝和车轮挑合适的平面图形。",
+    "en": "Pick flat shapes for roofs, kites, wheels and more."
+  },
+  "category": "math",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1b"
+  ],
+  "tags": [
+    "平面图形"
+  ],
+  "icon": "🔷",
+  "order": 36,
+  "badge": "new"
+}

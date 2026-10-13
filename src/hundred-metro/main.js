@@ -85,9 +85,17 @@
     { start: 45, target: 79, rider: '👦', zh: '找机器人', en: 'to find a robot' },
     { start: 92, target: 38, rider: '👩', zh: '去天文台', en: 'for the observatory' },
     { start: 11, target: 99, rider: '🧓', zh: '参加百站庆典', en: 'for the 100-stop party' },
+    { start: 58, target: 14, rider: '👩‍🚀', zh: '去看火箭', en: 'to see a rocket' },
+    { start: 37, target: 82, rider: '🧑‍🎨', zh: '画彩虹', en: 'to paint a rainbow' },
   ];
 
   const LS = { lang: 'kidslab.lang', theme: 'kidslab.theme', progress: 'kidslab.hundredmetro' };
+  try {
+    if (localStorage.getItem('kidslab.hundredmetro.eight-route-version') !== '2') {
+      localStorage.removeItem('kidslab.progress.hundred-metro');
+      localStorage.setItem('kidslab.hundredmetro.eight-route-version', '2');
+    }
+  } catch { /* Storage is optional. */ }
   const store = {
     get: (key) => { try { return localStorage.getItem(key); } catch { return null; } },
     set: (key, value) => { try { localStorage.setItem(key, value); } catch {} },
@@ -102,7 +110,7 @@
     try { return JSON.parse(store.get(LS.progress)) || {}; } catch { return {}; }
   })();
   const state = {
-    level: 0,
+    level: Number.isInteger(saved.nextLevel) && saved.nextLevel >= 0 && saved.nextLevel < MISSIONS.length ? saved.nextLevel : 0,
     path: [],
     deltas: [],
     stars: saved.stars || {},
@@ -320,7 +328,7 @@
     const steps = state.deltas.length;
     const stars = steps === shortest ? 3 : steps <= shortest + 2 ? 2 : 1;
     state.stars[state.level] = Math.max(routeStars(), stars);
-    store.set(LS.progress, JSON.stringify({ stars: state.stars }));
+    store.set(LS.progress, JSON.stringify({ stars: state.stars, nextLevel: (state.level + 1) % MISSIONS.length }));
     els.secretEquation.textContent = equation(item);
     els.winTitle.textContent = stars === 3 ? t('winPerfect')(steps) : stars === 2 ? t('winGood')(steps) : t('winExplore')(steps);
     els.winText.textContent = stars === 3 ? t('winPerfectText') : t('winText');

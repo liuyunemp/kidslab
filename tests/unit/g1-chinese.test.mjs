@@ -23,5 +23,6 @@ test('award 与解锁逻辑（与数学引擎同源）', () => {
   assert.equal(s.coins, 5);
   assert.equal(isUnlocked(0, []), true);
   assert.equal(isUnlocked(2, [true, true]), true);
-  assert.equal(allDone([true, true, true, true]), true);
+  assert.equal(allDone([true], 4), false);
+  assert.equal(allDone([true, true, true, true], 4), true);
 });

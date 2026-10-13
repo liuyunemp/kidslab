@@ -1,0 +1,24 @@
+{
+  "id": "g1-character-garden",
+  "title": {
+    "zh": "汉字寻宝",
+    "en": "Character Garden"
+  },
+  "description": {
+    "zh": "在图画花园里给常见汉字找到对应的事物。",
+    "en": "Find the picture that belongs to each familiar character."
+  },
+  "category": "chinese",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "识字"
+  ],
+  "icon": "🌱",
+  "order": 208,
+  "badge": "new"
+}

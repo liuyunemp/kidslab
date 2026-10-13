@@ -1,0 +1,25 @@
+{
+  "id": "g1-addition-depot",
+  "title": {
+    "zh": "加法车站",
+    "en": "Addition Depot"
+  },
+  "description": {
+    "zh": "开动十位和个位小火车，把两批乘客合在一起。",
+    "en": "Drive tens and ones trains to join two groups of passengers."
+  },
+  "category": "math",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1b"
+  ],
+  "tags": [
+    "加减法",
+    "数位"
+  ],
+  "icon": "🚂",
+  "order": 31,
+  "badge": "new"
+}

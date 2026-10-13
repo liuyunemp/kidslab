@@ -50,7 +50,7 @@ test.describe('tangram shadow play', () => {
     await page.goto('/courseware/tangram-theater/');
   });
 
-  test('recovers from a misplaced piece and completes all three acts', async ({ page }) => {
+  test('recovers from a misplaced piece and completes all eight acts', async ({ page }) => {
     await expect(page.locator('#pieceShelf .piece-button')).toHaveCount(7);
     await page.getByRole('option', { name: '大三角一' }).click();
     await page.locator('#stage').click({ position: { x: 18, y: 18 } });
@@ -69,7 +69,15 @@ test.describe('tangram shadow play', () => {
     await page.getByRole('button', { name: '下一幕 →' }).click();
 
     await placeActWithHints(page);
-    await expect(page.getByRole('heading', { name: '三幕皮影戏圆满收官！' })).toBeVisible();
+    await expect(page.locator('#modal')).toBeVisible();
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('kidslab.progress.tangram-theater') || 'null')?.status)).not.toBe('completed');
+    for (let act = 4; act <= 8; act++) {
+      await page.getByRole('button', { name: '下一幕 →' }).click();
+      await placeActWithHints(page);
+      await expect(page.locator('#modal')).toBeVisible();
+      if (act < 8) expect(await page.evaluate(() => JSON.parse(localStorage.getItem('kidslab.progress.tangram-theater') || 'null')?.status)).not.toBe('completed');
+    }
+    await expect(page.getByRole('heading', { name: '八幕皮影戏圆满收官！' })).toBeVisible();
     await expect.poll(() => page.evaluate(() =>
       JSON.parse(localStorage.getItem('kidslab.progress.tangram-theater') || 'null')?.status)).toBe('completed');
   });

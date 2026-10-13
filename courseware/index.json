@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-12T01:16:53.442Z",
+  "generatedAt": "2026-10-13T01:32:30.027Z",
   "tags": {
     "3D": {
       "en": "3D",
@@ -7,10 +7,6 @@
     },
     "DNA": {
       "en": "DNA",
-      "kind": "knowledge"
-    },
-    "七巧板": {
-      "en": "Tangram",
       "kind": "knowledge"
     },
     "万有引力": {
@@ -35,10 +31,6 @@
     },
     "人体": {
       "en": "Human Body",
-      "kind": "knowledge"
-    },
-    "人民币": {
-      "en": "Currency (RMB)",
       "kind": "knowledge"
     },
     "估算": {
@@ -175,6 +167,10 @@
     },
     "抛体运动": {
       "en": "Projectile Motion",
+      "kind": "knowledge"
+    },
+    "拼音": {
+      "en": "Pinyin",
       "kind": "knowledge"
     },
     "排序算法": {
@@ -720,9 +716,7 @@
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2",
-        "g1a"
+        "g1b"
       ],
       "tags": [
         "加减法",
@@ -857,8 +851,6 @@
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2",
         "g1a"
       ],
       "tags": [
@@ -1100,8 +1092,7 @@
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2"
+        "g1b"
       ],
       "tags": [
         "数的认识",
@@ -1141,8 +1132,6 @@
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2",
         "g1a"
       ],
       "tags": [
@@ -1663,6 +1652,50 @@
       "path": "courseware/plant-lab/index.html"
     },
     {
+      "id": "g1-compare-bridge",
+      "title": {
+        "zh": "比大小桥",
+        "en": "Number Bridge"
+      },
+      "description": {
+        "zh": "给数字桥装上大于、小于或等于的桥牌，比较 20 和 100 以内的数。",
+        "en": "Fit the greater, less or equal bridge sign between numbers up to 100."
+      },
+      "category": "math",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a",
+        "g1b"
+      ],
+      "tags": [
+        "比大小",
+        "数的认识"
+      ],
+      "icon": "🐊",
+      "order": 30,
+      "badge": "new",
+      "keywords": [
+        "Compare Numbers",
+        "比大小",
+        "大于",
+        "小于",
+        "等于",
+        "compare numbers",
+        "greater than",
+        "less than",
+        "Numbers & Counting",
+        "百数表",
+        "hundred chart",
+        "数序",
+        "number order",
+        "100以内的数",
+        "counting"
+      ],
+      "path": "courseware/g1-compare-bridge/index.html"
+    },
+    {
       "id": "pendulum-lab",
       "title": {
         "zh": "单摆实验室",
@@ -1764,6 +1797,46 @@
       "path": "courseware/potion-ratio/index.html"
     },
     {
+      "id": "g1-addition-depot",
+      "title": {
+        "zh": "加法车站",
+        "en": "Addition Depot"
+      },
+      "description": {
+        "zh": "开动十位和个位小火车，把两批乘客合在一起。",
+        "en": "Drive tens and ones trains to join two groups of passengers."
+      },
+      "category": "math",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1b"
+      ],
+      "tags": [
+        "加减法",
+        "数位"
+      ],
+      "icon": "🚂",
+      "order": 31,
+      "badge": "new",
+      "keywords": [
+        "Addition & Subtraction",
+        "addition",
+        "subtraction",
+        "凑十法",
+        "make ten",
+        "数的分解",
+        "number bonds",
+        "Place Value",
+        "place value",
+        "十进制",
+        "大数",
+        "powers of ten"
+      ],
+      "path": "courseware/g1-addition-depot/index.html"
+    },
+    {
       "id": "updown-world",
       "title": {
         "zh": "上下世界",
@@ -1815,6 +1888,46 @@
         "游戏"
       ],
       "path": "courseware/updown-world/index.html"
+    },
+    {
+      "id": "g1-subtraction-depot",
+      "title": {
+        "zh": "减法车站",
+        "en": "Subtraction Depot"
+      },
+      "description": {
+        "zh": "让乘客下车，沿数线退回正确的站台。",
+        "en": "Let passengers off and move back to the right stop on the number line."
+      },
+      "category": "math",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1b"
+      ],
+      "tags": [
+        "加减法",
+        "数位"
+      ],
+      "icon": "🚋",
+      "order": 32,
+      "badge": "new",
+      "keywords": [
+        "Addition & Subtraction",
+        "addition",
+        "subtraction",
+        "凑十法",
+        "make ten",
+        "数的分解",
+        "number bonds",
+        "Place Value",
+        "place value",
+        "十进制",
+        "大数",
+        "powers of ten"
+      ],
+      "path": "courseware/g1-subtraction-depot/index.html"
     },
     {
       "id": "sale-detective",
@@ -1914,6 +2027,45 @@
         "游戏"
       ],
       "path": "courseware/drone-post/index.html"
+    },
+    {
+      "id": "g1-mixed-relay",
+      "title": {
+        "zh": "加减接力",
+        "en": "Add-Subtract Relay"
+      },
+      "description": {
+        "zh": "沿数线先接住一批、再送走一批，完成两步接力。",
+        "en": "Take a group on, then let a group off to finish each two-step relay."
+      },
+      "category": "math",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1b"
+      ],
+      "tags": [
+        "加减法",
+        "运算"
+      ],
+      "icon": "🏃",
+      "order": 33,
+      "badge": "new",
+      "keywords": [
+        "Addition & Subtraction",
+        "addition",
+        "subtraction",
+        "凑十法",
+        "make ten",
+        "数的分解",
+        "number bonds",
+        "Arithmetic",
+        "arithmetic",
+        "operations",
+        "四则运算"
+      ],
+      "path": "courseware/g1-mixed-relay/index.html"
     },
     {
       "id": "carnival-truth",
@@ -2028,6 +2180,88 @@
         "three.js"
       ],
       "path": "courseware/density-detective-lab/index.html"
+    },
+    {
+      "id": "g1-weight-lab",
+      "title": {
+        "zh": "轻重天平",
+        "en": "Balance Playground"
+      },
+      "description": {
+        "zh": "看天平哪边下沉，找出重的、轻的或一样重的东西。",
+        "en": "Watch the balance tip to find heavier, lighter and equal objects."
+      },
+      "category": "math",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a"
+      ],
+      "tags": [
+        "轻重",
+        "计量单位"
+      ],
+      "icon": "⚖️",
+      "order": 34,
+      "badge": "new",
+      "keywords": [
+        "Weight & Balance",
+        "轻重",
+        "比轻重",
+        "重",
+        "轻",
+        "heavier",
+        "lighter",
+        "weight",
+        "Units & Measurement",
+        "units",
+        "measurement",
+        "单位换算",
+        "unit conversion",
+        "cubic units"
+      ],
+      "path": "courseware/g1-weight-lab/index.html"
+    },
+    {
+      "id": "g1-direction-town",
+      "title": {
+        "zh": "方位小镇",
+        "en": "Direction Town"
+      },
+      "description": {
+        "zh": "在小镇地图上找前后、左右、上下的位置。",
+        "en": "Find neighbors in front, behind, left, right, above and below on a town map."
+      },
+      "category": "math",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a"
+      ],
+      "tags": [
+        "位置"
+      ],
+      "icon": "🧭",
+      "order": 35,
+      "badge": "new",
+      "keywords": [
+        "Position & Direction",
+        "位置",
+        "方向",
+        "前后左右",
+        "上下",
+        "position",
+        "direction",
+        "front",
+        "back",
+        "left",
+        "right",
+        "up",
+        "down"
+      ],
+      "path": "courseware/g1-direction-town/index.html"
     },
     {
       "id": "lantern-lane",
@@ -2204,6 +2438,37 @@
         "模拟"
       ],
       "path": "courseware/optics-lab/index.html"
+    },
+    {
+      "id": "g1-flat-shapes",
+      "title": {
+        "zh": "图形拼搭",
+        "en": "Shape Workshop"
+      },
+      "description": {
+        "zh": "为小房子、风筝和车轮挑合适的平面图形。",
+        "en": "Pick flat shapes for roofs, kites, wheels and more."
+      },
+      "category": "math",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1b"
+      ],
+      "tags": [
+        "平面图形"
+      ],
+      "icon": "🔷",
+      "order": 36,
+      "badge": "new",
+      "keywords": [
+        "2D Shapes",
+        "2d shapes",
+        "长方形",
+        "rectangle"
+      ],
+      "path": "courseware/g1-flat-shapes/index.html"
     },
     {
       "id": "shape-tailor",
@@ -4384,13 +4649,12 @@
         "zh": "毛毛虫只吃「有规律的东西」：红-黄-红-黄-？喂对下一个它就长一节，颜色、声音、动作三种规律轮番登场。吃饱结茧，破茧的蝴蝶翅膀就是它吃过的规律花纹！",
         "en": "This caterpillar only eats things that follow a pattern: red-yellow-red-yellow-? Feed the right next item and it grows. Colors, sounds and moves — then it spins a cocoon, and the butterfly's wings wear every pattern it ate!"
       },
-      "category": "logic",
+      "category": "math",
       "levels": [
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2"
+        "g1b"
       ],
       "tags": [
         "找规律",
@@ -4670,17 +4934,15 @@
         "en": "Tangram Shadow Play"
       },
       "description": {
-        "zh": "红幕拉开，故事却缺了角色！拖动、旋转和翻转七块七巧板，拼出桥、狐狸和大雁；最后一块归位时，剪影会立刻活过来走进戏里。",
-        "en": "The red curtain rises, but the story is missing its cast. Slide, turn, and flip all seven tangram pieces into a bridge, a fox, and a goose — then watch each finished shadow come alive on stage."
+        "zh": "拖动、旋转和翻转七块七巧板，完成桥、狐狸、大雁、帆船、小屋、松树、飞鸟和星星八幕皮影戏。",
+        "en": "Slide, turn and flip all seven tangram pieces to complete eight shadow-play scenes."
       },
-      "category": "logic",
+      "category": "math",
       "levels": [
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2",
-        "g3"
+        "g1b"
       ],
       "tags": [
         "平面图形",
@@ -5662,135 +5924,14 @@
       "path": "courseware/microscope-cell-lab/index.html"
     },
     {
-      "id": "g1-math",
+      "id": "g1-character-garden",
       "title": {
-        "zh": "一年级数学闯关",
-        "en": "Grade 1 Math Quest"
+        "zh": "汉字寻宝",
+        "en": "Character Garden"
       },
       "description": {
-        "zh": "和吉祥物小狐一起闯关：数一数、比大小、加减法、认时钟、找规律、比轻重、认方向、认钱币、认图形、玩七巧板。答对有星星和金币，答错只有温柔提示，绝不批评。",
-        "en": "Adventure with Foxy: counting, comparing, add & subtract, clocks, patterns, weight, directions, coins, shapes and tangram. Earn stars and coins; gentle hints, never punished."
-      },
-      "category": "math",
-      "levels": [
-        "primary"
-      ],
-      "grades": [
-        "g1"
-      ],
-      "tags": [
-        "数的认识",
-        "加减法",
-        "时间",
-        "找规律",
-        "平面图形",
-        "立体图形",
-        "比大小",
-        "轻重",
-        "位置",
-        "人民币",
-        "七巧板"
-      ],
-      "icon": "🧮",
-      "order": 200,
-      "keywords": [
-        "Numbers & Counting",
-        "百数表",
-        "hundred chart",
-        "数序",
-        "number order",
-        "100以内的数",
-        "counting",
-        "Addition & Subtraction",
-        "addition",
-        "subtraction",
-        "凑十法",
-        "make ten",
-        "数的分解",
-        "number bonds",
-        "Time & Clocks",
-        "telling time",
-        "clock",
-        "认识钟表",
-        "整时",
-        "半时",
-        "hours",
-        "minutes",
-        "作息",
-        "Patterns",
-        "patterns",
-        "模式识别",
-        "pattern recognition",
-        "逻辑启蒙",
-        "2D Shapes",
-        "2d shapes",
-        "长方形",
-        "rectangle",
-        "3D Shapes",
-        "3d shapes",
-        "长方体",
-        "圆柱",
-        "cylinder",
-        "圆锥",
-        "cone",
-        "旋转体",
-        "solids of revolution",
-        "voxels",
-        "Compare Numbers",
-        "比大小",
-        "大于",
-        "小于",
-        "等于",
-        "compare numbers",
-        "greater than",
-        "less than",
-        "Weight & Balance",
-        "轻重",
-        "比轻重",
-        "重",
-        "轻",
-        "heavier",
-        "lighter",
-        "weight",
-        "Position & Direction",
-        "位置",
-        "方向",
-        "前后左右",
-        "上下",
-        "position",
-        "direction",
-        "front",
-        "back",
-        "left",
-        "right",
-        "up",
-        "down",
-        "Currency (RMB)",
-        "人民币",
-        "元角分",
-        "钱币",
-        "钱",
-        "money",
-        "coins",
-        "yuan",
-        "jiao",
-        "fen",
-        "Tangram",
-        "七巧板",
-        "tangram",
-        "拼图"
-      ],
-      "path": "courseware/g1-math/index.html"
-    },
-    {
-      "id": "g1-chinese",
-      "title": {
-        "zh": "一年级语文闯关",
-        "en": "Grade 1 Chinese Quest"
-      },
-      "description": {
-        "zh": "和吉祥物小狐一起认生字：天地人、金木水火土、口耳目、日月水火、对韵歌。看图配字、看字配图，答对集星星，答错有温柔提示。",
-        "en": "Adventure with Foxy to learn characters: heaven/earth/person, the five elements, face parts, sun/moon/water/fire, and rhyming couplets. Match picture to character; earn stars, gentle hints."
+        "zh": "在图画花园里给常见汉字找到对应的事物。",
+        "en": "Find the picture that belongs to each familiar character."
       },
       "category": "chinese",
       "levels": [
@@ -5802,8 +5943,9 @@
       "tags": [
         "识字"
       ],
-      "icon": "📚",
-      "order": 201,
+      "icon": "🌱",
+      "order": 208,
+      "badge": "new",
       "keywords": [
         "Character Recognition",
         "识字",
@@ -5813,7 +5955,183 @@
         "character recognition",
         "chinese characters"
       ],
-      "path": "courseware/g1-chinese/index.html"
+      "path": "courseware/g1-character-garden/index.html"
+    },
+    {
+      "id": "g1-pinyin-tracks",
+      "title": {
+        "zh": "拼音轨道",
+        "en": "Pinyin Tracks"
+      },
+      "description": {
+        "zh": "把声母、韵母和声调车厢接起来，拼出图画里的字音。",
+        "en": "Join initial, final and tone cars to spell pictured syllables."
+      },
+      "category": "chinese",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a"
+      ],
+      "tags": [
+        "拼音"
+      ],
+      "icon": "🚃",
+      "order": 209,
+      "badge": "new",
+      "keywords": [
+        "Pinyin",
+        "pinyin",
+        "汉语拼音",
+        "声母",
+        "韵母",
+        "initials",
+        "finals"
+      ],
+      "path": "courseware/g1-pinyin-tracks/index.html"
+    },
+    {
+      "id": "g1-stroke-workshop",
+      "title": {
+        "zh": "笔画工坊",
+        "en": "Stroke Workshop"
+      },
+      "description": {
+        "zh": "用手指沿着发光路线描写基本笔画。",
+        "en": "Trace the glowing routes of basic Chinese strokes."
+      },
+      "category": "chinese",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a"
+      ],
+      "tags": [
+        "识字"
+      ],
+      "icon": "🖌️",
+      "order": 210,
+      "badge": "new",
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters"
+      ],
+      "path": "courseware/g1-stroke-workshop/index.html"
+    },
+    {
+      "id": "g1-word-post",
+      "title": {
+        "zh": "词语邮局",
+        "en": "Word Post Office"
+      },
+      "description": {
+        "zh": "把词语卡片送到对应的图画信箱。",
+        "en": "Deliver each word card to its matching picture mailbox."
+      },
+      "category": "chinese",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a"
+      ],
+      "tags": [
+        "识字"
+      ],
+      "icon": "📮",
+      "order": 211,
+      "badge": "new",
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters"
+      ],
+      "path": "courseware/g1-word-post/index.html"
+    },
+    {
+      "id": "g1-rhyme-stage",
+      "title": {
+        "zh": "对韵小剧场",
+        "en": "Rhyme Stage"
+      },
+      "description": {
+        "zh": "敲响搭档卡，让对韵歌中的两边在舞台相遇。",
+        "en": "Bring the paired words of a rhyme together on stage."
+      },
+      "category": "chinese",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a"
+      ],
+      "tags": [
+        "识字",
+        "找规律"
+      ],
+      "icon": "🥁",
+      "order": 212,
+      "badge": "new",
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "Patterns",
+        "patterns",
+        "模式识别",
+        "pattern recognition",
+        "逻辑启蒙"
+      ],
+      "path": "courseware/g1-rhyme-stage/index.html"
+    },
+    {
+      "id": "g1-sentence-train",
+      "title": {
+        "zh": "句子列车",
+        "en": "Sentence Train"
+      },
+      "description": {
+        "zh": "把主角、地点、动作车厢按示例顺序连起来。",
+        "en": "Link who, where and action cars in the shown order."
+      },
+      "category": "chinese",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a"
+      ],
+      "tags": [
+        "识字"
+      ],
+      "icon": "🚄",
+      "order": 213,
+      "badge": "new",
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters"
+      ],
+      "path": "courseware/g1-sentence-train/index.html"
     }
   ]
 }

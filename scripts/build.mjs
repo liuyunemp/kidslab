@@ -10,10 +10,22 @@
  * 内联进每个课件的 index.html（详见 docs/analytics.md）；未配置则跳过。
  */
 import { transform } from 'esbuild';
-import { cp, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readdir, readFile, rm, stat, writeFile as writeFileNative } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+// Windows indexers can briefly hold newly created build files open. Retry only
+// transient open failures; content validation and other errors still fail fast.
+async function writeFile(file, content) {
+  for (let attempt = 0; ; attempt += 1) {
+    try { return await writeFileNative(file, content); }
+    catch (error) {
+      if (attempt >= 5 || !['UNKNOWN', 'EBUSY', 'EPERM'].includes(error.code)) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 40 * (attempt + 1)));
+    }
+  }
+}
 import { validateFactsCoverage, validateFactsDocument } from './facts.mjs';
 import { GRADE_RE } from './grades.mjs';
 
@@ -87,6 +99,8 @@ function validate(id, meta, taxonomy) {
   if (meta.grades !== undefined && (!Array.isArray(meta.grades) || meta.grades.some((g) => !GRADE_RE.test(g))))
     errs.push('grades 必须是 g1–g12（可选 a/b 后缀表示上/下册）的数组');
   if (typeof meta.icon !== 'string' || !meta.icon) errs.push('icon 必填 (emoji)');
+  if (meta.listed !== undefined && typeof meta.listed !== 'boolean')
+    errs.push('listed 必须是布尔值');
   return errs;
 }
 
@@ -248,7 +262,8 @@ function bustCourseAssets(html, fingerprints) {
   return html.replace(
     /(<(?:link|script)\b[^>]*\b(?:href|src)=")([^"?#:]+\.(?:css|js|mjs))(?:\?v=[0-9a-f]+)?(")/gi,
     (match, head, asset, tail) => {
-      const v = fingerprints.get(asset);
+      const normalized = path.posix.normalize(asset);
+      const v = normalized.startsWith('../') ? null : fingerprints.get(normalized);
       return v ? `${head}${asset}?v=${v}${tail}` : `${head}${asset}${tail}`;
     },
   );
@@ -300,12 +315,13 @@ async function main() {
     ok(`courseware/${c.id}  ${(total / 1024).toFixed(1)} KB（压缩节省 ${(saved / 1024).toFixed(1)} KB）`);
   }
 
-  const usedTags = [...new Set(courses.flatMap((c) => c.tags))].sort();
+  const listedCourses = courses.filter((c) => c.listed !== false);
+  const usedTags = [...new Set(listedCourses.flatMap((c) => c.tags))].sort();
   const manifest = {
     generatedAt: new Date().toISOString(),
     /* 使用中的受控标签元数据（英文名 + 类型），供界面与星图使用 */
     tags: Object.fromEntries(usedTags.map((t) => [t, { en: taxonomy[t].en, kind: taxonomy[t].kind }])),
-    courses: courses.map((c) => ({
+    courses: listedCourses.map((c) => ({
       ...c,
       /* 词表别名展开为搜索关键词，让 "fraction"、"等值分数" 等仍可搜到 */
       keywords: [...new Set(c.tags.flatMap((t) => [taxonomy[t].en, ...(taxonomy[t].aliases || [])]))],
@@ -313,7 +329,7 @@ async function main() {
     })),
   };
   await writeFile(path.join(OUT, 'index.json'), JSON.stringify(manifest, null, 2) + '\n');
-  ok(`courseware/index.json  共 ${courses.length} 个课件`);
+  ok(`courseware/index.json  共 ${listedCourses.length} 个可见课件`);
 
   const assetVersions = await bustAssets();
   await emitServiceWorker(assetVersions);

@@ -314,7 +314,7 @@ export function initGame({ levels, messages }) {
       btn.classList.add('opt--ok');
       renderRewards(); renderNav();
       burst();
-      if (allDone(completed)) { setTimeout(showWin, 700); }
+      if (allDone(completed, levels.length)) { setTimeout(showWin, 700); }
       else { elCoach.textContent = M().correct || '答对啦！'; setTimeout(() => go(current + 1), 850); }
     } else {
       audio.wrong();

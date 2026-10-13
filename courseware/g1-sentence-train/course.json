@@ -1,0 +1,24 @@
+{
+  "id": "g1-sentence-train",
+  "title": {
+    "zh": "句子列车",
+    "en": "Sentence Train"
+  },
+  "description": {
+    "zh": "把主角、地点、动作车厢按示例顺序连起来。",
+    "en": "Link who, where and action cars in the shown order."
+  },
+  "category": "chinese",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "识字"
+  ],
+  "icon": "🚄",
+  "order": 213,
+  "badge": "new"
+}

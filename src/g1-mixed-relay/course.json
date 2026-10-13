@@ -1,0 +1,25 @@
+{
+  "id": "g1-mixed-relay",
+  "title": {
+    "zh": "加减接力",
+    "en": "Add-Subtract Relay"
+  },
+  "description": {
+    "zh": "沿数线先接住一批、再送走一批，完成两步接力。",
+    "en": "Take a group on, then let a group off to finish each two-step relay."
+  },
+  "category": "math",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1b"
+  ],
+  "tags": [
+    "加减法",
+    "运算"
+  ],
+  "icon": "🏃",
+  "order": 33,
+  "badge": "new"
+}

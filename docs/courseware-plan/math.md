@@ -1,6 +1,6 @@
 # 数学课件清单 · Math Courseware Plan
 
-> 分类 `math` ｜ 共 **31** 个 ｜ 已有课件：🍕 分数披萨店 `fraction-lab`（分数/小数/百分数认识）
+> 分类 `math` ｜ 共 **38** 个规划项 ｜另有既有课件：🍕 分数披萨店 `fraction-lab`（分数/小数/百分数认识）
 > 覆盖课标四大领域：数与代数 · 图形与几何 · 统计与概率 · 综合与实践（数学广角）
 
 标注说明：`G年级` `优先级 P0>P1>P2` `技术`。每条含 **玩法**（核心机制）与 **魔法时刻**（哇的瞬间）。
@@ -8,6 +8,22 @@
 ---
 
 ## 低年级 1–2
+
+### 一年级独立游戏补充（2026-10）
+
+旧综合入口 `g1-math` 保留为导航，`listed:false` 不进入主站清单。每个下列主题独立存档；一局须完成八道不同任务，答错留在当前任务。新增的七款低龄游戏采用本轮确定的 2D 卡通交互。
+
+| 课件 ID | 册次 | 玩法与覆盖 |
+| --- | --- | --- |
+| `g1-compare-bridge` 比大小桥 | 上、下册 | 0–100 比较，包含大于、小于、相等 |
+| `g1-addition-depot` 加法车站 | 下册 | 数线上的 100 以内加法，十位与个位移动 |
+| `g1-subtraction-depot` 减法车站 | 下册 | 数线上的 100 以内减法 |
+| `g1-mixed-relay` 加减接力 | 下册 | 两站接力，先加后减，每步均需完成 |
+| `g1-weight-lab` 轻重天平 | 上册 | 根据天平下沉或平衡比较轻重 |
+| `g1-direction-town` 方位小镇 | 上册 | 指定参照物后的前后、左右、上下位置 |
+| `g1-flat-shapes` 图形拼搭 | 下册 | 圆、三角形、正方形、长方形、平行四边形 |
+
+复用课件的通关边界：`number-fireflies` 八关；`hundred-metro` 与 `clock-town` 各补至八关；`change-vending` 新增分币与五位顾客，合计八单；`pattern-caterpillar` 前八关为基础通关、后四关为进阶；`tangram-theater` 增至八幕，每幕七块全放完才算一道；`shadow-theater` 保留十幕。`pattern-caterpillar` 与 `tangram-theater` 原属逻辑规划 ID，仍计在该规划口径，主站分类调整为数学便于查找。
 
 ### 1. ✨ 数字萤火虫 · Number Fireflies — `number-fireflies`
 `G1` `P0` `Canvas`｜20 以内加减、数的分解、凑十法

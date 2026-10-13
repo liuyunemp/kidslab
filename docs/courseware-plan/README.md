@@ -1,7 +1,7 @@
 # KidsLab 互动课件规划总览
 # KidsLab Interactive Courseware Master Plan
 
-> 小学目标：用一批「先好玩、再长知识」的交互小游戏，覆盖 1–6 年级 **数学 / 编程 / 逻辑 / 科学** 的重要知识点。
+> 小学目标：用一批「先好玩、再长知识」的交互小游戏，覆盖 1–6 年级 **数学 / 语文 / 编程 / 逻辑 / 科学** 的重要知识点。
 > 初高中目标：用可操控、可测量、可记录、可推断的数字实验，覆盖 7–12 年级的数学、物理、化学和生物/科学主干。
 > 本目录是规划清单，不是教案 —— 每个条目描述「一个值得做出来的游戏」，实现时以 `AGENTS.md` 的工程约定为准。
 > 已完成、未实现和待对齐状态统一维护在 [`status.md`](./status.md)；每次完成规划课件后必须同步更新。
@@ -43,8 +43,9 @@
 
 | 文件 | 学科 | 规划数量 | 分类值 (`category`) |
 |---|---|---|---|
-| [status.md](./status.md) | 状态清单 | 小学 84 个 + 初高中 46 个目标 | 已完成 / 未实现 / 待对齐 |
-| [math.md](./math.md) | 数学 | 31 | `math` |
+| [status.md](./status.md) | 状态清单 | 小学 97 个 + 初高中 46 个目标 | 已完成 / 未实现 / 待对齐 |
+| [math.md](./math.md) | 数学 | 38 | `math` |
+| [chinese.md](./chinese.md) | 一年级上册语文 | 6 | `chinese` |
 | [programming.md](./programming.md) | 编程 | 14 | `programming` |
 | [logic.md](./logic.md) | 逻辑 | 13 | `logic` |
 | [science.md](./science.md) | 科学 | 21 | `science` |
@@ -53,9 +54,9 @@
 | [primary-math-inquiry.md](./primary-math-inquiry.md) | 小学数学探究深度合同 | 26 个 `g3-g6` 课件的评级基线与改造批次 | `math` |
 | [junior-physics.md](./junior-physics.md) | 初中物理产品语言与试点路径 | 方案 B 学科试点（含存量单摆） | `physics` |
 
-共规划 **79** 个课件，加上已上线的 5 个小学课件（🍕 分数披萨店、🐢 海龟画室、🪐 太阳系漫游、🗼 汉诺塔挑战、🧩 数独动物园），小学学段合计 84 个。
+共规划 **92** 个课件，加上已上线的 5 个小学课件（🍕 分数披萨店、🐢 海龟画室、🪐 太阳系漫游、🗼 汉诺塔挑战、🧩 数独动物园），小学学段合计 97 个。
 
-初高中实验型课件采用独立口径，不混入小学 84 项汇总：第一轮 26 个见 [`secondary-labs.md`](./secondary-labs.md)，第二轮 20 个见 [`secondary-labs-wave2.md`](./secondary-labs-wave2.md)，合计 46 个目标。
+初高中实验型课件采用独立口径，不混入小学 97 项汇总：第一轮 26 个见 [`secondary-labs.md`](./secondary-labs.md)，第二轮 20 个见 [`secondary-labs-wave2.md`](./secondary-labs-wave2.md)，合计 46 个目标。
 
 ## 🎯 设计原则（每个课件都必须遵守）
 

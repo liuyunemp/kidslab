@@ -1,0 +1,25 @@
+{
+  "id": "g1-subtraction-depot",
+  "title": {
+    "zh": "减法车站",
+    "en": "Subtraction Depot"
+  },
+  "description": {
+    "zh": "让乘客下车，沿数线退回正确的站台。",
+    "en": "Let passengers off and move back to the right stop on the number line."
+  },
+  "category": "math",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1b"
+  ],
+  "tags": [
+    "加减法",
+    "数位"
+  ],
+  "icon": "🚋",
+  "order": 32,
+  "badge": "new"
+}

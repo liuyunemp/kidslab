@@ -137,6 +137,11 @@
     level: 0, running: false, width: 1, height: 1, dpr: 1, fireflies: [], particles: [], bursts: [], lasso: [], drawing: false,
     progress: 0, catches: 0, startedAt: 0, now: 0, last: 0, shakeUntil: 0, magicSeen: false, message: '', stars: 3,
   };
+  const SAVE_KEY = 'kidslab.number-fireflies.round';
+  try {
+    const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    if (Number.isInteger(saved.level) && saved.level >= 0 && saved.level < LEVELS.length) state.level = saved.level;
+  } catch { /* Storage is optional. */ }
 
   let actx = null;
   function ensureAudio() {
@@ -187,11 +192,22 @@
   function makeFireflies(nums) {
     const w = state.width || canvas.clientWidth;
     const h = state.height || canvas.clientHeight;
+    const cols = Math.ceil(Math.sqrt(nums.length * w / h));
+    const rows = Math.ceil(nums.length / cols);
+    const left = 62, right = w - 62, top = 120, bottom = h - 92;
     state.fireflies = nums.map((n, i) => ({
-      id: `${Date.now()}-${i}`, n, x: rand(70, Math.max(80, w - 70)), y: rand(105, Math.max(120, h - 125)),
+      id: `${Date.now()}-${i}`, n,
+      x: left + ((i % cols) + 0.5) * (right - left) / cols,
+      y: top + (Math.floor(i / cols) + 0.5) * (bottom - top) / rows,
       vx: rand(-24, 24), vy: rand(-18, 18), r: rand(21, 27), phase: rand(0, Math.PI * 2), flap: rand(0, 1),
       selected: false, happy: 0, shake: 0, ghost: false, spiral: null,
     }));
+  }
+  if (new URLSearchParams(location.search).has('e2e')) {
+    window.__fireflySnapshot = () => ({
+      level: state.level, progress: state.progress, running: state.running, width: state.width, height: state.height,
+      fireflies: state.fireflies.filter((fly) => !fly.ghost).map(({ n, x, y }) => ({ n, x, y })),
+    });
   }
 
   function startGame() {
@@ -263,8 +279,8 @@
       state.message = tenPair ? makeTenText(chosen) : t('success')(sum);
       makeBurst(avg(chosen), tenPair ? 95 : 55, tenPair);
       if (tenPair) tenSound(); else successSound();
-      setTimeout(() => refillIfNeeded(chosen), 450);
       const need = lv.type === 'rain' ? lv.need : lv.lights;
+      if (state.progress < need) setTimeout(() => makeFireflies(lv.nums), 780);
       if (state.progress >= need) setTimeout(completeLevel, 850);
       else if (lv.type === 'rain') state.message = t('rainNeed')(need - state.progress);
     } else {
@@ -298,18 +314,13 @@
       state.particles.push({ x: p.x, y: p.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: rand(0.5, hot ? 1.3 : 0.9), max: 1.3, size: rand(2, hot ? 7 : 5), hot });
     }
   }
-  function refillIfNeeded(chosen) {
-    const lv = currentLevel();
-    chosen.forEach((f) => {
-      if (lv.type === 'rain') {
-        f.ghost = false; f.spiral = null; f.n = lv.nums[(Math.random() * lv.nums.length) | 0]; f.x = rand(55, state.width - 55); f.y = -30; f.vy = rand(24, 48);
-      }
-    });
-  }
-
   function completeLevel() {
+    if (!state.running) return;
     state.running = false;
     const last = state.level === LEVELS.length - 1;
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ level: last ? 0 : state.level + 1 })); } catch { /* Storage is optional. */ }
+    window.cool?.stage?.(`level-${state.level + 1}-complete`);
+    if (last) window.cool?.complete?.();
     win.hidden = false;
     winEmoji.textContent = last ? '🌌' : '🌟';
     winTitle.textContent = last ? t('allTitle') : t('winTitle');
@@ -344,6 +355,7 @@
         return;
       }
       if (f.ghost) return;
+      if (state.drawing) return;
       f.x += f.vx * dt + Math.sin(f.phase) * 0.35;
       f.y += f.vy * dt + Math.cos(f.phase * 0.7) * 0.3;
       if (lv.type === 'rain') f.vy += dt * 4;

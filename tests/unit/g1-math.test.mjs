@@ -78,9 +78,10 @@ test('isUnlocked / allDone 解锁与通关逻辑', () => {
   assert.equal(isUnlocked(1, [false]), false);
   assert.equal(isUnlocked(1, [true]), true);
   assert.equal(isUnlocked(2, [true, false]), false);
-  assert.equal(allDone([]), false);
-  assert.equal(allDone([true, true, true]), true);
-  assert.equal(allDone([true, false, true]), false);
+  assert.equal(allDone([], 3), false);
+  assert.equal(allDone([true], 3), false);
+  assert.equal(allDone([true, true, true], 3), true);
+  assert.equal(allDone([true, false, true], 3), false);
 });
 
 test('实际钱币关的选项金额各不相同，且只有一个正确答案', () => {

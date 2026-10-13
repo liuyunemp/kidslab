@@ -1,63 +1,29 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>🧮 一年级数学闯关 · KidsLab</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>一年级数学游戏地图 · KidsLab</title>
   <script src="../../scripts/sdk/core.js" data-kidslab-sdk></script>
-  <script>
-    (() => {
-      try {
-        const theme = localStorage.getItem('kidslab.theme')
-          || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        const lang = localStorage.getItem('kidslab.lang')
-          || (navigator.language && navigator.language.startsWith('zh') ? 'zh' : 'en');
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-      } catch { /* private mode */ }
-    })();
-  </script>
+  <link rel="stylesheet" href="hub.css">
 </head>
-<body>
-  <header class="bar">
-    <a class="pill" id="backBtn" href="../../index.html">← <span data-t="back">返回</span></a>
-    <h1 class="bar__title">🧮 <span>一年级数学</span></h1>
-    <div class="bar__actions">
-      <button class="pill pill--icon" id="muteBtn" type="button" aria-pressed="false">🔊</button>
-      <button class="pill pill--icon" id="themeBtn" type="button" aria-pressed="true">🌙</button>
-      <button class="pill" id="langBtn" type="button">EN</button>
-    </div>
-  </header>
-
-  <button class="nav-toggle" id="navToggle" type="button">🗺️ <span data-t="nav">关卡星图</span></button>
-  <nav class="nav" id="nav" aria-label="关卡星图"></nav>
-
-  <main class="play">
-    <div class="mascot" id="mascot"></div>
-    <p class="coach" id="coach">开始吧！</p>
-    <section class="stage" id="stage" aria-live="polite"></section>
-    <p class="tip" id="tip"></p>
-    <div class="options" id="options"></div>
-  </main>
-
-  <footer class="rewards" id="rewards">
-    <span class="reward"><i>🌟</i><b id="starCount">0</b><span data-t="stars">星星</span></span>
-    <span class="reward"><i>🪙</i><b id="coinCount">0</b><span data-t="coins">金币</span></span>
-    <span class="reward"><i>🔖</i><b id="stickerCount">0</b><span data-t="stickers">贴纸</span></span>
-  </footer>
-
-  <p class="foot-tip" id="footTip" data-t="foot">点一点，闯一关，集星星！</p>
-
-  <div class="overlay" id="overlay" hidden>
-    <div class="overlay__card">
-      <div class="overlay__burst">🎉🌟🎊</div>
-      <h2 class="overlay__title">太棒了！</h2>
-      <p class="overlay__text">你闯过了所有关卡！</p>
-      <button class="btn btn--big" data-act="close" type="button">🏠 <span data-t="back">返回</span></button>
-    </div>
+<body data-subject="math"><main>
+  <nav class="toolbar"><a class="back" href="../../index.html" data-t="back">← 返回 KidsLab</a><div><button id="themeBtn" type="button" aria-label="切换主题">🌙</button><button id="langBtn" type="button" aria-label="切换语言">EN</button></div></nav>
+  <h1 data-t="title">🧮 一年级数学游戏地图</h1>
+  <p data-t="intro">挑一个喜欢的游戏，玩完八个任务再换下一站！</p>
+  <div class="grid">
+    <a href="../number-fireflies/" data-t="fireflies">✨ 数字萤火虫</a>
+    <a href="../hundred-metro/" data-t="metro">🚇 百数地铁</a>
+    <a href="../clock-town/" data-t="clock">🕰️ 时钟小镇</a>
+    <a href="../g1-compare-bridge/" data-t="compare">🐊 比大小桥</a>
+    <a href="../g1-addition-depot/" data-t="add">🚂 加法车站</a>
+    <a href="../g1-subtraction-depot/" data-t="subtract">🚋 减法车站</a>
+    <a href="../g1-mixed-relay/" data-t="mixed">🏃 加减接力</a>
+    <a href="../g1-weight-lab/" data-t="weight">⚖️ 轻重天平</a>
+    <a href="../g1-direction-town/" data-t="direction">🧭 方位小镇</a>
+    <a href="../change-vending/" data-t="money">🪙 找零售货机</a>
+    <a href="../pattern-caterpillar/" data-t="pattern">🐛 规律毛毛虫</a>
+    <a href="../tangram-theater/" data-t="tangram">🎭 七巧板皮影戏</a>
+    <a href="../shadow-theater/" data-t="shadow">🔦 立体影子剧场</a>
+    <a href="../g1-flat-shapes/" data-t="shapes">🔷 图形拼搭</a>
   </div>
-
-  <script type="module" src="main.js"></script>
-</body>
-</html>
+</main><script type="module" src="hub.js"></script></body></html>

@@ -1,0 +1,115 @@
+export const config = {
+  "id": "g1-sentence-train",
+  "kind": "sentence",
+  "category": "chinese",
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "识字"
+  ],
+  "icon": "🚄",
+  "title": {
+    "zh": "句子列车",
+    "en": "Sentence Train"
+  },
+  "description": {
+    "zh": "把主角、地点、动作车厢按示例顺序连起来。",
+    "en": "Link who, where and action cars in the shown order."
+  },
+  "accent": "#578acb",
+  "backdrop": "#eaf4ff",
+  "mascot": "🚄",
+  "tasks": [
+    {
+      "id": "q1",
+      "words": [
+        "小鸟",
+        "在天上",
+        "飞"
+      ],
+      "answer": "小鸟|在天上|飞"
+    },
+    {
+      "id": "q2",
+      "words": [
+        "小鱼",
+        "在水里",
+        "游"
+      ],
+      "answer": "小鱼|在水里|游"
+    },
+    {
+      "id": "q3",
+      "words": [
+        "小兔",
+        "在草地上",
+        "跑"
+      ],
+      "answer": "小兔|在草地上|跑"
+    },
+    {
+      "id": "q4",
+      "words": [
+        "小猫",
+        "在椅子上",
+        "睡觉"
+      ],
+      "answer": "小猫|在椅子上|睡觉"
+    },
+    {
+      "id": "q5",
+      "words": [
+        "妈妈",
+        "在厨房",
+        "做饭"
+      ],
+      "answer": "妈妈|在厨房|做饭"
+    },
+    {
+      "id": "q6",
+      "words": [
+        "爸爸",
+        "在花园里",
+        "种花"
+      ],
+      "answer": "爸爸|在花园里|种花"
+    },
+    {
+      "id": "q7",
+      "words": [
+        "小狗",
+        "在门口",
+        "等我"
+      ],
+      "answer": "小狗|在门口|等我"
+    },
+    {
+      "id": "q8",
+      "words": [
+        "太阳",
+        "在天空中",
+        "发光"
+      ],
+      "answer": "太阳|在天空中|发光"
+    },
+    {
+      "id": "q9",
+      "words": [
+        "我",
+        "在教室里",
+        "读书"
+      ],
+      "answer": "我|在教室里|读书"
+    },
+    {
+      "id": "q10",
+      "words": [
+        "我们",
+        "在操场上",
+        "玩"
+      ],
+      "answer": "我们|在操场上|玩"
+    }
+  ]
+};

@@ -1,0 +1,24 @@
+{
+  "id": "g1-stroke-workshop",
+  "title": {
+    "zh": "笔画工坊",
+    "en": "Stroke Workshop"
+  },
+  "description": {
+    "zh": "用手指沿着发光路线描写基本笔画。",
+    "en": "Trace the glowing routes of basic Chinese strokes."
+  },
+  "category": "chinese",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "识字"
+  ],
+  "icon": "🖌️",
+  "order": 210,
+  "badge": "new"
+}

@@ -51,6 +51,8 @@
         { action: '提醒小米去钓鱼', activity: '池塘开钓', win: '鱼竿甩起来！' },
         { action: '点亮晚餐小屋', activity: '全家吃晚餐', win: '热腾腾开饭！' },
         { action: '关灯说晚安', activity: '小镇入睡', win: '晚安，小镇！' },
+        { action: '叫醒晨跑队', activity: '开始晨跑', win: '大家跑起来啦！' },
+        { action: '打开图书馆', activity: '图书馆开门', win: '书香小镇开门啦！' },
       ],
     },
     en: {
@@ -102,6 +104,8 @@
         { action: 'send Mia fishing', activity: 'Fishing time', win: 'Cast the line!' },
         { action: 'light the dinner house', activity: 'Family dinner', win: 'Dinner is served!' },
         { action: 'turn out the lights', activity: 'Town bedtime', win: 'Good night, town!' },
+        { action: 'wake the running club', activity: 'Morning run', win: 'Everyone is running!' },
+        { action: 'open the library', activity: 'Library opens', win: 'Story time begins!' },
       ],
     },
   };
@@ -113,7 +117,19 @@
     { target: 915, start: 875, period: 'afternoon', scene: 'day', face: '🧒', emoji: '🎣🐟', activity: 'fishing' },
     { target: 1125, start: 1090, period: 'evening', scene: 'evening', face: '👨‍👩‍👧', emoji: '🍲✨', activity: 'dinner' },
     { target: 1260, start: 1215, period: 'night', scene: 'night', face: '👵', emoji: '🌙💤', activity: 'bedtime' },
+    { target: 390, start: 340, period: 'morning', scene: 'dawn', face: '🏃', emoji: '🏃🌅', activity: 'run' },
+    { target: 600, start: 545, period: 'morning', scene: 'day', face: '📚', emoji: '📚✨', activity: 'library' },
   ];
+  const ROUND_SAVE_KEY = 'kidslab.clock-town.eight-order';
+  let savedLevel = 0;
+  try {
+    if (localStorage.getItem(`${ROUND_SAVE_KEY}.version`) !== '2') {
+      localStorage.removeItem('kidslab.progress.clock-town');
+      localStorage.setItem(`${ROUND_SAVE_KEY}.version`, '2');
+    }
+    const value = Number(localStorage.getItem(ROUND_SAVE_KEY));
+    if (Number.isInteger(value) && value >= 0 && value < ORDERS.length) savedLevel = value;
+  } catch { /* Storage is optional. */ }
 
   const LS = { lang: 'kidslab.lang', theme: 'kidslab.theme' };
   const store = {
@@ -127,14 +143,15 @@
   if (!['light', 'dark'].includes(theme)) theme = 'light';
 
   const state = {
-    level: 0,
-    time: ORDERS[0].start,
+    level: savedLevel,
+    time: ORDERS[savedLevel].start,
     stars: 3,
     hintStep: 0,
     muted: false,
     dragging: null,
     previousStep: 0,
     spinning: false,
+    solved: false,
     idleTimer: 0,
   };
 
@@ -281,6 +298,7 @@
   }
 
   function setTime(value, feedback = true) {
+    if (state.solved) return;
     state.time = Math.round(wrapDay(value) / 5) * 5;
     if (state.time >= 1440) state.time = 0;
     els.town.removeAttribute('data-activity');
@@ -295,6 +313,7 @@
     state.stars = 3;
     state.hintStep = 0;
     state.spinning = false;
+    state.solved = false;
     els.day.disabled = false;
     els.win.hidden = true;
     els.town.removeAttribute('data-activity');
@@ -313,9 +332,11 @@
   }
 
   function checkTime() {
-    if (state.spinning) return;
+    if (state.spinning || state.solved) return;
     const delta = difference();
     if (delta === 0) {
+      state.solved = true;
+      store.set(ROUND_SAVE_KEY, String((state.level + 1) % ORDERS.length));
       bell();
       els.town.dataset.activity = order().activity;
       setTip(t('exact'), 'good');

@@ -1,0 +1,26 @@
+{
+  "id": "g1-compare-bridge",
+  "title": {
+    "zh": "比大小桥",
+    "en": "Number Bridge"
+  },
+  "description": {
+    "zh": "给数字桥装上大于、小于或等于的桥牌，比较 20 和 100 以内的数。",
+    "en": "Fit the greater, less or equal bridge sign between numbers up to 100."
+  },
+  "category": "math",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1a",
+    "g1b"
+  ],
+  "tags": [
+    "比大小",
+    "数的认识"
+  ],
+  "icon": "🐊",
+  "order": 30,
+  "badge": "new"
+}

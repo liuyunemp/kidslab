@@ -51,6 +51,11 @@
           text: '你用完了每一块，而且没有重叠。滑动、旋转、翻面，让七块图形讲完了一整个故事！',
           art: '🦊🪿✨',
         },
+        { tab: '第四幕 · 帆船', mission: '七块木片变成一艘帆船，载狐狸过河！', title: '帆船起航！', text: '七块图形换了位置和方向，变成了帆船。', art: '⛵🦊' },
+        { tab: '第五幕 · 小屋', mission: '给狐狸拼一座有屋顶的小屋。', title: '小屋亮灯啦！', text: '相同的七块木片又拼出了新的轮廓。', art: '🏠✨' },
+        { tab: '第六幕 · 松树', mission: '让七块木片在舞台上长成松树。', title: '松树长高啦！', text: '三角形转一转，可以成为树冠。', art: '🌲🦊' },
+        { tab: '第七幕 · 飞鸟', mission: '拼一只飞鸟，让它飞过小河。', title: '飞鸟展翅！', text: '木片翻面、转向，轮廓也跟着变化。', art: '🐦🌙' },
+        { tab: '第八幕 · 星星', mission: '最后把七块木片送进星光剪影。', title: '八幕皮影戏圆满收官！', text: '你完成了八个不同的七巧板场景，每幕都用到了七块。', art: '⭐🦊🎉' },
       ],
       next: '下一幕 →',
       replay: '再演一遍',
@@ -104,6 +109,11 @@
           text: 'You used every piece with no overlaps. Slides, turns, and flips let seven shapes tell a whole story!',
           art: '🦊🪿✨',
         },
+        { tab: 'Act 4 · Sailboat', mission: 'Use all seven pieces to build a sailboat for the fox.', title: 'The sailboat sets off!', text: 'The same seven shapes moved and turned into a boat.', art: '⛵🦊' },
+        { tab: 'Act 5 · House', mission: 'Give the fox a little house with a roof.', title: 'The house lights up!', text: 'The same seven pieces form another outline.', art: '🏠✨' },
+        { tab: 'Act 6 · Pine', mission: 'Grow a pine tree from all seven pieces.', title: 'The pine grows tall!', text: 'Turn triangles to make a tree crown.', art: '🌲🦊' },
+        { tab: 'Act 7 · Bird', mission: 'Build a bird to fly across the river.', title: 'The bird spreads its wings!', text: 'Turn and flip pieces to change the outline.', art: '🐦🌙' },
+        { tab: 'Act 8 · Star', mission: 'Put every piece into the final starlight shadow.', title: 'All eight acts complete!', text: 'You finished eight different scenes using seven pieces in each.', art: '⭐🦊🎉' },
       ],
       next: 'Next act →',
       replay: 'Play it again',
@@ -134,9 +144,20 @@
       [0.48, 0.51, 225, 1], [0.59, 0.47, 45, 1], [0.37, 0.35, 315, 1],
       [0.31, 0.24, 45, 1], [0.66, 0.62, 225, 1], [0.45, 0.65, 0, 1], [0.68, 0.34, 25, 1],
     ],
+    [[0.32,0.57,225,1],[0.58,0.57,315,1],[0.45,0.35,45,1],[0.32,0.39,135,1],[0.65,0.39,45,1],[0.46,0.68,0,1],[0.45,0.52,0,1]],
+    [[0.34,0.32,225,1],[0.58,0.32,315,1],[0.45,0.57,45,1],[0.34,0.64,135,1],[0.63,0.64,45,1],[0.48,0.45,0,1],[0.57,0.49,0,1]],
+    [[0.45,0.31,225,1],[0.45,0.49,45,1],[0.45,0.64,315,1],[0.33,0.48,135,1],[0.57,0.48,45,1],[0.45,0.78,0,1],[0.45,0.68,90,1]],
+    [[0.29,0.42,225,1],[0.65,0.42,315,1],[0.46,0.52,45,1],[0.27,0.62,135,1],[0.68,0.62,45,1],[0.45,0.65,0,1],[0.48,0.34,0,-1]],
+    [[0.45,0.27,225,1],[0.28,0.46,315,1],[0.62,0.46,45,1],[0.27,0.66,135,1],[0.64,0.66,45,1],[0.45,0.55,0,1],[0.45,0.75,0,1]],
   ];
 
   const SAVE_KEY = 'kidslab.tangram-theater';
+  try {
+    if (localStorage.getItem(`${SAVE_KEY}.eight-act-version`) !== '2') {
+      localStorage.removeItem('kidslab.progress.tangram-theater');
+      localStorage.setItem(`${SAVE_KEY}.eight-act-version`, '2');
+    }
+  } catch { /* Storage is optional. */ }
   const canvas = document.querySelector('#stage');
   const ctx = canvas.getContext('2d');
   const els = {
@@ -186,8 +207,8 @@
   function readSave() {
     try {
       const data = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
-      unlocked = Math.min(2, Math.max(0, Number(data.unlocked) || 0));
-      completed = Math.min(3, Math.max(0, Number(data.completed) || 0));
+      unlocked = Math.min(TARGETS.length - 1, Math.max(0, Number(data.unlocked) || 0));
+      completed = Math.min(TARGETS.length, Math.max(0, Number(data.completed) || 0));
       sceneIndex = Math.min(unlocked, Math.max(0, Number(data.scene) || 0));
     } catch {
       unlocked = 0;
@@ -554,10 +575,10 @@
     if (finaleStarted) return;
     finaleStarted = performance.now();
     completed = Math.max(completed, sceneIndex + 1);
-    if (sceneIndex < 2) unlocked = Math.max(unlocked, sceneIndex + 1);
+    if (sceneIndex < TARGETS.length - 1) unlocked = Math.max(unlocked, sceneIndex + 1);
     save();
     window.cool.stage(`act-${sceneIndex + 1}-complete`);
-    if (sceneIndex === 2) window.cool.complete?.();
+    if (sceneIndex === TARGETS.length - 1) window.cool.complete?.();
   }
 
   function showModal() {
@@ -566,7 +587,7 @@
     els.modalArt.textContent = scene.art;
     els.modalTitle.textContent = scene.title;
     els.modalText.textContent = scene.text;
-    els.next.textContent = sceneIndex === 2 ? t('replay') : t('next');
+    els.next.textContent = sceneIndex === TARGETS.length - 1 ? t('replay') : t('next');
     els.modal.hidden = false;
   }
 
@@ -585,7 +606,7 @@
   }
 
   function nextScene() {
-    if (sceneIndex === 2) {
+    if (sceneIndex === TARGETS.length - 1) {
       completed = 0;
       unlocked = 0;
       switchScene(0);
@@ -629,7 +650,7 @@
     const scene = t('scenes')[sceneIndex];
     els.mission.textContent = scene.mission;
     els.progress.textContent = `${count}/7`;
-    els.act.textContent = sceneIndex + 1;
+    els.act.textContent = `${sceneIndex + 1}/${TARGETS.length}`;
     els.pieceName.textContent = t('pieces')[selected];
     els.left.disabled = pieces[selected].placed || Boolean(finaleStarted);
     els.right.disabled = pieces[selected].placed || Boolean(finaleStarted);

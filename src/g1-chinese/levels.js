@@ -60,7 +60,7 @@ export const levels = [
   { chapter: 'match', type: 'match', char: '雪',
     prompt: { zh: '谁和“雪”是一对？', en: 'Which pairs with 雪?' },
     options: [{ id: 'flower', html: '🌸 花' }, { id: 'wind', html: '🌬️ 风' }, { id: 'bug', html: '🐛 虫' }],
-    answer: 'flower', tip: { zh: '雪对花。', en: '雪 pairs with 花 (flower).' } },
+    answer: 'wind', tip: { zh: '雪对风。', en: '雪 pairs with 风 (wind).' } },
   { chapter: 'match', type: 'match', char: '鸟',
     prompt: { zh: '谁和“鸟”是一对？', en: 'Which pairs with 鸟?' },
     options: [{ id: 'bug', html: '🐛 虫' }, { id: 'fish', html: '🐟 鱼' }, { id: 'tree', html: '🌳 木' }],

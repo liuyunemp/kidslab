@@ -1,0 +1,24 @@
+{
+  "id": "g1-word-post",
+  "title": {
+    "zh": "词语邮局",
+    "en": "Word Post Office"
+  },
+  "description": {
+    "zh": "把词语卡片送到对应的图画信箱。",
+    "en": "Deliver each word card to its matching picture mailbox."
+  },
+  "category": "chinese",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "识字"
+  ],
+  "icon": "📮",
+  "order": 211,
+  "badge": "new"
+}

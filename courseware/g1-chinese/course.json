@@ -1,12 +1,12 @@
 {
   "id": "g1-chinese",
   "title": {
-    "zh": "一年级语文闯关",
-    "en": "Grade 1 Chinese Quest"
+    "zh": "一年级语文游戏地图",
+    "en": "Grade 1 Chinese Games"
   },
   "description": {
-    "zh": "和吉祥物小狐一起认生字：天地人、金木水火土、口耳目、日月水火、对韵歌。看图配字、看字配图，答对集星星，答错有温柔提示。",
-    "en": "Adventure with Foxy to learn characters: heaven/earth/person, the five elements, face parts, sun/moon/water/fire, and rhyming couplets. Match picture to character; earn stars, gentle hints."
+    "zh": "选择识字、拼音、笔画、词语、对韵和句子等独立游戏；每个游戏完成八道任务才通关。",
+    "en": "Choose independent character, pinyin, stroke, word, rhyme and sentence games. Finish eight tasks in each game."
   },
   "category": "chinese",
   "levels": [
@@ -19,5 +19,6 @@
     "识字"
   ],
   "icon": "📚",
-  "order": 201
+  "order": 201,
+  "listed": false
 }

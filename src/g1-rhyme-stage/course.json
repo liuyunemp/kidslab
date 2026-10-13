@@ -1,0 +1,25 @@
+{
+  "id": "g1-rhyme-stage",
+  "title": {
+    "zh": "对韵小剧场",
+    "en": "Rhyme Stage"
+  },
+  "description": {
+    "zh": "敲响搭档卡，让对韵歌中的两边在舞台相遇。",
+    "en": "Bring the paired words of a rhyme together on stage."
+  },
+  "category": "chinese",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "识字",
+    "找规律"
+  ],
+  "icon": "🥁",
+  "order": 212,
+  "badge": "new"
+}

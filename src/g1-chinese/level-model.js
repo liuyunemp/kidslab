@@ -48,6 +48,7 @@ export function isUnlocked(index, completed = []) {
 }
 
 /** 是否全部通关 */
-export function allDone(completed = []) {
-  return completed.length > 0 && completed.every(Boolean);
+export function allDone(completed = [], expectedCount = 0) {
+  return Number.isInteger(expectedCount) && expectedCount > 0 &&
+    Array.from({ length: expectedCount }, (_, index) => completed[index] === true).every(Boolean);
 }

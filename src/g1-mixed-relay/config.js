@@ -1,0 +1,96 @@
+export const config = {
+  "id": "g1-mixed-relay",
+  "kind": "mixed",
+  "category": "math",
+  "grades": [
+    "g1b"
+  ],
+  "tags": [
+    "加减法",
+    "运算"
+  ],
+  "icon": "🏃",
+  "title": {
+    "zh": "加减接力",
+    "en": "Add-Subtract Relay"
+  },
+  "description": {
+    "zh": "沿数线先接住一批、再送走一批，完成两步接力。",
+    "en": "Take a group on, then let a group off to finish each two-step relay."
+  },
+  "accent": "#9a65c9",
+  "backdrop": "#f4ecff",
+  "mascot": "🏃",
+  "tasks": [
+    {
+      "id": "q1",
+      "a": 8,
+      "b": 5,
+      "c": 3,
+      "answer": 10
+    },
+    {
+      "id": "q2",
+      "a": 15,
+      "b": 7,
+      "c": 4,
+      "answer": 18
+    },
+    {
+      "id": "q3",
+      "a": 28,
+      "b": 10,
+      "c": 6,
+      "answer": 32
+    },
+    {
+      "id": "q4",
+      "a": 34,
+      "b": 8,
+      "c": 12,
+      "answer": 30
+    },
+    {
+      "id": "q5",
+      "a": 40,
+      "b": 20,
+      "c": 15,
+      "answer": 45
+    },
+    {
+      "id": "q6",
+      "a": 57,
+      "b": 9,
+      "c": 16,
+      "answer": 50
+    },
+    {
+      "id": "q7",
+      "a": 23,
+      "b": 30,
+      "c": 11,
+      "answer": 42
+    },
+    {
+      "id": "q8",
+      "a": 68,
+      "b": 12,
+      "c": 20,
+      "answer": 60
+    },
+    {
+      "id": "q9",
+      "a": 45,
+      "b": 25,
+      "c": 17,
+      "answer": 53
+    },
+    {
+      "id": "q10",
+      "a": 72,
+      "b": 8,
+      "c": 26,
+      "answer": 54
+    }
+  ]
+};

@@ -148,6 +148,13 @@ import * as THREE from './vendor/three.module.min.js';
   if (!renderer) selected = '';
   let current = 0;
   let won = new Set();
+  const PROGRESS_KEY = 'kidslab.shadow-theater.round';
+  try {
+    const saved = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
+    if (Array.isArray(saved.won)) won = new Set(saved.won.filter((n) => Number.isInteger(n) && n >= 0 && n < LEVELS.length));
+    if (Number.isInteger(saved.current) && saved.current >= 0 && saved.current < LEVELS.length) current = saved.current;
+  } catch { /* Storage is optional. */ }
+  selected = defaultSelection();
   let activeMeshes = [];
   let dragging = false;
   let last = { x: 0, y: 0 };
@@ -495,7 +502,11 @@ import * as THREE from './vendor/three.module.min.js';
   }
 
   function winLevel() {
+    if (won.has(current)) return;
     won.add(current);
+    try { localStorage.setItem(PROGRESS_KEY, JSON.stringify({ current: (current + 1) % LEVELS.length, won: [...won] })); } catch { /* Storage is optional. */ }
+    window.cool?.stage?.(`scene-${won.size}-of-${LEVELS.length}`);
+    if (won.size === LEVELS.length) window.cool?.complete?.();
     puppet.hidden = false;
     showToast(t('good'), 'good');
     sfx.win();
@@ -505,6 +516,10 @@ import * as THREE from './vendor/three.module.min.js';
 
   function nextLevel() {
     clearFeedback();
+    if (current === LEVELS.length - 1 && won.size === LEVELS.length) {
+      won.clear();
+      try { localStorage.setItem(PROGRESS_KEY, JSON.stringify({ current: 0, won: [] })); } catch { /* Storage is optional. */ }
+    }
     current = (current + 1) % LEVELS.length;
     dragging = false;
     velocity.x = 0;

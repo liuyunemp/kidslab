@@ -1,0 +1,24 @@
+{
+  "id": "g1-pinyin-tracks",
+  "title": {
+    "zh": "拼音轨道",
+    "en": "Pinyin Tracks"
+  },
+  "description": {
+    "zh": "把声母、韵母和声调车厢接起来，拼出图画里的字音。",
+    "en": "Join initial, final and tone cars to spell pictured syllables."
+  },
+  "category": "chinese",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "拼音"
+  ],
+  "icon": "🚃",
+  "order": 209,
+  "badge": "new"
+}

@@ -48,6 +48,7 @@ test.describe('change vending money and subtraction', () => {
     await addCoins(page, '1 角', 8);
     await page.getByRole('button', { name: '叮！弹出找零', exact: true }).click();
     await expect(page.getByRole('heading', { name: '换开纸币，饼干零钱也找对了！' })).toBeVisible();
+    await expect(page.locator('#coinRain')).toBeVisible();
 
     await page.getByRole('button', { name: '下一位顾客', exact: true }).click();
     await addCoins(page, '1 元', 2);
@@ -55,8 +56,24 @@ test.describe('change vending money and subtraction', () => {
     await addCoins(page, '1 角', 2);
     await page.getByRole('button', { name: '叮！弹出找零', exact: true }).click();
 
-    await expect(page.getByRole('heading', { name: '三位顾客都拿到了正确零钱！' })).toBeVisible();
-    await expect(page.locator('#coinRain')).toBeVisible();
+    await expect(page.getByRole('heading', { name: '饭团的零钱送到了！' })).toBeVisible();
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('kidslab.progress.change-vending') || 'null')?.status)).not.toBe('completed');
+    const remaining = [
+      [['1 角', 1], ['5 分', 1]],
+      [['1 角', 3], ['5 分', 1], ['1 分', 2]],
+      [['5 角', 1], ['1 分', 1]],
+      [['1 角', 2], ['5 分', 1], ['1 分', 3]],
+      [['1 角', 6], ['5 分', 1], ['1 分', 1]],
+    ];
+    for (const [index, coins] of remaining.entries()) {
+      await page.getByRole('button', { name: '下一位顾客', exact: true }).click();
+      await expectFitsViewport(page);
+      for (const [name, count] of coins) await addCoins(page, name, count);
+      await page.getByRole('button', { name: '叮！弹出找零', exact: true }).click();
+      await expect(page.locator('#modal')).toBeVisible();
+      if (index < 4) expect(await page.evaluate(() => JSON.parse(localStorage.getItem('kidslab.progress.change-vending') || 'null')?.status)).not.toBe('completed');
+    }
+    await expect(page.getByRole('heading', { name: '八位顾客都拿到了正确零钱！' })).toBeVisible();
     await expect.poll(() => page.evaluate(() =>
       JSON.parse(localStorage.getItem('kidslab.progress.change-vending') || 'null')?.status)).toBe('completed');
   });

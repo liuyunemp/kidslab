@@ -1,0 +1,24 @@
+{
+  "id": "g1-direction-town",
+  "title": {
+    "zh": "方位小镇",
+    "en": "Direction Town"
+  },
+  "description": {
+    "zh": "在小镇地图上找前后、左右、上下的位置。",
+    "en": "Find neighbors in front, behind, left, right, above and below on a town map."
+  },
+  "category": "math",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "位置"
+  ],
+  "icon": "🧭",
+  "order": 35,
+  "badge": "new"
+}
