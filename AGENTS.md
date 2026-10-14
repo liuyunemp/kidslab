@@ -35,7 +35,7 @@ scripts/build.mjs   # 构建/校验逻辑(分类、学段白名单在此;末尾�
 scripts/sw.js       # Service Worker 源码模板(缓存策略在此)
 scripts/icons.mjs   # PWA 图标生成:logo.svg 变更后运行 npm run icons 并提交 assets/icons/
 scripts/serve.mjs   # 预览服务器
-scripts/sdk/core.js # 平台 SDK:偏好、声明式 i18n、analytics 兼容入口
+scripts/sdk/core.js # 平台 SDK:偏好、声明式 i18n、语音朗读、analytics 兼容入口
 scripts/track.js    # 埋点脚本源码,构建时内联注入课件(见 docs/analytics.md)
 scripts/report.mjs  # 行为分析终端报表: npm run report
 tests/e2e/          # Playwright smoke:主站筛选与全部清单课件 + PWA/离线验收
@@ -142,6 +142,7 @@ cloudflare/analytics/  # 埋点接收 Worker(push 时经 deploy-analytics.yml �
 - **BGM 必做**:本地可循环背景音乐 + 独立音乐/音效开关;首次用户手势后才播放
 - **逻辑必须可单测**:玩法抽成无 DOM 的 `*-model.js`,在 `tests/unit/<id>.test.mjs` 覆盖恒等式、边界、非法拒绝、失败恢复
 - **进度与行为埋点**:`window.cool?.stage('level2')` 始终把课件记为“玩过”;在最终通关边界调用 `window.cool?.complete?.()`,可无限复玩的课件则在首个完整成功闭环调用;`window.cool?.track('flip')` 仅在配置 analytics 时上报核心动作。给"孩子做了什么"起名而非"点了哪个按钮",每课件 5~10 个即可,详见 `docs/sdk.md` 与 `docs/analytics.md`
+- **低年级题面可朗读**:`g1`/`g2` 课件的题面与引导语必须能点一下就用 `window.cool.speech` 念出来,按钮命中区 ≥44×44px,可单独静音并持久化。**朗读只念题面与动作指令,绝不念出答案**;组句抽成无 DOM 纯函数单独单测。语音是纯旁白:不得用 `utterance.onend` 推进玩法节奏,关闭语音或缺中文音色时视觉反馈必须照常发生。语音夸奖要克制——按里程碑(如连对、通关)给,不要每题复读同一句,详见 `docs/sdk.md`
 
 ## 初高中实验课壳（强制）
 

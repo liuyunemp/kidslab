@@ -177,12 +177,119 @@
     },
   };
 
-  cool.sdkVersion = 2;
+  /* 语音朗读：低年级课件用它把题面念给孩子听，也用它做语音夸奖。
+     惰性初始化——只有真正调用 speak() 时才读取语音列表、挂载清理监听；
+     浏览器不支持语音合成时全程静默降级，不抛错、不影响玩法。 */
+  const speechKey = 'kidslab.speech';
+  const canSpeak = typeof w.speechSynthesis !== 'undefined' && typeof w.SpeechSynthesisUtterance === 'function';
+  let speechEnabled = storage.get(speechKey, '1') !== '0';
+  let speechVoices = [];
+  let speechWired = false;
+  const speechListeners = new Set();
+
+  function refreshVoices() {
+    if (!canSpeak) return;
+    try {
+      speechVoices = w.speechSynthesis.getVoices() || [];
+    } catch {
+      speechVoices = [];
+    }
+  }
+
+  function stopSpeech() {
+    if (!canSpeak) return false;
+    try {
+      w.speechSynthesis.cancel();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function wireSpeech() {
+    if (speechWired || !canSpeak) return;
+    speechWired = true;
+    refreshVoices();
+    try {
+      w.speechSynthesis.addEventListener('voiceschanged', refreshVoices);
+    } catch {
+      try { w.speechSynthesis.onvoiceschanged = refreshVoices; } catch { /* 无语音列表可用时静默降级 */ }
+    }
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeech(); });
+    w.addEventListener('pagehide', () => { stopSpeech(); });
+  }
+
+  function voiceFor(tag) {
+    if (!speechVoices.length) refreshVoices();
+    if (!speechVoices.length) return null;
+    const wanted = tag.toLowerCase();
+    const family = wanted.slice(0, 2);
+    const language = (voice) => String(voice && voice.lang ? voice.lang : '').toLowerCase().replace('_', '-');
+    return speechVoices.find((voice) => language(voice) === wanted)
+      || speechVoices.find((voice) => language(voice).startsWith(family))
+      || null;
+  }
+
+  function speakSpeech(text, options = {}) {
+    if (!canSpeak || !speechEnabled) return null;
+    const value = typeof text === 'string' ? text.trim() : '';
+    if (!value) return null;
+    wireSpeech();
+    const tag = (options.lang || lang) === 'en' ? 'en-US' : 'zh-CN';
+    try {
+      if (options.interrupt !== false && (w.speechSynthesis.speaking || w.speechSynthesis.pending)) stopSpeech();
+      const utterance = new w.SpeechSynthesisUtterance(value);
+      utterance.lang = tag;
+      const voice = voiceFor(tag);
+      if (voice) utterance.voice = voice;
+      utterance.rate = 0.92;
+      utterance.pitch = 1;
+      /* 缺中文音色、被打断或设备不支持时按静默处理，不产生控制台噪音。 */
+      utterance.onerror = () => {};
+      if (typeof options.onEnd === 'function') utterance.onend = () => options.onEnd();
+      w.speechSynthesis.speak(utterance);
+      return utterance;
+    } catch {
+      return null;
+    }
+  }
+
+  const speech = {
+    get available() {
+      return canSpeak;
+    },
+    get enabled() {
+      return speechEnabled;
+    },
+    setEnabled(value) {
+      const next = Boolean(value);
+      if (next === speechEnabled) return speechEnabled;
+      speechEnabled = next;
+      storage.set(speechKey, next ? '1' : '0');
+      if (!next) stopSpeech();
+      for (const listener of [...speechListeners]) listener({ enabled: speechEnabled });
+      w.dispatchEvent(new CustomEvent('speechenabledchange', { detail: { enabled: speechEnabled } }));
+      return speechEnabled;
+    },
+    toggle() {
+      return speech.setEnabled(!speechEnabled);
+    },
+    speak: speakSpeech,
+    stop: stopSpeech,
+    subscribe(listener) {
+      if (typeof listener !== 'function') throw new TypeError('Speech listener must be a function');
+      speechListeners.add(listener);
+      return () => speechListeners.delete(listener);
+    },
+  };
+
+  cool.sdkVersion = 3;
   cool.courseId = courseId;
   cool.storage = storage;
   cool.preferences = preferences;
   cool.bindI18n = bindI18n;
   cool.progress = progress;
+  cool.speech = speech;
   if (typeof cool.track !== 'function') cool.track = () => {};
   cool.stage = (name) => {
     if (typeof name !== 'string' || !name) return;

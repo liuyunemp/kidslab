@@ -1,6 +1,6 @@
 # KidsLab 计划状态清单
 
-最后核验：2026-10-12
+最后核验：2026-10-13
 
 事实来源：`src/*/course.json`、`docs/courseware-plan/*.md`、`README.md`、`AGENTS.md`。本文件负责回答“哪些已完成、哪些未实现、后续 Agent 完成计划后要更新哪里”。
 
@@ -36,6 +36,7 @@ KidsLab 应该是一组孩子打开就想玩的交互课件，而不是题库或
 - 学段战略（方案 B）：初高中入口保持可见，产品语言与小学游戏叙事分开；决策记录在 [`README.md`](./README.md)，初中物理试点路径见 [`junior-physics.md`](./junior-physics.md)。
 - 课件模板：`docs/courseware-template/` 提供双语、主题、静态独立课件起点。
 - 交互音效：当前游戏课件含语义交互音效与静音控制（含新建 `cpu-lab` 与 `mini-pyramid`）；`huarong-dao` 与 `venn-port` 使用 ScoreKit 循环配乐和通关短曲；存量改进优先级见 `docs/courseware-audio-audit.md`。
+- 语音朗读（平台 SDK `window.cool.speech`）：一年级 13 款语数游戏的题面与引导语可点一下朗读，答对只在连对 3 题与通关两个里程碑给语音夸奖；共用顶栏「🔊 语音」开关并持久化到 `kidslab.speech`，无语音能力时静默降级。组句是无 DOM 纯函数，逐题型保证不念出答案。用法见 `docs/sdk.md`。
 - 行为分析：`docs/analytics.md`、`scripts/track.js`、`cloudflare/analytics/` 提供可选埋点链路。
 
 ## 非目标（铁律）
@@ -338,6 +339,7 @@ Agent 每次完成计划项后必须同步更新：
 | 主站浏览与筛选 | 中 | 部分：学段切换 + 搜索/分类 | 缺口：非法筛选组合 | 不适用：纯静态无角色 | 不适用：只读 UI | `tests/e2e/smoke.spec.js`（搜索/分类）；`tests/e2e/stage-strategy.spec.js`（小学问候、初高中实验室问候、三课仍在货架、不标建设中） |
 | 一年级数学独立游戏 | 中 | 13 款新语数游戏中的 7 款数学均由 E2E 完整完成 8 题；找零和七巧板也验收完整 8 单/8 幕 | 每款新游戏首题错答原地恢复；找零错币后调整、七巧板错放后继续 | 不适用：纯静态无角色 | 新游戏第 3 题后重载续玩、重复提交不重复领奖；第 1–7 题不得完成整课 | `tests/e2e/g1-independent-games.spec.js`、`change-vending.spec.js`、`tangram-theater.spec.js`；`tests/unit/g1-independent-games.test.mjs` |
 | 一年级语文独立游戏 | 中 | 六款语文游戏均由 E2E 完整完成 8 题 | 每款首题错答后原地重试 | 不适用：纯静态无角色 | 第 3 题后重载续玩，第 8 题才写整课完成，重玩换题 | `tests/e2e/g1-independent-games.spec.js`；`tests/unit/g1-independent-games.test.mjs` |
+| 一年级课件题面朗读与语音夸奖 | 中 | 已覆盖：13 款游戏在桌面与手机两档均验证题面朗读按钮可见、命中区 ≥44×44px、可点击；连对三题出现奖章、通关出现夸奖文案与「再听一次」；语音开关文案随语言切换 | 缺口：真实发音质量、硬件缺中文音色时的听感无法自动化验证；只验证了不报错与视觉反馈不缺席 | 不适用：纯静态无角色 | 已覆盖：关闭语音会立即停播且重载后保持关闭；语音不可用时仍然给出奖章、星标跳动与文案 | `tests/e2e/g1-independent-games.spec.js`（题面朗读、语言切换、语音开关持久化、375×667 无横向溢出与零报错用例）；`tests/unit/g1-speech.test.mjs`（13 款 × 每题的朗读文本不泄露答案、拼音不念声母韵母声调、里程碑边界、夸奖语中英轮转与长度）；`docs/sdk.md` |
 | 旧综合网址导航 | 低 | 数学与语文旧网址可打开并链接独立游戏，旧卡不进入主站清单 | 不适用：只读导航 | 不适用：纯静态无角色 | 不适用：只读导航 | `tests/e2e/g1-math.spec.js` |
 | 课件构建与 manifest 生成 | 中 | 部分：`npm run build` | 部分：`scripts/build.mjs` 校验非法 `course.json` | 不适用：本地构建无角色 | 部分：构建失败不应写入错误 manifest，需补回归验证 | `scripts/build.mjs`、`.github/workflows/deploy.yml` |
 | PWA 壳与课件离线缓存 | 高 | 已覆盖：manifest 合法性 + SW 激活预缓存 + cache-on-visit 角标 | 已覆盖：杀死服务器后离线回放已玩课件与主站壳 | 不适用：纯静态无角色 | 已覆盖：断网时 SW 缓存兜底，联网 network-first 自动恢复最新内容 | `tests/e2e/pwa.spec.js` |

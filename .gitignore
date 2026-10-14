@@ -1,7 +1,8 @@
 node_modules/
 _site/
 playwright-report/
-test-results/
+test-results*/
+.e2e-tmp/
 .DS_Store
 *.log
 .claude/settings.local.json

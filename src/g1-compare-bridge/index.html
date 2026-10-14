@@ -14,6 +14,7 @@
     <a class="back" id="back" href="../../index.html">← 返回</a>
     <h1 id="title">🐊 比大小桥</h1>
     <div class="top-actions">
+      <button class="icon-button" id="speechBtn" type="button" aria-label="关闭朗读" aria-pressed="true">🔊</button>
       <button class="icon-button" id="musicBtn" type="button" aria-label="关闭音乐" aria-pressed="true">♫</button>
       <button class="icon-button" id="effectsBtn" type="button" aria-label="关闭音效" aria-pressed="true">🔔</button>
       <button class="icon-button" id="themeBtn" type="button" aria-label="切换主题">🌙</button>
@@ -21,9 +22,10 @@
     </div>
   </header>
   <main class="game">
-    <p class="intro" id="intro">给数字桥装上大于、小于或等于的桥牌，比较 20 和 100 以内的数。</p>
+    <button class="intro" id="intro" type="button"><span class="speak-icon" aria-hidden="true">🔊</span><span id="introText">给数字桥装上大于、小于或等于的桥牌，比较 20 和 100 以内的数。</span></button>
     <div class="progress-row"><span class="count" id="count">1/8</span><div class="track" id="track" aria-hidden="true"></div><span class="stars" id="stars">⭐ 0</span></div>
     <section class="stage" id="stage" aria-live="polite"></section>
+    <p class="praise" id="praise" aria-live="polite" hidden></p>
     <p class="feedback" id="feedback" aria-live="polite"></p>
   </main>
   <script type="module" src="./main.js"></script>
