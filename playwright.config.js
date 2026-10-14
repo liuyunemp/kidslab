@@ -10,8 +10,8 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   // 大型 Three.js 页面和 PWA 离线服务器并发时会争抢软件渲染/端口资源；
   // 本机默认 12 个 worker 会直接耗尽 Chromium 资源而中止测试。保留适度并发，
-  // CI 仍串行运行以获得可重复的发布门禁。
-  workers: process.env.CI ? 1 : 4,
+  // CI 仍串行运行以获得可重复的发布门禁。可用 KIDSLAB_E2E_WORKERS 覆盖。
+  workers: process.env.CI ? 1 : (Number(process.env.KIDSLAB_E2E_WORKERS) || 4),
   reporter: process.env.CI
     ? [
         ['github'],
@@ -23,7 +23,10 @@ export default defineConfig({
   use: {
     baseURL: e2eBaseURL,
     screenshot: 'only-on-failure',
-    trace: 'retain-on-failure',
+    // trace 录制会给每个用例的每次操作补截图，Canvas/WebGL 课件单条 trace
+    // 可达数十 MB，录制本身也明显拖慢全量运行：本地只在新重试时录（retries=0
+    // 等于不录），CI 保留失败 trace 以便排查。
+    trace: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
     launchOptions: {
       args: process.env.CI
         ? [

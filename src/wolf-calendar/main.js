@@ -82,6 +82,13 @@ import * as THREE from './vendor/three.module.min.js';
   let dragging = false;
   let orderIndex = 0;
   const wonOrders = new Set();
+  /** 答对后自动进下一单；手动点「下一单」会取消它，避免连跳两单 */
+  let autoNextTimer = 0;
+  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
+  function scheduleAutoNext(fn, ms = 1400) {
+    cancelAutoNext();
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+  }
   let magicSeen = false;
 
   const root = new THREE.Group();
@@ -200,6 +207,7 @@ import * as THREE from './vendor/three.module.min.js';
       if (!wonOrders.has(orderIndex)) { wonOrders.add(orderIndex); const s = document.createElement('span'); s.className = 'sticker'; s.textContent = emoji; stickers.appendChild(s); }
       speech.textContent = wonOrders.size === t('orders').length ? t('allOrders') : t('right');
       celebrate(kind);
+      if (orderIndex < t('orders').length - 1) scheduleAutoNext(nextOrder);
     } else { speech.textContent = t('wrong'); wolf.className = 'wolf wrong'; setTimeout(() => { wolf.className = 'wolf'; }, 500); sfx.bad(); }
   }
 
@@ -247,7 +255,8 @@ import * as THREE from './vendor/three.module.min.js';
   canvas.addEventListener('pointerup', (e) => { dragging = false; try { canvas.releasePointerCapture(e.pointerId); } catch {} });
 
   checkBtn.addEventListener('click', checkOrder);
-  nextBtn.addEventListener('click', () => { orderIndex = Math.min(orderIndex + 1, t('orders').length - 1); updateOrderText(); });
+  function nextOrder() { cancelAutoNext(); orderIndex = Math.min(orderIndex + 1, t('orders').length - 1); updateOrderText(); }
+  nextBtn.addEventListener('click', nextOrder);
   tiltBtn.addEventListener('click', () => { tiltOn = !tiltOn; updateOrbitGeometry(); setMoonAngle(moonAngle); applyLang(); });
   $('#calendarOpen').addEventListener('click', () => { $('#calendarModal').hidden = false; makeCalendar(); });
   $('#closeCalendar').addEventListener('click', () => { $('#calendarModal').hidden = true; });

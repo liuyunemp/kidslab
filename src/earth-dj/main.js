@@ -144,6 +144,13 @@ import * as THREE from './vendor/three.module.min.js';
   const answerRow = $('answerRow');
   const nextMission = $('nextMission');
   const stampRow = $('stampRow');
+  /** 完成一张工单后自动进入下一张；手动点按钮会取消它，避免连跳 */
+  let autoNextTimer = 0;
+  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
+  function scheduleAutoNext(fn, ms = 1400) {
+    cancelAutoNext();
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+  }
   const stageCard = $('stageCard');
   const groundPanel = $('groundPanel');
   const groundTitle = $('groundTitle');
@@ -646,13 +653,16 @@ import * as THREE from './vendor/three.module.min.js';
     render();
   });
   stageCard.addEventListener('animationend', () => stageCard.classList.remove('magic-flash'));
-  nextMission.addEventListener('click', () => {
+  /** 手动/自动进入下一张工单；先取消待触发的自动跳转，避免连跳 */
+  function advanceMission() {
+    cancelAutoNext();
     if (state.mission < 7 && state.completed[state.mission]) {
       state.mission += 1;
       buildMissionActions();
       render();
     }
-  });
+  }
+  nextMission.addEventListener('click', advanceMission);
   mainViewBtn.addEventListener('click', () => {
     state.view = 'main';
     render();
@@ -854,6 +864,7 @@ import * as THREE from './vendor/three.module.min.js';
     const old = missionBody.textContent;
     missionBody.textContent = `${t('done')} ${old}`;
     if (i === 5) stageCard.classList.add('magic-flash');
+    if (i < 7) scheduleAutoNext(advanceMission);
   }
   function resize() {
     const rect = stageCard.getBoundingClientRect();

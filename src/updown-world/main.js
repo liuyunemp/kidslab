@@ -235,6 +235,13 @@
   let visualValue = -3;
   let deepTimer = null;
   let state = loadState();
+  /** 答对后自动进入下一层世界；手动点按钮会取消它，避免连跳 */
+  let autoNextTimer = 0;
+  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
+  function scheduleAutoNext(fn, ms = 1400) {
+    cancelAutoNext();
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+  }
 
   function freshState() {
     return { mission: 0, value: MISSIONS[0].start, selected: null, solved: false, completed: false, feedback: 'start' };
@@ -357,9 +364,11 @@
     window.cool?.track?.('solve_integer_mission', { mission: state.mission + 1 });
     saveState();
     render();
+    if (state.mission < MISSIONS.length - 1) scheduleAutoNext(nextMission);
   }
 
   function nextMission() {
+    cancelAutoNext();
     ensureAudio();
     if (!state.solved) return;
     if (state.mission < MISSIONS.length - 1) {

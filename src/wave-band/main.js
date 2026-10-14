@@ -262,6 +262,13 @@
   let missionIndex = 0;
   let unlocked = 0;
   let completed = new Set();
+  /** 答对后自动进入下一声部；手动点按钮会取消它，避免连跳 */
+  let autoNextTimer = 0;
+  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
+  function scheduleAutoNext(fn, ms = 1400) {
+    cancelAutoNext();
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+  }
   let tension = 1;
   let strength = 1;
   let air = 100;
@@ -457,6 +464,7 @@
 
   function switchMission(index) {
     if (index > unlocked) return;
+    cancelAutoNext();
     missionIndex = index;
     tension = 1;
     strength = 1;
@@ -513,6 +521,8 @@
         el.modal.hidden = false;
         el.playAgain.focus();
       }, 350);
+    } else {
+      scheduleAutoNext(() => switchMission(Math.min(2, missionIndex + 1)));
     }
     render();
   }

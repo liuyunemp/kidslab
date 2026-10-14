@@ -167,6 +167,13 @@ import * as THREE from './vendor/three.module.min.js';
   let magicShown = false;
   let actx = null;
   let soundOn = true;
+  /** 答对后自动进下一幕；手动点「下一幕」会取消它，避免连跳两幕 */
+  let autoNextTimer = 0;
+  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
+  function scheduleAutoNext(fn, ms = 1400) {
+    cancelAutoNext();
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+  }
 
   function tone(freq, dur = 0.12, type = 'sine', gain = 0.08, delay = 0) {
     if (!soundOn) return;
@@ -471,6 +478,7 @@ import * as THREE from './vendor/three.module.min.js';
   }
 
   function resetLevel() {
+    cancelAutoNext();
     clearFeedback();
     magic.hidden = true;
     dragging = false;
@@ -512,9 +520,11 @@ import * as THREE from './vendor/three.module.min.js';
     sfx.win();
     setTimeout(() => { puppet.hidden = true; }, 2200);
     render();
+    if (won.size < LEVELS.length) scheduleAutoNext(nextLevel);
   }
 
   function nextLevel() {
+    cancelAutoNext();
     clearFeedback();
     if (current === LEVELS.length - 1 && won.size === LEVELS.length) {
       won.clear();

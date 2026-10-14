@@ -163,6 +163,13 @@
   let actx = null;
   let score = 0;
   let qIndex = 0;
+  /** 答对后自动进下一题；手动点「下一题」会取消它，避免连跳两题 */
+  let autoNextTimer = 0;
+  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
+  function scheduleAutoNext(fn, ms = 1400) {
+    cancelAutoNext();
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+  }
   const questions = [
     { type: 'forward', d: 2, laps: 3 }, { type: 'forward', d: 1.5, laps: 4 }, { type: 'forward', d: 0.8, laps: 10 },
     { type: 'reverse', dist: 31.4, laps: 5, choices: [1, 2, 3] }, { type: 'reverse', dist: 18.8, laps: 4, choices: [1.5, 2.5, 3] },
@@ -516,10 +523,14 @@
     els.scoreText.textContent = `${score}/${questions.length}`; render();
   }
   function verify() {
+    cancelAutoNext();
     startAudio(); const q = questions[qIndex]; const ans = answerFor(q); let ok = false;
     if (q.type === 'forward') ok = Math.abs(Number(els.answer.value) - ans) <= 0.35;
     else ok = Math.abs(Number(els.wheelChoice.value) - ans) <= 0.15;
-    if (ok) { score += 1; els.tip.textContent = t('ok'); sfx.magic(); } else {
+    if (ok) {
+      score += 1; els.tip.textContent = t('ok'); sfx.magic();
+      if (qIndex < questions.length - 1) scheduleAutoNext(nextQuestion);
+    } else {
       const near = q.type === 'forward' && Math.abs(Number(els.answer.value) - ans) <= 1;
       els.tip.textContent = (near ? t('close') : t('miss'))(fmt(ans)); sfx.bonk();
     }
@@ -529,6 +540,7 @@
     els.scoreText.textContent = `${score}/${questions.length}`;
   }
   function nextQuestion() {
+    cancelAutoNext();
     qIndex += 1;
     if (qIndex >= questions.length) { qIndex = 0; els.tip.textContent = t('done'); score = 0; }
     else els.tip.textContent = t('chGo');
@@ -536,6 +548,7 @@
   }
 
   function switchMode(next) {
+    cancelAutoNext();
     mode = next; document.querySelectorAll('.tab').forEach((b) => b.classList.toggle('on', b.dataset.mode === mode));
     els.rollPanel.hidden = mode !== 'roll'; els.areaPanel.hidden = mode !== 'area'; els.challengePanel.hidden = mode !== 'challenge';
     els.tip.textContent = mode === 'roll' ? t('rollTip') : mode === 'area' ? t('areaTip') : t('chGo');

@@ -3,6 +3,8 @@ _site/
 playwright-report/
 test-results*/
 .e2e-tmp/
+.tmp-e2e-*/
+.vscode/
 .DS_Store
 *.log
 .claude/settings.local.json

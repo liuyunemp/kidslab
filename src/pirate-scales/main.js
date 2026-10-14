@@ -457,7 +457,16 @@
     return { before, after, gone: before - after };
   }
 
+  /** 破案后自动进入下一宗谜案；手动点按钮会取消它，避免连跳 */
+  let autoNextTimer = 0;
+  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
+  function scheduleAutoNext(fn, ms = 1400) {
+    cancelAutoNext();
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+  }
+
   function startMission(index, opts = {}) {
+    cancelAutoNext();
     missionIndex = index;
     const m = mission();
     coinCount = m.coins;
@@ -487,6 +496,12 @@
     el.course.inert = false;
     if (!opts.silent) window.cool?.stage?.(`mission${index + 1}`);
     render();
+  }
+
+  /** 手动/自动进入下一宗谜案；先取消待触发的自动跳转，避免连跳两关 */
+  function nextMission() {
+    cancelAutoNext();
+    if (missionIndex < MISSIONS.length - 1) startMission(missionIndex + 1);
   }
 
   function setStatus(type, payload = {}) {
@@ -709,6 +724,7 @@
         window.setTimeout(() => el.playAgainBtn?.focus(), 30);
       } else {
         el.nextBtn.hidden = false;
+        scheduleAutoNext(nextMission);
       }
       // 保留 correctAccuse 文案，通关弹窗自行展示总结
       render();
@@ -874,9 +890,7 @@
     setStatus('hint');
   });
   el.resetBtn.addEventListener('click', () => startMission(missionIndex));
-  el.nextBtn.addEventListener('click', () => {
-    if (missionIndex < MISSIONS.length - 1) startMission(missionIndex + 1);
-  });
+  el.nextBtn.addEventListener('click', nextMission);
   el.playAgainBtn.addEventListener('click', () => {
     completed = new Set();
     unlocked = 0;

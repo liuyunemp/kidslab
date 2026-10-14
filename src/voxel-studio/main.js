@@ -146,6 +146,13 @@ import * as THREE from './vendor/three.module.min.js';
   let hammer = false;
   let dragging = false;
   let moved = false;
+  /** 答对后自动进入下一关；手动点按钮会取消它，避免连跳 */
+  let autoNextTimer = 0;
+  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
+  function scheduleAutoNext(fn, ms = 1400) {
+    cancelAutoNext();
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+  }
   let last = { x: 0, y: 0 };
   let yaw = -0.65;
   let pitch = 0.58;
@@ -329,6 +336,8 @@ import * as THREE from './vendor/three.module.min.js';
     mode = 'build'; selectedCam = null; answered = {}; hammer = false;
     voxels = new Set(); rebuildVoxels(); render();
   }
+  function nextPredictLevel() { cancelAutoNext(); pLevel = (pLevel + 1) % PREDICT.length; startPredict(); }
+  function nextBuildLevel() { cancelAutoNext(); bLevel = (bLevel + 1) % BUILD.length; startBuild(); }
   function startFree() {
     mode = 'free'; selectedCam = null; answered = {}; hammer = false; freeTarget = null;
     voxels = new Set(); rebuildVoxels(); render();
@@ -386,7 +395,10 @@ import * as THREE from './vendor/three.module.min.js';
       answered[selectedCam] = true;
       el.classList.add('good'); sfx.ok(); flashCamera(); showToast(t('right'), 'good');
       selectedCam = null;
-      if (CAMS.every((c) => answered[c])) { showToast(t('allRight'), 'good'); sfx.win(); celebrate = performance.now() + 2200; }
+      if (CAMS.every((c) => answered[c])) {
+        showToast(t('allRight'), 'good'); sfx.win(); celebrate = performance.now() + 2200;
+        if (pLevel < PREDICT.length - 1) scheduleAutoNext(nextPredictLevel);
+      }
     } else { el.classList.add('bad'); sfx.bad(); showToast(t('wrong'), 'bad'); }
     render();
   }
@@ -397,6 +409,7 @@ import * as THREE from './vendor/three.module.min.js';
     showToast(t('buildWin'), 'good'); sfx.win(); celebrate = performance.now() + 2600;
     answered = { front: true, top: true, side: true };
     render();
+    if (bLevel < BUILD.length - 1) scheduleAutoNext(nextBuildLevel);
   }
 
   function flashCamera() {
@@ -525,8 +538,8 @@ import * as THREE from './vendor/three.module.min.js';
   hammerBtn.addEventListener('click', () => { hammer = !hammer; render(); });
   document.getElementById('clearBtn').addEventListener('click', () => { voxels = new Set(); answered = {}; rebuildVoxels(); render(); });
   document.getElementById('nextBtn').addEventListener('click', () => {
-    if (mode === 'predict') { pLevel = (pLevel + 1) % PREDICT.length; startPredict(); }
-    else if (mode === 'build') { bLevel = (bLevel + 1) % BUILD.length; startBuild(); }
+    if (mode === 'predict') nextPredictLevel();
+    else if (mode === 'build') nextBuildLevel();
     else startFree();
   });
   document.getElementById('makeCode').addEventListener('click', () => {

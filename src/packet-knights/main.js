@@ -254,6 +254,13 @@
   let state = loadState();
   let animationStart = 0;
   let animationKind = '';
+  /** 答对后自动进入下一个网络任务；手动点按钮会取消它，避免连跳 */
+  let autoNextTimer = 0;
+  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
+  function scheduleAutoNext(fn, ms = 1400) {
+    cancelAutoNext();
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+  }
   let frameId = 0;
 
   function freshState() {
@@ -478,9 +485,11 @@
     startAnimation(animation);
     saveState();
     render();
+    if (state.level < 2) scheduleAutoNext(nextMission);
   }
 
   function nextMission() {
+    cancelAutoNext();
     if (!state.solved) return;
     ensureAudio();
     if (state.level < 2) {
