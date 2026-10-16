@@ -1,7 +1,7 @@
 # g1-poem-stage 知识断言
 
 ## 适用范围
-- 保留本课实际内容作为拓展；完整教材年级归属待核准，仅在全部年级显示，见 [分类核查](../../docs/courseware-plan/classification-audit.md)。
+- 本课仅涵盖 诗画猜猜台 实际出现的内容；教材归属为 g1a，科目为 chinese。年级依据见 docs/courseware-plan/classification-audit.md。
 
 ## 知识断言
 - [F1] 本课选用一年级常见古诗《咏鹅》《静夜思》《画》《悯农》《古朗月行（节选）》《风》，三种玩法是看图配句、接下句和把诗句排回原文顺序；诗句均按教材原文。[S1]

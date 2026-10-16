@@ -1,14 +1,14 @@
 {
   "id": "function-kitchen",
-  "version": "69cc3381eb8699e00a1e0a7d4fefdb7670e2cf75dc854f7b554fcc02618b49d4",
+  "version": "6cf9172ba629b6c3da3734614206291ab47d78a4d859c5185e1730c0b6991b06",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "3ecd5b8ca8a691856b523e6add6d7dd7464aab05eb1910e901d1da4a20b821fe"
+      "sha256": "1783f31c5022f05aaf6987e85f6e2b45592b9ae1408de4dca77517aab7be4b6d"
     },
     {
       "path": "index.html",
-      "sha256": "4452053d9787d98e45d6e9f04116e09068a08d34951305c7f2a5d99904ae42ee"
+      "sha256": "d19a046e305ca3e791c56d5f103959f9e2dd2296f22939f91f35c987316f7c2c"
     },
     {
       "path": "main.js",

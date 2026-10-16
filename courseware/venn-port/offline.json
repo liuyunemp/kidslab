@@ -1,6 +1,6 @@
 {
   "id": "venn-port",
-  "version": "bff393431667e22b8fbb322ca15de132217ffef6b8607818ee136daa286c5737",
+  "version": "1d2dfddc2d47259ee8da32d4f6728bb0916107a63df18ddf007f49a85982857b",
   "assets": [
     {
       "path": "audio.js",
@@ -25,7 +25,7 @@
     },
     {
       "path": "course.json",
-      "sha256": "2d6d44f5c8e428db0bd366bb826c978e4b0d0348bd935c6ccbd6e7178836d54d"
+      "sha256": "194e150777cadd8baec9c596fe68afb654d3a80b760431e5e4f4666da42909d0"
     },
     {
       "path": "game3d.js",
@@ -34,7 +34,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "dad85d54f77b07036952e80bcd6f81e308068a77c958e297eaa592e8d68051f1"
+      "sha256": "1a31eff58ababade53499c639518453daf6ae813b9e7d3789565f7d05573e01a"
     },
     {
       "path": "main.js",

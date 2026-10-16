@@ -1,14 +1,14 @@
 {
   "id": "zoom-ten",
-  "version": "c1d0fe4ab954954a85daa9c289320f5fba5671b0ceaf3edc3b320b7985c4d2e0",
+  "version": "cba185373b38f3aea8a5eb1d8ff87895fc23f7c19529f1a357ad0700c0620881",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "7097c80385d7f686ade0688cf37c28a3f386c3ca0be9bb8b634dffe1cb3bd010"
+      "sha256": "adbf4972fd89449f8a139d921aeea9a81a82ed59873db3db2355d4aa85062ff3"
     },
     {
       "path": "index.html",
-      "sha256": "3bb333b43002c76a585ef721baec6f4cd3a59acea59fb62c3a9492a4e7d2bed8"
+      "sha256": "a201261cf0a7c1e5752a7657d29b5aba2c6dee72640737957d24ccd312105cfa"
     },
     {
       "path": "main.js",

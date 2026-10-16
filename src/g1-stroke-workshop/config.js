@@ -14,8 +14,8 @@ export const config = {
     "en": "Stroke Workshop"
   },
   "description": {
-    "zh": "用手指沿着发光路线描写基本笔画。",
-    "en": "Trace the glowing routes of basic Chinese strokes."
+    "zh": "照着亮线描一描，写完看看你的笔画正不正。",
+    "en": "Trace along the glowing line, then see how straight your stroke is."
   },
   "accent": "#ab76be",
   "backdrop": "#f9edff",

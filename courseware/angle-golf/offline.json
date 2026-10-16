@@ -1,6 +1,6 @@
 {
   "id": "angle-golf",
-  "version": "f45cc8a946dc115c46d66e83005e2a6bbb8990b7719c149dbde8ef5a6cb18c1d",
+  "version": "2f2af736df9fd8dd44c72ad9463b7a2abba20657215773c8702e06cea1db71c3",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "6d3068486175681e916d0f7d3ead19388ab2e5ccfc68fb9e98c0e1b6ee6807ad"
+      "sha256": "756e740935f9d32f4dd6cc49d45c44d44dcbdd2a6d7e50f2b80bc05a2e782c34"
     },
     {
       "path": "main.js",

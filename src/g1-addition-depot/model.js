@@ -122,6 +122,22 @@ export function speakText({ kind, task, words = {}, phase = 0, lang = 'zh' } = {
     case 'sentence':
       push(words.sentence);
       break;
+    case 'sort':
+      /* 筐的编号正是答案，只念指令与分类标准。 */
+      push(words.sort);
+      push(pickText(task.criterion, lang));
+      break;
+    case 'poem':
+      /* 排序题念出诗句就等于念出答案，只有它只念指令。 */
+      if (task.form === 'guess') { push(words.poem); push(pickText(task.title, lang)); }
+      else if (task.form === 'next') { push(words.poemNext); push(pickText(task.line, lang)); }
+      else push(words.poemOrder);
+      break;
+    case 'stroke-order':
+      /* 笔画顺序正是答案，只念指令与要写的字。 */
+      push(words.strokeOrder);
+      push(task.char);
+      break;
     default:
       return '';
   }
@@ -151,4 +167,84 @@ export function praiseText(key, times = 0, lang = 'zh') {
   const list = PRAISE[key] && PRAISE[key][lang === 'en' ? 'en' : 'zh'];
   if (!Array.isArray(list) || !list.length) return '';
   return list[Math.abs(Math.floor(Number(times) || 0)) % list.length];
+}
+
+/* 答错时的鼓励语：先安抚再指路，绝不复述答案、也不说「错了」。
+   连错越多越温柔，避免孩子在同一个坎上被反复否定。 */
+const ENCOURAGE = {
+  zh: [
+    ['没关系，再试一次就好', '加把劲儿，你可以的', '别着急，慢慢想一想'],
+    ['专心一点，再仔细看看', '再看一眼，你会发现线索的', '不慌，静下来再试一次'],
+    ['再想一想，答案就在眼前', '慢慢来，我陪着你', '别灰心，换个思路试试'],
+  ],
+  en: [
+    ['It is okay. Have another go', 'Keep going. You can do it', 'No rush. Take your time'],
+    ['Focus a little. Look again', 'One more look. You will spot the clue', 'Stay calm. Try once more'],
+    ['Think again. The answer is close', 'Take your time. I am here with you', 'Do not give up. Try another way'],
+  ],
+};
+
+/* 同一道题上连错的次数决定用哪一档；次数多了会往后轮，再回到最温柔的一档。 */
+export function encourageText(missCount = 0, lang = 'zh') {
+  const table = ENCOURAGE[lang === 'en' ? 'en' : 'zh'];
+  const index = Math.max(0, Math.floor(Number(missCount) || 0));
+  const tier = table[Math.min(index, table.length - 1)];
+  return tier[index % tier.length];
+}
+
+/* ===== 描红判定（笔画工坊用，纯几何，无 DOM） ===== */
+
+const point = (value) => (Array.isArray(value) && value.length === 2 && value.every((n) => Number.isFinite(Number(n)))
+  ? [Number(value[0]), Number(value[1])] : null);
+
+/* 点到线段的最小距离（viewBox 单位）；输入非法返回 Infinity。 */
+export function pointToSegmentDistance(p, a, b) {
+  const q = point(p), start = point(a), end = point(b);
+  if (!q || !start || !end) return Infinity;
+  const dx = end[0] - start[0], dy = end[1] - start[1];
+  const lengthSq = dx * dx + dy * dy;
+  const t = lengthSq === 0 ? 0 : Math.max(0, Math.min(1, ((q[0] - start[0]) * dx + (q[1] - start[1]) * dy) / lengthSq));
+  return Math.hypot(q[0] - (start[0] + t * dx), q[1] - (start[1] + t * dy));
+}
+
+/* 点到参考折线（路标点数组）的最小距离。 */
+export function distanceToPath(p, guide) {
+  if (!Array.isArray(guide) || guide.length < 2) return Infinity;
+  let min = Infinity;
+  for (let i = 1; i < guide.length; i++) min = Math.min(min, pointToSegmentDistance(p, guide[i - 1], guide[i]));
+  return min;
+}
+
+/* 每个墨迹采样点到参考折线的最小距离数组。 */
+export function pathDeviation(ink, guide) {
+  if (!Array.isArray(ink)) return [];
+  return ink.map((p) => distanceToPath(p, guide));
+}
+
+/*
+ * 描红评估：墨迹采样点 vs 参考折线。
+ * - 不到起点或终点 → 'incomplete'（没写完）
+ * - 平均偏离超过容差 → 'offtrack'（跑出轨迹）
+ * - 平均偏离在容差一半以内且峰值不超容差 → 'straight'（写得直）
+ * - 其余 → 'wobbly'（写得完但有点歪）
+ */
+export const STRAIGHT_RATIO = 0.45;
+export const EDGE_RATIO = 1.5;
+export function evaluateTrace(ink, guide, tolerance = 12) {
+  const tol = Number(tolerance);
+  const bad = { passed: false, verdict: 'incomplete', avgDev: Infinity, maxDev: Infinity };
+  if (!Array.isArray(ink) || !Array.isArray(guide) || guide.length < 2 || ink.length < 2 || !Number.isFinite(tol) || tol <= 0) return bad;
+  const deviations = pathDeviation(ink, guide);
+  if (deviations.some((d) => !Number.isFinite(d)) || deviations.length < 2) return bad;
+  const edge = tol * EDGE_RATIO;
+  const near = (p, target) => Math.hypot(p[0] - target[0], p[1] - target[1]) <= edge;
+  const start = point(guide[0]), end = point(guide[guide.length - 1]);
+  const first = point(ink[0]), last = point(ink[ink.length - 1]);
+  if (!start || !end || !first || !last) return bad;
+  if (!near(first, start) || !near(last, end)) return { ...bad, verdict: 'incomplete' };
+  const maxDev = Math.max(...deviations);
+  const avgDev = deviations.reduce((sum, d) => sum + d, 0) / deviations.length;
+  if (avgDev > tol) return { passed: false, verdict: 'offtrack', avgDev, maxDev };
+  const straight = avgDev <= tol * STRAIGHT_RATIO && maxDev <= tol;
+  return { passed: true, verdict: straight ? 'straight' : 'wobbly', avgDev, maxDev };
 }

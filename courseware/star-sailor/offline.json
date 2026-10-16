@@ -1,14 +1,14 @@
 {
   "id": "star-sailor",
-  "version": "82e5116169800df5553059246ddde2899a23be888d852c8e20c356e895bdb522",
+  "version": "620dd4db62ac4662dab70d78dce0dd105676609e9bf17a91e3f98a998c42f747",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "25ae48f1cbdfb158c0ffdf764044866428bfa82564a4663e675e0f394a1887b5"
+      "sha256": "76d68a2e01c95475f592afbe4ecdc6f27ab45a38b39f1588b5a13280ec6ebc30"
     },
     {
       "path": "index.html",
-      "sha256": "fbface88469ffe92d98d4a25abeaa463a91696fee6dacf23ae92fb85f614c05a"
+      "sha256": "60e0e2a5408df21661d26cafa63237b8aae9e9879e04bd8c40259c8850a86717"
     },
     {
       "path": "main.js",

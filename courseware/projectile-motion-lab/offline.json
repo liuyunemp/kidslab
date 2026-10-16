@@ -1,6 +1,6 @@
 {
   "id": "projectile-motion-lab",
-  "version": "6e51311dd387e985a9a9715c5b5eecd90064d18ca1a9ca883ad515f3a46b1ccf",
+  "version": "a42cef32854bea424b9eaf31695049ec3b85929abc7669dd5de608e043005f9d",
   "assets": [
     {
       "path": "audio.js",
@@ -17,11 +17,11 @@
     },
     {
       "path": "course.json",
-      "sha256": "fbb763a28b3e42f9ddfb38736c88d742a889b2fb25a01c9572648480caeba844"
+      "sha256": "a386fbcbb49a02db80edce436f1171eac938e38fb9f541478ce59b5c30f24561"
     },
     {
       "path": "index.html",
-      "sha256": "d23c260b3dd9fd265c0c975c666a626cd5367ba5af3f179fe5541eb0def09e4b"
+      "sha256": "237c783b80237ad5f9bbb427a6c81d39b8be1e2c91906eeea8618f500b31df42"
     },
     {
       "path": "lab-model.js",

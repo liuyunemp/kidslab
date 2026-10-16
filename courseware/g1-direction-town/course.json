@@ -12,7 +12,9 @@
   "levels": [
     "primary"
   ],
-  "grades": ["g1b"],
+  "grades": [
+    "g1b"
+  ],
   "tags": [
     "位置"
   ],

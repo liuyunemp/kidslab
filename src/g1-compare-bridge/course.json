@@ -9,7 +9,7 @@
     "en": "Add or remove blocks and watch the comparison sign."
   },
   "category": "math",
-  "grades": ["g1b"],
+  "grades": ["g1a","g1b"],
   "levels": [
     "primary"
   ],

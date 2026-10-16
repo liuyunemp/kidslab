@@ -1,6 +1,6 @@
 {
   "id": "plant-lab",
-  "version": "ef3b6d59d2cc765c487a7170213b2fc58fa3c15f0cd16ec34e2fb7dcdacd6b50",
+  "version": "6a6db601bb2ff208e809b7d9374c6b15260ab59abeffcf02d556750f53ebc756",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "c4aa8a397e5228e75860381f4ab1e2c9b60825dd79364612f54919043d02c7c6"
+      "sha256": "91dfa41d69dd67aef6ec6048ebb82ec8f84047d607a8fe3c84ff5171c4316f05"
     },
     {
       "path": "main.js",

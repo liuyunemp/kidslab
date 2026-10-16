@@ -13,7 +13,7 @@
     "junior",
     "senior"
   ],
-  "grades": ["g9"],
+  "grades": ["g9","g11"],
   "tags": [
     "欧姆定律",
     "电路",

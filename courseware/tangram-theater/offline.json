@@ -1,24 +1,42 @@
 {
   "id": "tangram-theater",
-  "version": "6c12f09e86d6a9e701dc8cfa541be4a37a323b7012a321f66c6572adb7e89b91",
+  "version": "b1e1fb7a5ba1e5bc78b1d7ad6c2e15612f553bc7c3608047c2df2346376dd4d3",
   "assets": [
     {
+      "path": "audio.js",
+      "sha256": "1aa0d28c1e6144427007e65feec538849065da5e7618fe0e212c90c7098694f9",
+      "fingerprint": "a451217e"
+    },
+    {
+      "path": "audio/shadow-stage.meta.json",
+      "sha256": "aea1bd135c871ab31e91d50b27215f8da829e78dd398ea8e837532bb29df0c38"
+    },
+    {
+      "path": "audio/shadow-stage.ogg",
+      "sha256": "7dbf8ed6f8735e4e2a02ec135ec01461cc6671c81b463ce0510b1905b55b4842"
+    },
+    {
       "path": "course.json",
-      "sha256": "54617a738224fc6443b6010ae211d69f776f3a1cbae3535ba9b433a404363b14"
+      "sha256": "3d29b11533c271d148b869cd2e937dcf38c55809e8992baddc3c8e2cc2491d0c"
     },
     {
       "path": "index.html",
-      "sha256": "0ebab216f341ca891f811670895046877b0aa69d99a0073bed8cb9c98e4b1686"
+      "sha256": "51c99717f41004cd93af35efc1a49a3c825423276f809adf6af33caa5d8a9a43"
     },
     {
       "path": "main.js",
-      "sha256": "46ea8537a1be595443c28a7025d6bb1f4a14437186b6ad7b8a4d8068126ced11",
-      "fingerprint": "9518a0dd"
+      "sha256": "a7be3d623bb73f6b3d239cdd7f8876de5c2d8ece80d9c122ad11b12f54b54bbf",
+      "fingerprint": "ca22e607"
+    },
+    {
+      "path": "model.js",
+      "sha256": "42241d58d3591933fdc84ecff6aad2cd8250a1b111b8894a6150ea7c524674fd",
+      "fingerprint": "e5f4091a"
     },
     {
       "path": "style.css",
-      "sha256": "5f47611023918ae08780f7eb066cb4c461fe38aaa15c24060d8e31853ba811b4",
-      "fingerprint": "e57374b2"
+      "sha256": "7a60048dff79c5eeb3bb1e97f5231a5f5af7539757fbef28affa2d7b18245d58",
+      "fingerprint": "0a157cd7"
     }
   ]
 }

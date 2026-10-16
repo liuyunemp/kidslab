@@ -12,7 +12,7 @@
   "levels": [
     "senior"
   ],
-  "grades": [],
+  "grades": ["g11"],
   "tags": [
     "圆周运动",
     "万有引力",

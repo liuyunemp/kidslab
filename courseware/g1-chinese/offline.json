@@ -1,6 +1,6 @@
 {
   "id": "g1-chinese",
-  "version": "d4baac72bbaf11ed57044918fa319ebb6ce5d9aeb1da77f64c76bfde0e7afd0e",
+  "version": "16525e3e8806332a41dc1fec2603b6cdcd2a68f8f5ffab99c232e6901fd055b1",
   "assets": [
     {
       "path": "audio.js",
@@ -28,7 +28,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "4f2677f43fdad981c76673a1d3ca764f1b1a5634fb32dace7d3760d57ef180e1"
+      "sha256": "be9a68aeafb1d478d5c766323e10559bef6e8112c70e1ef451e992eb06c7a33a"
     },
     {
       "path": "level-model.js",

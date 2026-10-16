@@ -1,6 +1,6 @@
 {
   "id": "g1b-quantity-theater",
-  "version": "3ca3d0e6eb6752815c626282759a7b9debf23ccfc33e93ef943d8217df460fa3",
+  "version": "ac5d38f09bcfbca368dbe8917c12d191c26615fdcdb8c21d45c0537090d945b8",
   "assets": [
     {
       "path": "audio.js",
@@ -17,8 +17,8 @@
     },
     {
       "path": "content.js",
-      "sha256": "702a95ae968d3380f1d45700e04cd6eb445ffb9160f1fe47e1d2e5f8c5483842",
-      "fingerprint": "d45a189e"
+      "sha256": "1d1ad9e67bab074e73af4e93108b39eed8283dc2d471dccb9103e669ba396225",
+      "fingerprint": "f2109f63"
     },
     {
       "path": "course.json",
@@ -26,22 +26,22 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
-      "fingerprint": "da11fe5b"
+      "sha256": "9fa07d62da025e4a6d0adca2c8d5cbbfc9bcfbb22bdecf3eb58e49703076889d",
+      "fingerprint": "dade1ba1"
     },
     {
       "path": "index.html",
-      "sha256": "45e9a11ea73d62f75080b6fb96e87d5895617799f19c0fd6d095c428be7e2ecf"
+      "sha256": "47fcd8e389789af192131d954160e33d2b4f1aa4d00da2c7793d7e07bc2bbdf1"
     },
     {
       "path": "main.js",
-      "sha256": "168126f3b0a3f1625a68fb7fc7f4943376c5e6384063d44e42a6440eb9285785",
-      "fingerprint": "555bc686"
+      "sha256": "859a6b5aca11099f20d5af614f3374ecc3687fcf8f7de0e8d3a3875a6c4e0b9f",
+      "fingerprint": "f6488235"
     },
     {
       "path": "scene.js",
-      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
-      "fingerprint": "3e5ed74b"
+      "sha256": "38d6c8a91a1e4a8b6e9ef43ee014eae3646f06bcb5460cc18cffc86a5d04d636",
+      "fingerprint": "d24e6a69"
     },
     {
       "path": "style.css",

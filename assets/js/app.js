@@ -186,6 +186,7 @@ const CourseCatalog = (() => {
       wholeCourse: '整课探索',
       curriculumCount: (courses, entries) => `共 ${courses} 个课件 · ${entries} 个探索入口`,
       unitCount: (entries) => `${entries} 个探索入口`,
+      stageCount: (n, m) => `${n} 关 · 已玩 ${m} 关`,
       textbookPage: (page) => `教材第 ${page} 页`,
       loadErr: '课件清单加载失败，请先运行 npm run build 并通过 npm run preview 访问。',
       levels: { primary: '小学', junior: '初中', senior: '高中' },
@@ -239,6 +240,7 @@ const CourseCatalog = (() => {
       wholeCourse: 'Explore the course',
       curriculumCount: (courses, entries) => `${courses} courses · ${entries} exploration entries`,
       unitCount: (entries) => `${entries} exploration entries`,
+      stageCount: (n, m) => `${n} levels · ${m} played`,
       textbookPage: (page) => `Textbook p. ${page}`,
       loadErr: 'Failed to load the manifest. Run `npm run build` then `npm run preview`.',
       levels: { primary: 'Primary', junior: 'Middle', senior: 'High' },
@@ -553,6 +555,14 @@ const CourseCatalog = (() => {
     return courseProgressMeta(id)?.status || '';
   }
 
+  // 关卡级完成清单：课件存档 kidslab.exploration-v2.<id>.done；旧存档没有该字段时返回空数组降级。
+  function stageDone(courseId) {
+    try {
+      const value = JSON.parse(local.get(`kidslab.exploration-v2.${courseId}`) || 'null');
+      return Array.isArray(value?.done) ? value.done.filter((id) => typeof id === 'string') : [];
+    } catch { return []; }
+  }
+
   function card(c, i, entry = null) {
     const a = document.createElement('a');
     a.className = 'card';
@@ -616,6 +626,74 @@ const CourseCatalog = (() => {
     return a;
   }
 
+  // 聚合卡：同一课件的多关合并为一张卡，卡内关卡按钮直达对应关（?activity=）。
+  function groupCard(course, entries, i) {
+    const box = document.createElement('article');
+    box.className = 'card card--group';
+    box.dataset.courseId = course.id;
+    box.style.setProperty('--i', Math.min(i, 8));
+    box.style.setProperty('--cat-c', course.pinned ? 'var(--c-featured)' : catColor(course.category));
+
+    const cover = document.createElement('div');
+    cover.className = 'card__cover';
+    cover.innerHTML = `<span class="card__emoji">${course.icon || '📘'}</span>`;
+    if (course.pinned) cover.insertAdjacentHTML('beforeend', `<span class="card__pin">⭐ ${t().pinned}</span>`);
+    if (course.badge === 'new') cover.insertAdjacentHTML('beforeend', `<span class="card__new">✨</span>`);
+    const progress = courseProgress(course.id);
+    if (progress) {
+      box.dataset.progress = progress;
+      const status = document.createElement('span');
+      status.className = `card__progress card__progress--${progress}`;
+      status.textContent = t()[progress];
+      cover.appendChild(status);
+    }
+    if (offlineIds.has(course.id)) {
+      const off = document.createElement('span');
+      off.className = 'card__offline';
+      off.textContent = `📥 ${t().offline}`;
+      off.title = state.lang === 'zh' ? '本课资源已完整保存，断网也能玩' : 'Cached on this device — playable offline';
+      cover.appendChild(off);
+    }
+
+    const body = document.createElement('div');
+    body.className = 'card__body';
+    const h = document.createElement('h3');
+    h.className = 'card__title';
+    h.textContent = course.title[state.lang];
+    const meta = document.createElement('p');
+    meta.className = 'card__group-meta';
+    const done = stageDone(course.id);
+    meta.textContent = t().stageCount(entries.length, entries.filter((entry) => done.includes(entry.activity)).length);
+    const stages = document.createElement('div');
+    stages.className = 'card__stages';
+    entries.forEach((entry, stageIndex) => {
+      const link = document.createElement('a');
+      link.className = 'stage';
+      link.dataset.courseId = course.id;
+      link.dataset.activity = entry.activity;
+      link.href = CourseCatalog.entryPath(course, entry);
+      const played = done.includes(entry.activity);
+      if (played) link.dataset.done = '';
+      link.setAttribute('aria-label', entry.activityTitle?.[state.lang] || entry.activity);
+      const label = typeof entry.detail === 'string' ? entry.detail : entry.detail?.[state.lang];
+      link.innerHTML = `<span class="stage__num" aria-hidden="true">${stageIndex + 1}</span>`
+        + `<span class="stage__label">${esc(label || entry.activityTitle?.[state.lang] || entry.activity)}</span>`
+        + (played ? `<span class="stage__check" aria-hidden="true">✓</span>` : '');
+      stages.appendChild(link);
+    });
+    body.append(h, meta, stages);
+
+    const foot = document.createElement('div');
+    foot.className = 'card__meta';
+    const chip = document.createElement('span');
+    chip.className = 'chip chip--cat';
+    chip.textContent = t().cats[course.category] || course.category;
+    foot.append(chip);
+
+    box.append(cover, body, foot);
+    return box;
+  }
+
   function unitLabel(entry, lang = state.lang) {
     if (entry.unitKind === 'topic') return '';
     const digits = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
@@ -651,7 +729,22 @@ const CourseCatalog = (() => {
       count.textContent = t().unitCount(group.items.length);
       const grid = document.createElement('div');
       grid.className = 'grid curriculum-unit__grid';
-      for (const { course, entry } of group.items) grid.appendChild(card(course, index++, entry));
+      // 同课件多关聚合成一张卡；单关或整课入口保持一课一卡，位置仍按教材页序。
+      const stageCounts = new Map();
+      for (const { course, entry } of group.items) {
+        if (entry.activity) stageCounts.set(course.id, (stageCounts.get(course.id) || 0) + 1);
+      }
+      const rendered = new Set();
+      for (const { course, entry } of group.items) {
+        if (entry.activity && stageCounts.get(course.id) > 1) {
+          if (rendered.has(course.id)) continue;
+          rendered.add(course.id);
+          const entries = group.items.filter((item) => item.course.id === course.id && item.entry.activity).map((item) => item.entry);
+          grid.appendChild(groupCard(course, entries, index++));
+        } else {
+          grid.appendChild(card(course, index++, entry));
+        }
+      }
       section.append(book, heading, count, grid);
       el.grid.appendChild(section);
     }

@@ -10,7 +10,7 @@
   },
   "category": "science",
   "levels": ["primary"],
-  "grades": [],
+  "grades": ["g3","g4"],
   "tags": ["化石", "地层", "观察", "实验"],
   "icon": "🦖",
   "order": 71,

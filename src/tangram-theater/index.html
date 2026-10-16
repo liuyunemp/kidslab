@@ -12,6 +12,7 @@
     <a class="pill" href="../../index.html">← <span data-t="back">返回平台</span></a>
     <h1 class="bar__title">🎭 <span data-t="title">七巧板皮影戏</span></h1>
     <div class="bar__actions">
+      <button class="pill pill--icon" id="soundBtn" type="button" aria-label="关闭全部声音" aria-pressed="false">🔊</button>
       <button class="pill pill--icon" id="themeBtn" type="button" aria-label="切换主题">🌙</button>
       <button class="pill" id="langBtn" type="button">EN</button>
     </div>
@@ -22,7 +23,7 @@
       <div class="story-strip__seal" aria-hidden="true">影</div>
       <div class="story-strip__copy">
         <p class="eyebrow" data-t="eyebrow">今晚演出：狐狸过河</p>
-        <p id="mission">第一幕缺一座桥。把七块木片都送进发光剪影，故事才能继续！</p>
+        <p id="mission">第一幕缺一座桥。把七块木片都拖进发光的影子，故事才能继续！</p>
       </div>
       <div class="progress-chip"><span data-t="progress">归位</span> <strong id="progressCount">0/7</strong></div>
     </section>
@@ -34,6 +35,7 @@
         <div class="curtain curtain--left" aria-hidden="true"></div>
         <div class="curtain curtain--right" aria-hidden="true"></div>
         <canvas id="stage" role="img" aria-label="可拖动的七巧板拼图舞台"></canvas>
+        <p class="stage-coach" id="coach" aria-live="polite">把手上的木板拖到发光的影子上</p>
         <div class="stage-badge"><span data-t="act">幕</span> <strong id="actNumber">1</strong></div>
       </section>
 
@@ -46,7 +48,7 @@
           <button class="reset-button" id="resetBtn" type="button" aria-label="重开本幕">↻</button>
         </div>
 
-        <p class="feedback" id="feedback" aria-live="polite">拖住木片送到同形剪影。方向不对，就转一转！</p>
+        <p class="feedback" id="feedback" aria-live="polite">每块木片都有自己的影子。拖过去就归位！</p>
 
         <div class="piece-shelf" id="pieceShelf" role="listbox" aria-label="七巧板木片"></div>
 
@@ -72,6 +74,6 @@
     </div>
   </div>
 
-  <script src="main.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>

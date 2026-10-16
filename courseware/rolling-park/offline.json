@@ -1,6 +1,6 @@
 {
   "id": "rolling-park",
-  "version": "ca15749206ba4314ba8ab3285e8389f23faeb045af107c0c299eebec92b144f6",
+  "version": "119f22e0496039012567d93e673aeb7517b8559012c7eb80273057daccb0fa37",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "b38def55c2435f7e53d04ae99cfec926f179b26504ae4154f9d05f27ec363c1c"
+      "sha256": "495217753385d49308c639bc7eca1f8ba62da75a044bdbdfcb3a6dced869f9ba"
     },
     {
       "path": "main.js",

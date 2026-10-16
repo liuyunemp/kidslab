@@ -10,7 +10,7 @@
   },
   "category": "math",
   "levels": ["senior"],
-  "grades": [],
+  "grades": ["g10","g11","g12"],
   "tags": ["统计与抽样", "实验", "3D"],
   "icon": "📊",
   "order": 38,

@@ -12,7 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [],
+  "grades": ["g1b"],
   "tags": [
     "平面图形",
     "空间想象",

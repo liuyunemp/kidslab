@@ -1,6 +1,6 @@
 {
   "id": "change-vending",
-  "version": "42112326244ed295dc9abba8b6931c4bc910e62dd3643d5e56c10979d3875045",
+  "version": "2aa05fee46e32e92c75fd8148e96656fb0c3a883e949aa4ff6ab992cd69efe11",
   "assets": [
     {
       "path": "audio.js",
@@ -26,22 +26,22 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
-      "fingerprint": "da11fe5b"
+      "sha256": "9fa07d62da025e4a6d0adca2c8d5cbbfc9bcfbb22bdecf3eb58e49703076889d",
+      "fingerprint": "dade1ba1"
     },
     {
       "path": "index.html",
-      "sha256": "3aa897075b409298562806021b16b94d69eee1384cde431ad28f42b1aea20c93"
+      "sha256": "6ecf51bda50afa3d4c4ad76258e15d9509e176f3afc5982c7387d3a638ff47ac"
     },
     {
       "path": "main.js",
-      "sha256": "39f94c86c12c07fed15431fc5926a67e7ec889be2b9d0121299868c1742443fe",
-      "fingerprint": "754dba27"
+      "sha256": "cfc5407906cb19e0d30643185a5151fbbd37a9b901f948a89a6083834ecd9f97",
+      "fingerprint": "dd529671"
     },
     {
       "path": "scene.js",
-      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
-      "fingerprint": "3e5ed74b"
+      "sha256": "38d6c8a91a1e4a8b6e9ef43ee014eae3646f06bcb5460cc18cffc86a5d04d636",
+      "fingerprint": "d24e6a69"
     },
     {
       "path": "style.css",

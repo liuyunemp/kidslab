@@ -1,6 +1,6 @@
 {
   "id": "g1-poem-stage",
-  "version": "f06598a02d019719bd2fa9dfe6be1c021a86b75c0de0dd9a03af2103a74852e4",
+  "version": "7e490d28eb249ab32e508233ab5fc4ea82cfb646ae38fec77be43432fe4a9611",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -8,36 +8,36 @@
     },
     {
       "path": "config.js",
-      "sha256": "2348872f5b0b3001b6bd06939731086d19b39f1b0226362f00ae2c8707d9399b",
-      "fingerprint": "591297ec"
+      "sha256": "53e7acf4eb65e132db284d90ce816eb32191c73e06bc3d29d0bf12f1e462e067",
+      "fingerprint": "0c5eb8ff"
     },
     {
       "path": "course.json",
-      "sha256": "cd47e8ee949f0e08812c84a46825cd9d4a18ecd22c3eecc791461341fcbe515a"
+      "sha256": "e0fcbea696fc3f25c8cf92f4b31ed0b28ff8747cdd0b9ccd2b2aa52c8b9a3685"
     },
     {
       "path": "engine.js",
-      "sha256": "b2f978854d86a6988dd89bf28d13d9e2b872169b9cf280083e68d960ed0853d3",
-      "fingerprint": "0d3f2646"
+      "sha256": "047e1b10601fd12ee10207eb6476aeb58c9cab765acccfad810cefe02ad16a56",
+      "fingerprint": "fb0d9d15"
     },
     {
       "path": "index.html",
-      "sha256": "d9a96133a5ceddcd2089d29581f6d0ecfb43f73777986eea4cf8dfe28157162d"
+      "sha256": "460692f3739fcbd8e9cbb2be5cd5353293903872642c860d91e3beb29b41d6bc"
     },
     {
       "path": "main.js",
-      "sha256": "c3a67efea5e8b33ac89f33403cd3bc28cc0338f0454448c5317256bade2bffe8",
-      "fingerprint": "65adbcc1"
+      "sha256": "9f964d0b3548085d902ec011838793584c99184eb9541f083b6c45ff023d69ba",
+      "fingerprint": "90d86a7b"
     },
     {
       "path": "model.js",
-      "sha256": "200576b540c95c5edc0d1aa7f64f24c109559196dee9d73c057c9d01614664aa",
-      "fingerprint": "9217243d"
+      "sha256": "55d5cbf4067be07e3b767a0cbd540a2794151f18618aeeb216a87c2a6d81aa61",
+      "fingerprint": "8777b077"
     },
     {
       "path": "style.css",
-      "sha256": "e16d3a6aea8be84447475e9109d7dfcf70753043a85d54a4d683ab5a40ac1a22",
-      "fingerprint": "1a8bcd3f"
+      "sha256": "c6e0a157d98534bcef93ea8cddd58e8c792c97d1c8b8ce782fb83fc53fec060e",
+      "fingerprint": "bdce3c1f"
     }
   ]
 }

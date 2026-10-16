@@ -1,10 +1,10 @@
 {
   "id": "strata-dig",
-  "version": "fb0a659098bf15eef93453ff7b26e4a9fc70df8bba50afab4e571fbb467ef20b",
+  "version": "24574c2ffd0007948b846efb31a6fdb31d1ce93dff51fb2e0d946557f505aba5",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "4abadab376f8f43b93f3e9ef0ed564b543cb6475de5e92474616a5711444e7d7"
+      "sha256": "fa35cc8ee72d97c374ee08bc8f75ad49c8f6a1325a5f9e4f1ba3d643cdafa5f0"
     },
     {
       "path": "dig-model.js",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "612f91c39ffcfa883587f00ea38b15cf74f662e119a287a51886f2fd0e5b5702"
+      "sha256": "bdfad031e2d08985d0fa7a608dd320fef7ae455a68fabe4a115f11f36d97170d"
     },
     {
       "path": "main.js",

@@ -1,6 +1,6 @@
 {
   "id": "g1b-writing-workshop",
-  "version": "28a58c80e1c0e4dbc7328a42da9c4ed4c22b51baabf8d3aba456a87a5dc896f3",
+  "version": "fd8aa0c1fd9e03622fc258f9501882aa68b3fa729408cdd6db1908fa8ad5fd58",
   "assets": [
     {
       "path": "audio.js",
@@ -26,22 +26,22 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
-      "fingerprint": "da11fe5b"
+      "sha256": "9fa07d62da025e4a6d0adca2c8d5cbbfc9bcfbb22bdecf3eb58e49703076889d",
+      "fingerprint": "dade1ba1"
     },
     {
       "path": "index.html",
-      "sha256": "c4c4ce46a377b122bd191913a8a5fe80086da618efac73897e00af1801c972eb"
+      "sha256": "10ea36eeafe2e47d75e5a5dd51e37a359740e75047d3bc2f00f9ed88e029626e"
     },
     {
       "path": "main.js",
-      "sha256": "836811d92a65dda6b65b32d438da30ac72fb389dac5092f9c27d51c646e2cc70",
-      "fingerprint": "af8b0481"
+      "sha256": "5346acfa41c9568e1334a227eaa713c56d382cd75494efe71e23f7e96b0612d6",
+      "fingerprint": "0b51990b"
     },
     {
       "path": "scene.js",
-      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
-      "fingerprint": "3e5ed74b"
+      "sha256": "38d6c8a91a1e4a8b6e9ef43ee014eae3646f06bcb5460cc18cffc86a5d04d636",
+      "fingerprint": "d24e6a69"
     },
     {
       "path": "style.css",

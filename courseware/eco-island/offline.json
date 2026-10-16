@@ -1,6 +1,6 @@
 {
   "id": "eco-island",
-  "version": "45a32e995b0011e63dd3e75626afde8a3aae333f07e1e53475dabf21e2469266",
+  "version": "243c3fb54ef14275f384fb14f79246266758fe1db098347e7809294bd906d80a",
   "assets": [
     {
       "path": "course.json",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "40f1ea5b0210a59567f24a76689c7e4817c25e4278d474686f0f20bc6add3186"
+      "sha256": "9600c87f0dd067db91c30dc9d0fc3f1fecbcc747aa8d2d7a5d72f6569f09e1de"
     },
     {
       "path": "main.js",

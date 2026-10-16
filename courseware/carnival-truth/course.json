@@ -10,7 +10,7 @@
   },
   "category": "math",
   "levels": ["primary"],
-  "grades": [],
+  "grades": ["g5"],
   "tags": ["分数", "运算", "实验", "益智游戏"],
   "icon": "🎠",
   "order": 34,

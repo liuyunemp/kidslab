@@ -20,8 +20,12 @@ const catalog = vm.runInContext('CourseCatalog', context);
 const course = (id, entries, extra = {}) => ({ id, grades: ['g1a'], category: 'math', curriculum: entries, path: `courseware/${id}/index.html`, ...extra });
 const entry = (unit, page, extra = {}) => ({ bookId: 'math-g1a', grade: 'g1a', unitId: `${unit}`, unitOrder: unit, page, lessonOrder: 1, ...extra });
 
-test('所有已核准年级课件都有教材入口，136 个活动各自对应稳定的活动 ID', async () => {
-  assert.deepEqual(Object.keys(expanded).sort(), metadata.filter(c => c.listed !== false && c.grades?.length).map(c => c.id).sort());
+test('教材映射必须是已核准年级课件的子集，136 个活动各自对应稳定的活动 ID', async () => {
+  const graded = new Set(metadata.filter(c => c.listed !== false && c.grades?.length).map(c => c.id).sort());
+  /* 年级标注 = 适龄筛选；教材映射 = 单元入口。映射是年级的子集，但允许适龄课件暂无教材锚点（待逐课核准）。 */
+  for (const id of Object.keys(expanded)) {
+    assert.ok(graded.has(id), `${id} 有教材映射但没有年级标注`);
+  }
   assert.deepEqual(await loadCurriculum(fileURLToPath(root), metadata), expanded);
   for (const c of activities) {
     assert.deepEqual(expanded[c.id].map(e => e.activity).sort(), c.activities.map(a => a.id).sort(), c.id);

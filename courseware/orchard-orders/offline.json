@@ -1,14 +1,14 @@
 {
   "id": "orchard-orders",
-  "version": "3c074bfd32125a69c18cd84ded5bbe157a9ffe63dc878d71e63ad2a32f3bd167",
+  "version": "36449611d1e1741a314e5cbb483da33aad1b26e9727db14ff7a9c2ad3332bfd9",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "d0bf116560a4779285946754e05b573512d86844d20b102592a862f2d75aa05d"
+      "sha256": "2d479fe4341fd958bc81a816e1bdaf52cda362ba9138593c95fe2e222983affb"
     },
     {
       "path": "index.html",
-      "sha256": "89b69c18c821e5e6aaef2ad45fd613e57db4cff87fb7898c6eae1ec8046adfb6"
+      "sha256": "05a1500907724b5820b40ddc05dbe805556cffd73102d008e95bd34279e28246"
     },
     {
       "path": "main.js",

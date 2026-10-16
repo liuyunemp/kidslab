@@ -1,6 +1,6 @@
 {
   "id": "g1b-poetry-theater",
-  "version": "52934ec6ff08cc9f05bd3836eeeff16cd9748b78dee6a0f9b8f44a75c8aac03e",
+  "version": "be257f4ba3f6aeabe235c11bfb6e05874cd1a9cdfe3c8cdd6b3f0e96ab7a3e4d",
   "assets": [
     {
       "path": "audio.js",
@@ -26,22 +26,22 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
-      "fingerprint": "da11fe5b"
+      "sha256": "9fa07d62da025e4a6d0adca2c8d5cbbfc9bcfbb22bdecf3eb58e49703076889d",
+      "fingerprint": "dade1ba1"
     },
     {
       "path": "index.html",
-      "sha256": "ea776e4ba55634e1c031d8462fdb54fbc80523d1cf7f0dffc1b727553d39186a"
+      "sha256": "00dd908c0f7458e8c9e7d2179a09bef69effebfd5183d70b80f44fdf7eb5a1fd"
     },
     {
       "path": "main.js",
-      "sha256": "89ee985a2d04fe2b7cfbc192efa4daed34c5325da88dbf4909dd1822537eba99",
-      "fingerprint": "5210cda1"
+      "sha256": "fb7835d311ecee62176d6d17de35e2aae665e117e918ae9f7ae0dc501f0c143a",
+      "fingerprint": "5ae907fc"
     },
     {
       "path": "scene.js",
-      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
-      "fingerprint": "3e5ed74b"
+      "sha256": "38d6c8a91a1e4a8b6e9ef43ee014eae3646f06bcb5460cc18cffc86a5d04d636",
+      "fingerprint": "d24e6a69"
     },
     {
       "path": "style.css",

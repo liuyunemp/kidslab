@@ -10,7 +10,7 @@
   },
   "category": "science",
   "levels": ["primary"],
-  "grades": [],
+  "grades": ["g2","g3"],
   "tags": ["生态", "观察", "益智游戏"],
   "icon": "🦋",
   "order": 60,

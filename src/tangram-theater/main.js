@@ -1,3 +1,17 @@
+import {
+  TARGETS as MODEL_TARGETS,
+  PIECE_DEFS as MODEL_PIECE_DEFS,
+  COLORS as MODEL_COLORS,
+  PIECE_COUNT,
+  PICK_RADIUS,
+  SNAP_BACK_MS,
+  normalizeAngle,
+  resolveSnap,
+  snapRadius,
+  clampSceneIndex,
+} from './model.js';
+import { createAudio } from './audio.js';
+
 (() => {
   'use strict';
 
@@ -19,20 +33,25 @@
       stageLabel: '可拖动的七巧板拼图舞台',
       shelfLabel: '七巧板木片',
       controlsLabel: '木片动作',
-      intro: '拖住木片送到同形剪影。方向不对，就转一转！',
-      selected: (name) => `已拿起${name}。拖到发光轮廓里；需要时先旋转或翻面。`,
-      wrong: '还没对上剪影。木片回到后台了，看看位置和方向再试一次！',
+      sound: '关闭全部声音',
+      soundOff: '恢复声音',
+      coach: '把手上的木板拖到发光的影子上',
+      intro: '每块木片都有自己的影子。拖过去就归位！',
+      selected: (name) => `已拿起${name}。把它拖到${name}的影子上去。`,
+      wrongFar: '离影子还差一点，再靠近一些。',
+      wrongAngle: '位置对了，形状还差个方向——转一转或翻个面。',
+      wrongFlip: '就是这里！不过要翻个面才能吻合。',
       correct: (name, count) => `${name}稳稳归位！还差 ${7 - count} 块。`,
       lastPiece: '最后一块归位——剪影醒过来了！',
       locked: '先演完前一幕，后面的角色才会登场。',
-      hintPlaced: (name) => `灯笼照亮了${name}的位置。观察它怎样滑动、转向，再放下一块！`,
+      hintPlaced: (name) => `灯笼照亮了${name}的位置。看看它怎样滑动、转向，再放下一块！`,
       resetDone: '这一幕重新布景。七块木片都回到后台啦！',
       completedScene: '这一幕已经演完，可以重玩或继续后面的故事。',
       pieces: ['大三角一', '大三角二', '中三角', '小三角一', '小三角二', '正方形', '平行四边形'],
       scenes: [
         {
           tab: '第一幕 · 桥',
-          mission: '第一幕缺一座桥。把七块木片都送进发光剪影，故事才能继续！',
+          mission: '第一幕缺一座桥。把七块木片都拖进发光的影子，故事才能继续！',
           title: '桥架起来了！',
           text: '七块木片没有变大或缩小，只是滑动、转向和翻面，就组成了新的轮廓。',
           art: '🦊🌉',
@@ -77,20 +96,25 @@
       stageLabel: 'Draggable tangram puzzle stage',
       shelfLabel: 'Tangram pieces',
       controlsLabel: 'Piece controls',
-      intro: 'Drag a piece into its matching shadow. If it points the wrong way, give it a turn!',
-      selected: (name) => `${name} selected. Drag it into the glowing outline; turn or flip it if needed.`,
-      wrong: 'Not quite aligned with the shadow. The piece is back backstage — check its place and direction!',
+      sound: 'Mute all sounds',
+      soundOff: 'Restore sound',
+      coach: 'Drag the piece in your hand onto its glowing shadow',
+      intro: 'Every piece has its own shadow. Drag it over to place it!',
+      selected: (name) => `${name} is in your hand. Drag it onto the matching shadow.`,
+      wrongFar: 'Almost there — move a little closer to the shadow.',
+      wrongAngle: 'Right spot, wrong angle. Give it a turn or a flip.',
+      wrongFlip: 'Exactly there! But it needs a flip to fit.',
       correct: (name, count) => `${name} is in place! ${7 - count} pieces to go.`,
       lastPiece: 'The final piece lands — the shadow wakes up!',
       locked: 'Finish the earlier act before the next character can enter.',
-      hintPlaced: (name) => `The lantern revealed the home of ${name}. Watch how it slides and turns, then place the next one!`,
+      hintPlaced: (name) => `The lantern lit up the home of ${name}. Watch how it slides and turns, then place the next one!`,
       resetDone: 'The stage is reset. All seven pieces are back backstage!',
       completedScene: 'This act is complete. Replay it or continue the story.',
       pieces: ['Large triangle one', 'Large triangle two', 'Medium triangle', 'Small triangle one', 'Small triangle two', 'Square', 'Parallelogram'],
       scenes: [
         {
           tab: 'Act 1 · Bridge',
-          mission: 'Act one needs a bridge. Move all seven pieces into the glowing shadow so the story can continue!',
+          mission: 'Act one needs a bridge. Drag all seven pieces into the glowing shadows so the story can continue!',
           title: 'The bridge rises!',
           text: 'None of the seven pieces grew or shrank. They only slid, turned, and flipped to make a brand-new outline.',
           art: '🦊🌉',
@@ -120,36 +144,9 @@
     },
   };
 
-  const COLORS = ['--coral', '--blue', '--gold', '--jade', '--violet', '--crimson', '--blue'];
-  const PIECE_DEFS = [
-    { id: 'large-a', shape: 'triangle', size: 1.18, points: [[-0.82, -0.82], [-0.82, 0.82], [0.82, 0.82]] },
-    { id: 'large-b', shape: 'triangle', size: 1.18, points: [[-0.82, -0.82], [-0.82, 0.82], [0.82, 0.82]] },
-    { id: 'medium', shape: 'triangle', size: 0.91, points: [[-0.76, -0.76], [-0.76, 0.76], [0.76, 0.76]] },
-    { id: 'small-a', shape: 'triangle', size: 0.7, points: [[-0.72, -0.72], [-0.72, 0.72], [0.72, 0.72]] },
-    { id: 'small-b', shape: 'triangle', size: 0.7, points: [[-0.72, -0.72], [-0.72, 0.72], [0.72, 0.72]] },
-    { id: 'square', shape: 'square', size: 0.7, points: [[-0.63, -0.63], [0.63, -0.63], [0.63, 0.63], [-0.63, 0.63]] },
-    { id: 'para', shape: 'para', size: 0.82, points: [[-0.9, -0.55], [0.4, -0.55], [0.9, 0.55], [-0.4, 0.55]] },
-  ];
-
-  const TARGETS = [
-    [
-      [0.35, 0.45, 225, 1], [0.55, 0.45, 315, 1], [0.45, 0.28, 45, 1],
-      [0.25, 0.60, 45, 1], [0.65, 0.60, 135, 1], [0.45, 0.50, 45, 1], [0.45, 0.66, 0, 1],
-    ],
-    [
-      [0.43, 0.48, 45, 1], [0.55, 0.53, 225, 1], [0.34, 0.34, 315, 1],
-      [0.28, 0.25, 45, 1], [0.34, 0.62, 135, 1], [0.49, 0.66, 0, 1], [0.67, 0.42, 335, -1],
-    ],
-    [
-      [0.48, 0.51, 225, 1], [0.59, 0.47, 45, 1], [0.37, 0.35, 315, 1],
-      [0.31, 0.24, 45, 1], [0.66, 0.62, 225, 1], [0.45, 0.65, 0, 1], [0.68, 0.34, 25, 1],
-    ],
-    [[0.32,0.57,225,1],[0.58,0.57,315,1],[0.45,0.35,45,1],[0.32,0.39,135,1],[0.65,0.39,45,1],[0.46,0.68,0,1],[0.45,0.52,0,1]],
-    [[0.34,0.32,225,1],[0.58,0.32,315,1],[0.45,0.57,45,1],[0.34,0.64,135,1],[0.63,0.64,45,1],[0.48,0.45,0,1],[0.57,0.49,0,1]],
-    [[0.45,0.31,225,1],[0.45,0.49,45,1],[0.45,0.64,315,1],[0.33,0.48,135,1],[0.57,0.48,45,1],[0.45,0.78,0,1],[0.45,0.68,90,1]],
-    [[0.29,0.42,225,1],[0.65,0.42,315,1],[0.46,0.52,45,1],[0.27,0.62,135,1],[0.68,0.62,45,1],[0.45,0.65,0,1],[0.48,0.34,0,-1]],
-    [[0.45,0.27,225,1],[0.28,0.46,315,1],[0.62,0.46,45,1],[0.27,0.66,135,1],[0.64,0.66,45,1],[0.45,0.55,0,1],[0.45,0.75,0,1]],
-  ];
+  const TARGETS = MODEL_TARGETS;
+  const PIECE_DEFS = MODEL_PIECE_DEFS;
+  const COLORS = MODEL_COLORS;
 
   const SAVE_KEY = 'kidslab.tangram-theater';
   try {
@@ -163,6 +160,8 @@
   const els = {
     lang: document.querySelector('#langBtn'),
     theme: document.querySelector('#themeBtn'),
+    sound: document.querySelector('#soundBtn'),
+    coach: document.querySelector('#coach'),
     mission: document.querySelector('#mission'),
     progress: document.querySelector('#progressCount'),
     tabs: document.querySelector('#sceneTabs'),
@@ -183,6 +182,8 @@
     next: document.querySelector('#nextBtn'),
   };
 
+  const audio = createAudio('kidslab.tangram-theater.audio');
+
   let t = (key) => key;
   let sceneIndex = 0;
   let unlocked = 0;
@@ -192,6 +193,8 @@
   let dragging = null;
   let finaleStarted = 0;
   let hintPulse = -1;
+  let armedTarget = -1;
+  let focusPulseAt = 0;
   let cssWidth = 0;
   let cssHeight = 0;
   let dpr = 1;
@@ -199,6 +202,14 @@
   let feedbackArgs = [];
   let feedbackKind = '';
   let feedbackTimer = 0;
+  let audioUnlocked = false;
+
+  // 首次用户手势解锁音频；绝不 await，玩法动作立即执行。
+  function unlockAudio() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+    audio.unlock();
+  }
 
   function cssVar(name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -209,7 +220,7 @@
       const data = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
       unlocked = Math.min(TARGETS.length - 1, Math.max(0, Number(data.unlocked) || 0));
       completed = Math.min(TARGETS.length, Math.max(0, Number(data.completed) || 0));
-      sceneIndex = Math.min(unlocked, Math.max(0, Number(data.scene) || 0));
+      sceneIndex = clampSceneIndex(Math.min(unlocked, Math.max(0, Number(data.scene) || 0)), TARGETS.length);
     } catch {
       unlocked = 0;
       completed = 0;
@@ -248,14 +259,18 @@
         ...definition,
         x: source.x,
         y: source.y,
-        rotation: (index * 45 + sceneIndex * 15) % 360,
+        // 起始角度必须落在 45° 网格上：否则左右转按钮永远转不到目标角度。
+        rotation: normalizeAngle(index * 45 + sceneIndex * 90),
         flip: 1,
         placed: false,
+        snapBack: null,
       };
     });
     selected = 0;
     finaleStarted = 0;
     hintPulse = -1;
+    armedTarget = -1;
+    focusPulseAt = 0;
     if (message) setFeedback('resetDone', [], '');
     renderUI();
   }
@@ -348,21 +363,95 @@
     ctx.restore();
   }
 
+  // 剪影 = 影子的"家"。三层绘制：光晕 → 底色 → 描边，确保孩子在暖色舞台上真的看得见。
   function drawTargets(now) {
+    const focused = dragging ? dragging.index : selected;
+    // 供 E2E 观察高亮/就绪状态，不参与渲染逻辑。
+    canvas.dataset.focusedTarget = String(focused);
+    canvas.dataset.armedTarget = String(armedTarget);
     pieces.forEach((piece, index) => {
+      // 灯笼提示刚放下的那块：画一圈会呼吸的光环，兑现"灯笼照亮了它的位置"。
+      if (index === hintPulse) {
+        const target = targetFor(index);
+        const glow = 0.5 + Math.sin(now / 200) * 0.28;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0.18, glow);
+        ctx.strokeStyle = cssVar('--gold');
+        ctx.lineWidth = 4;
+        ctx.setLineDash([9, 7]);
+        ctx.lineDashOffset = -now / 45;
+        pathPiece(piece, target);
+        ctx.stroke();
+        ctx.restore();
+      }
       if (piece.placed) return;
       const target = targetFor(index);
-      const pulse = index === hintPulse ? 0.48 + Math.sin(now / 170) * 0.16 : 0.24;
+      const isFocused = index === focused;
+      const isHint = index === hintPulse;
+      const isArmed = index === armedTarget && Boolean(dragging);
+      const color = cssVar(COLORS[index]);
+
+      // 呼吸节奏：提示态最快，选中其次，安静时最慢。
+      const breath = isHint ? Math.sin(now / 170)
+        : isArmed ? Math.sin(now / 130)
+          : isFocused ? Math.sin(now / 320)
+            : Math.sin(now / 500);
+      const base = isHint ? 0.62 : isArmed ? 0.72 : isFocused ? 0.60 : 0.34;
+      const amplitude = isFocused || isHint || isArmed ? 0.14 : 0.10;
+
+      // 选中一块木片时，其余剪影退到背景，形成聚光灯效应：一眼看出"这块板要去那里"。
+      const dimmed = index !== focused && (Boolean(dragging) || selected !== index);
+
+      pathPiece(piece, target);
+
+      // 1) 光晕层：真正画出发光感（旧实现只有透明度叠加，孩子看不到任何光）。
       ctx.save();
-      ctx.globalAlpha = pulse;
-      ctx.fillStyle = index === hintPulse ? cssVar('--gold') : cssVar('--ghost');
-      ctx.strokeStyle = cssVar('--line');
-      ctx.lineWidth = index === hintPulse ? 4 : 2;
-      ctx.setLineDash(index === hintPulse ? [9, 7] : [5, 6]);
+      ctx.globalAlpha = dimmed ? 0.16 : base * 0.85;
+      ctx.fillStyle = isArmed ? cssVar('--success') : color;
+      ctx.shadowColor = isArmed ? cssVar('--success') : color;
+      ctx.shadowBlur = (isHint ? 30 : isArmed ? 26 : isFocused ? 22 : 15) + breath * 6;
+      ctx.fill();
+      ctx.restore();
+
+      // 2) 底色层：让剪影本体在暖黄舞台上足够实，不再被 globalAlpha 二次稀释到看不见。
+      ctx.save();
+      ctx.globalAlpha = dimmed ? 0.14 : Math.min(0.92, base + amplitude * breath);
+      ctx.fillStyle = cssVar('--ghost');
       pathPiece(piece, target);
       ctx.fill();
+      ctx.restore();
+
+      // 3) 描边层：边界始终清晰，保证形状与朝向可读。
+      ctx.save();
+      ctx.globalAlpha = dimmed ? 0.22 : 0.78;
+      ctx.strokeStyle = isArmed ? cssVar('--success') : isHint ? cssVar('--gold') : cssVar('--line');
+      ctx.lineWidth = isHint ? 4.5 : isArmed ? 4 : isFocused ? 3.5 : 2.5;
+      ctx.setLineDash(isArmed || isHint ? [9, 7] : [5, 6]);
+      ctx.lineDashOffset = isArmed || isHint ? -now / 45 : 0;
+      pathPiece(piece, target);
       ctx.stroke();
       ctx.restore();
+
+      // 4) 刚被选中的一瞬：放大脉冲，把注意力引到这块影子上。
+      if (isFocused && focusPulseAt) {
+        const elapsed = now - focusPulseAt;
+        if (elapsed < 400) {
+          const progress = elapsed / 400;
+          const scale = 1 + 0.16 * (1 - progress) * Math.sin(Math.PI * progress);
+          ctx.save();
+          ctx.globalAlpha = 0.5 * (1 - progress);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 3;
+          ctx.translate(target.x, target.y);
+          ctx.scale(scale, scale);
+          ctx.translate(-target.x, -target.y);
+          pathPiece(piece, target);
+          ctx.stroke();
+          ctx.restore();
+        } else {
+          focusPulseAt = 0;
+        }
+      }
     });
   }
 
@@ -408,6 +497,7 @@
 
   function draw(now = performance.now()) {
     ctx.clearRect(0, 0, cssWidth, cssHeight);
+    tickSnapBack(now);
     drawScenery(now);
     drawTargets(now);
     pieces.forEach((piece, index) => drawPiece(piece, index, now));
@@ -436,16 +526,19 @@
     for (let index = pieces.length - 1; index >= 0; index -= 1) {
       if (!pieces[index].placed && pointInPolygon(x, y, transformedPoints(pieces[index]))) return index;
     }
-    return -1;
-  }
-
-  function normalizeAngle(angle) {
-    return ((angle % 360) + 360) % 360;
-  }
-
-  function angleDistance(a, b) {
-    const difference = Math.abs(normalizeAngle(a) - normalizeAngle(b));
-    return Math.min(difference, 360 - difference);
+    // 精确命中落空时给一点手抖空间：小手和触屏都容易点到旁边。
+    let best = -1;
+    let bestDistance = PICK_RADIUS;
+    for (let index = pieces.length - 1; index >= 0; index -= 1) {
+      const piece = pieces[index];
+      if (piece.placed) continue;
+      const distance = Math.hypot(x - piece.x, y - piece.y);
+      if (distance <= bestDistance) {
+        bestDistance = distance;
+        best = index;
+      }
+    }
+    return best;
   }
 
   function setFeedback(key, args = [], kind = '') {
@@ -462,21 +555,37 @@
     els.feedback.className = `feedback${feedbackKind ? ` is-${feedbackKind}` : ''}`;
   }
 
+  // 木片正在回弹时的补间：看起来是"滑回去"，不是生硬瞬移。
+  function tickSnapBack(now) {
+    for (const piece of pieces) {
+      if (!piece.snapBack) continue;
+      const progress = Math.min(1, (now - piece.snapBack.at) / SNAP_BACK_MS);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      piece.x = piece.snapBack.fromX + (piece.snapBack.toX - piece.snapBack.fromX) * eased;
+      piece.y = piece.snapBack.fromY + (piece.snapBack.toY - piece.snapBack.fromY) * eased;
+      if (progress >= 1) {
+        piece.x = piece.snapBack.toX;
+        piece.y = piece.snapBack.toY;
+        piece.snapBack = null;
+      }
+    }
+  }
+
   function trySnap(index) {
     const piece = pieces[index];
     const target = targetFor(index);
-    const distance = Math.hypot(piece.x - target.x, piece.y - target.y);
-    const closeEnough = distance <= Math.max(34, pieceScale() * 0.9);
-    const angleMatches = angleDistance(piece.rotation, target.rotation) <= 24;
-    const flipMatches = piece.flip === target.flip;
+    const verdict = resolveSnap(piece, target, pieceScale());
 
-    if (closeEnough && angleMatches && flipMatches) {
+    if (verdict.ok) {
       piece.x = target.x;
       piece.y = target.y;
       piece.rotation = target.rotation;
       piece.flip = target.flip;
       piece.placed = true;
+      piece.snapBack = null;
       hintPulse = -1;
+      armedTarget = -1;
+      audio.tone('success');
       const count = pieces.filter((candidate) => candidate.placed).length;
       window.cool.track('place_tangram_piece', { scene: sceneIndex + 1, piece: piece.id });
       if (count === pieces.length) {
@@ -486,15 +595,18 @@
         selected = pieces.findIndex((candidate) => !candidate.placed);
         setFeedback('correct', [t('pieces')[index], count], 'good');
       }
+      focusPulseAt = performance.now();
       renderUI();
       return true;
     }
 
+    // 没放对：说清楚差在哪里，然后滑回后台，而不是瞬间消失。
     const source = sourceFor(index);
-    piece.x = source.x;
-    piece.y = source.y;
-    setFeedback('wrong', [], 'wrong');
-    window.cool.track('retry_tangram_piece', { scene: sceneIndex + 1 });
+    piece.snapBack = { at: performance.now(), fromX: piece.x, fromY: piece.y, toX: source.x, toY: source.y };
+    const key = verdict.reason === 'angle' ? 'wrongAngle' : verdict.reason === 'flip' ? 'wrongFlip' : 'wrongFar';
+    setFeedback(key, [], 'wrong');
+    audio.tone('error');
+    window.cool.track(verdict.reason === 'far' ? 'misplace_far' : 'misplace_angle', { scene: sceneIndex + 1 });
     clearTimeout(feedbackTimer);
     feedbackTimer = window.setTimeout(() => setFeedback('selected', [t('pieces')[index]], ''), 1400);
     return false;
@@ -502,25 +614,22 @@
 
   function pointerDown(event) {
     if (finaleStarted || !els.modal.hidden) return;
+    unlockAudio();
     const point = canvasPoint(event);
     const index = pickPiece(point.x, point.y);
 
-    if (index < 0) {
-      const piece = pieces[selected];
-      if (piece && !piece.placed) {
-        piece.x = point.x;
-        piece.y = point.y;
-        trySnap(selected);
-      }
-      return;
-    }
+    // 点空舞台什么也不做：旧实现会把手上那块木片瞬移到点击处，孩子会被吓一跳。
+    if (index < 0) return;
 
     selected = index;
     const piece = pieces[index];
+    piece.snapBack = null;
     dragging = { index, dx: point.x - piece.x, dy: point.y - piece.y };
     canvas.setPointerCapture(event.pointerId);
     canvas.classList.add('is-dragging');
+    audio.tone('pick');
     setFeedback('selected', [t('pieces')[index]], '');
+    focusPulseAt = performance.now();
     renderUI();
   }
 
@@ -530,12 +639,21 @@
     const piece = pieces[dragging.index];
     piece.x = point.x - dragging.dx;
     piece.y = point.y - dragging.dy;
+    // 吸附预览：接近目标时剪影转绿，松开就能放。
+    const target = targetFor(dragging.index);
+    const near = Math.hypot(piece.x - target.x, piece.y - target.y) <= snapRadius(pieceScale());
+    const next = near ? dragging.index : -1;
+    if (next !== armedTarget) {
+      armedTarget = next;
+      if (near) audio.tone('hint');
+    }
   }
 
   function pointerUp(event) {
     if (!dragging) return;
     const index = dragging.index;
     dragging = null;
+    armedTarget = -1;
     canvas.classList.remove('is-dragging');
     if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
     trySnap(index);
@@ -544,14 +662,18 @@
   function transformSelected(deltaRotation = 0, shouldFlip = false) {
     const piece = pieces[selected];
     if (!piece || piece.placed || finaleStarted) return;
+    unlockAudio();
     piece.rotation = normalizeAngle(piece.rotation + deltaRotation);
     if (shouldFlip) piece.flip *= -1;
+    focusPulseAt = performance.now();
+    audio.tone('action');
     setFeedback('selected', [t('pieces')[selected]], '');
     window.cool.track(shouldFlip ? 'flip_tangram_piece' : 'turn_tangram_piece');
   }
 
   function placeHint() {
     if (finaleStarted) return;
+    unlockAudio();
     let index = selected;
     if (pieces[index]?.placed) index = pieces.findIndex((piece) => !piece.placed);
     if (index < 0) return;
@@ -562,7 +684,9 @@
     piece.rotation = target.rotation;
     piece.flip = target.flip;
     piece.placed = true;
+    piece.snapBack = null;
     hintPulse = index;
+    audio.tone('hint');
     const count = pieces.filter((candidate) => candidate.placed).length;
     setFeedback(count === 7 ? 'lastPiece' : 'hintPlaced', count === 7 ? [] : [t('pieces')[index]], 'good');
     window.cool.track('use_tangram_hint', { scene: sceneIndex + 1 });
@@ -576,6 +700,7 @@
     finaleStarted = performance.now();
     completed = Math.max(completed, sceneIndex + 1);
     if (sceneIndex < TARGETS.length - 1) unlocked = Math.max(unlocked, sceneIndex + 1);
+    audio.tone('complete');
     save();
     window.cool.stage(`act-${sceneIndex + 1}-complete`);
     if (sceneIndex === TARGETS.length - 1) window.cool.complete?.();
@@ -649,16 +774,22 @@
     const count = pieces.filter((piece) => piece.placed).length;
     const scene = t('scenes')[sceneIndex];
     els.mission.textContent = scene.mission;
-    els.progress.textContent = `${count}/7`;
+    els.progress.textContent = `${count}/${PIECE_COUNT}`;
     els.act.textContent = `${sceneIndex + 1}/${TARGETS.length}`;
     els.pieceName.textContent = t('pieces')[selected];
     els.left.disabled = pieces[selected].placed || Boolean(finaleStarted);
     els.right.disabled = pieces[selected].placed || Boolean(finaleStarted);
     els.flip.disabled = pieces[selected].placed || Boolean(finaleStarted);
     els.hint.disabled = Boolean(finaleStarted);
+    // 舞台上的那一句动作邀请：孩子不用去工具箱里找怎么玩。
+    els.coach.textContent = count === 0 && sceneIndex === 0 ? t('coach') : '';
+    els.coach.hidden = !els.coach.textContent;
     els.hint.setAttribute('aria-label', t('hint'));
     els.reset.setAttribute('aria-label', t('reset'));
     els.theme.setAttribute('aria-label', t('theme'));
+    els.sound.setAttribute('aria-label', audio.muted ? t('soundOff') : t('sound'));
+    els.sound.setAttribute('aria-pressed', String(audio.muted));
+    els.sound.textContent = audio.muted ? '🔇' : '🔊';
     canvas.setAttribute('aria-label', t('stageLabel'));
     els.shelf.setAttribute('aria-label', t('shelfLabel'));
     document.querySelector('.control-row').setAttribute('aria-label', t('controlsLabel'));
@@ -676,11 +807,18 @@
   els.flip.addEventListener('click', () => transformSelected(0, true));
   els.hint.addEventListener('click', placeHint);
   els.reset.addEventListener('click', () => {
+    unlockAudio();
     resetPieces(false);
     setFeedback('resetDone', [], '');
+    audio.tone('action');
     window.cool.track('reset_tangram_act', { scene: sceneIndex + 1 });
   });
   els.next.addEventListener('click', nextScene);
+  els.sound.addEventListener('click', () => {
+    unlockAudio();
+    audio.set('muted', !audio.muted);
+    renderUI();
+  });
   els.lang.addEventListener('click', () => window.cool.preferences.toggleLang());
   els.theme.addEventListener('click', () => window.cool.preferences.toggleTheme());
   window.addEventListener('keydown', (event) => {

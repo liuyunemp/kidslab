@@ -1,14 +1,14 @@
 {
   "id": "packet-knights",
-  "version": "b1d9442e5de0d699509c4e39f16bdb541d3306591172e0584e5acb8759539073",
+  "version": "ab78aabd068c9e9966f981e9535a93f993637f4edb53e52a4775f9355baa90e6",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "1de4d7fe2f85b578d897fc701043cb4ea2d8c2e7e03e0a0e9dcb7164facd1177"
+      "sha256": "3b893a5e513db4529f18ba384573d3da4dc8c9730ea0969cdcf9bda0eec464c6"
     },
     {
       "path": "index.html",
-      "sha256": "d3f20340c60c833553fe48310ef923c6a1f4e6f81e0398225584a68ab53c11a6"
+      "sha256": "eecd29ec2b22268ae69cd04b94e0ede624b8db8cd6fc32e9eb4fef20d944c0b2"
     },
     {
       "path": "main.js",

@@ -81,7 +81,7 @@ test.describe('教材单元分组', () => {
 
 test('教材活动入口直达目标，已有进度保留，非法活动回退到可用存档', async ({ page }) => {
   await page.goto('/?lang=zh&grade=g1&term=b&cat=chinese&q=手的动作');
-  const card = page.locator('.card[data-course-id="g1b-character-lab"][data-activity="character-4"]');
+  const card = page.locator('[data-course-id="g1b-character-lab"][data-activity="character-4"]');
   await expect(card).toBeVisible();
   await card.click();
   await expect(page.locator('#activitySelect')).toHaveValue('3');
@@ -104,6 +104,38 @@ test('教材活动入口直达目标，已有进度保留，非法活动回退�
   await page.goto('/courseware/g1b-character-lab/');
   await expect(page.locator('#activitySelect')).toHaveValue('2');
   await expect(page.locator('#progress')).toHaveText('1/8');
+});
+
+test('同课件多关聚合成一张卡：关卡按钮直达、显示算式与玩过✓、语言切换', async ({ page }) => {
+  const entry = (id, detail) => ({
+    bookId: 'math-g1a', bookTitle: { zh: '数学 一年级上册', en: 'Math · Grade 1 · Fall' }, grade: 'g1a',
+    unitId: '2', unitNumber: 2, unitKind: 'unit', unitOrder: 2, page: 2, lessonOrder: 1,
+    topic: { zh: '认读五', en: 'Reading five' },
+    activity: id, activityTitle: { zh: `读一读 ${id}`, en: `Read ${id}` }, invite: { zh: '试一试', en: 'Try it' },
+    ...(detail ? { detail } : {}),
+  });
+  const courses = [makeCourse('grouped', [entry('read-1', '2 + 3'), entry('read-2', '1 + 4'), entry('read-3')])];
+  await page.addInitScript(() => {
+    // 模拟课件存档（新格式含 done）与课件级进度。
+    localStorage.setItem('kidslab.exploration-v2.grouped', JSON.stringify({ version: 1, courseId: 'grouped', done: ['read-2'] }));
+    localStorage.setItem('kidslab.progress.grouped', JSON.stringify({ status: 'played', updatedAt: 1 }));
+  });
+  await page.route('**/courseware/index.json', route => route.fulfill({ json: { courses } }));
+  await page.goto('/?lang=zh&grade=g1&term=a&cat=math');
+  const card = page.locator('.card--group[data-course-id="grouped"]');
+  await expect(card.locator('.card__title')).toHaveText('grouped');
+  await expect(card.locator('.card__group-meta')).toHaveText('3 关 · 已玩 1 关');
+  const stages = card.locator('.stage');
+  await expect(stages).toHaveCount(3);
+  await expect(stages.nth(0).locator('.stage__label')).toHaveText('2 + 3');
+  await expect(stages.nth(1)).toHaveAttribute('data-done', '');
+  await expect(stages.nth(2).locator('.stage__label')).toHaveText('读一读 read-3');
+  await expect(stages.nth(1)).toHaveAttribute('href', 'courseware/grouped/index.html?activity=read-2');
+  await expect(card.locator('.card__progress--played')).toHaveText('玩过');
+  await expect(page.locator('#countText')).toHaveText('共 1 个课件 · 3 个探索入口');
+  await page.locator('#langBtn').click();
+  await expect(card.locator('.card__group-meta')).toHaveText('3 levels · 1 played');
+  await expect(stages.nth(2).locator('.stage__label')).toHaveText('Read read-3');
 });
 
 test('构建清单包含与源码相同的教材映射', async ({ request }) => {

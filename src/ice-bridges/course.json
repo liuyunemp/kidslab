@@ -10,7 +10,7 @@
   },
   "category": "logic",
   "levels": ["primary"],
-  "grades": [],
+  "grades": ["g5","g6"],
   "tags": ["推理", "策略", "益智游戏"],
   "icon": "⛸️",
   "order": 72,

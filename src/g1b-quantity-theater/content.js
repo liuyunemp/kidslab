@@ -44,6 +44,7 @@ export const course = {
       "a": 5,
       "b": 3,
       "relation": "part",
+      "detail": "5 - 3",
       "id": "quantity-1"
     },
     {
@@ -67,6 +68,7 @@ export const course = {
       "a": 12,
       "b": 5,
       "relation": "part",
+      "detail": "12 - 5",
       "id": "quantity-2"
     },
     {
@@ -90,6 +92,7 @@ export const course = {
       "a": 8,
       "b": 4,
       "relation": "increase",
+      "detail": "8 + 4",
       "id": "quantity-3"
     },
     {
@@ -113,6 +116,7 @@ export const course = {
       "a": 15,
       "b": 6,
       "relation": "decrease",
+      "detail": "15 - 6",
       "id": "quantity-4"
     },
     {
@@ -136,6 +140,7 @@ export const course = {
       "a": 9,
       "b": 5,
       "relation": "compare",
+      "detail": { "zh": "9 和 5 比一比", "en": "9 vs 5" },
       "id": "quantity-5"
     },
     {
@@ -159,6 +164,7 @@ export const course = {
       "a": 13,
       "b": 7,
       "relation": "compare",
+      "detail": { "zh": "13 和 7 比一比", "en": "13 vs 7" },
       "id": "quantity-6"
     },
     {
@@ -182,6 +188,7 @@ export const course = {
       "a": 20,
       "b": 8,
       "relation": "part",
+      "detail": "20 - 8",
       "id": "quantity-7"
     },
     {
@@ -205,6 +212,7 @@ export const course = {
       "a": 23,
       "b": 12,
       "relation": "increase",
+      "detail": "23 + 12",
       "id": "quantity-8"
     }
   ]

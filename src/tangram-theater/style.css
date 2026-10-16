@@ -26,7 +26,7 @@
   --stage: #f8d98d;
   --stage-deep: #ce9850;
   --shadow: rgba(67, 35, 35, 0.24);
-  --ghost: rgba(67, 35, 35, 0.23);
+  --ghost: rgba(67, 35, 35, 0.34);
   --spotlight: rgba(255, 250, 204, 0.75);
   --success: #23775f;
   --danger: #a52f3a;
@@ -45,7 +45,7 @@
   --stage: #6a493a;
   --stage-deep: #3c2929;
   --shadow: rgba(0, 0, 0, 0.46);
-  --ghost: rgba(255, 241, 207, 0.25);
+  --ghost: rgba(255, 241, 207, 0.42);
   --spotlight: rgba(255, 218, 132, 0.2);
   --success: #6ed4ad;
   --danger: #ff9a99;
@@ -245,6 +245,29 @@ button { font-family: inherit; }
   cursor: grab;
 }
 #stage.is-dragging { cursor: grabbing; }
+
+/* 舞台上的那一句动作邀请：孩子不用去工具箱里找怎么玩，也不占用玩法区布局。 */
+.stage-coach {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 9%;
+  margin: 0;
+  padding: 6px 14px;
+  display: block;
+  max-width: 82%;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--line);
+  font-size: 16px;
+  font-weight: 900;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.stage-coach[hidden] { display: none; }
 .curtain {
   position: absolute;
   z-index: 3;
@@ -474,6 +497,7 @@ button { font-family: inherit; }
   .hint-button { grid-column: 2; grid-row: 1; min-width: 44px; min-height: 44px; padding: 2px 9px; }
   .hint-button span:last-child { display: none; }
   .stage-badge { top: 7px; left: 7px; width: 42px; height: 42px; }
+  .stage-coach { bottom: 7%; padding: 5px 10px; max-width: 88%; font-size: 16px; }
 }
 
 @media (max-width: 390px) {

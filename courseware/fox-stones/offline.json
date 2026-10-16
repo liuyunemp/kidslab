@@ -1,14 +1,14 @@
 {
   "id": "fox-stones",
-  "version": "8df24365c4d7a4194499d38909ebbaf46c8ad52f292a4d910f0ed1de4e694bbf",
+  "version": "59690d4accf306b9ade64ffa82f6861eafbac76a1f96e25056f73d4420b3736a",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "53b998932dded92d6df9d90a81c61b175cfef2e5022b50ebc87a1eb14a79b664"
+      "sha256": "33fe3544f2fa8a305cc2a79e6c3446258e73917f1b5843a3b1b5871e8dbd5383"
     },
     {
       "path": "index.html",
-      "sha256": "63d33e8fd3c14ceb43db4fafab56e05c8de3e82bd730e28b0d31989cc78f511a"
+      "sha256": "59f2563064f496d2f1f6c90572cd704bb63c111f5bf4654fe34760eea4a20d8d"
     },
     {
       "path": "main.js",

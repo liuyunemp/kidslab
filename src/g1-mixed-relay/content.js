@@ -2,6 +2,7 @@
 export const course = {
   "id": "g1-mixed-relay",
   "kind": "relay",
+  "expression": "{a} + {b} - {c}",
   "title": {
     "zh": "加减接力",
     "en": "Add-Subtract Relay"

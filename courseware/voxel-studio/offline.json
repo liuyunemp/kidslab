@@ -1,6 +1,6 @@
 {
   "id": "voxel-studio",
-  "version": "89f65be96a03ea1491fcdafce73973f02b7cadb3d562f6081fd1b2bded27e48d",
+  "version": "90254612e17b8fc60cfb9d346de0c4e26c98e3cb4c9f77044c8e889437a6849c",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "7c04c60c58eeed80b818cf54a30c8983b18d530dea076a78f491e51209800ddd"
+      "sha256": "6b85a7c24813e1620ef1bae57b510cfcf120d4416099421fdd0608e9718571b4"
     },
     {
       "path": "main.js",

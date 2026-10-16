@@ -1,6 +1,6 @@
 {
   "id": "g1-word-post",
-  "version": "e446cd3cd420e8161461e1b2e8b52cab2cf11e149a6975cc0446005c3442c539",
+  "version": "b242ee250858e20e92310d58c9de9e46deda81ee9a9d44a65890594fbf6c6c52",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -8,36 +8,36 @@
     },
     {
       "path": "config.js",
-      "sha256": "3c7b3664ece78d3633183bf1b32fa3bce2f2ffc8ba782a081c8af83ddc127bd1",
-      "fingerprint": "55553797"
+      "sha256": "c416d276382dd8ccf5da9ed9335366cc000f26240507871163de2996ea35e540",
+      "fingerprint": "2697d6a6"
     },
     {
       "path": "course.json",
-      "sha256": "663c759823563a869bf3be8bf33ed3171e44c32b64b1c21eca32fbfdc9a7debe"
+      "sha256": "113625a97aede579660d94869783982abf781ed2ddfb9e80d82f265f0f2511cf"
     },
     {
       "path": "engine.js",
-      "sha256": "b2f978854d86a6988dd89bf28d13d9e2b872169b9cf280083e68d960ed0853d3",
-      "fingerprint": "0d3f2646"
+      "sha256": "047e1b10601fd12ee10207eb6476aeb58c9cab765acccfad810cefe02ad16a56",
+      "fingerprint": "fb0d9d15"
     },
     {
       "path": "index.html",
-      "sha256": "3056de7229fa364dab39700f4e7684e49ddd013053ceb72d8390e80f87b8228a"
+      "sha256": "ab34b1fc574efdd821ca313d18d9211369c988b2c7e33972a4f70833378a6eb8"
     },
     {
       "path": "main.js",
-      "sha256": "1c2fa23b6bd0af42e371896d1602fa6af0c2e5446ff8263db4de3bc4525a07eb",
-      "fingerprint": "241fa19d"
+      "sha256": "baced39b13219edfc611da5ad868d1b8e21e5fcbe90acbd131676cdfc1845474",
+      "fingerprint": "aab22cb0"
     },
     {
       "path": "model.js",
-      "sha256": "200576b540c95c5edc0d1aa7f64f24c109559196dee9d73c057c9d01614664aa",
-      "fingerprint": "9217243d"
+      "sha256": "55d5cbf4067be07e3b767a0cbd540a2794151f18618aeeb216a87c2a6d81aa61",
+      "fingerprint": "8777b077"
     },
     {
       "path": "style.css",
-      "sha256": "e16d3a6aea8be84447475e9109d7dfcf70753043a85d54a4d683ab5a40ac1a22",
-      "fingerprint": "1a8bcd3f"
+      "sha256": "c6e0a157d98534bcef93ea8cddd58e8c792c97d1c8b8ce782fb83fc53fec060e",
+      "fingerprint": "bdce3c1f"
     }
   ]
 }

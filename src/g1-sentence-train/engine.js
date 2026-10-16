@@ -1,4 +1,4 @@
-import { MILESTONE_STREAK, ROUND_COUNT, currentTask, initialState, milestoneFor, praiseText, replay, restoreState, speakText, submit } from './model.js';
+import { MILESTONE_STREAK, ROUND_COUNT, currentTask, encourageText, distanceToPath, evaluateTrace, initialState, milestoneFor, praiseText, replay, restoreState, speakText, submit } from './model.js';
 
 /* 导出给单元测试用：朗读组句依赖这份文案表。 */
 export const WORDS = {
@@ -12,7 +12,7 @@ export const WORDS = {
     mapFront: '前 ↑', mapLeft: '← 左', mapRight: '右 →',
     shape: '为场景挑合适的图形', character: '这个字是哪幅图？',
     pinyin: '接上声母、韵母和声调车厢', initial: '声母', final: '韵母', tone: '声调', check: '拼好啦',
-    stroke: '从亮点出发，顺着箭头描一描', word: '把词语送到这幅图的信箱', rhyme: '谁和它是一对？',
+    stroke: '从亮点出发，顺着亮线描一描', traceOff: '跑出亮线啦，回到线上再描', traceWobbly: '有一点点歪，再描一次', traceMiss: '要从亮点出发，写到小圆点哦', word: '把词语送到这幅图的信箱', rhyme: '谁和它是一对？',
     sentence: '按“谁 → 在哪里 → 做什么”连车厢', clear: '重新排列',
     sort: '分一分：它该进哪个筐？', sorted: '已分好的',
     poem: '看看画面，选出配得上的一句诗', poemNext: '下一句是哪一句？', poemOrder: '把诗句按原文顺序排好',
@@ -30,7 +30,7 @@ export const WORDS = {
     mapFront: 'Front ↑', mapLeft: '← Left', mapRight: 'Right →',
     shape: 'Pick a shape for the scene', character: 'Which picture matches this character?',
     pinyin: 'Join an initial, final and tone', initial: 'Initial', final: 'Final', tone: 'Tone', check: 'Check',
-    stroke: 'Start at the glowing dot and trace the line', word: 'Deliver a word to this picture', rhyme: 'Which word pairs with it?',
+    stroke: 'Start at the glowing dot and trace the line', traceOff: 'You left the line. Follow the glow', traceWobbly: 'A little wobbly. Trace it again', traceMiss: 'Start at the dot and finish at the dot', word: 'Deliver a word to this picture', rhyme: 'Which word pairs with it?',
     sentence: 'Link who → where → action', clear: 'Start arrangement again',
     sort: 'Which basket does it go in?', sorted: 'Sorted',
     poem: 'Pick the line that matches the picture', poemNext: 'Which line comes next?', poemOrder: 'Put the lines in order',
@@ -69,6 +69,8 @@ export function startGame(config) {
   let effectsOn = storage.get('kidslab.g1.effects', '1') !== '0';
   /* 连对计数只在本次会话里累加：答对对 +1，答错归零；不写入存档，重载后重新计。 */
   let streak = 0;
+  /* 当前这一步连错的次数，只影响鼓励语语气，不写入存档。 */
+  let missCount = 0;
   let praiseTimer = null;
   let duckTimer = null;
   let speakTimer = null;
@@ -154,6 +156,14 @@ export function startGame(config) {
     if (!message) return;
     bumpStars();
     if (milestone === 'streak3') showPraise(message, 'streak3');
+    say(message, { interrupt: true });
+  }
+  /* 答错时念一句鼓励：文字与声音同时给，缺语音的设备也不会少反馈。
+     同一步上连错越多，语气越往后走；答对或换一步就重新计数。 */
+  function encourage() {
+    const message = encourageText(missCount, cool.preferences.lang);
+    if (!message) return;
+    feedback(message, true);
     say(message, { interrupt: true });
   }
   /* 朗读中的喇叭会脉动，用来告诉孩子「正在念」。token 防止被打断的旧发音误清掉新状态。 */
@@ -265,7 +275,7 @@ export function startGame(config) {
     }
     if (k === 'stroke') {
       const points = task.points.map(([x,y]) => `${x},${y}`).join(' ');
-      return `${promptButton(esc(words.stroke))}<div class="stroke-name">${esc(t(task.stroke))}</div><svg id="trace" class="trace" viewBox="0 0 100 100" role="img" aria-label="${esc(t(task.stroke))}"><polyline points="${points}" fill="none" stroke="var(--accent)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity=".42"/><circle cx="${task.points[0][0]}" cy="${task.points[0][1]}" r="10" fill="var(--accent)"/><circle cx="${task.points.at(-1)[0]}" cy="${task.points.at(-1)[1]}" r="6" fill="var(--ink)"/></svg>`;
+      return `${promptButton(esc(words.stroke))}<div class="stroke-name">${esc(t(task.stroke))}</div><svg id="trace" class="trace" viewBox="0 0 100 100" role="img" aria-label="${esc(t(task.stroke))}"><polyline points="${points}" fill="none" stroke="var(--accent)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity=".42"/><polyline id="ink" class="ink" points="" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${task.points[0][0]}" cy="${task.points[0][1]}" r="10" fill="var(--accent)"/><circle cx="${task.points.at(-1)[0]}" cy="${task.points.at(-1)[1]}" r="6" fill="var(--ink)"/></svg>`;
     }
     if (k === 'sentence') {
       const choices = rotate(task.words, state.done.length % task.words.length);
@@ -323,9 +333,10 @@ export function startGame(config) {
     const task = currentTask(config, state);
     if (!task) return;
     const result = submit(config, state, task.id, value);
-    if (!result.accepted) { streak = 0; sound('wrong'); feedback(w().tryAgain, true); $('#stage').classList.remove('wobble'); void $('#stage').offsetWidth; $('#stage').classList.add('wobble'); return; }
+    if (!result.accepted) { streak = 0; missCount += 1; sound('wrong'); encourage(); $('#stage').classList.remove('wobble'); void $('#stage').offsetWidth; $('#stage').classList.add('wobble'); return; }
     busy = true;
     streak += 1;
+    missCount = 0;
     state = result.state; save();
     sound(state.done.length === ROUND_COUNT ? 'win' : 'good');
     feedback(w().success);
@@ -343,43 +354,91 @@ export function startGame(config) {
     const expected = config.kind === 'poem' ? task.lines[seqParts.length] : task.strokes[seqParts.length]?.key;
     if (value !== expected) {
       streak = 0;
+      missCount += 1;
       sound('wrong');
       const hint = task.hints?.[seqParts.length];
-      feedback(hint ? t(hint) : w().tryAgain, true);
+      /* 有针对性提示就念提示，没有才退回通用鼓励。 */
+      if (hint) { feedback(t(hint), true); say(t(hint), { interrupt: true }); }
+      else encourage();
       $('#stage').classList.remove('wobble');
       void $('#stage').offsetWidth;
       $('#stage').classList.add('wobble');
       return;
     }
     seqParts = [...seqParts, value];
+    missCount = 0;
     if (seqParts.length === steps.length) return answer(seqParts.join('|'));
     sound('good');
     render();
   }
+  /* 描红：落笔近起点，move 逐点渲染墨迹并按偏离实时变色（边界触发，不在 move 里发声），
+     抬笔用 evaluateTrace 给出「直 / 微歪 / 跑偏 / 没写完」结论；失败不推进进度，可原地重描。 */
   function wireStroke(task) {
     const svg = $('#trace');
+    const inkNode = $('#ink');
+    const guide = task.points;
+    const TOLERANCE = 12;
+    const SAMPLE_GAP = 1.5;
+    const START_RADIUS = 17;
     let active = false;
     let nextPoint = 1;
+    let inkPoints = [];
+    let offTrack = false;
     const coordinates = (event) => { const box = svg.getBoundingClientRect(); return [(event.clientX - box.left) / box.width * 100, (event.clientY - box.top) / box.height * 100]; };
-    const closeTo = (point, event) => { const [x, y] = coordinates(event); return Math.hypot(x - point[0], y - point[1]) < 17; };
+    const closeTo = (point, event) => { const [x, y] = coordinates(event); return Math.hypot(x - point[0], y - point[1]) < START_RADIUS; };
+    const drawInk = () => inkNode.setAttribute('points', inkPoints.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' '));
+    /* 偏离只在跨越边界那一刻提示一次，回到线上就撤掉，不刷屏。 */
+    const markOff = (bad) => {
+      if (bad === offTrack) return;
+      offTrack = bad;
+      inkNode.classList.toggle('off-track', bad);
+      feedback(bad ? w().traceOff : '', bad);
+    };
     svg.addEventListener('pointerdown', (event) => {
-      if (!closeTo(task.points[0], event)) return;
+      if (!closeTo(guide[0], event)) return;
       event.preventDefault();
-      active = true; nextPoint = 1; svg.setPointerCapture(event.pointerId); svg.classList.add('drawing');
+      active = true; nextPoint = 1; inkPoints = [coordinates(event)]; offTrack = false;
+      svg.setPointerCapture(event.pointerId);
+      svg.classList.add('drawing');
+      svg.classList.remove('complete-trace');
+      drawInk();
     });
     svg.addEventListener('pointermove', (event) => {
       if (!active) return;
-      if (nextPoint < task.points.length && closeTo(task.points[nextPoint], event)) nextPoint += 1;
-      if (nextPoint === task.points.length) svg.classList.add('complete-trace');
+      const spot = coordinates(event);
+      const last = inkPoints[inkPoints.length - 1];
+      if (last && Math.hypot(spot[0] - last[0], spot[1] - last[1]) < SAMPLE_GAP) return;
+      inkPoints.push(spot);
+      drawInk();
+      markOff(distanceToPath(spot, guide) > TOLERANCE);
+      if (nextPoint < guide.length && closeTo(guide[nextPoint], event)) nextPoint += 1;
+      if (nextPoint === guide.length) svg.classList.add('complete-trace');
     });
-    svg.addEventListener('pointerup', (event) => {
+    const stopDrawing = () => {
       if (!active) return;
-      active = false; svg.classList.remove('drawing');
-      if (nextPoint === task.points.length - 1 && closeTo(task.points[nextPoint], event)) nextPoint += 1;
-      if (nextPoint === task.points.length && closeTo(task.points.at(-1), event)) answer('traced');
-      else feedback(w().tryAgain, true);
+      active = false;
+      svg.classList.remove('drawing');
+    };
+    svg.addEventListener('pointerup', (event) => {
+      stopDrawing();
+      inkNode.classList.remove('off-track');
+      offTrack = false;
+      const spot = coordinates(event);
+      const last = inkPoints[inkPoints.length - 1];
+      if (last && Math.hypot(spot[0] - last[0], spot[1] - last[1]) >= SAMPLE_GAP) inkPoints.push(spot);
+      const result = evaluateTrace(inkPoints, guide, TOLERANCE);
+      if (result.passed) return answer('traced');
+      const words = w();
+      const message = result.verdict === 'offtrack' ? words.traceOff : result.verdict === 'wobbly' ? words.traceWobbly : words.traceMiss;
+      missCount += 1;
+      sound('wrong');
+      feedback(message, true);
+      say(message, { interrupt: true });
+      $('#stage').classList.remove('wobble');
+      void $('#stage').offsetWidth;
+      $('#stage').classList.add('wobble');
     });
-    svg.addEventListener('pointercancel', () => { active = false; svg.classList.remove('drawing'); });
+    svg.addEventListener('pointercancel', () => stopDrawing());
   }
 
   $('#stage').addEventListener('click', (event) => {
@@ -403,7 +462,7 @@ export function startGame(config) {
       const task = currentTask(config, state);
       if (config.kind === 'mixed' && phase === 0) {
         if (draft === task.a + task.b) { phase = 1; feedback(w().success); render(); }
-        else { sound('wrong'); feedback(w().tryAgain, true); }
+        else { streak = 0; missCount += 1; sound('wrong'); encourage(); }
         return;
       }
       return answer(draft);

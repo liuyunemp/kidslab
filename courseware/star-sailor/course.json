@@ -13,7 +13,7 @@
     "primary",
     "junior"
   ],
-  "grades": [],
+  "grades": ["g5","g6"],
   "tags": [
     "星座",
     "天文",

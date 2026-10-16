@@ -2,6 +2,7 @@
 export const course = {
   "id": "g1b-column-workshop",
   "kind": "column",
+  "expression": "{a} {op} {b}",
   "title": {
     "zh": "竖式搭建厂",
     "en": "Column Workshop"

@@ -1,14 +1,14 @@
 {
   "id": "shadow-theater",
-  "version": "1b1945eb43ec0a32862d69340db45768aa0b4554430e3a5bc89d90849d0eb1de",
+  "version": "278812a3a0b46856b5bb810b35b6e3ad00dda392ecc858ce2b58f1d8a341f3ff",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "71ebca7ecb9d6652ad5dddbf906a7a91856c826a1d3cac09e62f6484f46c3034"
+      "sha256": "76de1e847338897cef02a6895ec65e22861c6ff7bc0ddf4461e410fa9e44e267"
     },
     {
       "path": "index.html",
-      "sha256": "9e2342a84f3da2a442bf250a8ddb85d0dd41abc5b7f72ecc91272e20a54f83a5"
+      "sha256": "cec97cfe6cfff7b763aa1832839c722072e0a0855329c5f6bec770ae8f45216c"
     },
     {
       "path": "main.js",

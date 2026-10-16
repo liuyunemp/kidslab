@@ -1,7 +1,7 @@
 # g1-character-garden 知识断言
 
 ## 适用范围
-- 一年级上册语文；本课仅涵盖 汉字寻宝 游戏实际出现的内容。
+- 本课仅涵盖 汉字寻宝 实际出现的内容；教材归属为 g1a，科目为 chinese。年级依据见 docs/courseware-plan/classification-audit.md。
 
 ## 知识断言
 - [F1] 本课选用一年级上册识字内容中的常见字，借助图画联系字形和字义，如日、月、山、水、火。[S1]

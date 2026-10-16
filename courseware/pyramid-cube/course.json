@@ -10,7 +10,7 @@
   },
   "category": "logic",
   "levels": ["primary", "junior", "senior"],
-  "grades": [],
+  "grades": ["g3","g4","g5","g6","g7","g8","g9"],
   "tags": ["魔方", "空间想象", "3D", "益智游戏"],
   "icon": "🔺",
   "order": 72,

@@ -1,14 +1,14 @@
 {
   "id": "rainbow-stage",
-  "version": "714ecbc73e002212af187aa7399fcbeb0eeaff036e03276ced2340dd97e0cf69",
+  "version": "924af2677d931d1f94abb3118a514890e805a117cbb56ebb8a0cd8de206328fe",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "c1ee365262d8b5f7473cc67a935684ba895f05d7e1455616f58a87591121f76f"
+      "sha256": "28f9ff49b9c612dd69faf7a5f56725ab025eb93247005bb32e23d1c5da03f458"
     },
     {
       "path": "index.html",
-      "sha256": "65821f7f0cf8fca7b87fd66ddf5834947fbcf3c903820e96924982db9fe91309"
+      "sha256": "1dc0f56f07ca5e1b8e8563af252f4acf16ba61be770d90927cbb442407297b72"
     },
     {
       "path": "main.js",

@@ -12,7 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [],
+  "grades": ["g1","g2"],
   "tags": [
     "顺序执行",
     "编程启蒙"

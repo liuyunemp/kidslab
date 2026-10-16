@@ -1,6 +1,6 @@
 {
   "id": "g1b-speaking-stage",
-  "version": "dff0fa1fd791e949d155263de9ed9f92771e07cd3226dd6d2da6ac31f0cb581a",
+  "version": "fd607045c82662904aa99a2f704efa3c38a751eeddf9e2b059f7446b62b50d07",
   "assets": [
     {
       "path": "audio.js",
@@ -26,22 +26,22 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
-      "fingerprint": "da11fe5b"
+      "sha256": "9fa07d62da025e4a6d0adca2c8d5cbbfc9bcfbb22bdecf3eb58e49703076889d",
+      "fingerprint": "dade1ba1"
     },
     {
       "path": "index.html",
-      "sha256": "d1210f11fb819bd9365cc8dffc7a1794c839682c125d5c3c1507e5f05470f942"
+      "sha256": "bf0d6495772630267e24ab6ca9578381c230a63d4753456a6f23a809dc9f4cd9"
     },
     {
       "path": "main.js",
-      "sha256": "0cc0f94027489fff49cbedda549c0fb07697f4e89cfc9b18c1b67b13e98727f4",
-      "fingerprint": "4c346225"
+      "sha256": "93177396612c127b6d87040401274058d4eb0cd4bca1b5298772eae29b53744e",
+      "fingerprint": "05c1dfdb"
     },
     {
       "path": "scene.js",
-      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
-      "fingerprint": "3e5ed74b"
+      "sha256": "38d6c8a91a1e4a8b6e9ef43ee014eae3646f06bcb5460cc18cffc86a5d04d636",
+      "fingerprint": "d24e6a69"
     },
     {
       "path": "style.css",

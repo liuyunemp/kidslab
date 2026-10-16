@@ -10,7 +10,7 @@
   },
   "category": "logic",
   "levels": ["primary"],
-  "grades": [],
+  "grades": ["g3","g4","g5"],
   "tags": ["推理", "益智游戏"],
   "icon": "🏝️",
   "order": 77,

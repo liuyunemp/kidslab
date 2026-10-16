@@ -10,7 +10,7 @@
   },
   "category": "math",
   "levels": ["primary"],
-  "grades": [],
+  "grades": ["g5","g6"],
   "tags": ["运算", "变量", "推理", "益智游戏"],
   "icon": "🎪",
   "order": 28,

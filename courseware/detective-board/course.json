@@ -13,7 +13,7 @@
     "primary",
     "junior"
   ],
-  "grades": [],
+  "grades": ["g4","g5","g6"],
   "tags": [
     "推理",
     "益智游戏"

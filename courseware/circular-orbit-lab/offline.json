@@ -1,6 +1,6 @@
 {
   "id": "circular-orbit-lab",
-  "version": "7084ff3771bb0015f90659dadf9248a7c39282b0006e1e14621edde0dd5d0dfc",
+  "version": "12c1396c8e82d02c2bcff13e59c5b15cb7f5a5377702a843b688481cc58131c1",
   "assets": [
     {
       "path": "audio.js",
@@ -17,11 +17,11 @@
     },
     {
       "path": "course.json",
-      "sha256": "38f863f27aca0f0360a0d40d4eaff7849021aa2bc6af00578ee221edb0343c65"
+      "sha256": "b553dad3725ac81f82a177f41cdafca146f7c74a0140bae4bd10d477b08d78c7"
     },
     {
       "path": "index.html",
-      "sha256": "48f896430cd684b31ed9750f0bcd533fe3d53d8c14c649c70594270ac5ec4c2a"
+      "sha256": "020667c30ba43a5431e709103ce0f342008c222828a5e8b58bfed7172ba1a85b"
     },
     {
       "path": "lab-model.js",

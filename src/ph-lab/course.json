@@ -13,7 +13,7 @@
     "junior",
     "senior"
   ],
-  "grades": [],
+  "grades": ["g8","g9","g10"],
   "tags": [
     "酸碱",
     "溶液",

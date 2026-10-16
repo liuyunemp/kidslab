@@ -10,7 +10,7 @@
   },
   "category": "programming",
   "levels": ["primary"],
-  "grades": [],
+  "grades": ["g5","g6"],
   "tags": ["编程启蒙", "算法", "策略", "益智游戏"],
   "icon": "📦",
   "order": 44,

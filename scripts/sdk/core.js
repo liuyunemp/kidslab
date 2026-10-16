@@ -187,6 +187,19 @@
   let speechWired = false;
   const speechListeners = new Set();
 
+  /* 移动端首次调用 getVoices() 常常返回空数组，音色稍后才异步到达。
+     这时如果直接朗读，第一句（孩子最先听到的题面或夸奖）会缺音色而无声。
+     等音色就绪再念，最多等 VOICE_WAIT_MS，超时就用系统默认音色照常朗读。 */
+  const VOICE_WAIT_MS = 600;
+  const voiceWaiters = new Set();
+  /* 每发起一次朗读就自增；等待音色期间序号若变了，说明这一句已作废。 */
+  let speechTokens = 0;
+
+  function releaseVoiceWaiters() {
+    for (const waiter of [...voiceWaiters]) waiter();
+    voiceWaiters.clear();
+  }
+
   function refreshVoices() {
     if (!canSpeak) return;
     try {
@@ -194,10 +207,32 @@
     } catch {
       speechVoices = [];
     }
+    if (speechVoices.length) releaseVoiceWaiters();
+  }
+
+  function awaitVoices() {
+    if (speechVoices.length) return Promise.resolve(true);
+    refreshVoices();
+    if (speechVoices.length) return Promise.resolve(true);
+    return new Promise((resolve) => {
+      let settled = false;
+      let timer = null;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        voiceWaiters.delete(finish);
+        if (timer !== null) clearTimeout(timer);
+        refreshVoices();
+        resolve(speechVoices.length > 0);
+      };
+      voiceWaiters.add(finish);
+      timer = setTimeout(finish, VOICE_WAIT_MS);
+    });
   }
 
   function stopSpeech() {
     if (!canSpeak) return false;
+    speechTokens += 1;
     try {
       w.speechSynthesis.cancel();
       return true;
@@ -230,6 +265,9 @@
       || null;
   }
 
+  /* 调用方会立刻拿到 utterance 并挂 onend/onerror，所以这里先构造、再择机 speak()。
+     返回同一个对象也就意味着：如果孩子在等音色的这几百毫秒里又点了别处，
+     中断逻辑照样能认得出它。 */
   function speakSpeech(text, options = {}) {
     if (!canSpeak || !speechEnabled) return null;
     const value = typeof text === 'string' ? text.trim() : '';
@@ -247,7 +285,17 @@
       /* 缺中文音色、被打断或设备不支持时按静默处理，不产生控制台噪音。 */
       utterance.onerror = () => {};
       if (typeof options.onEnd === 'function') utterance.onend = () => options.onEnd();
-      w.speechSynthesis.speak(utterance);
+
+      const utter = () => {
+        /* 等待音色期间语音被关掉、或已被更新的一句取代时，这一句就不再出声。 */
+        if (!speechEnabled || token !== speechTokens) return;
+        const ready = voiceFor(tag);
+        if (ready) utterance.voice = ready;
+        try { w.speechSynthesis.speak(utterance); } catch { /* 设备拒绝时静默降级 */ }
+      };
+      /* 认领本次朗读的序号：之后任何新朗读或 stop() 都会让它失效。 */
+      const token = ++speechTokens;
+      Promise.resolve(awaitVoices()).then(utter);
       return utterance;
     } catch {
       return null;

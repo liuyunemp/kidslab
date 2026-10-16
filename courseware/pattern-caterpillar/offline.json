@@ -1,14 +1,14 @@
 {
   "id": "pattern-caterpillar",
-  "version": "e5977efb22ca74d5b5ff1bf40f53c28fa953c53e0d1d10a50788ef25cbdab526",
+  "version": "501b94a2b9639b8c025000a2d5d7c357b2819cf18fcbea1454242b32f5883548",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "b86b57cc5d048e20a5c41c52e6b31744574ea87462a4c0c0bb618cdad2070e0e"
+      "sha256": "4070977bb5aedecca552dfdc7f394f2fbf04970aab7501aafe83ba3e362543ef"
     },
     {
       "path": "index.html",
-      "sha256": "c10351b2230096b09abe2339c3cc1c0d8e1d6c9b060b3574e515e4fde2ca9b28"
+      "sha256": "63e6d842b77b0847ad734bc5f6eab49cf2fb59de974310ae045b0cf6c2cc2e6a"
     },
     {
       "path": "main.js",

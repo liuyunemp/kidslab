@@ -10,7 +10,7 @@
   },
   "category": "physics",
   "levels": ["senior"],
-  "grades": [],
+  "grades": ["g10"],
   "tags": ["抛体运动", "运动", "速度", "重力", "实验", "3D"],
   "icon": "🎯",
   "order": 37,

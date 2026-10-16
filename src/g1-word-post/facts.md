@@ -1,7 +1,7 @@
 # g1-word-post 知识断言
 
 ## 适用范围
-- 保留本课实际内容作为拓展；完整教材年级归属待核准，仅在全部年级显示，见 [分类核查](../../docs/courseware-plan/classification-audit.md)。
+- 本课仅涵盖 词语邮局 实际出现的内容；教材归属为 g1a，科目为 chinese。年级依据见 docs/courseware-plan/classification-audit.md。
 
 ## 知识断言
 - [F1] 本课使用由一年级常见汉字组成的日常词语，通过图画理解词语所指的事物。[S1]

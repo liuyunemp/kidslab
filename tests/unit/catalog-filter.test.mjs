@@ -98,18 +98,19 @@ const readMeta = id => JSON.parse(readFileSync(new URL(`${id}/course.json`, sour
 
 test('重点核查结论锁定：一年级下册、二年级迁移、跨年级综合与科目归属', () => {
   const expected = {
-    'g1-compare-bridge': ['math', ['g1b']],
+    'g1-compare-bridge': ['math', ['g1a', 'g1b']],
     'g1-direction-town': ['science', ['g1b']],
     'g1-sort-laundry': ['math', ['g2a']],
     'clock-town': ['math', ['g2b']],
-    'number-fireflies': ['math', ['g1b']],
+    'number-fireflies': ['math', ['g1a', 'g1b']],
     'bet-party': ['math', ['g6b']],
-    'data-studio': ['math', []],
-    'function-grapher': ['math', []],
-    'pattern-caterpillar': ['math', []],
-    'tangram-theater': ['math', []],
+    /* 2026-10-16 解耦修订：年级回归适龄语义，以下课件恢复年龄标注；教材映射仍待逐课核准。 */
+    'data-studio': ['math', ['g3', 'g4', 'g5', 'g6']],
+    'function-grapher': ['math', ['g8', 'g9', 'g10', 'g11']],
+    'pattern-caterpillar': ['math', ['g1b']],
+    'tangram-theater': ['math', ['g1b']],
     'welcome': ['featured', []],
-    'ohms-law-lab': ['physics', ['g9']],
+    'ohms-law-lab': ['physics', ['g9', 'g11']],
   };
   for (const [id, [category, grades]] of Object.entries(expected)) {
     const course = readMeta(id);

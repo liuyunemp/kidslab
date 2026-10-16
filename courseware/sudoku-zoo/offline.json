@@ -1,6 +1,6 @@
 {
   "id": "sudoku-zoo",
-  "version": "4164c0a25061d99d0b9082fbca63a8095cbc1c4c66a50dec4378387e0fb5fbb0",
+  "version": "a08aaa5fa0cafdc07c3ff22828e64dbe701be01cc98fcec13f3c43a57f15893a",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "09780ab183728d1e9fd8fdd942124c1a24985bc7dd3891103c056d77961114e4"
+      "sha256": "b3e5cde17effd53f0f9f512fb9fb1e2d9c9602e2b41ffd8b7ca53ba6d4ecfe9d"
     },
     {
       "path": "main.js",

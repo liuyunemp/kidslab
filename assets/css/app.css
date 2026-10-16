@@ -537,6 +537,61 @@ button { font-family: inherit; color: inherit; }
 .curriculum-unit__rest > h2 { grid-column: 1 / -1; }
 .card__curriculum { margin: 8px 0; color: var(--ink-soft); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
 
+/* 聚合课件卡：同一课件的多关合并为一张卡，卡内是可直达对应关的关卡按钮。 */
+.card--group .card__cover { height: 108px; }
+.card__group-meta { margin: 6px 0 0; color: var(--ink-soft); font-size: 14px; font-weight: 700; line-height: 1.5; }
+.card__stages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 12px 16px 4px;
+}
+.stage {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 7px 12px;
+  text-decoration: none;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--cat-c) 8%, var(--card));
+  border: 2px solid color-mix(in srgb, var(--cat-c) 42%, var(--line));
+  border-radius: 14px;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s, box-shadow 0.15s;
+}
+.stage:hover { transform: translateY(-2px); border-color: var(--cat-c); box-shadow: 3px 3px 0 var(--shadow); }
+.stage:active { transform: translateY(1px); box-shadow: none; }
+.stage:focus-visible { outline: 3px solid var(--cat-c); outline-offset: 2px; }
+.stage__num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--cat-c) 18%, var(--card));
+  border: 2px solid color-mix(in srgb, var(--cat-c) 55%, var(--line));
+  border-radius: 50%;
+}
+.stage__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.stage__check { flex: none; font-size: 17px; font-weight: 800; color: color-mix(in srgb, var(--cat-c) 55%, var(--ink)); }
+.stage[data-done] { background: color-mix(in srgb, var(--cat-c) 14%, var(--card)); border-color: var(--cat-c); }
+.stage[data-done] .stage__num { background: var(--cat-c); color: #241c36; border-color: var(--cat-c); }
+.stage[data-done] .stage__label { color: var(--ink-soft); }
+
 .card {
   --cat-c: var(--accent);
   position: relative;
@@ -765,6 +820,8 @@ button { font-family: inherit; color: inherit; }
   .grade-list button { flex: 1 1 calc(50% - 6px); }
   .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .card__cover { height: 104px; }
+  .card--group .card__cover { height: 96px; }
+  .card__stages { grid-template-columns: 1fr; padding: 10px 12px 2px; }
   .card__emoji { width: 60px; height: 60px; font-size: 34px; }
   .card__desc { display: none; }
   .card__title { font-size: 16px; }

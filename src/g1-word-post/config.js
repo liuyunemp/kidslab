@@ -2,7 +2,9 @@ export const config = {
   "id": "g1-word-post",
   "kind": "word",
   "category": "chinese",
-  "grades": [],
+  "grades": [
+    "g1a"
+  ],
   "tags": [
     "识字"
   ],

@@ -1,6 +1,6 @@
 {
   "id": "air-garage",
-  "version": "148c15274f9716a18a398eacbc0c8fa780a9f6e5cade728cc161c94b1a8764d4",
+  "version": "ac3425314c10f85fa8a3d5f70b951cebacd02f995de58c57540cf4e6741968e5",
   "assets": [
     {
       "path": "air-model.js",
@@ -9,11 +9,11 @@
     },
     {
       "path": "course.json",
-      "sha256": "05bd8335735b686170e107f5af79a89695e4de4b58a84a0304793de9d1943548"
+      "sha256": "3873fa991bf2fdd0bd6e3412cb445ec40d5a046453a93fc270aba90f88bc49f9"
     },
     {
       "path": "index.html",
-      "sha256": "8f2402d7d1ac03ad74d40fe40ac5000d7a320e54f5a8697e5c5bbda1b9a2c517"
+      "sha256": "57342817178540222000fac6d131c7c13ec553697cdd9b458c88ea920ddae633"
     },
     {
       "path": "main.js",

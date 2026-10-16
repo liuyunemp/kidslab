@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { courses } from '../../scripts/g1-games/data.mjs';
 import { WORDS } from '../../scripts/g1-games/engine.js';
-import { MILESTONE_STREAK, ROUND_COUNT, milestoneFor, praiseText, speakText } from '../../scripts/g1-games/model.js';
+import { MILESTONE_STREAK, ROUND_COUNT, encourageText, milestoneFor, praiseText, speakText } from '../../scripts/g1-games/model.js';
 
 /* 每道题在中文模式下的朗读文本必须非空、且不得出现任何答案标记。 */
 test('每道题的朗读文本非空且不泄露答案', () => {
@@ -83,4 +83,32 @@ test('夸奖语中英齐备、长度克制并确定性轮转', () => {
   }
   assert.equal(praiseText('nope', 0, 'zh'), '');
   assert.equal(praiseText('clear', 0, 'zh').length > 0, true);
+});
+
+/* 答错鼓励语：中英齐备、句子短、同一次数结果稳定，且绝不出现「错」这类否定词。 */
+test('答错鼓励语中英齐备、短句且确定性轮转', () => {
+  const limits = { zh: 16, en: 48 };
+  for (const lang of ['zh', 'en']) {
+    for (let miss = 0; miss < 6; miss++) {
+      const text = encourageText(miss, lang);
+      assert.ok(text.length > 0, `${lang} 第 ${miss} 次连错没有鼓励语`);
+      assert.ok(text.length <= limits[lang], `${lang} 鼓励语过长：${text}`);
+      assert.equal(text, encourageText(miss, lang), `${lang} 同一连错次数应得到同一句`);
+    }
+    /* 前三次连错应各给不同的一句，避免同一句反复念。 */
+    assert.equal(new Set([0, 1, 2].map((n) => encourageText(n, lang))).size, 3, `${lang} 前三句应互不相同`);
+  }
+  /* 非法与缺失的连错次数按 0 处理，不能抛错也不能返回空。 */
+  for (const bad of [undefined, null, -5, NaN, 'x', {}]) {
+    assert.equal(encourageText(bad, 'zh'), encourageText(0, 'zh'), `连错次数 ${String(bad)} 应按 0 处理`);
+  }
+  /* 连错很多次也要一直有话说，且始终不出现否定性字眼。 */
+  for (const miss of [7, 20, 999]) {
+    const text = encourageText(miss, 'zh');
+    assert.ok(text.length > 0, `连错 ${miss} 次仍要有鼓励语`);
+    assert.equal(/错了|不对|又错|笨/.test(text), false, `鼓励语不得否定孩子：${text}`);
+  }
+  /* 未知道别语言回落到中文，不能返回空。 */
+  const fallback = encourageText(0, 'fr');
+  assert.ok(fallback.length > 0, '未知语言应回落到中文鼓励语');
 });

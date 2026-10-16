@@ -1,6 +1,6 @@
 {
   "id": "g1b-dictionary-house",
-  "version": "0c7c946ade11551e8a5e692e33bbd58216eafd419f847228d607492e49a65b41",
+  "version": "58dd8e42eae784fdce0187d8d3d1c09c61e3a4cc3ab2e548a773c62f9a76aacb",
   "assets": [
     {
       "path": "audio.js",
@@ -26,22 +26,22 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
-      "fingerprint": "da11fe5b"
+      "sha256": "9fa07d62da025e4a6d0adca2c8d5cbbfc9bcfbb22bdecf3eb58e49703076889d",
+      "fingerprint": "dade1ba1"
     },
     {
       "path": "index.html",
-      "sha256": "b50be3bfe532060ef40f71bab241374d8cdcd8ab898167d82cb676c4fef757c5"
+      "sha256": "c11f2f455e4df5e2f1757513c5c8543378c17787d96f935449de695786c62e0f"
     },
     {
       "path": "main.js",
-      "sha256": "39f4681ff760dda2a1d7e599a986e0d54eeed189cffb0e62f07cee54e872d931",
-      "fingerprint": "1937da26"
+      "sha256": "cbc4a3e314f4064c7ad5f25eef54af8e1c914189723d14d0e222162612fbe6a3",
+      "fingerprint": "4afea527"
     },
     {
       "path": "scene.js",
-      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
-      "fingerprint": "3e5ed74b"
+      "sha256": "38d6c8a91a1e4a8b6e9ef43ee014eae3646f06bcb5460cc18cffc86a5d04d636",
+      "fingerprint": "d24e6a69"
     },
     {
       "path": "style.css",

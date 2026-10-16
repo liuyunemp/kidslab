@@ -14,7 +14,7 @@
     "junior",
     "senior"
   ],
-  "grades": [],
+  "grades": ["g3","g4","g5","g6","g7","g8","g9"],
   "tags": [
     "空间想象",
     "推理",

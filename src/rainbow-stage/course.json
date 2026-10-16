@@ -10,7 +10,7 @@
   },
   "category": "science",
   "levels": ["primary"],
-  "grades": [],
+  "grades": ["g4","g5"],
   "tags": ["光学", "实验"],
   "icon": "🌈",
   "order": 58,

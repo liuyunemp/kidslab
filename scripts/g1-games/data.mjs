@@ -30,7 +30,7 @@ const st = (key, zh, en) => ({ key, name: pair(zh, en) });
 
 const legacyCourses = [
   {
-    id: 'g1-compare-bridge', kind: 'compare', category: 'math', grades: ["g1b"], tags: ['比大小', '数的认识'], icon: '🐊', order: 32,
+    id: 'g1-compare-bridge', kind: 'compare', category: 'math', grades: ["g1a", "g1b"], tags: ['比大小', '数的认识'], icon: '🐊', order: 32,
     title: pair('比大小桥', 'Number Bridge'), description: pair('给数字桥装上大于、小于或等于的桥牌，比较 20 和 100 以内的数。', 'Fit the greater, less or equal bridge sign between numbers up to 100.'),
     accent: '#e2663d', backdrop: '#fff1dc', mascot: '🐊', source: mathSource,
     fact: '比较两个 0 到 100 的整数时，可以先比较十位，再比较个位；相同的两个数用等号连接。',
@@ -58,7 +58,7 @@ const legacyCourses = [
     tasks: arithmetic([[8, 5, 3], [15, 7, 4], [28, 10, 6], [34, 8, 12], [40, 20, 15], [57, 9, 16], [23, 30, 11], [68, 12, 20], [45, 25, 17], [72, 8, 26]], 'mixed'),
   },
   {
-    id: 'g1-weight-lab', kind: 'weight', category: 'math', grades: [], tags: ['轻重', '计量单位'], icon: '⚖️', order: 34,
+    id: 'g1-weight-lab', kind: 'weight', category: 'math', grades: ["g1a"], tags: ['轻重', '计量单位'], icon: '⚖️', order: 34,
     title: pair('轻重天平', 'Balance Playground'), description: pair('看天平哪边下沉，找出重的、轻的或一样重的东西。', 'Watch the balance tip to find heavier, lighter and equal objects.'),
     accent: '#c4842c', backdrop: '#fff3da', mascot: '⚖️', source: mathSource,
     fact: '在同一架等臂天平上，较重的一侧下沉；两侧一样重时天平保持平衡。',
@@ -106,7 +106,7 @@ const legacyCourses = [
   },
   {
     id: 'g1-stroke-workshop', kind: 'stroke', category: 'chinese', grades: ["g1a"], tags: ['识字'], icon: '🖌️', order: 210,
-    title: pair('笔画工坊', 'Stroke Workshop'), description: pair('用手指沿着发光路线描写基本笔画。', 'Trace the glowing routes of basic Chinese strokes.'),
+    title: pair('笔画工坊', 'Stroke Workshop'), description: pair('照着亮线描一描，写完看看你的笔画正不正。', 'Trace along the glowing line, then see how straight your stroke is.'),
     accent: '#ab76be', backdrop: '#f9edff', mascot: '🖌️', source: chineseSource,
     fact: '本课练习的横、竖、撇、捺、点、提、折、钩是汉字常见基本笔画或笔画组合；描写按箭头方向进行。',
     tasks: withIds([
@@ -118,7 +118,7 @@ const legacyCourses = [
     ].map(([stroke, english, points]) => ({ stroke: pair(stroke, english), points, answer: 'traced' }))),
   },
   {
-    id: 'g1-word-post', kind: 'word', category: 'chinese', grades: [], tags: ['识字'], icon: '📮', order: 211,
+    id: 'g1-word-post', kind: 'word', category: 'chinese', grades: ["g1a"], tags: ['识字'], icon: '📮', order: 211,
     title: pair('词语邮局', 'Word Post Office'), description: pair('把词语卡片送到对应的图画信箱。', 'Deliver each word card to its matching picture mailbox.'),
     accent: '#d47b4c', backdrop: '#fff1e8', mascot: '📮', source: chineseSource,
     fact: '本课使用由一年级常见汉字组成的日常词语，通过图画理解词语所指的事物。',
@@ -139,7 +139,7 @@ const legacyCourses = [
     ].map(([left, answer, wrongA, wrongB]) => ({ left, answer, choices: [answer, wrongA, wrongB] }))),
   },
   {
-    id: 'g1-sentence-train', kind: 'sentence', category: 'chinese', grades: [], tags: ['识字'], icon: '🚄', order: 213,
+    id: 'g1-sentence-train', kind: 'sentence', category: 'chinese', grades: ["g1a"], tags: ['识字'], icon: '🚄', order: 213,
     title: pair('句子列车', 'Sentence Train'), description: pair('把主角、地点、动作车厢按示例顺序连起来。', 'Link who, where and action cars in the shown order.'),
     accent: '#578acb', backdrop: '#eaf4ff', mascot: '🚄', source: chineseSource,
     fact: '本课只练习“谁—在哪里—做什么”这一种简单句表达方式；它不是汉语句子的唯一合法语序。',
@@ -167,7 +167,7 @@ const legacyCourses = [
     ]),
   },
   {
-    id: 'g1-poem-stage', kind: 'poem', category: 'chinese', grades: [], tags: ['识字', '古诗'], icon: '🖼️', order: 228,
+    id: 'g1-poem-stage', kind: 'poem', category: 'chinese', grades: ["g1a"], tags: ['识字', '古诗'], icon: '🖼️', order: 228,
     title: pair('诗画猜猜台', 'Poem Picture Stage'), description: pair('看画面猜诗句、接上下句，再把整首诗排回原顺序。', 'Match lines to pictures, finish couplets and order whole poems.'),
     accent: '#b0567a', backdrop: '#fff0f5', mascot: '🖼️', source: chineseSource,
     fact: '本课选用一年级常见古诗《咏鹅》《静夜思》《画》《悯农》《古朗月行（节选）》《风》，三种玩法是看图配句、接下句和把诗句排回原文顺序；诗句均按教材原文。',

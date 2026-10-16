@@ -1,6 +1,6 @@
 {
   "id": "huarong-dao",
-  "version": "97c5b54de307d1d3a38279208c347afaf4b27ec777da8a18927880991b00a9fd",
+  "version": "8cd8d6f6e37b62e981e6a6bbf9bb5d204a4a20534fb1b778eb10876b77a0230f",
   "assets": [
     {
       "path": "audio.js",
@@ -25,7 +25,7 @@
     },
     {
       "path": "course.json",
-      "sha256": "500523d0a91a65a266226da0df2392e16fbf1fb6868fb9590899b6898dd6d626"
+      "sha256": "4d5506feb29782e80ff9774d142059292882dde9902de159b53dc7d2e6b25150"
     },
     {
       "path": "game3d.js",
@@ -34,7 +34,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "e81028dbd610f809a163b5b5eab1473d33ffd27b24cf62b20dc200d9c179cc5a"
+      "sha256": "de6850f0c3c5cd6b21f982affdb31567e48ad1bff198c894a006d7bfe55f1729"
     },
     {
       "path": "main.js",

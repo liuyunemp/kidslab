@@ -1,14 +1,14 @@
 {
   "id": "four-color-kingdom",
-  "version": "4f573ad36e95d625fcb98a66e1fc290d35c24b3c6f030dbacddca7a15a2c22e9",
+  "version": "897cacb63c7c1fe501b658a5681cfb74d205c17122dbc4da9a6f7c25464b1a19",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "691bc9cac9074dfd37004f042e3d1d9cd87d0fdcfbc342ff6d9e57d7b3cac6c4"
+      "sha256": "38abf99f959b65de42a3636a021b873eafd2e3ce9e97e3291a577d4c45f9dc1b"
     },
     {
       "path": "index.html",
-      "sha256": "cb1bc499a5a486c2f8c0b6d8b8500ddf30a5e712b79aebb87a0325f59e877a8f"
+      "sha256": "64b455d288d7b4895f470adf709509d7730612a86ae586babf86ab24663ea3e0"
     },
     {
       "path": "main.js",

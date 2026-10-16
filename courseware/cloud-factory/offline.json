@@ -1,6 +1,6 @@
 {
   "id": "cloud-factory",
-  "version": "bc2dee935c77c90a1ed4052e526336b33960fcd57d92f4dd0978e09e8ef80465",
+  "version": "b57ad950262da8642dcdb91fcc07128e3a29b213705a66e1399b1b0c4968a000",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "acbcbd005649efc862f9c32034260a284ccf0b2faafaa0cc974d43cb4b8a74eb"
+      "sha256": "25188d714431f36b0daecf52f92de0dd1340b2074bc331235ad41d9c18010a19"
     },
     {
       "path": "main.js",

@@ -9,3 +9,5 @@ test-results*/
 *.log
 .claude/settings.local.json
 .codebuddy/
+.playwright-cli/
+/*.png

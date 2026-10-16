@@ -1,14 +1,14 @@
 {
   "id": "updown-world",
-  "version": "fed3f1933ab467a4b18e7f315dcd97a50a69837f7c4831b5db6ca12ea6439b71",
+  "version": "0bf3442515226b1f069f4e4721dabbe3b42368bd78e0b8773d71e143c6d1fecf",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "c112bd8de072428741535ae944bfae1540bdfdaa18945046e820ade5585658af"
+      "sha256": "010974388220a73ddd3ec7955071b65bfa08a4b33be7c5f202c851e328bd7e8b"
     },
     {
       "path": "index.html",
-      "sha256": "7700ea126762586162b8c3955dcb750c73db08122fe2a98796685d76ea6f1c09"
+      "sha256": "f4653ebbe6d38f4a4b34a3207132e733a64ec99d55cc9b419f352d357b9c05c3"
     },
     {
       "path": "main.js",

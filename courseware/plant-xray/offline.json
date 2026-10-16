@@ -1,6 +1,6 @@
 {
   "id": "plant-xray",
-  "version": "8a59f3b29fe65342c4ddd0e9a9db483d0454787929cdd11f17c03b7b437c2e2f",
+  "version": "9afee635e02a622ebe9103ed23cce68f4a6e20acf6593c77c0aa5645a3f46edf",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "a990a65e5333a5046b279a7a2ab8f18470fac9bb4f0fd94ee9b0a2282f6037bb"
+      "sha256": "7d3b608dcdb31d12b4c704733fe5e1717483f9a1a7a2a8a4eb2645520fb349fc"
     },
     {
       "path": "main.js",

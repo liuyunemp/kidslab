@@ -1,6 +1,6 @@
 {
   "id": "organic-builder-lab",
-  "version": "253ba14a22ecb663344fe14e203e506a734e9aba921b21471e83ba69f7f0efef",
+  "version": "c2dcfadd6e7b2ecb80fe35b7e217e4f5c478c7a6a3549f9d6616534bd70b11b6",
   "assets": [
     {
       "path": "audio.js",
@@ -13,11 +13,11 @@
     },
     {
       "path": "course.json",
-      "sha256": "775d75302b6733348ecfa5dead13f4356551e6182889da81cbcdfc8509b860c0"
+      "sha256": "a61ccb1070c46344423075bf2caa9b8cb19e8d668062e4df258092bfc941e9f3"
     },
     {
       "path": "index.html",
-      "sha256": "d3cb0753ee8bf3cfdf218605143252768cb4728f7e88d724607a326d2516a3d4"
+      "sha256": "ac9a4965da658eb7ba3bf475d8e4f81ec59fb3838c7a61cede9b843797975857"
     },
     {
       "path": "main.js",

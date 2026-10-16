@@ -1,14 +1,14 @@
 {
   "id": "punch-origami",
-  "version": "0a2f85ae2709cf295d3d7c9c52264a008b3ccede6504cdd6f5093fb0ced93f29",
+  "version": "bad7878220c0584ed86aefad9a61eed123416983b24a9d9b68be9be26659346d",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "3ee6d859c538911fe5d331cf95248d320f520ec120b8ccf95ed12262bc1ffe25"
+      "sha256": "f881a923f70fa43ff23f9cfb8872fcfc6731416321d54187b3d90e587c6c0e97"
     },
     {
       "path": "index.html",
-      "sha256": "357a66af5ec5860ffa255b582960c5f6d3ce46288869b8d1b805147cb30d2262"
+      "sha256": "9dc2cb95761e93eb74c542e1de4552c3b08185af23940e740b66c926bf42ea0f"
     },
     {
       "path": "main.js",

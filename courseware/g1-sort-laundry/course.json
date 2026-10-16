@@ -12,7 +12,9 @@
   "levels": [
     "primary"
   ],
-  "grades": ["g2a"],
+  "grades": [
+    "g2a"
+  ],
   "tags": [
     "分类"
   ],

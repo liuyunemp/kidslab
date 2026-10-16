@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T05:32:33.709Z",
+  "generatedAt": "2026-10-16T09:44:00.816Z",
   "tags": {
     "3D": {
       "en": "3D",
@@ -477,7 +477,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3a",
+        "g5",
+        "g6a"
+      ],
       "tags": [
         "分数",
         "小数"
@@ -514,6 +518,7 @@
         "primary"
       ],
       "grades": [
+        "g1a",
         "g1b"
       ],
       "tags": [
@@ -583,7 +588,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g2"
+      ],
       "tags": [
         "乘法",
         "运算"
@@ -619,7 +626,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g2",
+        "g3"
+      ],
       "tags": [
         "乘法",
         "运算",
@@ -662,7 +672,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4"
+      ],
       "tags": [
         "乘法",
         "运算",
@@ -789,7 +802,10 @@
         "primary",
         "junior"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5"
+      ],
       "tags": [
         "数位",
         "小数",
@@ -897,7 +913,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g1a"
+      ],
       "tags": [
         "立体图形",
         "平面图形",
@@ -1167,7 +1185,12 @@
         "junior",
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g8",
+        "g9",
+        "g10",
+        "g11"
+      ],
       "tags": [
         "函数"
       ],
@@ -1403,7 +1426,11 @@
         "junior",
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g7",
+        "g8",
+        "g9"
+      ],
       "tags": [
         "平方根",
         "运算",
@@ -1609,7 +1636,12 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
       "tags": [
         "分类",
         "运算",
@@ -1648,7 +1680,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4"
+      ],
       "tags": [
         "时间",
         "运算",
@@ -1693,7 +1728,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "运算",
         "变量",
@@ -1752,7 +1790,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "数的认识",
         "乘法",
@@ -2148,7 +2189,10 @@
         "junior",
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g8",
+        "g11"
+      ],
       "tags": [
         "单摆",
         "重力",
@@ -2191,7 +2235,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g6"
+      ],
       "tags": [
         "分数",
         "乘法",
@@ -2544,7 +2590,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g6"
+      ],
       "tags": [
         "数的认识",
         "加减法",
@@ -2593,6 +2641,7 @@
       },
       "category": "math",
       "grades": [
+        "g1a",
         "g1b"
       ],
       "levels": [
@@ -2637,7 +2686,8 @@
           "invite": {
             "zh": "给两边添一些，看看桥牌怎么变。",
             "en": "Add or remove blocks and watch the comparison sign."
-          }
+          },
+          "detail": "7 > 4"
         },
         {
           "bookId": "m1b",
@@ -2668,7 +2718,8 @@
           "invite": {
             "zh": "给两边添一些，看看桥牌怎么变。",
             "en": "Add or remove blocks and watch the comparison sign."
-          }
+          },
+          "detail": "3 < 9"
         },
         {
           "bookId": "m1b",
@@ -2699,7 +2750,8 @@
           "invite": {
             "zh": "给两边添一些，看看桥牌怎么变。",
             "en": "Add or remove blocks and watch the comparison sign."
-          }
+          },
+          "detail": "6 = 6"
         },
         {
           "bookId": "m1b",
@@ -2730,7 +2782,8 @@
           "invite": {
             "zh": "给两边添一些，看看桥牌怎么变。",
             "en": "Add or remove blocks and watch the comparison sign."
-          }
+          },
+          "detail": "12 < 18"
         },
         {
           "bookId": "m1b",
@@ -2761,7 +2814,8 @@
           "invite": {
             "zh": "给两边添一些，看看桥牌怎么变。",
             "en": "Add or remove blocks and watch the comparison sign."
-          }
+          },
+          "detail": "20 > 11"
         },
         {
           "bookId": "m1b",
@@ -2792,7 +2846,8 @@
           "invite": {
             "zh": "给两边添一些，看看桥牌怎么变。",
             "en": "Add or remove blocks and watch the comparison sign."
-          }
+          },
+          "detail": "35 < 53"
         },
         {
           "bookId": "m1b",
@@ -2823,7 +2878,8 @@
           "invite": {
             "zh": "给两边添一些，看看桥牌怎么变。",
             "en": "Add or remove blocks and watch the comparison sign."
-          }
+          },
+          "detail": "47 = 47"
         },
         {
           "bookId": "m1b",
@@ -2854,7 +2910,8 @@
           "invite": {
             "zh": "给两边添一些，看看桥牌怎么变。",
             "en": "Add or remove blocks and watch the comparison sign."
-          }
+          },
+          "detail": "90 < 99"
         }
       ],
       "keywords": [
@@ -2973,7 +3030,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g6"
+      ],
       "tags": [
         "空间想象",
         "计量单位",
@@ -3062,7 +3121,8 @@
           "invite": {
             "zh": "把两批合起来，满十再捆一捆。",
             "en": "Join both groups, then bundle ten loose blocks."
-          }
+          },
+          "detail": "20 + 30"
         },
         {
           "bookId": "m1b",
@@ -3093,7 +3153,8 @@
           "invite": {
             "zh": "把两批合起来，满十再捆一捆。",
             "en": "Join both groups, then bundle ten loose blocks."
-          }
+          },
+          "detail": "30 + 4"
         },
         {
           "bookId": "m1b",
@@ -3124,7 +3185,8 @@
           "invite": {
             "zh": "把两批合起来，满十再捆一捆。",
             "en": "Join both groups, then bundle ten loose blocks."
-          }
+          },
+          "detail": "35 + 2"
         },
         {
           "bookId": "m1b",
@@ -3155,7 +3217,8 @@
           "invite": {
             "zh": "把两批合起来，满十再捆一捆。",
             "en": "Join both groups, then bundle ten loose blocks."
-          }
+          },
+          "detail": "36 + 7"
         },
         {
           "bookId": "m1b",
@@ -3186,7 +3249,8 @@
           "invite": {
             "zh": "把两批合起来，满十再捆一捆。",
             "en": "Join both groups, then bundle ten loose blocks."
-          }
+          },
+          "detail": "40 + 20"
         },
         {
           "bookId": "m1b",
@@ -3217,7 +3281,8 @@
           "invite": {
             "zh": "把两批合起来，满十再捆一捆。",
             "en": "Join both groups, then bundle ten loose blocks."
-          }
+          },
+          "detail": "23 + 30"
         },
         {
           "bookId": "m1b",
@@ -3248,7 +3313,8 @@
           "invite": {
             "zh": "把两批合起来，满十再捆一捆。",
             "en": "Join both groups, then bundle ten loose blocks."
-          }
+          },
+          "detail": "58 + 6"
         },
         {
           "bookId": "m1b",
@@ -3279,7 +3345,8 @@
           "invite": {
             "zh": "把两批合起来，满十再捆一捆。",
             "en": "Join both groups, then bundle ten loose blocks."
-          }
+          },
+          "detail": "90 + 10"
         }
       ],
       "keywords": [
@@ -3321,7 +3388,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5"
+      ],
       "tags": [
         "分数",
         "运算",
@@ -3499,7 +3568,8 @@
           "invite": {
             "zh": "不够拿时拆开一个十，再送走一些。",
             "en": "Unbundle a ten when needed, then take some blocks away."
-          }
+          },
+          "detail": "13 - 9"
         },
         {
           "bookId": "m1b",
@@ -3530,7 +3600,8 @@
           "invite": {
             "zh": "不够拿时拆开一个十，再送走一些。",
             "en": "Unbundle a ten when needed, then take some blocks away."
-          }
+          },
+          "detail": "12 - 8"
         },
         {
           "bookId": "m1b",
@@ -3561,7 +3632,8 @@
           "invite": {
             "zh": "不够拿时拆开一个十，再送走一些。",
             "en": "Unbundle a ten when needed, then take some blocks away."
-          }
+          },
+          "detail": "15 - 7"
         },
         {
           "bookId": "m1b",
@@ -3592,7 +3664,8 @@
           "invite": {
             "zh": "不够拿时拆开一个十，再送走一些。",
             "en": "Unbundle a ten when needed, then take some blocks away."
-          }
+          },
+          "detail": "16 - 9"
         },
         {
           "bookId": "m1b",
@@ -3623,7 +3696,8 @@
           "invite": {
             "zh": "不够拿时拆开一个十，再送走一些。",
             "en": "Unbundle a ten when needed, then take some blocks away."
-          }
+          },
+          "detail": "18 - 6"
         },
         {
           "bookId": "m1b",
@@ -3654,7 +3728,8 @@
           "invite": {
             "zh": "不够拿时拆开一个十，再送走一些。",
             "en": "Unbundle a ten when needed, then take some blocks away."
-          }
+          },
+          "detail": "40 - 20"
         },
         {
           "bookId": "m1b",
@@ -3685,7 +3760,8 @@
           "invite": {
             "zh": "不够拿时拆开一个十，再送走一些。",
             "en": "Unbundle a ten when needed, then take some blocks away."
-          }
+          },
+          "detail": "32 - 8"
         },
         {
           "bookId": "m1b",
@@ -3716,7 +3792,8 @@
           "invite": {
             "zh": "不够拿时拆开一个十，再送走一些。",
             "en": "Unbundle a ten when needed, then take some blocks away."
-          }
+          },
+          "detail": "65 - 7"
         }
       ],
       "keywords": [
@@ -3758,7 +3835,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g1a"
+      ],
       "tags": [
         "轻重",
         "计量单位"
@@ -3904,7 +3983,8 @@
           "invite": {
             "zh": "把数位对齐，再操作计数棒。",
             "en": "Align the place values, then work with the rods."
-          }
+          },
+          "detail": "35 + 32"
         },
         {
           "bookId": "m1b",
@@ -3935,7 +4015,8 @@
           "invite": {
             "zh": "把数位对齐，再操作计数棒。",
             "en": "Align the place values, then work with the rods."
-          }
+          },
+          "detail": "36 + 27"
         },
         {
           "bookId": "m1b",
@@ -3966,7 +4047,8 @@
           "invite": {
             "zh": "把数位对齐，再操作计数棒。",
             "en": "Align the place values, then work with the rods."
-          }
+          },
+          "detail": "48 + 7"
         },
         {
           "bookId": "m1b",
@@ -3997,7 +4079,8 @@
           "invite": {
             "zh": "把数位对齐，再操作计数棒。",
             "en": "Align the place values, then work with the rods."
-          }
+          },
+          "detail": "75 + 18"
         },
         {
           "bookId": "m1b",
@@ -4028,7 +4111,8 @@
           "invite": {
             "zh": "把数位对齐，再操作计数棒。",
             "en": "Align the place values, then work with the rods."
-          }
+          },
+          "detail": "67 - 32"
         },
         {
           "bookId": "m1b",
@@ -4059,7 +4143,8 @@
           "invite": {
             "zh": "把数位对齐，再操作计数棒。",
             "en": "Align the place values, then work with the rods."
-          }
+          },
+          "detail": "52 - 38"
         },
         {
           "bookId": "m1b",
@@ -4090,7 +4175,8 @@
           "invite": {
             "zh": "把数位对齐，再操作计数棒。",
             "en": "Align the place values, then work with the rods."
-          }
+          },
+          "detail": "60 - 24"
         },
         {
           "bookId": "m1b",
@@ -4121,7 +4207,8 @@
           "invite": {
             "zh": "把数位对齐，再操作计数棒。",
             "en": "Align the place values, then work with the rods."
-          }
+          },
+          "detail": "93 - 7"
         }
       ],
       "keywords": [
@@ -4163,7 +4250,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5"
+      ],
       "tags": [
         "运算",
         "找规律",
@@ -4212,7 +4301,10 @@
         "junior",
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g8",
+        "g10"
+      ],
       "tags": [
         "运动",
         "速度",
@@ -4397,7 +4489,8 @@
           "invite": {
             "zh": "移一个物件，再展开关系图。",
             "en": "Move an object, then open the relation diagram."
-          }
+          },
+          "detail": "5 - 3"
         },
         {
           "bookId": "m1b",
@@ -4428,7 +4521,8 @@
           "invite": {
             "zh": "移一个物件，再展开关系图。",
             "en": "Move an object, then open the relation diagram."
-          }
+          },
+          "detail": "12 - 5"
         },
         {
           "bookId": "m1b",
@@ -4459,7 +4553,8 @@
           "invite": {
             "zh": "把送来的物件放在一起。",
             "en": "Join the arriving objects."
-          }
+          },
+          "detail": "8 + 4"
         },
         {
           "bookId": "m1b",
@@ -4490,7 +4585,8 @@
           "invite": {
             "zh": "送走一些物件，看看剩下多少。",
             "en": "Move some objects away and observe what remains."
-          }
+          },
+          "detail": "15 - 6"
         },
         {
           "bookId": "m1b",
@@ -4521,6 +4617,10 @@
           "invite": {
             "zh": "改变一组数量，再对齐看看。",
             "en": "Change a group, then line up the objects."
+          },
+          "detail": {
+            "zh": "9 和 5 比一比",
+            "en": "9 vs 5"
           }
         },
         {
@@ -4552,6 +4652,10 @@
           "invite": {
             "zh": "改变一组数量，再对齐看看。",
             "en": "Change a group, then line up the objects."
+          },
+          "detail": {
+            "zh": "13 和 7 比一比",
+            "en": "13 vs 7"
           }
         },
         {
@@ -4583,7 +4687,8 @@
           "invite": {
             "zh": "移一个物件，再展开关系图。",
             "en": "Move an object, then open the relation diagram."
-          }
+          },
+          "detail": "20 - 8"
         },
         {
           "bookId": "m1b",
@@ -4614,7 +4719,8 @@
           "invite": {
             "zh": "把送来的物件放在一起。",
             "en": "Join the arriving objects."
-          }
+          },
+          "detail": "23 + 12"
         }
       ],
       "keywords": [
@@ -5020,7 +5126,9 @@
       "levels": [
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g10"
+      ],
       "tags": [
         "抛体运动",
         "运动",
@@ -5131,7 +5239,8 @@
           "invite": {
             "zh": "先接一批，再送一批，看看每站变化。",
             "en": "Pick up a group, then drop one off and compare the stops."
-          }
+          },
+          "detail": "8 + 5 - 3"
         },
         {
           "bookId": "m1b",
@@ -5162,7 +5271,8 @@
           "invite": {
             "zh": "先接一批，再送一批，看看每站变化。",
             "en": "Pick up a group, then drop one off and compare the stops."
-          }
+          },
+          "detail": "15 + 7 - 4"
         },
         {
           "bookId": "m1b",
@@ -5193,7 +5303,8 @@
           "invite": {
             "zh": "先接一批，再送一批，看看每站变化。",
             "en": "Pick up a group, then drop one off and compare the stops."
-          }
+          },
+          "detail": "28 + 10 - 6"
         },
         {
           "bookId": "m1b",
@@ -5224,7 +5335,8 @@
           "invite": {
             "zh": "先接一批，再送一批，看看每站变化。",
             "en": "Pick up a group, then drop one off and compare the stops."
-          }
+          },
+          "detail": "34 + 8 - 12"
         },
         {
           "bookId": "m1b",
@@ -5255,7 +5367,8 @@
           "invite": {
             "zh": "先接一批，再送一批，看看每站变化。",
             "en": "Pick up a group, then drop one off and compare the stops."
-          }
+          },
+          "detail": "40 + 20 - 15"
         },
         {
           "bookId": "m1b",
@@ -5286,7 +5399,8 @@
           "invite": {
             "zh": "先接一批，再送一批，看看每站变化。",
             "en": "Pick up a group, then drop one off and compare the stops."
-          }
+          },
+          "detail": "57 + 9 - 16"
         },
         {
           "bookId": "m1b",
@@ -5317,7 +5431,8 @@
           "invite": {
             "zh": "先接一批，再送一批，看看每站变化。",
             "en": "Pick up a group, then drop one off and compare the stops."
-          }
+          },
+          "detail": "23 + 30 - 11"
         },
         {
           "bookId": "m1b",
@@ -5348,7 +5463,8 @@
           "invite": {
             "zh": "先接一批，再送一批，看看每站变化。",
             "en": "Pick up a group, then drop one off and compare the stops."
-          }
+          },
+          "detail": "68 + 12 - 20"
         }
       ],
       "keywords": [
@@ -5390,7 +5506,11 @@
       "levels": [
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g10",
+        "g11",
+        "g12"
+      ],
       "tags": [
         "统计与抽样",
         "实验",
@@ -5503,7 +5623,11 @@
         "junior",
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g8",
+        "g9",
+        "g10"
+      ],
       "tags": [
         "酸碱",
         "溶液",
@@ -5558,7 +5682,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "编程启蒙",
         "算法",
@@ -5645,7 +5772,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g1",
+        "g2"
+      ],
       "tags": [
         "顺序执行",
         "编程启蒙"
@@ -5678,7 +5808,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g2",
+        "g3"
+      ],
       "tags": [
         "循环",
         "编程启蒙",
@@ -5718,7 +5851,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4"
+      ],
       "tags": [
         "条件判断",
         "编程启蒙"
@@ -5753,7 +5889,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4",
+        "g5"
+      ],
       "tags": [
         "调试"
       ],
@@ -5786,7 +5926,10 @@
         "primary",
         "junior"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "排序算法",
         "算法"
@@ -5822,7 +5965,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5"
+      ],
       "tags": [
         "变量",
         "编程启蒙"
@@ -5861,7 +6007,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "函数",
         "编程启蒙"
@@ -5901,7 +6050,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5"
+      ],
       "tags": [
         "事件驱动",
         "编程启蒙"
@@ -5939,7 +6091,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5",
+        "g6"
+      ],
       "tags": [
         "二进制",
         "编程启蒙"
@@ -6061,7 +6217,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4",
+        "g5"
+      ],
       "tags": [
         "编程启蒙",
         "二进制"
@@ -6099,7 +6259,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5"
+      ],
       "tags": [
         "光学",
         "实验"
@@ -6291,7 +6454,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4"
+      ],
       "tags": [
         "算法",
         "策略",
@@ -6332,7 +6498,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g2",
+        "g3"
+      ],
       "tags": [
         "生态",
         "观察",
@@ -6494,7 +6663,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4",
+        "g5"
+      ],
       "tags": [
         "物质三态",
         "分子运动",
@@ -6538,7 +6711,11 @@
         "primary",
         "junior"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5",
+        "g6"
+      ],
       "tags": [
         "电路",
         "实验"
@@ -6724,7 +6901,10 @@
         "primary",
         "junior"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "星座",
         "天文",
@@ -6974,7 +7154,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4"
+      ],
       "tags": [
         "空气",
         "质量",
@@ -7140,7 +7323,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4"
+      ],
       "tags": [
         "溶液",
         "混合物",
@@ -7201,7 +7387,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "算法",
         "编程启蒙",
@@ -7286,7 +7475,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4"
+      ],
       "tags": [
         "化石",
         "地层",
@@ -7414,7 +7606,15 @@
         "junior",
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6",
+        "g7",
+        "g8",
+        "g9"
+      ],
       "tags": [
         "空间想象",
         "推理",
@@ -7479,7 +7679,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "推理",
         "策略",
@@ -7599,7 +7802,15 @@
         "junior",
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6",
+        "g7",
+        "g8",
+        "g9"
+      ],
       "tags": [
         "魔方",
         "空间想象",
@@ -7643,7 +7854,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "分类",
         "观察",
@@ -7736,7 +7950,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g1b"
+      ],
       "tags": [
         "找规律",
         "推理"
@@ -7922,7 +8138,11 @@
         "primary",
         "junior"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5",
+        "g6"
+      ],
       "tags": [
         "推理",
         "益智游戏"
@@ -7965,7 +8185,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g1",
+        "g2",
+        "g3"
+      ],
       "tags": [
         "集合",
         "分类",
@@ -8006,7 +8230,11 @@
         "primary",
         "junior"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5",
+        "g6"
+      ],
       "tags": [
         "策略",
         "推理",
@@ -8056,7 +8284,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g1b"
+      ],
       "tags": [
         "平面图形",
         "空间想象",
@@ -8096,7 +8326,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g2",
+        "g3",
+        "g4"
+      ],
       "tags": [
         "推理",
         "策略",
@@ -8148,7 +8382,11 @@
         "primary",
         "junior"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5",
+        "g6"
+      ],
       "tags": [
         "推理",
         "策略",
@@ -8199,7 +8437,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4",
+        "g5"
+      ],
       "tags": [
         "推理",
         "益智游戏"
@@ -8243,7 +8485,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5",
+        "g6"
+      ],
       "tags": [
         "空间想象",
         "推理",
@@ -8292,7 +8538,11 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g3",
+        "g4",
+        "g5"
+      ],
       "tags": [
         "空间想象",
         "推理",
@@ -8349,7 +8599,10 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6"
+      ],
       "tags": [
         "推理",
         "策略",
@@ -8401,7 +8654,11 @@
         "primary",
         "junior"
       ],
-      "grades": [],
+      "grades": [
+        "g5",
+        "g6",
+        "g7"
+      ],
       "tags": [
         "物质三态",
         "分子运动",
@@ -8529,7 +8786,12 @@
         "primary",
         "junior"
       ],
-      "grades": [],
+      "grades": [
+        "g4",
+        "g5",
+        "g6",
+        "g7"
+      ],
       "tags": [
         "计算机原理",
         "编程启蒙",
@@ -8586,7 +8848,10 @@
       "levels": [
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g10",
+        "g12"
+      ],
       "tags": [
         "有机化合物",
         "官能团",
@@ -8656,7 +8921,9 @@
       "levels": [
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g11"
+      ],
       "tags": [
         "圆周运动",
         "万有引力",
@@ -8721,7 +8988,9 @@
       "levels": [
         "senior"
       ],
-      "grades": [],
+      "grades": [
+        "g12"
+      ],
       "tags": [
         "DNA",
         "遗传",
@@ -8863,7 +9132,8 @@
         "senior"
       ],
       "grades": [
-        "g9"
+        "g9",
+        "g11"
       ],
       "tags": [
         "欧姆定律",
@@ -9280,8 +9550,8 @@
         "en": "Stroke Workshop"
       },
       "description": {
-        "zh": "用手指沿着发光路线描写基本笔画。",
-        "en": "Trace the glowing routes of basic Chinese strokes."
+        "zh": "照着亮线描一描，写完看看你的笔画正不正。",
+        "en": "Trace along the glowing line, then see how straight your stroke is."
       },
       "category": "chinese",
       "levels": [
@@ -9344,7 +9614,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g1a"
+      ],
       "tags": [
         "识字"
       ],
@@ -9440,7 +9712,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g1a"
+      ],
       "tags": [
         "识字"
       ],
@@ -11840,7 +12114,9 @@
       "levels": [
         "primary"
       ],
-      "grades": [],
+      "grades": [
+        "g1a"
+      ],
       "tags": [
         "识字",
         "古诗"

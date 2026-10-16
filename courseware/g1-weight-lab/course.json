@@ -12,7 +12,9 @@
   "levels": [
     "primary"
   ],
-  "grades": [],
+  "grades": [
+    "g1a"
+  ],
   "tags": [
     "轻重",
     "计量单位"

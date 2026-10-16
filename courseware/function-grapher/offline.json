@@ -1,14 +1,14 @@
 {
   "id": "function-grapher",
-  "version": "138411abb6ba17e77beead0d2662acb43ebc7e41803c8e099016932e25b58e6d",
+  "version": "acd9cd002801ac526f51178f2beb21e5072486515f2e67aad28aa6b899893bbe",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "939da0beacf557308fa30e05a1c2a1243023ecfd501e573ac0afb1a9dd4ff920"
+      "sha256": "2e7584b05f8be4761c7fa7312b9fa2e12e529f2ea0b221bec61fc04caab73279"
     },
     {
       "path": "index.html",
-      "sha256": "88c28189c9c84664ccf1a9199d2dbf43c3426a8d699188ec5596d0904fdc3ffe"
+      "sha256": "bdd511fe78ca42acee7ecd7d88706d416b2b41a14a8c5e466b95b6c26b9c0051"
     },
     {
       "path": "main.js",

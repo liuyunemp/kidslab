@@ -5,14 +5,14 @@ async function placeActWithHints(page, count = 7) {
   for (let piece = 0; piece < count; piece += 1) await hint.click();
 }
 
-async function dragFirstPieceHome(page) {
-  await page.getByRole('button', { name: '向左转' }).click({ clickCount: 3 });
+async function dragFirstPieceHome(page, { to = { x: 0.35, y: 0.45 }, rotate = 3 } = {}) {
+  if (rotate) await page.getByRole('button', { name: '向左转' }).click({ clickCount: rotate });
   const box = await page.locator('#stage').boundingBox();
   const start = {
     x: box.x + box.width * 0.12 + Math.min(box.width, box.height) * 0.035,
     y: box.y + box.height * 0.84,
   };
-  const target = { x: box.x + box.width * 0.35, y: box.y + box.height * 0.45 };
+  const target = { x: box.x + box.width * to.x, y: box.y + box.height * to.y };
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
   await page.mouse.move(target.x, target.y, { steps: 8 });
@@ -30,6 +30,10 @@ async function expectFitsViewport(page) {
     hintBottom: document.querySelector('#hintBtn').getBoundingClientRect().bottom,
     controlHeights: [...document.querySelectorAll('.control')].map((control) =>
       control.getBoundingClientRect().height),
+    barButtons: ['#soundBtn', '#themeBtn', '#langBtn'].map((selector) => {
+      const rect = document.querySelector(selector).getBoundingClientRect();
+      return { left: rect.left, right: rect.right, width: rect.width, height: rect.height };
+    }),
   }));
   expect(layout.width).toBeLessThanOrEqual(layout.viewportWidth + 1);
   expect(layout.height).toBeLessThanOrEqual(layout.viewportHeight + 1);
@@ -37,6 +41,13 @@ async function expectFitsViewport(page) {
   expect(layout.canvasHeight).toBeGreaterThan(200);
   expect(layout.hintBottom).toBeLessThanOrEqual(layout.viewportHeight + 1);
   expect(Math.min(...layout.controlHeights)).toBeGreaterThanOrEqual(44);
+  // 375px 下每个顶栏按钮都必须真的能点到，不能漏到视口外。
+  for (const button of layout.barButtons) {
+    expect(button.left).toBeGreaterThanOrEqual(0);
+    expect(button.right).toBeLessThanOrEqual(layout.viewportWidth + 1);
+    expect(button.width).toBeGreaterThanOrEqual(44);
+    expect(button.height).toBeGreaterThanOrEqual(44);
+  }
 }
 
 test.describe('tangram shadow play', () => {
@@ -46,20 +57,57 @@ test.describe('tangram shadow play', () => {
       localStorage.setItem('kidslab.theme', 'light');
       localStorage.removeItem('kidslab.tangram-theater');
       localStorage.removeItem('kidslab.progress.tangram-theater');
+      localStorage.removeItem('kidslab.tangram-theater.audio.muted');
     });
     await page.goto('/courseware/tangram-theater/');
   });
 
-  test('recovers from a misplaced piece and completes all eight acts', async ({ page }) => {
+  test('misplaced pieces explain what is wrong instead of snapping back silently', async ({ page }) => {
     await expect(page.locator('#pieceShelf .piece-button')).toHaveCount(7);
     await page.getByRole('option', { name: '大三角一' }).click();
+
+    // 点空白舞台不该把木片瞬移过去，也不该改变进度。
+    const before = await page.locator('#stage').evaluate((stage) => stage.dataset.focusedTarget);
     await page.locator('#stage').click({ position: { x: 18, y: 18 } });
-    await expect(page.locator('#feedback')).toContainText('还没对上剪影');
+    await expect(page.locator('#progressCount')).toHaveText('0/7');
+    await expect(page.locator('#stage')).toHaveAttribute('data-focused-target', before);
+
+    // 拖到离目标很远的地方：插回后台，并说明"再靠近一些"。
+    await dragFirstPieceHome(page, { to: { x: 0.9, y: 0.2 } });
+    await expect(page.locator('#progressCount')).toHaveText('0/7');
+    await expect(page.locator('#feedback')).toContainText('再靠近一些');
+
+    // 位置对、角度错：提示要指出是方向问题，而不是笼统的"没对上"。
+    await page.getByRole('option', { name: '大三角一' }).click();
+    await dragFirstPieceHome(page, { rotate: 0 });
+    await expect(page.locator('#feedback')).toContainText('转一转');
 
     await dragFirstPieceHome(page);
     await expect(page.locator('#progressCount')).toHaveText('1/7');
     await expect(page.locator('#feedback')).toContainText('稳稳归位');
+  });
 
+  test('selecting a piece spotlights its own shadow, and dragging arms it', async ({ page }) => {
+    await expect(page.locator('#stage')).toHaveAttribute('data-focused-target', '0');
+    await page.getByRole('option', { name: '正方形' }).click();
+    await expect(page.locator('#stage')).toHaveAttribute('data-focused-target', '5');
+
+    // 拖进吸附半径时剪影进入"就绪"态；离开后又退出。
+    await page.getByRole('option', { name: '大三角一' }).click();
+    const box = await page.locator('#stage').boundingBox();
+    const target = { x: box.x + box.width * 0.35, y: box.y + box.height * 0.45 };
+    await page.mouse.move(box.x + box.width * 0.12, box.y + box.height * 0.84);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width * 0.9, box.y + box.height * 0.2, { steps: 6 });
+    await expect(page.locator('#stage')).toHaveAttribute('data-armed-target', '-1');
+    await page.mouse.move(target.x, target.y, { steps: 6 });
+    await expect(page.locator('#stage')).toHaveAttribute('data-armed-target', '0');
+    await page.mouse.move(box.x + box.width * 0.9, box.y + box.height * 0.2, { steps: 6 });
+    await expect(page.locator('#stage')).toHaveAttribute('data-armed-target', '-1');
+    await page.mouse.up();
+  });
+
+  test('completes all eight acts using the lantern hint', async ({ page }) => {
     await placeActWithHints(page, 6);
     await expect(page.getByRole('heading', { name: '桥架起来了！' })).toBeVisible();
     await page.getByRole('button', { name: '下一幕 →' }).click();
@@ -91,7 +139,18 @@ test.describe('tangram shadow play', () => {
     await page.locator('#langBtn').click();
     await expect(page.getByRole('heading', { name: 'Tangram Shadow Play' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Act 1 · Bridge' })).toBeVisible();
-    await expect(page.locator('#feedback')).toContainText('Drag a piece');
+    await expect(page.locator('#feedback')).toContainText('Every piece has its own shadow');
+
+    // 静音开关可见可访问，且点击后立即反映在 aria-pressed 与图标上。
+    const sound = page.locator('#soundBtn');
+    await expect(sound).toBeVisible();
+    await expect(sound).toHaveAttribute('aria-pressed', 'false');
+    await expect(sound).toHaveAttribute('aria-label', /./);
+    await sound.click();
+    await expect(sound).toHaveAttribute('aria-pressed', 'true');
+    await expect(sound).toHaveText('🔇');
+    expect(await sound.evaluate((button) => button.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+
     await expectFitsViewport(page);
   });
 });

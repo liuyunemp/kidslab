@@ -2,6 +2,7 @@
 export const course = {
   "id": "g1-subtraction-depot",
   "kind": "subtract",
+  "expression": "{a} - {b}",
   "title": {
     "zh": "减法车站",
     "en": "Subtraction Depot"

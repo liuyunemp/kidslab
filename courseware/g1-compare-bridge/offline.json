@@ -1,6 +1,6 @@
 {
   "id": "g1-compare-bridge",
-  "version": "f5393c249cc25a58d8018611b0735c437d266766b8e4ec8a3e2b45d972162595",
+  "version": "eb4da1d5f85c01889f2013bda1900a1dbc33e30328b1ef1aebcfc7c72f5c6718",
   "assets": [
     {
       "path": "audio.js",
@@ -21,46 +21,46 @@
     },
     {
       "path": "config.js",
-      "sha256": "43e83e98f1157c3b768e109a266a7416de99a13306ec6437de61fb6abbd34996",
-      "fingerprint": "fe09fc00"
+      "sha256": "f26f08708a75c233b13c1d840c4a36b0a644e00df551c9f77a68205294f7025f",
+      "fingerprint": "4c23c76b"
     },
     {
       "path": "content.js",
-      "sha256": "fd6ceb2d3740e910ac680b11ae1df3f2c950da8f6a75cdc00510eeb5dd1c8693",
-      "fingerprint": "728facde"
+      "sha256": "a0bea1ec235407f32547d397de8d292092eedca2e7028de2812b9641506e500e",
+      "fingerprint": "59b22be3"
     },
     {
       "path": "course.json",
-      "sha256": "3a8bd8e806f5cf14b75f664c95eff3b8ce28bd38140ba4f48edb8fc5934717e7"
+      "sha256": "03d66636fa1af2e1f0e67bc7cb14e8fac40e6c97c54fed9b30aa9e37491ba6af"
     },
     {
       "path": "engine.js",
-      "sha256": "778edc27c71099c37cec318ed689a75f06e43902ed45f33c63792dd3271d203a",
-      "fingerprint": "eed1e137"
+      "sha256": "047e1b10601fd12ee10207eb6476aeb58c9cab765acccfad810cefe02ad16a56",
+      "fingerprint": "fb0d9d15"
     },
     {
       "path": "exploration-model.js",
-      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
-      "fingerprint": "da11fe5b"
+      "sha256": "9fa07d62da025e4a6d0adca2c8d5cbbfc9bcfbb22bdecf3eb58e49703076889d",
+      "fingerprint": "dade1ba1"
     },
     {
       "path": "index.html",
-      "sha256": "c3e9ffbab3173142a1fcfd97940cf2b01945c9a61690d81eeac1b5cfe18d8e1f"
+      "sha256": "1da7dffac70751a64b76808cb332db17abe515ac0fd6a4fff82346f3b942b14c"
     },
     {
       "path": "main.js",
-      "sha256": "e0510e7fd9ddb7e9269bca01bc661763812b6ee6948505cb4fa531adfb7cff23",
-      "fingerprint": "51ddfbd7"
+      "sha256": "d4970fe80a7a97f6f93bdb068044253fd329b7ebe782f3fc050808d5de413a7c",
+      "fingerprint": "3d4bf373"
     },
     {
       "path": "model.js",
-      "sha256": "21b3e073e17122756cf610ad003ecc95c8eef8266c1bbd64a6a35ecbb70277a3",
-      "fingerprint": "ccfea184"
+      "sha256": "55d5cbf4067be07e3b767a0cbd540a2794151f18618aeeb216a87c2a6d81aa61",
+      "fingerprint": "8777b077"
     },
     {
       "path": "scene.js",
-      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
-      "fingerprint": "3e5ed74b"
+      "sha256": "38d6c8a91a1e4a8b6e9ef43ee014eae3646f06bcb5460cc18cffc86a5d04d636",
+      "fingerprint": "d24e6a69"
     },
     {
       "path": "style.css",

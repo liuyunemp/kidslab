@@ -13,7 +13,7 @@
     "primary",
     "junior"
   ],
-  "grades": [],
+  "grades": ["g4","g5"],
   "tags": [
     "数位",
     "小数",

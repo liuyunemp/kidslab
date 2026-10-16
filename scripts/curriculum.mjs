@@ -10,6 +10,21 @@ const identifier = value => typeof value === 'string' && /^[a-z0-9-]+$/.test(val
 const covers = (grades, token) => (grades || []).includes(token) || (/[ab]$/.test(token) && (grades || []).includes(token.slice(0, -1)));
 const inSourcePages = (page, pages) => typeof pages === 'string' && [...pages.matchAll(/(\d+)(?:[–—-](\d+))?/g)]
   .some(([, from, to]) => page >= Number(from) && page <= Number(to || from));
+// activity 级 detail：语言无关的算式字符串，或 {zh,en} 双语对象；用于主站关卡按钮展示每关练什么。
+const validDetail = value => (typeof value === 'string' && value.trim()) || bilingual(value);
+const normalizedDetail = value => (typeof value === 'string' ? value.trim() : { zh: value.zh, en: value.en });
+// 课件根级 expression 模板（如 "{a} + {b}"）：对 activity 字段插值；缺字段的关卡不带 detail，不报错。
+const expressionDetail = (course, activity) => {
+  if (activity.detail !== undefined) return normalizedDetail(activity.detail);
+  if (typeof course?.expression !== 'string') return undefined;
+  let missing = false;
+  const text = course.expression.replace(/\{([A-Za-z_]\w*)\}/g, (_, field) => {
+    const value = activity[field];
+    if (value === undefined || value === null) { missing = true; return ''; }
+    return String(value);
+  }).trim();
+  return missing || !text ? undefined : text;
+};
 
 export function expandCurriculum(catalog, courses, activities = {}) {
   const errors = [];
@@ -50,6 +65,17 @@ export function expandCurriculum(catalog, courses, activities = {}) {
     }
     const seen = new Set();
     result[courseId] = [];
+    if (activities[courseId]?.expression !== undefined && typeof activities[courseId].expression !== 'string') {
+      errors.push(`课件 ${courseId}: expression 必须是字符串模板`);
+    }
+    const templateFields = typeof activities[courseId]?.expression === 'string'
+      ? [...new Set([...activities[courseId].expression.matchAll(/\{([A-Za-z_]\w*)\}/g)].map(match => match[1]))] : [];
+    if (templateFields.length) {
+      const knownFields = new Set((activities[courseId].activities || []).flatMap(a => Object.keys(a)));
+      for (const field of templateFields) {
+        if (!knownFields.has(field)) errors.push(`课件 ${courseId}: expression 引用了不存在的字段 {${field}}`);
+      }
+    }
     for (const entry of entries) {
       const book = books.get(entry?.book);
       const unit = book?.units.get(entry?.unit);
@@ -61,17 +87,20 @@ export function expandCurriculum(catalog, courses, activities = {}) {
         || (entry.lessonOrder !== undefined && !positive(entry.lessonOrder)) || seen.has(key)
         || (entry.activity !== undefined && (!identifier(entry.activity) || !activity
           || activities[courseId].book?.url !== book.url || !bilingual(activity.title) || !bilingual(activity.invite)
+          || (activity.detail !== undefined && !validDetail(activity.detail))
           || !inSourcePages(entry.page, activity.source?.pages)))) {
         errors.push(`课件 ${courseId}: 教材入口 ${key} 与年级/科目/单元/页码/活动不符或重复`);
         continue;
       }
       seen.add(key);
+      const detail = activity ? expressionDetail(activities[courseId], activity) : undefined;
       result[courseId].push({
         bookId: entry.book, bookTitle: book.title, grade: book.grade,
         unitId: unit.id, unitTitle: unit.title, unitKind: unit.kind, unitNumber: unit.number,
         unitOrder: unit.startPage, page: entry.page, lessonOrder: entry.lessonOrder || 1,
         topic: entry.topic,
-        ...(activity ? { activity: activity.id, activityTitle: activity.title, invite: activity.invite } : {}),
+        ...(activity ? { activity: activity.id, activityTitle: activity.title, invite: activity.invite,
+          ...(detail ? { detail } : {}) } : {}),
       });
     }
   }

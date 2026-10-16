@@ -1,6 +1,6 @@
 {
   "id": "earth-dj",
-  "version": "db07c5703cfca3b7b9bac1e4ae0a6e15d47f5c2afab61528d4836f4fef16cf8a",
+  "version": "ad76a1f6ac13a58bf6e048b51001036a190ebc581468faa9f8733c38b717e1e8",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "6d56a69ac81dd32b042febd298db9db353e1d91573804fd74a527973d734220e"
+      "sha256": "22fa2b722efe7e4fa7c47ecf96febd89cf438b03e212a74f28e7e3c21ffced06"
     },
     {
       "path": "main.js",

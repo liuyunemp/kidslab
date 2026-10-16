@@ -12,7 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [],
+  "grades": ["g3","g4","g5"],
   "tags": [
     "物质三态",
     "分子运动",

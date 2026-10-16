@@ -14,7 +14,7 @@ export const course = {
     "3D",
     "实验"
   ],
-  "grades": ["g1b"],
+  "grades": ["g1a","g1b"],
   "book": {
     "title": "数学 一年级下册",
     "edition": "2024年审定",
@@ -41,6 +41,7 @@ export const course = {
       },
       "a": 7,
       "b": 4,
+      "detail": "7 > 4",
       "id": "compare-1"
     },
     {
@@ -63,6 +64,7 @@ export const course = {
       },
       "a": 3,
       "b": 9,
+      "detail": "3 < 9",
       "id": "compare-2"
     },
     {
@@ -85,6 +87,7 @@ export const course = {
       },
       "a": 6,
       "b": 6,
+      "detail": "6 = 6",
       "id": "compare-3"
     },
     {
@@ -107,6 +110,7 @@ export const course = {
       },
       "a": 12,
       "b": 18,
+      "detail": "12 < 18",
       "id": "compare-4"
     },
     {
@@ -129,6 +133,7 @@ export const course = {
       },
       "a": 20,
       "b": 11,
+      "detail": "20 > 11",
       "id": "compare-5"
     },
     {
@@ -151,6 +156,7 @@ export const course = {
       },
       "a": 35,
       "b": 53,
+      "detail": "35 < 53",
       "id": "compare-6"
     },
     {
@@ -173,6 +179,7 @@ export const course = {
       },
       "a": 47,
       "b": 47,
+      "detail": "47 = 47",
       "id": "compare-7"
     },
     {
@@ -195,6 +202,7 @@ export const course = {
       },
       "a": 90,
       "b": 99,
+      "detail": "90 < 99",
       "id": "compare-8"
     }
   ]

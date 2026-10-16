@@ -1,6 +1,6 @@
 {
   "id": "magnet-hockey",
-  "version": "8c4a3110c4ef74b009e8934d425df8834a8f6273fef96b7ee78e39cad7b900be",
+  "version": "a498ccab15428f0e71c23fb4bfec72ef0056044d76987f55a7f8e8bb50d80eda",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "4b06e7986ca27a5dbd756284de617d11745d8079a4270dc80b75b984c9a54556"
+      "sha256": "e809927aa08049edc121c632c44d6b4051a1a0a45bc15114d75a56b45c8b16a3"
     },
     {
       "path": "main.js",

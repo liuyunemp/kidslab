@@ -1,10 +1,10 @@
 {
   "id": "dna-replication-lab",
-  "version": "cb2e753d74bf2ace0ec01b2112b1ed4a15d1a4693aa9c850cf1b465c57984889",
+  "version": "6fe983ab68cc4f71adc927294b0b41190c1f1de56ee4009154f3990367030dff",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "f93959ca6c989371fa6197bc2c4c215c9c8c38b8dd453c7c59d486d6ed9555b5"
+      "sha256": "16acd79d1c99cc8105fceccdde876304ed35f346329ae5da04950fad52c5ec09"
     },
     {
       "path": "dna-model.js",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "d22b405d4d54aee4e8ee1a1a3e0381d5f6d89455dabbdfc45a2164f1d1d97d6e"
+      "sha256": "5792163bfd3a51c4a2f19549dcaa106ef6abb52a13cacec47c72741689cbdcf9"
     },
     {
       "path": "main.js",

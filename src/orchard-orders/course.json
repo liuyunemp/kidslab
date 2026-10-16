@@ -12,7 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [],
+  "grades": ["g2"],
   "tags": [
     "乘法",
     "运算"

@@ -1,7 +1,7 @@
 # g1-sentence-train 知识断言
 
 ## 适用范围
-- 保留本课实际内容作为拓展；完整教材年级归属待核准，仅在全部年级显示，见 [分类核查](../../docs/courseware-plan/classification-audit.md)。
+- 本课仅涵盖 句子列车 实际出现的内容；教材归属为 g1a，科目为 chinese。年级依据见 docs/courseware-plan/classification-audit.md。
 
 ## 知识断言
 - [F1] 本课只练习“谁—在哪里—做什么”这一种简单句表达方式；它不是汉语句子的唯一合法语序。[S1]

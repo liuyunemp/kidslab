@@ -1,14 +1,14 @@
 {
   "id": "lantern-lane",
-  "version": "4ecc15b09f1c2602ccc8c6c6c4110d3e8a347e76dcad372718b765c7e7ea5dbd",
+  "version": "736661f423f493ee1c0950f9fc60b6595df99c4b9dec7ba04d56f3301cdaf7ed",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "917994e6707c18386d313d459baac15823c89dd25f6aadeb93eb768d53adb911"
+      "sha256": "d3ca76589e1c8d2d8446b0caa50b7283fce5dc99423188ef6d2d652273600d92"
     },
     {
       "path": "index.html",
-      "sha256": "d23a326ae68c033076b708ad4f4babd8564d9e91d37044627817ad1e6d24a60f"
+      "sha256": "1591dc29e717f565518a07cc00acbee8ed71a28ac8286ac00855af9a6b155e2b"
     },
     {
       "path": "main.js",

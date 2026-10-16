@@ -1,6 +1,6 @@
 {
   "id": "clock-town",
-  "version": "278bd3bb760a7720f06757ea1e9add7a432df1adca5ceddb4d8ed882be9ba730",
+  "version": "5a27787dc95d53f91c5fe0a106c6d5cd6b9ef0c955b2823ddaa6771d01680850",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "fde99fa04f7d8cc9f4542c9586350f418a5d7e1a37ea02ac1a6a394d8bcc5e90"
+      "sha256": "4a8996ededc90ec3c66b78be8c7cfbc389ba420d2a48c2956066eac0ef688c8d"
     },
     {
       "path": "main.js",

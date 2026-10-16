@@ -12,7 +12,7 @@
   "levels": [
     "senior"
   ],
-  "grades": [],
+  "grades": ["g10","g12"],
   "tags": [
     "有机化合物",
     "官能团",

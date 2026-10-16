@@ -2,7 +2,9 @@ export const config = {
   "id": "g1-poem-stage",
   "kind": "poem",
   "category": "chinese",
-  "grades": [],
+  "grades": [
+    "g1a"
+  ],
   "tags": [
     "识字",
     "古诗"

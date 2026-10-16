@@ -2,7 +2,9 @@ export const config = {
   "id": "g1-direction-town",
   "kind": "direction",
   "category": "science",
-  "grades": ["g1b"],
+  "grades": [
+    "g1b"
+  ],
   "tags": [
     "位置"
   ],

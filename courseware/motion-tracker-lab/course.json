@@ -13,7 +13,7 @@
     "junior",
     "senior"
   ],
-  "grades": [],
+  "grades": ["g8","g10"],
   "tags": [
     "运动",
     "速度",

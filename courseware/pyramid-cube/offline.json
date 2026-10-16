@@ -1,6 +1,6 @@
 {
   "id": "pyramid-cube",
-  "version": "91812b009dc126d7dcb9a69de3dfe68a1b8590c3d11c8d2c4a0c671ddeb25d7d",
+  "version": "b436d30e86c7a75c0e05921dcdbde9497072f6b262a8f845f015c3f237a66179",
   "assets": [
     {
       "path": "audio.js",
@@ -9,11 +9,11 @@
     },
     {
       "path": "course.json",
-      "sha256": "2634641d8df8cc04ce5b2fd27797b86781b97d92596118bc470853041f07aead"
+      "sha256": "4e168c6bf46543cf283f48b09ed9480aae582407befc3a065fa59c009d240ef0"
     },
     {
       "path": "index.html",
-      "sha256": "9bfb4e2e7db78d079d408eeae2c370933252439e24c487e5ad7566863ebebc4b"
+      "sha256": "5f070d44398bf865c8b0d536716a99da60e9e2b0e8b5b3dd57c8d5f9c63cea3b"
     },
     {
       "path": "main.js",

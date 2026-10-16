@@ -1,14 +1,14 @@
 {
   "id": "crystal-cave",
-  "version": "87f326e25b29e850a80c4aa8e5f675f97858ba6fc8695dfea0a746b341008f12",
+  "version": "9586f79783bed609225265758e2c2e799d169d3756a48bdc2ce98d6274fc9955",
   "assets": [
     {
       "path": "course.json",
-      "sha256": "8f3a31c1bf7c13cb7e466498fd77bddce876fe4fd426dd70f6aaf5d59d2ca970"
+      "sha256": "2cdbf9a09b35948128224e641170a71dcad8ec2e1334dca1e4241fde2affd2b0"
     },
     {
       "path": "index.html",
-      "sha256": "80f78024ced850bb14869b36bd9481b202db00f0f8d55242182a3259fba962ee"
+      "sha256": "8c41336b2c258767f95b555f85d38d0c3df8cf4010d5f4a8d5fbec72389b9c4b"
     },
     {
       "path": "main.js",

@@ -12,7 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": ["g1b"],
+  "grades": ["g1a", "g1b"],
   "tags": [
     "加减法",
     "运算",

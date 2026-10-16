@@ -2,7 +2,9 @@ export const config = {
   "id": "g1-sort-laundry",
   "kind": "sort",
   "category": "math",
-  "grades": ["g2a"],
+  "grades": [
+    "g2a"
+  ],
   "tags": [
     "分类"
   ],

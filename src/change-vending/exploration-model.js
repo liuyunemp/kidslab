@@ -204,7 +204,7 @@ export function reduce(course, before, action, { replay = false } = {}) {
   if (!replay) s.log.push(clone(action));
   return { ok: true, state: s, discovered, complete: s.done.length === 8, changed };
 }
-export function serialize(state) { return { version: VERSION, courseId: state.courseId, log: state.log }; }
+export function serialize(state) { return { version: VERSION, courseId: state.courseId, done: [...state.done], log: state.log }; }
 // 教材入口只选择已有活动；沿用日志恢复，保留进度，不触发玩法或音频。
 export function openActivity(course, state, activityId) {
   const index = course.activities.findIndex(activity => activity.id === activityId);
@@ -223,6 +223,12 @@ export function restore(course, saved) {
       if (!result.ok) return initialState(course);
       state = result.state;
     }
-    state.log = clone(saved.log); return state;
+    state.log = clone(saved.log);
+    // 主站聚合卡片读取 done 展示关卡级✓；与日志重放结果合并，缺省或非法 id 时保持不变。
+    if (Array.isArray(saved.done)) {
+      const ids = new Set(course.activities.map(a => a.id));
+      for (const id of saved.done) if (ids.has(id) && !state.done.includes(id)) state.done.push(id);
+    }
+    return state;
   } catch { return initialState(course); }
 }
