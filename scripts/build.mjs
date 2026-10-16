@@ -10,7 +10,7 @@
  * 内联进每个课件的 index.html（详见 docs/analytics.md）；未配置则跳过。
  */
 import { transform } from 'esbuild';
-import { cp, mkdir, readdir, readFile, rm, stat, writeFile as writeFileNative } from 'node:fs/promises';
+import { cp, mkdir, readdir, readFile, stat, writeFile as writeFileNative } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,16 +28,24 @@ async function writeFile(file, content) {
 }
 import { validateFactsCoverage, validateFactsDocument } from './facts.mjs';
 import { GRADE_RE } from './grades.mjs';
+import { loadCurriculum } from './curriculum.mjs';
+import { createBuildWorkspace, removeBuildWorkspace, publishArtifacts } from './build-workspace.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const TEXT_ASSET = /\.(?:html|css|js|mjs|json|svg|md|txt|webmanifest|gltf)$/i;
+const normalizeText = (text) => text.replace(/\r\n?/g, '\n');
+
+export async function buildProject({ rootDir = DEFAULT_ROOT, log = console.log, publish = publishArtifacts } = {}) {
+const ROOT = path.resolve(rootDir);
 const SRC = path.join(ROOT, 'src');
-const OUT = path.join(ROOT, 'courseware');
+let OUT, STAGE, workspace;
+const errors = [];
 
 const CATEGORIES = ['featured', 'math', 'physics', 'chemistry', 'programming', 'science', 'logic', 'chinese'];
 const LEVELS = ['primary', 'junior', 'senior'];
 
-const fail = (msg) => { console.error(`\x1b[31m✗ ${msg}\x1b[0m`); process.exitCode = 1; };
-const ok = (msg) => console.log(`\x1b[32m✓\x1b[0m ${msg}`);
+const fail = (msg) => { errors.push(msg); };
+const ok = (msg) => log(`✓ ${msg}`);
 
 async function loadTaxonomy() {
   const { tags } = JSON.parse(await readFile(path.join(SRC, 'taxonomy.json'), 'utf8'));
@@ -57,7 +65,7 @@ async function validateKnowledgeAssertions(courses) {
   const documented = new Set();
   for (const { id } of courses) {
     try {
-      const document = await readFile(path.join(SRC, id, 'facts.md'), 'utf8');
+      const document = normalizeText(await readFile(path.join(SRC, id, 'facts.md'), 'utf8'));
       documented.add(id);
       for (const error of validateFactsDocument(id, document)) {
         fail(`src/${id}/facts.md: ${error}`);
@@ -82,12 +90,13 @@ async function validateKnowledgeAssertions(courses) {
   )) {
     fail(`knowledge assertions: ${error}`);
   }
-  if (!process.exitCode) ok(`知识断言 ${documented.size} 个已审计，${legacy.size} 个存量待补`);
+  if (!errors.length) ok(`知识断言 ${documented.size} 个格式通过，${legacy.size} 个存量待补`);
 }
 
 function validate(id, meta, taxonomy) {
   const errs = [];
   const isPair = (v) => v && typeof v.zh === 'string' && v.zh && typeof v.en === 'string' && v.en;
+  if (!meta || typeof meta !== 'object' || Array.isArray(meta)) return ['course.json 必须是对象'];
   if (meta.id !== id) errs.push(`id "${meta.id}" 与目录名 "${id}" 不一致`);
   if (!isPair(meta.title)) errs.push('title 需要 {zh, en}');
   if (!isPair(meta.description)) errs.push('description 需要 {zh, en}');
@@ -151,6 +160,7 @@ async function buildCourse(id, sdk, tracker) {
     const rel = path.relative(srcDir, file);
     if (rel === '.DS_Store' || rel.endsWith('.DS_Store')) continue;
     if (rel === 'facts.md') continue;
+    if (rel === 'offline.json') throw new Error(`src/${id}/offline.json 是保留的构建产物名`);
     if (rel === 'index.html') { indexFile = file; continue; }
     const dest = path.join(outDir, rel);
     await mkdir(path.dirname(dest), { recursive: true });
@@ -168,8 +178,9 @@ async function buildCourse(id, sdk, tracker) {
       total += min.length;
       fingerprints.set(rel.split(path.sep).join('/'), fingerprint(min));
     } else {
-      await cp(file, dest);
-      const size = (await stat(file)).size;
+      if (TEXT_ASSET.test(file)) await writeFile(dest, normalizeText(await readFile(file, 'utf8')));
+      else await cp(file, dest);
+      const size = (await stat(dest)).size;
       total += size;
       if (['.js', '.mjs', '.css'].includes(ext)) {
         fingerprints.set(rel.split(path.sep).join('/'), fingerprint(await readFile(dest)));
@@ -180,7 +191,7 @@ async function buildCourse(id, sdk, tracker) {
   total += await bustModuleImports(outDir, fingerprints);
 
   if (indexFile) {
-    const html = (await readFile(indexFile, 'utf8')).replace(SDK_SOURCE_TAG_RE, '');
+    const html = normalizeText(await readFile(indexFile, 'utf8')).replace(SDK_SOURCE_TAG_RE, '');
     if (html.includes('data-kidslab-sdk')) throw new Error(`src/${id}: SDK 源码标签未能内联替换`);
     const tags = [];
     if (!/<link[^>]+rel=["'][^"']*icon/i.test(html)) tags.push(FAVICON_TAG);
@@ -191,6 +202,16 @@ async function buildCourse(id, sdk, tracker) {
     await writeFile(path.join(outDir, 'index.html'), out);
     total += Buffer.byteLength(out);
   }
+  const assets = [];
+  for await (const file of walk(outDir)) {
+    const rel = path.relative(outDir, file).split(path.sep).join('/');
+    const asset = { path: rel, sha256: createHash('sha256').update(await readFile(file)).digest('hex') };
+    if (fingerprints.has(rel)) asset.fingerprint = fingerprints.get(rel);
+    assets.push(asset);
+  }
+  assets.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
+  const version = createHash('sha256').update(JSON.stringify(assets)).digest('hex');
+  await writeFile(path.join(outDir, 'offline.json'), JSON.stringify({ id, version, assets }, null, 2) + '\n');
   return { total, saved };
 }
 
@@ -282,31 +303,39 @@ async function main() {
     let meta;
     try {
       meta = JSON.parse(await readFile(path.join(SRC, id, 'course.json'), 'utf8'));
-    } catch {
-      console.log(`\x1b[33m∅ src/${id}: 无 course.json，跳过\x1b[0m`);
+    } catch (error) {
+      fail(`src/${id}/course.json: ${error.message}`);
       continue;
     }
+    try {
+      const entry = path.join(SRC, id, 'index.html');
+      if (!(await stat(entry)).isFile()) throw new Error('入口必须是文件');
+      await readFile(entry);
+    } catch (error) { fail(`src/${id}/index.html: ${error.message}`); }
     const errs = validate(id, meta, taxonomy);
-    if (seen.has(meta.id)) errs.push(`id "${meta.id}" 重复`);
+    if (seen.has(meta?.id)) errs.push(`id "${meta.id}" 重复`);
     if (errs.length) { errs.forEach((e) => fail(`src/${id}: ${e}`)); continue; }
     seen.add(meta.id);
     courses.push(meta);
   }
   await validateKnowledgeAssertions(courses);
-  if (process.exitCode) throw new Error('构建前校验未通过');
+  if (errors.length) throw new Error(`构建前校验未通过:\n${errors.join('\n')}`);
   if (courses.filter((c) => c.pinned).length > 1) throw new Error('pinned 课件只能有一个');
+  const curriculum = await loadCurriculum(ROOT, courses);
 
   courses.sort((a, b) =>
     (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) ||
     (a.order ?? 999) - (b.order ?? 999) ||
     a.id.localeCompare(b.id));
 
-  await rm(OUT, { recursive: true, force: true });
+  workspace = await createBuildWorkspace(ROOT);
+  STAGE = path.join(workspace, 'staged');
+  OUT = path.join(STAGE, 'courseware');
   await mkdir(OUT, { recursive: true });
 
   const [sdk, tracker] = await Promise.all([loadSdk(), loadTracker()]);
   ok(`platform SDK 已启用（${(sdk.length / 1024).toFixed(1)} KB 内联注入）`);
-  console.log(tracker
+  log(tracker
     ? `\x1b[32m✓\x1b[0m analytics 埋点已启用（${(tracker.length / 1024).toFixed(1)} KB 内联注入）`
     : '\x1b[33m∅ analytics 未配置 endpoint，跳过埋点注入\x1b[0m');
 
@@ -323,6 +352,7 @@ async function main() {
     tags: Object.fromEntries(usedTags.map((t) => [t, { en: taxonomy[t].en, kind: taxonomy[t].kind }])),
     courses: listedCourses.map((c) => ({
       ...c,
+      ...(curriculum[c.id] ? { curriculum: curriculum[c.id] } : {}),
       /* 词表别名展开为搜索关键词，让 "fraction"、"等值分数" 等仍可搜到 */
       keywords: [...new Set(c.tags.flatMap((t) => [taxonomy[t].en, ...(taxonomy[t].aliases || [])]))],
       path: `courseware/${c.id}/index.html`,
@@ -333,6 +363,10 @@ async function main() {
 
   const assetVersions = await bustAssets();
   await emitServiceWorker(assetVersions);
+  if (errors.length) throw new Error(errors.join('\n'));
+  await validateOutput();
+  await publish(ROOT, workspace);
+  return { courses: courses.length, listed: listedCourses.length };
 }
 
 /**
@@ -341,9 +375,8 @@ async function main() {
  * 内容指纹保证引用变则必然拉新文件。幂等：重复构建产出一致。
  */
 async function bustAssets() {
-  const page = path.join(ROOT, 'index.html');
-  let html = await readFile(page, 'utf8');
-  const before = html;
+  const page = path.join(STAGE, 'index.html');
+  let html = normalizeText(await readFile(path.join(ROOT, 'index.html'), 'utf8'));
   const versions = {};
   for (const asset of ['assets/css/app.css', 'assets/js/app.js', 'assets/js/starmap.js']) {
     const v = createHash('md5').update(await readFile(path.join(ROOT, asset))).digest('hex').slice(0, 8);
@@ -351,7 +384,7 @@ async function bustAssets() {
     html = html.replaceAll(new RegExp(`${asset.replaceAll('/', '\\/')}(\\?v=[0-9a-f]+)?`, 'g'), () => `${asset}?v=${v}`);
     if (!html.includes(`${asset}?v=${v}`)) fail(`index.html 未找到对 ${asset} 的引用，cache-busting 失效`);
   }
-  if (html !== before) await writeFile(page, html);
+  await writeFile(page, html);
   ok('index.html 资源引用已注入内容指纹（cache-busting）');
   return versions;
 }
@@ -394,7 +427,7 @@ async function emitServiceWorker(assetVersions) {
   /* SW 源码变更也必须换代，否则逻辑修复（如 206 缓存）不会激活新 worker */
   hash.update(template);
   for (const rel of [...shellFiles, ...Object.keys(assetVersions)]) {
-    const file = path.join(ROOT, rel);
+    const file = path.join(rel === 'index.html' ? STAGE : ROOT, rel);
     try {
       hash.update(await readFile(file));
     } catch {
@@ -413,8 +446,34 @@ async function emitServiceWorker(assetVersions) {
     charset: 'utf8',
     banner: `/* KidsLab SW ${version} — 构建产物，源码见 scripts/sw.js，勿手改 */`,
   });
-  await writeFile(path.join(ROOT, 'sw.js'), code + '\n');
+  await writeFile(path.join(STAGE, 'sw.js'), code + '\n');
   ok(`sw.js 已生成（版本 ${version}，预缓存 ${precache.length} 项）`);
 }
 
-main().catch((e) => { fail(e.message); process.exit(1); });
+async function validateOutput() {
+  for (const entry of await readdir(OUT, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const dir = path.join(OUT, entry.name);
+    const manifest = JSON.parse(await readFile(path.join(dir, 'offline.json'), 'utf8'));
+    for (const asset of manifest.assets) {
+      const bytes = await readFile(path.join(dir, asset.path));
+      if (createHash('sha256').update(bytes).digest('hex') !== asset.sha256) throw new Error('离线资源校验失败: ' + asset.path);
+    }
+  }
+}
+
+try { return await main(); }
+catch (error) {
+  if (error.preserveWorkspace) workspace = null;
+  throw error;
+} finally {
+  if (workspace) {
+    try { await removeBuildWorkspace(ROOT, workspace); }
+    catch (error) { log(`临时目录清理失败，已保留 ${workspace}: ${error.message}`); }
+  }
+}
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  buildProject().catch((error) => { console.error(error.message); process.exitCode = 1; });
+}

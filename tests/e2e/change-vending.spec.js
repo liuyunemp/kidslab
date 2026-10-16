@@ -1,91 +1,19 @@
-import { test, expect } from '@playwright/test';
-
-async function addCoins(page, name, count = 1) {
-  for (let index = 0; index < count; index += 1) {
-    await page.getByRole('button', { name: `添加 ${name}`, exact: true }).click();
-  }
-}
-
-async function expectFitsViewport(page) {
-  const layout = await page.evaluate(() => ({
-    width: document.documentElement.scrollWidth,
-    height: document.documentElement.scrollHeight,
-    viewportWidth: window.innerWidth,
-    viewportHeight: window.innerHeight,
-    hintBottom: document.querySelector('#hintBtn').getBoundingClientRect().bottom,
-    dispenseBottom: document.querySelector('#dispenseBtn').getBoundingClientRect().bottom,
-  }));
-  expect(layout.width).toBeLessThanOrEqual(layout.viewportWidth + 1);
-  expect(layout.height).toBeLessThanOrEqual(layout.viewportHeight + 1);
-  expect(layout.hintBottom).toBeLessThanOrEqual(layout.viewportHeight + 1);
-  expect(layout.dispenseBottom).toBeLessThanOrEqual(layout.viewportHeight + 1);
-}
-
-test.describe('change vending money and subtraction', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.addInitScript(() => {
-      localStorage.setItem('kidslab.lang', 'zh');
-      localStorage.setItem('kidslab.theme', 'light');
-      localStorage.removeItem('kidslab.change-vending');
-      localStorage.removeItem('kidslab.progress.change-vending');
-    });
-    await page.goto('/courseware/change-vending/');
-  });
-
-  test('recovers from wrong change, exchanges money, and serves all customers', async ({ page }) => {
-    await addCoins(page, '1 元');
-    await page.getByRole('button', { name: '叮！弹出找零', exact: true }).click();
-    await expect(page.locator('#feedback')).toContainText('托盘里是 1 元，应找 1 元 5 角');
-    await addCoins(page, '5 角');
-    await page.getByRole('button', { name: '叮！弹出找零', exact: true }).click();
-    await expect(page.getByRole('heading', { name: '果汁零钱准确弹出！' })).toBeVisible();
-
-    await page.getByRole('button', { name: '下一位顾客', exact: true }).click();
-    await expectFitsViewport(page);
-    await page.getByRole('button', { name: '把 1 元换成 10 个 1 角', exact: true }).click();
-    await expect(page.locator('#feedback')).toContainText('1 元变成了 10 个 1 角');
-    await addCoins(page, '1 元');
-    await addCoins(page, '1 角', 8);
-    await page.getByRole('button', { name: '叮！弹出找零', exact: true }).click();
-    await expect(page.getByRole('heading', { name: '换开纸币，饼干零钱也找对了！' })).toBeVisible();
-    await expect(page.locator('#coinRain')).toBeVisible();
-
-    await page.getByRole('button', { name: '下一位顾客', exact: true }).click();
-    await addCoins(page, '1 元', 2);
-    await addCoins(page, '5 角');
-    await addCoins(page, '1 角', 2);
-    await page.getByRole('button', { name: '叮！弹出找零', exact: true }).click();
-
-    await expect(page.getByRole('heading', { name: '饭团的零钱送到了！' })).toBeVisible();
-    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('kidslab.progress.change-vending') || 'null')?.status)).not.toBe('completed');
-    const remaining = [
-      [['1 角', 1], ['5 分', 1]],
-      [['1 角', 3], ['5 分', 1], ['1 分', 2]],
-      [['5 角', 1], ['1 分', 1]],
-      [['1 角', 2], ['5 分', 1], ['1 分', 3]],
-      [['1 角', 6], ['5 分', 1], ['1 分', 1]],
-    ];
-    for (const [index, coins] of remaining.entries()) {
-      await page.getByRole('button', { name: '下一位顾客', exact: true }).click();
-      await expectFitsViewport(page);
-      for (const [name, count] of coins) await addCoins(page, name, count);
-      await page.getByRole('button', { name: '叮！弹出找零', exact: true }).click();
-      await expect(page.locator('#modal')).toBeVisible();
-      if (index < 4) expect(await page.evaluate(() => JSON.parse(localStorage.getItem('kidslab.progress.change-vending') || 'null')?.status)).not.toBe('completed');
-    }
-    await expect(page.getByRole('heading', { name: '八位顾客都拿到了正确零钱！' })).toBeVisible();
-    await expect.poll(() => page.evaluate(() =>
-      JSON.parse(localStorage.getItem('kidslab.progress.change-vending') || 'null')?.status)).toBe('completed');
-  });
-
-  test('switches language and theme while keeping controls in the viewport', async ({ page }) => {
-    await expect(page.locator('#coinBank')).toBeVisible();
-    await expectFitsViewport(page);
-
-    await page.getByRole('button', { name: 'EN', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Ding! Dispense change', exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'Switch to dark theme', exact: true }).click();
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await expectFitsViewport(page);
-  });
+import {test,expect} from '@playwright/test';
+test('integer-fen wallet: failed purchase, exchange, return, exact payment and change',async({page})=>{
+ await page.addInitScript(()=>localStorage.setItem('kidslab.lang','zh'));
+ await page.goto('/courseware/change-vending/');await page.locator('#activitySelect').selectOption('2');
+ const click=(type,coin)=>page.locator(`[data-action="${type}"]${coin?`[data-coin="${coin}"]`:''}`).click();
+ await click('buy');await expect(page.locator('#progress')).toHaveText('0/8');
+ await click('coin',100);await click('return',100);await expect(page.locator('#stageReadout')).toContainText('托盘 0 元');
+ await click('exchange',100);await click('coin',100);for(let i=0;i<5;i++)await click('coin',10);
+ await click('buy');await expect(page.locator('#progress')).toHaveText('1/8');await expect(page.locator('#stageReadout')).toContainText('手里 5 角');
+ await page.locator('#resetBtn').click();await click('coin',100);await click('coin',100);await click('buy');await expect(page.locator('#stageReadout')).toContainText('手里 5 角');
+ await expect(page.locator('#progress')).toHaveText('1/8');
+});
+test('jiao discovery requires exchanging a jiao; free budget can recover after insufficient funds',async({page})=>{
+ await page.goto('/courseware/change-vending/');await page.locator('#activitySelect').selectOption('1');
+ await page.locator('[data-action=exchange][data-coin="10"]').click();await expect(page.locator('#progress')).toHaveText('1/8');
+ await page.locator('#freeBtn').click();await page.locator('#budget').fill('100');await page.locator('#price').fill('150');await page.locator('[data-action=budget]').click();
+ await page.locator('[data-action=coin][data-coin="100"]').click();await page.locator('[data-action=buy]').click();await expect(page.locator('#progress')).toHaveText('1/8');
+ await page.locator('#budget').fill('1000');await page.locator('[data-action=budget]').click();await page.locator('[data-action=coin][data-coin="1000"]').click();await page.locator('[data-action=buy]').click();await expect(page.locator('#progress')).toHaveText('1/8');
 });

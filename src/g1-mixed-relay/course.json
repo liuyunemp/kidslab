@@ -5,21 +5,24 @@
     "en": "Add-Subtract Relay"
   },
   "description": {
-    "zh": "沿数线先接住一批、再送走一批，完成两步接力。",
-    "en": "Take a group on, then let a group off to finish each two-step relay."
+    "zh": "先接一批，再送一批，看看每站变化。",
+    "en": "Pick up a group, then drop one off and compare the stops."
   },
   "category": "math",
-  "levels": [
-    "primary"
-  ],
   "grades": [
     "g1b"
   ],
+  "levels": [
+    "primary"
+  ],
   "tags": [
     "加减法",
-    "运算"
+    "数位",
+    "3D",
+    "实验"
   ],
   "icon": "🏃",
-  "order": 33,
+  "order": 38,
   "badge": "new"
 }
+

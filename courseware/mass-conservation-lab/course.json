@@ -10,7 +10,7 @@
   },
   "category": "chemistry",
   "levels": ["junior"],
-  "grades": ["g9"],
+  "grades": ["g9a"],
   "tags": ["质量", "质量守恒", "实验", "3D"],
   "icon": "⚗️",
   "order": 175,

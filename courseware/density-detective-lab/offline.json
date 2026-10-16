@@ -1,0 +1,58 @@
+{
+  "id": "density-detective-lab",
+  "version": "db9d54290c60f0241c3c30b784d5fc25f24b1582217a486749d130882215f2bd",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "7a3bd8bfb194e6bd9a1f4bf9de8f1e0dfc4439002a69f6b821d5264b283dcaee",
+      "fingerprint": "e7392781"
+    },
+    {
+      "path": "audio/bgm-mystery-thinking-01.ogg",
+      "sha256": "94d7edd72e7b412e006359fab62b5108074363ff12250fa8fb4a3f35a1f87a54"
+    },
+    {
+      "path": "course.json",
+      "sha256": "4ddb86fceccf96b6938430fb1cf3ee5fafff6e6f39e199d6bab5e43e0606ce4e"
+    },
+    {
+      "path": "density-model.js",
+      "sha256": "9a833755b5b31ab56ba535451ac80fabae8f498cd74f5d054de23fae50a58848",
+      "fingerprint": "bc4bfecc"
+    },
+    {
+      "path": "index.html",
+      "sha256": "5ce1153f4347c8ef90e0fd8a87ab2a04cc8e72aaf19ef94d61f203504ad28a5e"
+    },
+    {
+      "path": "main.js",
+      "sha256": "bc689b44eeafbfc11c0f00cbfb01f0abe0a6a6965d3cf35cd4ccb78e26e4f3ae",
+      "fingerprint": "58554ed7"
+    },
+    {
+      "path": "scene3d.js",
+      "sha256": "ba04f4529e26fdadaa31f812d4cfaf462a7b2d8350b8f6623bd4abe74ace8ee9",
+      "fingerprint": "9ba04a34"
+    },
+    {
+      "path": "style.css",
+      "sha256": "289317b56d3c004eef8012915f941a41934f0f15e3db6849a114ce79d3246e7f",
+      "fingerprint": "a8e710f4"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

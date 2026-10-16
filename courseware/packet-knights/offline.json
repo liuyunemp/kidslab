@@ -1,0 +1,24 @@
+{
+  "id": "packet-knights",
+  "version": "b1d9442e5de0d699509c4e39f16bdb541d3306591172e0584e5acb8759539073",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "1de4d7fe2f85b578d897fc701043cb4ea2d8c2e7e03e0a0e9dcb7164facd1177"
+    },
+    {
+      "path": "index.html",
+      "sha256": "d3f20340c60c833553fe48310ef923c6a1f4e6f81e0398225584a68ab53c11a6"
+    },
+    {
+      "path": "main.js",
+      "sha256": "e60f7f0cae0f61583d1ee78c5931cb98d3eabd1c8031f3f013c4e3957ef0995a",
+      "fingerprint": "a2f7d171"
+    },
+    {
+      "path": "style.css",
+      "sha256": "58d0cbd97a73443cb9d09ad7b73e52443f22ee5a7f8e40c7837fe25312ab5610",
+      "fingerprint": "32e9a55b"
+    }
+  ]
+}

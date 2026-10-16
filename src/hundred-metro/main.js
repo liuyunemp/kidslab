@@ -1,417 +1,163 @@
-(() => {
-  'use strict';
+import { course } from './content.js';
+import { initialState, current, reduce, restore, serialize, openActivity, text, valueOf, moneyValue, DENOMINATIONS, EXCHANGES, sentenceFor, speechText } from './exploration-model.js';
+import { createAudio } from './audio.js';
+import { createScene } from './scene.js';
 
-  const I18N = {
-    zh: {
-      doc: '🚇 百数地铁 · KidsLab',
-      back: '返回平台',
-      title: '百数地铁',
-      passenger: '乘客任务',
-      mission: '路线',
-      moves: '已走',
-      best: '最短',
-      tip0: '先坐竖着的 ±10 快车，再坐横着的 ±1 慢车。',
-      express: '快车 ±10',
-      local: '慢车 ±1',
-      now: '现在',
-      destination: '终点',
-      drive: '开哪班车？',
-      undo: '退一站',
-      hint: '提示',
-      reset: '重新出发',
-      routeLog: '列车记录',
-      secret: '你发现了数位秘密！',
-      next: '下一位乘客 →',
-      again: '从第一位乘客再玩',
-      place: (n) => `${Math.floor(n / 10)} 个十 · ${n % 10} 个一`,
-      missionText: (target, place) => `去 ${target} 站${place}！`,
-      edge: '轨道到头啦！换个方向，列车马上就能继续。',
-      moved: (delta, current) => `${delta > 0 ? '+' : '−'}${Math.abs(delta)} 列车到达 ${current} 站。`,
-      undoTip: (current) => `倒回 ${current} 站，路线可以重新选。`,
-      resetTip: (start) => `回到 ${start} 站，重新规划最短路线！`,
-      verticalHint: (delta) => `先看十位：试试 ${delta > 0 ? '+' : '−'}10 快车。`,
-      horizontalHint: (delta) => `十位到位啦！再用 ${delta > 0 ? '+' : '−'}1 慢车。`,
-      arrived: (target) => `叮咚！${target} 站到了。`,
-      winPerfect: (steps) => `正好 ${steps} 站，满星到达！`,
-      winGood: (steps) => `${steps} 站到达，路线很聪明！`,
-      winExplore: (steps) => `${steps} 站到达，下次试试少绕一点！`,
-      winPerfectText: '竖着跳十位，横着走个位。整张百数表都变成了地铁图！',
-      winText: '成功送到终点！点击“重新出发”，还能挑战更短的路线。',
-      stationLabel: (n) => `${n} 站`,
-    },
-    en: {
-      doc: '🚇 Hundred-Chart Metro · KidsLab',
-      back: 'Back',
-      title: 'Hundred Metro',
-      passenger: 'Passenger mission',
-      mission: 'Trip',
-      moves: 'Moves',
-      best: 'Best',
-      tip0: 'Ride the vertical ±10 express, then the horizontal ±1 local.',
-      express: 'Express ±10',
-      local: 'Local ±1',
-      now: 'Now',
-      destination: 'Goal',
-      drive: 'Which train?',
-      undo: 'Back 1 stop',
-      hint: 'Hint',
-      reset: 'Restart',
-      routeLog: 'Train log',
-      secret: 'You found the place-value secret!',
-      next: 'Next passenger →',
-      again: 'Play from passenger one',
-      place: (n) => `${Math.floor(n / 10)} tens · ${n % 10} ones`,
-      missionText: (target, place) => `Take me to ${target} ${place}!`,
-      edge: 'End of the track! Pick another direction and keep rolling.',
-      moved: (delta, current) => `${delta > 0 ? '+' : '−'}${Math.abs(delta)} train reached stop ${current}.`,
-      undoTip: (current) => `Back at ${current}. You can choose a new route.`,
-      resetTip: (start) => `Back to ${start}. Plan the shortest route!`,
-      verticalHint: (delta) => `Look at the tens first: try the ${delta > 0 ? '+' : '−'}10 express.`,
-      horizontalHint: (delta) => `Tens are ready! Try the ${delta > 0 ? '+' : '−'}1 local.`,
-      arrived: (target) => `Ding ding! Welcome to stop ${target}.`,
-      winPerfect: (steps) => `Exactly ${steps} stops — three-star trip!`,
-      winGood: (steps) => `${steps} stops — smart route!`,
-      winExplore: (steps) => `${steps} stops. Can you make it even shorter?`,
-      winPerfectText: 'Jump tens vertically and ones horizontally. The whole hundred chart is now a metro map!',
-      winText: 'Passenger delivered! Restart this trip to find an even shorter route.',
-      stationLabel: (n) => `Stop ${n}`,
-    },
-  };
-
-  const MISSIONS = [
-    { start: 23, target: 67, rider: '🧒', zh: '看恐龙', en: 'to see dinosaurs' },
-    { start: 84, target: 31, rider: '👧', zh: '参加画展', en: 'for the art show' },
-    { start: 16, target: 52, rider: '🧑', zh: '买草莓', en: 'to buy strawberries' },
-    { start: 45, target: 79, rider: '👦', zh: '找机器人', en: 'to find a robot' },
-    { start: 92, target: 38, rider: '👩', zh: '去天文台', en: 'for the observatory' },
-    { start: 11, target: 99, rider: '🧓', zh: '参加百站庆典', en: 'for the 100-stop party' },
-    { start: 58, target: 14, rider: '👩‍🚀', zh: '去看火箭', en: 'to see a rocket' },
-    { start: 37, target: 82, rider: '🧑‍🎨', zh: '画彩虹', en: 'to paint a rainbow' },
-  ];
-
-  const LS = { lang: 'kidslab.lang', theme: 'kidslab.theme', progress: 'kidslab.hundredmetro' };
-  try {
-    if (localStorage.getItem('kidslab.hundredmetro.eight-route-version') !== '2') {
-      localStorage.removeItem('kidslab.progress.hundred-metro');
-      localStorage.setItem('kidslab.hundredmetro.eight-route-version', '2');
+const $=id=>document.getElementById(id), cool=window.cool;
+const key=`kidslab.exploration-v2.${course.id}`;
+let saved=null;try{saved=JSON.parse(localStorage.getItem(key)||'null');}catch{}
+let state=restore(course,saved),lang=cool.preferences.lang,lab=null,feedbackTimer=0,strokePoints=null,strokePointer=null,started=false;
+const entryActivity=new URLSearchParams(location.search).get('activity');
+const entryState=openActivity(course,state,entryActivity);
+if(entryState!==state){state=entryState;try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}}
+const audio=createAudio(`kidslab.exploration-v2.${course.id}.audio`);
+const I18N={zh:{tools:'探索工具',choose:'选择探索关卡',free:'自由玩',undo:'撤销',reset:'重来',discover:'小发现',source:'查看出版社教材',back:'返回平台',no3d:'暂时不能打开 3D 舞台',no3dHint:'请换用支持 WebGL 的浏览器，或打开浏览器的图形加速后重试。',music:'背景音乐',effects:'操作音效',speech:'引导朗读',on:'开',off:'关',theme:'切换主题',language:'切换语言',mute:'关闭全部声音',unmute:'恢复声音',settings:'声音设置',scene:'可拖动的 3D 探索舞台',done:'发现已收藏',allDone:'八个发现都收藏好了！还可以继续探索。',practice:'自由玩：发现不计入关卡',same:'这个状态已经看过了，试着换一种摆法。',invalid:'试试台上的工具。',range:'到边界啦，换一个方向试试。',nothing:'还没有可以撤销的操作。',trace:'从亮点出发，沿着这一笔慢慢写。',place:'先把物件放到台上。',index:'先翻首字母，再找音节。',pieces:'先放好材料，再播放。',play:'先播放一次，再看看课文线索。',drop:'放到桌面上试试，物件会回到原位。',money:'看看手里的钱和托盘，还能换开或取回。',align:'先让相同的数位对齐。',unbundle:'散开的不够拿，试试拆开一个十。',bundle:'捆成一个十',split:'拆开一个十',operate:'合在一起',take:'送走这一批',depart:'再送走一批',alignButton:'对齐数位',playButton:'播放场景',replay:'回放笔顺',dismantle:'拆开看看',placeButton:'放到台上',act:'让它动起来',evidence:'看看课文线索',swap:'交换前后',rotate:'转一转',shift:'移一移',buy:'试着买下',exchangeYuan:'1元换10角',exchangeJiao:'1角换10分',exchangeTen:'10元换10张1元',wallet:'手里',tray:'托盘',price:'价格',spent:'已买下',left:'左边',right:'右边',ones:'个一',tens:'个十',current:'现在',whole:'合起来',difference:'相差',layout:'对齐比较',transfer:'移到另一组',poemAction:'移动景物',writingHint:'只描这一笔，随时可以重写。',original:'课文的先后线索',message:'消息已送到',waiting:'朋友还在等更清楚的信息',who:'主角',where:'地点',verb:'动作',setup:'摆好新的数量',freeA:'第一组',freeB:'第二组',unit:'单元',page:'页',observed:'课文关联',lookup:'本课小字典',letters:'首字母',syllables:'音节',entries:'汉字',soundRead:'朗读操作提示',wordMove:'把物件移到台上',restored:'本版探索',change:'找零后手里',numberLine:'数线',part:'两部分',col:'十位／个位',empty:'尚未操作',selectHint:'所有关卡都可以直接选择。'},
+en:{tools:'Exploration tools',choose:'Choose an activity',free:'Free play',undo:'Undo',reset:'Reset',discover:'Discoveries',source:'Publisher textbook',back:'Back to KidsLab',no3d:'The 3D stage is unavailable',no3dHint:'Try a WebGL-capable browser, or enable graphics acceleration and reload.',music:'Background music',effects:'Sound effects',speech:'Read guidance',on:'On',off:'Off',theme:'Switch theme',language:'Switch language',mute:'Mute all sounds',unmute:'Restore sound',settings:'Sound settings',scene:'Interactive 3D exploration stage',done:'Discovery collected',allDone:'All eight discoveries collected! Keep exploring.',practice:'Free play: discoveries are not counted',same:'You have seen this state. Try another arrangement.',invalid:'Try one of the tools.',range:'At the boundary. Try another direction.',nothing:'There is nothing to undo yet.',trace:'Start at the dot and follow this stroke slowly.',place:'Put the object on the stage first.',index:'Open the initial, then a syllable.',pieces:'Arrange the pieces before playing.',play:'Play once, then look at the source clues.',drop:'Place it on the table; the piece will return.',money:'Look at your wallet and tray. Exchange or return a coin.',align:'Align equal place values first.',unbundle:'Not enough loose blocks. Unbundle a ten.',bundle:'Bundle ten',split:'Unbundle a ten',operate:'Join the groups',take:'Take the group away',depart:'Drop off the next group',alignButton:'Align place values',playButton:'Play the scene',replay:'Replay strokes',dismantle:'Take apart',placeButton:'Place on stage',act:'Set it in motion',evidence:'Read source clues',swap:'Swap neighbors',rotate:'Rotate',shift:'Move',buy:'Try a purchase',exchangeYuan:'1 yuan → 10 jiao',exchangeJiao:'1 jiao → 10 fen',exchangeTen:'10 yuan → ten 1 yuan',wallet:'Wallet',tray:'Tray',price:'Price',spent:'Purchased',left:'Left bank',right:'Right bank',ones:'ones',tens:'tens',current:'Now',whole:'Together',difference:'Difference',layout:'Pair and compare',transfer:'Move to other group',poemAction:'Move the scenery',writingHint:'Follow one stroke at a time. Rewrite whenever you like.',original:'Sequence in the source story',message:'The message has arrived',waiting:'Your friend needs clearer information',who:'Who',where:'Where',verb:'Action',setup:'Set up new quantities',freeA:'First group',freeB:'Second group',unit:'Unit',page:'pages',observed:'Textbook connection',lookup:'Our mini dictionary',letters:'Initial',syllables:'Syllable',entries:'Entry',soundRead:'Read the guidance',wordMove:'Move the object onto the stage',restored:'This edition',change:'Wallet after change',numberLine:'Number line',part:'Two parts',col:'Tens / ones',empty:'Ready to explore',selectHint:'Every activity can be chosen immediately.'}};
+const t=k=>I18N[lang][k]??k;
+const esc=value=>String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+const room=()=>state.rooms[state.active],activity=()=>current(course,state);
+const button=(label,action,attrs='')=>`<button type="button" data-action="${action}" ${attrs}>${esc(label)}</button>`;
+function money(n){const yuan=Math.floor(n/100),jiao=Math.floor(n%100/10),fen=n%10;const parts=[];if(yuan)parts.push(`${yuan} ${lang==='zh'?'元':'yuan'}`);if(jiao)parts.push(`${jiao} ${lang==='zh'?'角':'jiao'}`);if(fen)parts.push(`${fen} ${lang==='zh'?'分':'fen'}`);return parts.join(' ')||`0 ${lang==='zh'?'元':'yuan'}`;}
+function unlock(){audio.unlock();if(!started){started=true;cool.stage(`explore:${activity().id}`);}}
+function notice(message,success=false){clearTimeout(feedbackTimer);$('feedback').hidden=false;$('feedback').textContent=message;$('feedback').classList.toggle('success',success);feedbackTimer=setTimeout(()=>$('feedback').hidden=true,success?2600:2200);}
+function act(action){
+  unlock();const result=reduce(course,state,action);
+  if(!result.ok){audio.tone('error');notice(t(result.reason));if(action.type==='position')lab?.update(activity(),room(),lang);return false;}
+  state=result.state;try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}
+  if(action.type==='select'&&new URLSearchParams(location.search).has('activity')){
+    const url=new URL(location.href);url.searchParams.set('activity',activity().id);
+    try{history.replaceState(null,'',url);}catch{}
+  }
+  if(!['select','free','undo','reset'].includes(action.type))cool.track('explore-action',{action:action.type,activity:activity().id});
+  if(result.discovered){audio.tone(result.complete?'complete':'success');notice(t(result.complete?'allDone':'done'),true);cool.track('collect-discovery',{activity:activity().id});if(result.complete)cool.complete();}
+  else audio.tone('action');
+  if(action.type==='free')notice(state.free?t('practice'):t('selectHint'));
+  paint();
+  if(action.type==='play'&&course.kind==='story')playStory();
+  return true;
+}
+let storyTimers=[];
+function playStory(){
+  const cards=[...document.querySelectorAll('.story-card')];
+  cards.forEach((card,i)=>storyTimers.push(setTimeout(()=>{cards.forEach(c=>c.classList.remove('playing'));if(card.isConnected){card.classList.add('playing');lab?.storyFrame(i);}},i*850)));
+}
+function soundChrome(){
+  $('muteBtn').textContent=audio.muted?'🔇':'🔊';$('muteBtn').setAttribute('aria-label',t(audio.muted?'unmute':'mute'));$('muteBtn').setAttribute('aria-pressed',String(audio.muted));
+  for(const [id,label,on] of [['musicBtn','music',audio.music],['soundBtn','effects',audio.effects],['speechBtn','speech',cool.speech.enabled]]){$(id).textContent=`${t(label)} · ${t(on?'on':'off')}`;$(id).setAttribute('aria-pressed',String(on));$(id).setAttribute('aria-label',`${t(label)}: ${t(on?'on':'off')}`);}
+  $('settingsBtn').setAttribute('aria-label',t('settings'));$('themeBtn').textContent=cool.preferences.theme==='dark'?'☀️':'🌙';$('themeBtn').setAttribute('aria-label',t('theme'));$('langBtn').textContent=lang==='zh'?'EN':'中';$('langBtn').setAttribute('aria-label',t('language'));$('back').setAttribute('aria-label',t('back'));
+}
+function paint(){
+  storyTimers.forEach(clearTimeout);storyTimers=[];
+  const a=activity(),r=room(),kind=course.kind;document.body.dataset.kind=kind;
+  document.title=`${text(course.title,lang)} · KidsLab`;$('title').textContent=`${course.icon} ${text(course.title,lang)}`;
+  $('progress').textContent=`${state.done.length}/8`;$('progress').setAttribute('aria-label',`${t('restored')} ${state.done.length}/8`);
+  $('unitBadge').textContent=`${t('unit')} ${a.source.unit} · ${state.active+1}/8`;
+  $('coach').textContent=`♪ ${text(a.invite,lang)}`;$('coach').setAttribute('aria-label',`${t('soundRead')}: ${text(a.invite,lang)}`);
+  $('scene').setAttribute('aria-label',t('scene'));
+  $('activitySelect').innerHTML=course.activities.map((v,i)=>`<option value="${i}" ${i===state.active?'selected':''}>${state.done.includes(v.id)?'✓ ':''}${i+1}. ${esc(text(v.title,lang))}</option>`).join('');
+  $('activitySelect').setAttribute('aria-label',t('choose'));$('freeBtn').setAttribute('aria-pressed',String(state.free));$('undoBtn').disabled=state.histories[state.active].length===0;
+  $('lessonText').textContent=text(a.note,lang)+(kind==='dictionary'?'\n'+Array.from({length:26},(_,i)=>String.fromCharCode(65+i)+' '+String.fromCharCode(97+i)).join(' · '):'');$('bookSource').textContent=`${course.book.title} · ${course.book.edition} · ${a.source.lesson} · ${a.source.pages} ${t('page')}`;$('bookLink').href=course.book.url;
+  let controls='',display='';
+  if(kind==='character'){
+    controls=a.variants.map((v,i)=>button(`${lang==='zh'?'装上':'Add'} ${v.part}`,'assemble',`data-index="${i}" aria-pressed="${r.assembled&&r.variant===i}"`)).join('')+button(t('dismantle'),'dismantle','class="wide"');
+    const v=a.variants[r.variant];display=`<div class="caption"><div class="hanzi">${r.assembled?esc(v.char):`${esc(a.base)} + ${esc(v.part)}`}</div>${r.assembled?`<div class="pinyin">${esc(v.pinyin)}</div><p>${esc(v.word)}</p>`:''}</div>`;
+  }else if(kind==='writing'){
+    controls=button(t('replay'),'replay','class="wide"');
+    const points=p=>p.map(v=>v.join(',')).join(' ');
+    display=`<div class="writing-board" id="writingBoard"><svg id="trace" viewBox="0 0 100 100" role="img" aria-label="${esc(a.char)} ${r.stroke+1}/${a.strokes.length}"><path class="grid-line" d="M50 0V100 M0 50H100 M0 0L100 100 M100 0L0 100"/>${a.strokes.map((p,i)=>`<polyline class="stroke ${i<r.stroke?'done':i===r.stroke?'next':''}" points="${points(p)}" style="animation-delay:${i*.18}s"/>`).join('')}${r.stroke<a.strokes.length?`<circle class="start-dot" cx="${a.strokes[r.stroke][0][0]}" cy="${a.strokes[r.stroke][0][1]}" r="2.7"/>`:''}${r.ink.map(p=>`<polyline class="ink" points="${points(p)}"/>`).join('')}<polyline id="liveInk" class="ink" points=""/></svg></div>`;
+  }else if(kind==='word'){
+    controls=a.variants.map((v,i)=>button(lang==='zh'?v.word:`${v.word} · ${v.en}`,'variant',`data-index="${i}" aria-pressed="${r.variant===i}"`)).join('')+button(t('placeButton'),'place')+button(t('act'),'act');
+    display=r.placed?`<div class="caption"><strong>${esc(a.variants[r.variant].word)}</strong></div>`:'';
+  }else if(kind==='dictionary'){
+    const initials=[...new Set(a.entries.map(e=>e.initial))].sort();
+    controls=`<div class="wide"><span class="control-label">${t('letters')}</span><div class="button-row">${initials.map(v=>button(v,'initial',`data-value="${v}" aria-pressed="${r.initial===v}"`)).join('')}</div></div>`;
+    if(r.initial)controls+=`<div class="wide"><span class="control-label">${t('syllables')}</span><div class="button-row">${[...new Set(a.entries.filter(e=>e.initial===r.initial).map(e=>e.syllable))].sort().map(v=>button(v,'syllable',`data-value="${v}" aria-pressed="${r.syllable===v}"`)).join('')}</div></div>`;
+    if(r.syllable)controls+=`<div class="wide button-row">${a.entries.filter(e=>e.initial===r.initial&&e.syllable===r.syllable).map(e=>button(`${e.char} · ${e.page}`,'entry',`data-value="${e.char}"`)).join('')}</div>`;
+    const e=a.entries.find(e=>e.char===r.entry);display=`<div class="caption"><div class="result-note">${t('lookup')} · ${e?`${e.page} ${t('page')}`:a.target}</div>${e?`<div class="hanzi">${e.char}</div><div class="pinyin">${e.pinyin}</div><p>${e.word}</p>`:`<strong>${r.initial||'ABC'} ${r.syllable}</strong>`}</div>`;
+  }else if(kind==='sentence'){
+    controls=[a.who,a.where,a.actions].map((values,slot)=>`<div class="wide"><span class="control-label">${t(['who','where','verb'][slot])}</span><div class="button-row">${values.map((v,index)=>button(v,'slot',`data-slot="${slot}" data-index="${index}" aria-pressed="${r.slots[slot]===index}"`)).join('')}</div></div>`).join('')+`<div class="button-row">${['。','！','？'].map(v=>button(v,'punctuation',`data-value="${v}"`)).join('')}</div>`+button(t('playButton'),'play');
+    const sentence=sentenceFor(a,r);if(sentence)display=`<div class="caption"><strong>${esc(sentence)}</strong></div>`;
+  }else if(kind==='poetry'){
+    controls=button(a.title.zh==='再看月光'?(lang==='zh'?'转动月光':'Turn the moonlight'):t('poemAction'),'move','class="wide"');
+    display=r.line?`<div class="caption poem"><p>${esc(a.lines[r.line-1])}</p></div>`:'';
+    if(r.line)controls+=`<details class="wide"><summary>${lang==='zh'?'已发现的诗句':'Revealed lines'}</summary><p>${a.author} · ${a.lines.slice(0,r.line).map(esc).join('')}</p></details>`;
+  }else if(kind==='story'){
+    controls=button(`${t('swap')} 1 ↔ 2`,'swap','data-from="0" data-to="1"')+button(`${t('swap')} 2 ↔ 3`,'swap','data-from="1" data-to="2"')+button(t('playButton'),'play')+button(t('evidence'),'evidence');
+    display=`<div class="story-strip">${r.order.map((n,i)=>`<div class="story-card"><small>${i+1}</small><div>${esc(a.events[n])}</div></div>`).join('')}</div>`;
+    if(r.evidence)display+=`<div class="caption result-note">${t('original')}：${a.events.map(esc).join(' → ')}</div>`;
+  }else if(kind==='speaking'){
+    controls=a.parts.map((part,i)=>button(part,'include',`class="wide" data-index="${i}" aria-pressed="${r.included.includes(i)}"`)).join('')+button(t('playButton'),'play','class="wide"');
+    if(r.included.length)display=`<div class="caption">${r.included.map(i=>`<p>${esc(a.parts[i])}</p>`).join('')}${r.played?`<p class="result-note">${lang==='zh'?esc(a.responses[r.included.at(-1)]):t(r.included.length===3?'message':'waiting')}</p>`:''}</div>`;
+  }else if(kind==='shape'){
+    const names={circle:['圆','Circle'],triangle:['三角形','Triangle'],square:['正方形','Square'],rectangle:['长方形','Rectangle'],parallelogram:['平行四边形','Parallelogram']};
+    controls=a.pieces.map((v,i)=>`<div class="wide"><span class="control-label">${i+1}. ${names[v][lang==='zh'?0:1]}</span><div class="button-row">${button(t('rotate'),'rotate',`data-index="${i}"`)}${button(t('shift'),'shift',`data-index="${i}"`)}</div></div>`).join('');
+  }else if(kind==='money'){
+    controls=`<div class="wide button-row">${DENOMINATIONS.filter(v=>EXCHANGES[v]&&r.wallet[v]).map(v=>button(`${money(v)} → ${EXCHANGES[v][1]} × ${money(EXCHANGES[v][0])}`,'exchange',`data-coin="${v}"`)).join('')}</div>`;
+    controls+=DENOMINATIONS.filter(v=>r.wallet[v]||r.tray[v]).map(v=>`<div class="wide button-row">${button(`+ ${money(v)} (${r.wallet[v]})`,'coin',`data-coin="${v}" aria-label="${lang==='zh'?'放入':'Add'} ${money(v)}"`)}${button(`− ${money(v)} (${r.tray[v]})`,'return',`data-coin="${v}" aria-label="${lang==='zh'?'取回':'Return'} ${money(v)}"`)}</div>`).join('');
+    if(state.free)controls+=`<label>${lang==='zh'?'预算（分）':'Budget (fen)'}<input id="budget" type="number" min="1" max="10000" value="${r.budget}"></label><label>${lang==='zh'?'价格（分）':'Price (fen)'}<input id="price" type="number" min="1" max="10000" value="${r.price}"></label>${button(t('setup'),'budget','class="wide"')}`;
+    if(!a.exchangeOnly||state.free)controls+=button(t('buy'),'buy','class="wide"');
+    display=`<div class="caption"><div class="representation"><span>${t('wallet')} ${money(moneyValue(r.wallet))}</span><span>${t('tray')} ${money(moneyValue(r.tray))}</span></div><strong>${t(r.spent?'spent':'price')} ${money(r.price)}</strong></div>`;
+  }else{
+    const steps=side=>`<div class="wide"><span class="control-label">${t(side==='a'?'left':'right')}</span><div class="button-row">${[-10,-1,1,10].map(delta=>button(`${delta>0?'+':''}${delta}`,'step',`data-side="${side}" data-delta="${delta}"`)).join('')}</div></div>`;
+    if(kind==='compare'){
+      controls=steps('a')+steps('b');display=`<div class="caption math-equation">${r.a} ${r.a>r.b?'&gt;':r.a<r.b?'&lt;':'='} ${r.b}</div>`;
+    }else if(kind==='quantity'){
+      controls=a.relation==='part'?button('← 1','transfer','data-delta="-1"')+button('1 →','transfer','data-delta="1"'):a.relation==='compare'?button('− 1','step','data-side="a" data-delta="-1"')+button('+ 1','step','data-side="a" data-delta="1"'):button(t(a.relation==='increase'?'operate':'take'),'operate','class="wide"');
+      controls+=button(lang==='zh'?'展开关系图':'Show relation','layout','class="wide"');
+      const sub=a.relation==='decrease',compare=a.relation==='compare',result=sub?r.a-r.b:r.a+r.b;
+      display=`<div class="caption"><div class="representation"><span>${r.a}</span><span>${r.b}</span></div>${r.layout?`<div class="relation-bars"><span style="flex:${compare?Math.min(r.a,r.b):sub?result:r.a}">${compare?Math.min(r.a,r.b):sub?result:r.a}</span><span style="flex:${compare?Math.abs(r.a-r.b):r.b}">${compare?Math.abs(r.a-r.b):r.b}</span></div><div class="math-equation">${compare?`${Math.max(r.a,r.b)} − ${Math.min(r.a,r.b)} = ${Math.abs(r.a-r.b)}`:`${r.a} ${sub?'−':'+'} ${r.b} = ${result}`}</div>`:''}</div>`;
+    }else{
+      if(kind==='count')controls=steps('a');
+      if(kind==='column')controls+=button(t('alignButton'),'align','class="wide"');
+      controls+=button(t('split'),'unbundle')+button(t('bundle'),'bundle');
+      if(kind!=='count')controls+=button(t(kind==='subtract'||a.op==='-'?'take':'operate'),'operate','class="wide"');
+      if(kind==='subtract')controls+=button(lang==='zh'?'移走一个':'Remove one','takeOne','class="wide"');
+      if(kind==='relay')controls+=button(t('depart'),'depart','class="wide"');
+      display=`<div class="caption"><div class="math-equation">${t('current')} ${valueOf(r)}</div><div class="representation"><span>${r.tens} ${t('tens')}</span><span>${r.ones} ${t('ones')}</span></div>`;
+      if(kind==='count')display+=`<details class="hundred-chart"><summary>${lang==='zh'?'打开百数表':'Open hundred chart'}</summary><div class="chart-grid">${Array.from({length:100},(_,i)=>`<span class="${i+1===valueOf(r)?'selected':''}">${i+1}</span>`).join('')}</div></details>`;
+      if(kind==='column'){
+        const bTen=Math.floor(r.b/10)||'',aTen=Math.floor(r.a/10)||'';
+        const digits=n=>[n>=100?1:'',n>=10?Math.floor(n/10)%10:'',n%10];
+        display+=`<div class="column" id="columnView" data-aligned="${r.aligned}"><span></span>${digits(r.a).map(n=>`<span>${n}</span>`).join('')}<span>${a.op}</span>${(r.aligned?digits(r.b):['',r.b,'']).map(n=>`<span>${n}</span>`).join('')}<i class="rule"></i><span></span>${digits(valueOf(r)).map(n=>`<span>${r.phase&&r.ones<10?n:''}</span>`).join('')}</div>${r.exchanged?`<div class="result-note">${r.tens} × 10 + ${r.ones}</div>`:''}`;
+      }else if(kind!=='count'&&r.phase)display+=`<div class="result-note">${r.a} ${kind==='subtract'?'−':'+'} ${r.b}${kind==='relay'&&r.phase===2?` − ${r.c}`:''} = ${valueOf(r)}</div>`;
+      display+='</div>';
+      if(kind==='subtract'&&r.a<=20)display+=`<div class="ten-frames" aria-label="${lang==='zh'?'十格盘':'Ten frames'}">${Array.from({length:20},(_,i)=>`<i class="${i<valueOf(r)?'filled':''}"></i>`).join('')}</div>`;
     }
-  } catch { /* Storage is optional. */ }
-  const store = {
-    get: (key) => { try { return localStorage.getItem(key); } catch { return null; } },
-    set: (key, value) => { try { localStorage.setItem(key, value); } catch {} },
-  };
-
-  let lang = store.get(LS.lang) || (navigator.language?.startsWith('zh') ? 'zh' : 'en');
-  if (!I18N[lang]) lang = 'zh';
-  let theme = store.get(LS.theme) || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  if (!['light', 'dark'].includes(theme)) theme = 'light';
-
-  const saved = (() => {
-    try { return JSON.parse(store.get(LS.progress)) || {}; } catch { return {}; }
-  })();
-  const state = {
-    level: Number.isInteger(saved.nextLevel) && saved.nextLevel >= 0 && saved.nextLevel < MISSIONS.length ? saved.nextLevel : 0,
-    path: [],
-    deltas: [],
-    stars: saved.stars || {},
-    muted: false,
-    complete: false,
-    idleTimer: 0,
-  };
-
-  const $ = (selector) => document.querySelector(selector);
-  const $$ = (selector) => [...document.querySelectorAll(selector)];
-  const t = (key) => I18N[lang][key] ?? I18N.zh[key] ?? key;
-  const mission = () => MISSIONS[state.level];
-  const row = (n) => Math.floor((n - 1) / 10);
-  const col = (n) => (n - 1) % 10;
-  const minSteps = (a, b) => Math.abs(row(a) - row(b)) + Math.abs(col(a) - col(b));
-  const current = () => state.path[state.path.length - 1];
-
-  const els = {
-    grid: $('#stationGrid'),
-    tip: $('#tip'),
-    rider: $('#rider'),
-    missionText: $('#missionText'),
-    start: $('#startText'),
-    target: $('#targetText'),
-    sideTarget: $('#sideTargetText'),
-    level: $('#levelText'),
-    moves: $('#movesText'),
-    best: $('#bestText'),
-    stars: $('#stars'),
-    current: $('#currentText'),
-    place: $('#placeText'),
-    targetPlace: $('#targetPlaceText'),
-    routeLog: $('#routeLog'),
-    win: $('#win'),
-    winTitle: $('#winTitle'),
-    winText: $('#winText'),
-    secretEquation: $('#secretEquation'),
-    next: $('#nextBtn'),
-    undo: $('#undoBtn'),
-    sound: $('#soundBtn'),
-    theme: $('#themeBtn'),
-    lang: $('#langBtn'),
-  };
-
-  for (let n = 1; n <= 100; n += 1) {
-    const station = document.createElement('div');
-    station.className = 'station';
-    station.dataset.station = String(n);
-    station.setAttribute('role', 'gridcell');
-    station.textContent = String(n);
-    els.grid.append(station);
+    if(state.free)controls+=`<label>${t('freeA')}<input id="freeA" type="number" min="0" max="100" value="${r.a}"></label><label>${t('freeB')}<input id="freeB" type="number" min="0" max="100" value="${r.b}"></label>${button(t('setup'),'setup','class="wide"')}`;
   }
-
-  let audio = null;
-  function tone(frequency = 440, duration = 0.08, delay = 0) {
-    if (state.muted) return;
-    try {
-      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
-      if (audio.state === 'suspended') audio.resume();
-      const oscillator = audio.createOscillator();
-      const gain = audio.createGain();
-      const start = audio.currentTime + delay;
-      oscillator.type = 'triangle';
-      oscillator.frequency.setValueAtTime(frequency, start);
-      gain.gain.setValueAtTime(0.1, start);
-      gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
-      oscillator.connect(gain).connect(audio.destination);
-      oscillator.start(start);
-      oscillator.stop(start + duration + 0.02);
-    } catch {}
-  }
-
-  function playArrival() {
-    [523, 659, 784, 1047].forEach((frequency, index) => tone(frequency, 0.14, index * 0.08));
-  }
-
-  function setTip(message) {
-    els.tip.textContent = message;
-    resetIdleHint();
-  }
-
-  function routeStars() {
-    return state.stars[state.level] || 0;
-  }
-
-  function validMove(from, delta) {
-    if (delta === -10) return from > 10;
-    if (delta === 10) return from <= 90;
-    if (delta === -1) return col(from) > 0;
-    if (delta === 1) return col(from) < 9;
-    return false;
-  }
-
-  function missionLabel(item) {
-    return t('missionText')(item.target, lang === 'zh' ? item.zh : item.en);
-  }
-
-  function equation(item) {
-    const vertical = row(item.target) - row(item.start);
-    const horizontal = col(item.target) - col(item.start);
-    const parts = [String(item.start)];
-    if (vertical) parts.push(`${vertical > 0 ? '+' : '−'} ${Math.abs(vertical)}×10`);
-    if (horizontal) parts.push(`${horizontal > 0 ? '+' : '−'} ${Math.abs(horizontal)}×1`);
-    return `${parts.join(' ')} = ${item.target}`;
-  }
-
-  function render() {
-    const item = mission();
-    const here = current();
-    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-    document.title = t('doc');
-    document.querySelectorAll('[data-t]').forEach((node) => {
-      const value = I18N[lang][node.dataset.t];
-      if (typeof value === 'string') node.textContent = value;
-    });
-    els.lang.textContent = lang === 'zh' ? 'EN' : '中';
-    els.theme.textContent = theme === 'light' ? '🌙' : '☀️';
-    els.sound.textContent = state.muted ? '🔇' : '🔊';
-    els.rider.textContent = item.rider;
-    els.missionText.textContent = missionLabel(item);
-    els.start.textContent = item.start;
-    els.target.textContent = item.target;
-    els.sideTarget.textContent = item.target;
-    els.level.textContent = `${state.level + 1}/${MISSIONS.length}`;
-    els.moves.textContent = state.deltas.length;
-    els.best.textContent = minSteps(item.start, item.target);
-    els.stars.textContent = '⭐'.repeat(routeStars()) + '☆'.repeat(3 - routeStars());
-    els.current.textContent = here;
-    els.place.textContent = t('place')(here);
-    els.targetPlace.textContent = t('place')(item.target);
-    els.next.textContent = state.level === MISSIONS.length - 1 ? t('again') : t('next');
-
-    $$('.station').forEach((station) => {
-      const n = Number(station.dataset.station);
-      station.className = 'station';
-      station.setAttribute('aria-label', t('stationLabel')(n));
-      if (state.path.includes(n)) station.classList.add('visited');
-      if (n === item.start) station.classList.add('start');
-      if (n === item.target) station.classList.add('goal');
-      station.textContent = String(n);
-      if (n === here) {
-        const train = document.createElement('span');
-        train.className = 'train';
-        train.textContent = '🚇';
-        train.setAttribute('aria-hidden', 'true');
-        station.append(train);
-      }
-    });
-
-    els.routeLog.innerHTML = `<span class="route-empty">${item.start}</span>`;
-    state.deltas.slice(-7).forEach((delta) => {
-      const step = document.createElement('span');
-      step.className = `route-step ${Math.abs(delta) === 10 ? 'express' : 'local'}`;
-      step.textContent = `${delta > 0 ? '+' : '−'}${Math.abs(delta)}`;
-      els.routeLog.append(step);
-    });
-
-    $$('.move').forEach((button) => {
-      button.disabled = state.complete || !validMove(here, Number(button.dataset.delta));
-    });
-    els.undo.disabled = state.complete || state.path.length <= 1;
-  }
-
-  function resetIdleHint() {
-    clearTimeout(state.idleTimer);
-    if (!state.complete) state.idleTimer = setTimeout(showHint, 18000);
-  }
-
-  function suggestedDelta() {
-    const item = mission();
-    const here = current();
-    if (row(here) !== row(item.target)) return row(here) < row(item.target) ? 10 : -10;
-    if (col(here) !== col(item.target)) return col(here) < col(item.target) ? 1 : -1;
-    return 0;
-  }
-
-  function showHint() {
-    if (state.complete) return;
-    const delta = suggestedDelta();
-    if (!delta) return;
-    $$('.move').forEach((button) => button.classList.toggle('suggest', Number(button.dataset.delta) === delta));
-    const nextStation = current() + delta;
-    document.querySelector(`[data-station="${nextStation}"]`)?.classList.add('hint');
-    setTip(Math.abs(delta) === 10 ? t('verticalHint')(delta) : t('horizontalHint')(delta));
-    setTimeout(() => {
-      $$('.move').forEach((button) => button.classList.remove('suggest'));
-      document.querySelector(`[data-station="${nextStation}"]`)?.classList.remove('hint');
-    }, 1600);
-    window.cool?.track('hint_route');
-  }
-
-  function move(delta) {
-    if (state.complete) return;
-    const here = current();
-    if (!validMove(here, delta)) {
-      tone(150, 0.18);
-      setTip(t('edge'));
-      return;
-    }
-    const next = here + delta;
-    state.path.push(next);
-    state.deltas.push(delta);
-    tone(Math.abs(delta) === 10 ? 380 : 620);
-    setTip(t('moved')(delta, next));
-    window.cool?.track(Math.abs(delta) === 10 ? 'ride_express' : 'ride_local');
-    render();
-    if (next === mission().target) completeTrip();
-  }
-
-  function completeTrip() {
-    state.complete = true;
-    clearTimeout(state.idleTimer);
-    const item = mission();
-    const shortest = minSteps(item.start, item.target);
-    const steps = state.deltas.length;
-    const stars = steps === shortest ? 3 : steps <= shortest + 2 ? 2 : 1;
-    state.stars[state.level] = Math.max(routeStars(), stars);
-    store.set(LS.progress, JSON.stringify({ stars: state.stars, nextLevel: (state.level + 1) % MISSIONS.length }));
-    els.secretEquation.textContent = equation(item);
-    els.winTitle.textContent = stars === 3 ? t('winPerfect')(steps) : stars === 2 ? t('winGood')(steps) : t('winExplore')(steps);
-    els.winText.textContent = stars === 3 ? t('winPerfectText') : t('winText');
-    setTip(t('arrived')(item.target));
-    render();
-    playArrival();
-    confetti(stars === 3 ? 34 : 18);
-    setTimeout(() => { els.win.hidden = false; }, 380);
-    window.cool?.stage(`route_${state.level + 1}_complete`);
-    if (state.level === MISSIONS.length - 1) window.cool?.complete?.();
-  }
-
-  function confetti(count) {
-    for (let index = 0; index < count; index += 1) {
-      const piece = document.createElement('i');
-      piece.className = 'confetti';
-      piece.style.left = `${Math.random() * 100}vw`;
-      piece.style.animationDuration = `${1.7 + Math.random() * 1.7}s`;
-      piece.style.animationDelay = `${Math.random() * 0.45}s`;
-      piece.style.background = index % 3 === 0 ? 'var(--express)' : index % 3 === 1 ? 'var(--local)' : 'var(--accent)';
-      document.body.append(piece);
-      setTimeout(() => piece.remove(), 3900);
-    }
-  }
-
-  function startMission(level = state.level) {
-    state.level = level;
-    const item = mission();
-    state.path = [item.start];
-    state.deltas = [];
-    state.complete = false;
-    els.win.hidden = true;
-    setTip(t('tip0'));
-    render();
-    window.cool?.stage(`route_${state.level + 1}`);
-  }
-
-  $$('.move').forEach((button) => button.addEventListener('click', () => move(Number(button.dataset.delta))));
-  $('#hintBtn').addEventListener('click', showHint);
-  $('#resetBtn').addEventListener('click', () => {
-    const start = mission().start;
-    startMission();
-    setTip(t('resetTip')(start));
-    window.cool?.track('restart_route');
-  });
-  els.undo.addEventListener('click', () => {
-    if (state.path.length <= 1 || state.complete) return;
-    state.path.pop();
-    state.deltas.pop();
-    tone(260);
-    setTip(t('undoTip')(current()));
-    render();
-    window.cool?.track('undo_stop');
-  });
-  els.next.addEventListener('click', () => startMission((state.level + 1) % MISSIONS.length));
-  els.lang.addEventListener('click', () => {
-    lang = lang === 'zh' ? 'en' : 'zh';
-    store.set(LS.lang, lang);
-    setTip(t('tip0'));
-    render();
-  });
-  els.theme.addEventListener('click', () => {
-    theme = theme === 'light' ? 'dark' : 'light';
-    document.documentElement.dataset.theme = theme;
-    store.set(LS.theme, theme);
-    dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
-    render();
-  });
-  els.sound.addEventListener('click', () => {
-    state.muted = !state.muted;
-    render();
-    if (!state.muted) tone(640);
-  });
-
-  addEventListener('keydown', (event) => {
-    if (els.win.hidden === false) return;
-    const deltas = { ArrowUp: -10, ArrowDown: 10, ArrowLeft: -1, ArrowRight: 1 };
-    if (deltas[event.key]) {
-      event.preventDefault();
-      move(deltas[event.key]);
-    }
-  });
-
-  document.documentElement.dataset.theme = theme;
-  startMission();
-})();
+  const scroll=$('panelBody').scrollTop;
+  $('controls').innerHTML=controls;$('panelBody').scrollTop=scroll;$('stageReadout').innerHTML=display;
+  soundChrome();lab?.update(a,r,lang);
+}
+$('controls').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-action]');if(!b)return;
+  const type=b.dataset.action;
+  if(type==='replay'){unlock();$('writingBoard').classList.remove('replaying');requestAnimationFrame(()=>$('writingBoard')?.classList.add('replaying'));return;}
+  if(type==='shift'){const i=Number(b.dataset.index),p=room().positions[i];act({type:'position',index:i,x:p.x>3?p.x-1:p.x+.5,z:p.z>.5?p.z-1:p.z+.5});return;}
+  if(type==='budget'){act({type,budget:Number($('budget').value),price:Number($('price').value)});return;}
+  if(type==='setup'){act({type,a:Number($('freeA').value),b:Number($('freeB').value)});return;}
+  const action={type:type==='return'?'coin':type};for(const name of ['index','slot','from','to','delta','coin'])if(name in b.dataset)action[name]=Number(b.dataset[name]);for(const name of ['value','side'])if(name in b.dataset)action[name]=b.dataset[name];if(type==='return')action.back=true;
+  act(action);
+});
+$('activitySelect').addEventListener('change',e=>act({type:'select',index:Number(e.target.value)}));
+$('freeBtn').addEventListener('click',()=>act({type:'free',value:!state.free}));
+$('resetBtn').addEventListener('click',()=>act({type:'reset'}));$('undoBtn').addEventListener('click',()=>act({type:'undo'}));
+$('lessonBtn').addEventListener('click',()=>{$('lesson').hidden=!$('lesson').hidden;$('lessonBtn').setAttribute('aria-expanded',String(!$('lesson').hidden));});
+$('panelHandle').addEventListener('click',()=>{const open=$('panelBody').hidden;$('panelBody').hidden=!open;$('panel').classList.toggle('collapsed',!open);$('panelHandle').setAttribute('aria-expanded',String(open));$('panelArrow').textContent=open?'▾':'▴';});
+$('coach').addEventListener('click',()=>{unlock();if(!audio.muted)cool.speech.speak(speechText(course,state,lang),{lang:lang==='zh'?'zh-CN':'en-US'});});
+$('langBtn').addEventListener('click',()=>cool.preferences.toggleLang());$('themeBtn').addEventListener('click',()=>cool.preferences.toggleTheme());
+$('settingsBtn').addEventListener('click',()=>{$('soundMenu').hidden=!$('soundMenu').hidden;$('settingsBtn').setAttribute('aria-expanded',String(!$('soundMenu').hidden));});
+$('muteBtn').addEventListener('click',()=>{audio.set('muted',!audio.muted);if(audio.muted)cool.speech.stop();unlock();soundChrome();});
+$('musicBtn').addEventListener('click',()=>{audio.set('music',!audio.music);unlock();soundChrome();});$('soundBtn').addEventListener('click',()=>{audio.set('effects',!audio.effects);unlock();soundChrome();});$('speechBtn').addEventListener('click',()=>{cool.speech.toggle();soundChrome();});
+cool.speech.subscribe(soundChrome);
+function tracePoint(e){const svg=$('trace'),b=svg.getBoundingClientRect();return [Math.max(0,Math.min(100,(e.clientX-b.left)/b.width*100)),Math.max(0,Math.min(100,(e.clientY-b.top)/b.height*100))];}
+$('stageReadout').addEventListener('pointerdown',e=>{if(strokePointer!==null||!e.target.closest('#trace'))return;unlock();strokePointer=e.pointerId;strokePoints=[tracePoint(e)];$('stageReadout').setPointerCapture(e.pointerId);});
+$('stageReadout').addEventListener('pointermove',e=>{if(strokePointer!==e.pointerId||!strokePoints)return;const point=tracePoint(e),last=strokePoints.at(-1);if(Math.hypot(point[0]-last[0],point[1]-last[1])>=.5)strokePoints.push(point);if(strokePoints.length>1500)strokePoints=strokePoints.filter((_,i)=>i%2===0);$('liveInk')?.setAttribute('points',strokePoints.map(p=>p.join(',')).join(' '));});
+function endTrace(e,cancel=false){if(strokePointer!==e.pointerId)return;const points=strokePoints;strokePointer=null;strokePoints=null;if($('stageReadout').hasPointerCapture(e.pointerId))$('stageReadout').releasePointerCapture(e.pointerId);if(cancel){$('liveInk')?.setAttribute('points','');return;}points.push(tracePoint(e));act({type:'trace',points});}
+$('stageReadout').addEventListener('pointerup',e=>endTrace(e));$('stageReadout').addEventListener('pointercancel',e=>endTrace(e,true));
+cool.bindI18n(I18N,{onChange({lang:next}){lang=next;paint();lab?.theme();}});
+try{lab=createScene($('scene'),course,{onGesture:unlock,onDrop:(index,x,z)=>act({type:'position',index,x,z}),onActivate:()=>{if(course.kind==='poetry')act({type:'move'});if(course.kind==='word')act({type:room().placed?'act':'place'});}});lab.update(activity(),room(),lang);}catch{ $('nogl').hidden=false; }
+addEventListener('pagehide',e=>{if(!e.persisted)lab?.dispose();});
+// One non-blocking invitation if a child has not started; never display a long tutorial.
+setTimeout(()=>{if(!started)notice(text(activity().invite,lang));},30000);
+paint();

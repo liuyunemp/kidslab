@@ -1,0 +1,51 @@
+{
+  "id": "welcome",
+  "version": "9ec9f72911429d53d51258581cdac7a65094e1e2f24130614729cbc0f8218119",
+  "assets": [
+    {
+      "path": "audio/bgm-base.m4a",
+      "sha256": "82355403654f2fb5d5aff2b7be87b0882819f60e9f1cec8586c883f5c699a99c"
+    },
+    {
+      "path": "audio/bgm-epic.m4a",
+      "sha256": "ed56b38775e3f1ca1de20b819b9a0bd40fc1e149ab92a28df2bf255d88802aca"
+    },
+    {
+      "path": "audio/bgm-mid.m4a",
+      "sha256": "62641c4a2a64c6a7e3e5753c8bd93b4bf29ec2226d2aec489916a7b93fe325df"
+    },
+    {
+      "path": "course.json",
+      "sha256": "3d85520af5fde459e709fbafbaa18caf969f49eccfadd10d78d23fa08abfa13f"
+    },
+    {
+      "path": "index.html",
+      "sha256": "d6a14dbe7ad8aaf7f612d3fb272bca503447445d543d4da9d1663322c94de53f"
+    },
+    {
+      "path": "main.js",
+      "sha256": "749c97dca4e20ba6f058d8270f5bfc55b63c7f1085d37dd21f36854236cfcf84",
+      "fingerprint": "5f692561"
+    },
+    {
+      "path": "music.js",
+      "sha256": "363807a7ab487eb7722d648dddc3a5411285eef2c2aaa7e4419c8982c7d07f73",
+      "fingerprint": "110ec4f4"
+    },
+    {
+      "path": "stages.js",
+      "sha256": "3b431bd781c99ddfb623e2812c0195715f2bc52273fe96448327329d8901aec6",
+      "fingerprint": "3eb6a722"
+    },
+    {
+      "path": "style.css",
+      "sha256": "ff8e7977b3e086a13e0926d316c0b6b687780044473582f82a114c779f190d00",
+      "fingerprint": "ac2fe0c3"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

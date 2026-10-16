@@ -11,9 +11,10 @@ test('旧数学和语文网址保留导航，综合卡不进入主站清单', as
     await page.goto(`/courseware/${oldId}/`);
     await expect(page.locator(`a[href="../${target}/"]`)).toBeVisible();
   }
-  const chinese = ['g1-character-garden', 'g1-pinyin-tracks', 'g1-stroke-workshop', 'g1-word-post', 'g1-rhyme-stage', 'g1-sentence-train'];
+  const chinese = ['g1-character-garden', 'g1-pinyin-tracks', 'g1-stroke-workshop', 'g1-word-post', 'g1-rhyme-stage', 'g1-sentence-train', 'g1-poem-stage', 'g1-stroke-order'];
+  const upperChinese = ['g1-character-garden', 'g1-pinyin-tracks', 'g1-stroke-workshop', 'g1-rhyme-stage', 'g1-stroke-order'];
   for (const course of manifest.courses.filter((entry) => entry.id.startsWith('g1-'))) {
-    expect(course.category).toBe(chinese.includes(course.id) ? 'chinese' : 'math');
-    if (chinese.includes(course.id)) expect(course.grades).toContain('g1a');
+    expect(course.category).toBe(chinese.includes(course.id) ? 'chinese' : course.id === 'g1-direction-town' ? 'science' : 'math');
+    if (chinese.includes(course.id)) expect(course.grades).toEqual(upperChinese.includes(course.id) ? ['g1a'] : []);
   }
 });

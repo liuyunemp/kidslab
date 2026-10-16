@@ -1,0 +1,62 @@
+{
+  "id": "statistics-sampling-lab",
+  "version": "8f5ea35b3d935d7d1b7b44eee1354df093363996907fc1599e2ebba7e285bff1",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "958b01c96826c0f8dd29fb798d48e6e2501f2c3a2b46132530fbffb8d69b4e68",
+      "fingerprint": "18b0caea"
+    },
+    {
+      "path": "audio/lab-glow.meta.json",
+      "sha256": "0f19c1fab1e0c23085b6fdea516db47bb8ea04414919a63b1d783cb34e3bb73f"
+    },
+    {
+      "path": "audio/lab-glow.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "course.json",
+      "sha256": "b1712c9fd950320260fefb12abd49a2b2b00c357cf226dab4986aa38c34341f3"
+    },
+    {
+      "path": "index.html",
+      "sha256": "b3b8d2ef63cbdbf9786a193af55c99e153b271ee59e301384adaf63885ff0303"
+    },
+    {
+      "path": "lab-model.js",
+      "sha256": "4244adc7c74baff76c157feea909f12b723babdcda572a5ed5e42a9a821155fc",
+      "fingerprint": "49fa10d1"
+    },
+    {
+      "path": "main.js",
+      "sha256": "3473b39d89e72016f12f4536e14cc071cae83b3ab627fdb1708fb1c18b73bbd9",
+      "fingerprint": "35eb0c4e"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "d922bfd58162e90cdc75ed80c33b80e94d6d8d7e8808810c14a766218b4651b3",
+      "fingerprint": "42ba98a8"
+    },
+    {
+      "path": "style.css",
+      "sha256": "f2ce4fe87e3a57bee58c50775cfcaa3e70b1cf96be5b80b70eb1168b1265a51e",
+      "fingerprint": "747c05ef"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

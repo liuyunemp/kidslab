@@ -1,0 +1,24 @@
+{
+  "id": "bug-hospital",
+  "version": "8d44435277b558af9ebccb34ab11e92c5063df9dc712495061cb5d780cc5de56",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "0061ece8e2b0f1baa053e60696d3080afdc82a0ac6be70f7f1b0099536e54c00"
+    },
+    {
+      "path": "index.html",
+      "sha256": "adc082dd3d7e5e33f598bc7ec5a1a0d95ec36ca6e6e00fcba747e3dd73641f5e"
+    },
+    {
+      "path": "main.js",
+      "sha256": "f568096438dc140ca0bd188b9c830d2d01f2ab9a6cfb4669f42a9dc982a0efc4",
+      "fingerprint": "f06f5049"
+    },
+    {
+      "path": "style.css",
+      "sha256": "29e44a57d4394b92651a95015e88da4169696ee0936ebf5ae1d4c45f94c6fc11",
+      "fingerprint": "95831a50"
+    }
+  ]
+}

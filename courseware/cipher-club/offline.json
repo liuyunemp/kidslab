@@ -1,0 +1,24 @@
+{
+  "id": "cipher-club",
+  "version": "a45e88ced65ef69396f4e8505056f76cf87c263e5e35cd25f46dd92a23b70eba",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "eee8408df6e1aae91fdbc65e94e2f44d63c346fb2893391cb9d69d4bca462c4f"
+    },
+    {
+      "path": "index.html",
+      "sha256": "c2471599a9b751e07c83b086c15efdaf793bba39680d9ee1808ae10160324ab7"
+    },
+    {
+      "path": "main.js",
+      "sha256": "a88c14f1eab4b5b53fd3119f1149e75e1124977f8496a8581745dfa30ce6227b",
+      "fingerprint": "fc687d6e"
+    },
+    {
+      "path": "style.css",
+      "sha256": "497dfc7e29b7e2db18b8d1b8a46b25b96b8be88d2796a6f8bf04cbbf0e9be6c1",
+      "fingerprint": "8e3e0750"
+    }
+  ]
+}

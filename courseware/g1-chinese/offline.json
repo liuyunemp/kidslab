@@ -1,0 +1,54 @@
+{
+  "id": "g1-chinese",
+  "version": "d4baac72bbaf11ed57044918fa319ebb6ce5d9aeb1da77f64c76bfde0e7afd0e",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "8cb9707b7afd65639d3ec9c7e16ea9043413c39907a2d2564024ffabaccfe932",
+      "fingerprint": "d2f16ab1"
+    },
+    {
+      "path": "course.json",
+      "sha256": "764ce4c19db3e3b1d96132d3d853c742367cb858bc5003063cb758335bc6b5e5"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "fa2e29733ae0c269391586224af60893a38d7c8170a06846659244a483783c8a",
+      "fingerprint": "fb06f314"
+    },
+    {
+      "path": "hub.css",
+      "sha256": "bac98f7f6367c0a3a638f5623d4bd177d53fbae663cdd1ecfdcf2ff15f84ce13",
+      "fingerprint": "e7716385"
+    },
+    {
+      "path": "hub.js",
+      "sha256": "3ff642b72b1689c51cc976b7cf5ed442fd85f603414d295695315b0bffb8a238",
+      "fingerprint": "28516a8e"
+    },
+    {
+      "path": "index.html",
+      "sha256": "4f2677f43fdad981c76673a1d3ca764f1b1a5634fb32dace7d3760d57ef180e1"
+    },
+    {
+      "path": "level-model.js",
+      "sha256": "e99f9861154090f441162148665aa7ddfc3667e1592f49ea12119c7495ea9505",
+      "fingerprint": "5bdcafd2"
+    },
+    {
+      "path": "levels.js",
+      "sha256": "ec988d021bf29d38fc357e5580778cb9bbfda8880c0aaba61f87dc9e12a6bba7",
+      "fingerprint": "bc744096"
+    },
+    {
+      "path": "main.js",
+      "sha256": "dbb7b8cd8e3624c8704c38cec7257e5cd26c37fb4f350e0493aa12b1f48f9af7",
+      "fingerprint": "8c6d14da"
+    },
+    {
+      "path": "style.css",
+      "sha256": "58ac8424f4db6f541338443022d54ff86bf8b14429dd5b10329cff0c762250eb",
+      "fingerprint": "82c92116"
+    }
+  ]
+}

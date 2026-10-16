@@ -1,0 +1,24 @@
+{
+  "id": "square-root-lab",
+  "version": "f2161ddeda6eb45aacdd52a2b6d6d444735007f661fab828736a5ddbd3b39f7e",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "963730ca143a17d99201e1cabc26c227435785eb57c6b3190b35c8b86c6d3ccd"
+    },
+    {
+      "path": "index.html",
+      "sha256": "7c854d4ef934c2280bed0ee1c09bd304b6cebe26ddb62c9d7ac14c58ba59eba7"
+    },
+    {
+      "path": "main.js",
+      "sha256": "c41c8f9fe12a0312b5eb40b5d03f145a8eb1403f2dbdd864e1bcb388421f8f97",
+      "fingerprint": "356a533f"
+    },
+    {
+      "path": "style.css",
+      "sha256": "a074b29b4aaab039777fa8f05f474b7b4785b73dd2f46f5984b0013a5df32163",
+      "fingerprint": "7921e3ee"
+    }
+  ]
+}

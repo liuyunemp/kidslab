@@ -1,0 +1,29 @@
+{
+  "id": "zoom-ten",
+  "version": "c1d0fe4ab954954a85daa9c289320f5fba5671b0ceaf3edc3b320b7985c4d2e0",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "7097c80385d7f686ade0688cf37c28a3f386c3ca0be9bb8b634dffe1cb3bd010"
+    },
+    {
+      "path": "index.html",
+      "sha256": "3bb333b43002c76a585ef721baec6f4cd3a59acea59fb62c3a9492a4e7d2bed8"
+    },
+    {
+      "path": "main.js",
+      "sha256": "2791900ef6d1374daaeddf4471093181ff5554f211006ce683d2ea4a969b3c48",
+      "fingerprint": "09930a21"
+    },
+    {
+      "path": "style.css",
+      "sha256": "a4791b1c8e5d6ae93f56ac1d574af7c1b7f53616bd43df7c4f3dac3570be5e08",
+      "fingerprint": "dbacc1d1"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

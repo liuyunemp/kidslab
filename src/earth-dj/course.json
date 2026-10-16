@@ -13,11 +13,7 @@
     "primary",
     "junior"
   ],
-  "grades": [
-    "g4",
-    "g5",
-    "g6"
-  ],
+  "grades": ["g5b"],
   "tags": [
     "地球运动",
     "天文"

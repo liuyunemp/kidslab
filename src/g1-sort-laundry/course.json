@@ -1,0 +1,22 @@
+{
+  "id": "g1-sort-laundry",
+  "title": {
+    "zh": "分类洗衣坊",
+    "en": "Sorting Laundry"
+  },
+  "description": {
+    "zh": "把洗衣篮里的东西分进合适的筐，还能换个标准再分一次。",
+    "en": "Sort the laundry into the right baskets, then try a different rule."
+  },
+  "category": "math",
+  "levels": [
+    "primary"
+  ],
+  "grades": ["g2a"],
+  "tags": [
+    "分类"
+  ],
+  "icon": "🧺",
+  "order": 39,
+  "badge": "new"
+}

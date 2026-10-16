@@ -12,10 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g5",
-    "g6"
-  ],
+  "grades": ["g5b"],
   "tags": [
     "观察",
     "实验"

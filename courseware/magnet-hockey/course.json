@@ -12,10 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g2",
-    "g3"
-  ],
+  "grades": ["g3a"],
   "tags": [
     "磁铁",
     "实验"

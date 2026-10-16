@@ -1,0 +1,58 @@
+{
+  "id": "ph-lab",
+  "version": "0a671b6fd7ecb33a4967c41be1e41381969b8988d920b3b8c5b181355ec1a61e",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "73257fa1df44578b1061739c37716a6dcaf31858960044fc96743566ce50e4ea",
+      "fingerprint": "595bce20"
+    },
+    {
+      "path": "audio/bgm-lab.ogg",
+      "sha256": "d755b2c7993a20eee751f8fc0b2fb7b28f54a6028738665264cdda73ab3bc1a6"
+    },
+    {
+      "path": "course.json",
+      "sha256": "0c73499937b63b811fdd71723e3b7c2ac9cce414687bb0da97b6b5a8dcc9cf00"
+    },
+    {
+      "path": "index.html",
+      "sha256": "ea82d1c2c9f62bd88b9d785ad9556244f99eaf0c631cc92516953207feff7463"
+    },
+    {
+      "path": "main.js",
+      "sha256": "6d44fa5f4347c05f886f77ae850d8d3e90cb170d7e7b4ef93aa30cfbc1883a28",
+      "fingerprint": "07029651"
+    },
+    {
+      "path": "ph-model.js",
+      "sha256": "3633862758587787797e8eac523861eb6dbb0b707f923c27e77e45061d9e3cd9",
+      "fingerprint": "b72b93ed"
+    },
+    {
+      "path": "scene3d.js",
+      "sha256": "479798888b1fc7f7b1a7be9e99687037b453952c66be51566aec4b0b465b94c9",
+      "fingerprint": "0c7dcf06"
+    },
+    {
+      "path": "style.css",
+      "sha256": "465d4a6ca2201d063a7fc263ad3e916932d5d77628cc12d9c683058779eebbe1",
+      "fingerprint": "21aa4bf0"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

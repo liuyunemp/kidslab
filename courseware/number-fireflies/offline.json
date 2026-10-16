@@ -1,0 +1,24 @@
+{
+  "id": "number-fireflies",
+  "version": "f8e11de05d5b0beb129c7eeea0b46cd6bed7a212df0b31bbe7866fc99210cb30",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "7fa729d1192a47e850b4cb2d6a0470b219137afaef4f5082bb920cb1b97f9fa4"
+    },
+    {
+      "path": "index.html",
+      "sha256": "97a0b78e636449391103e7161b5a2a54593cd59d0f1a1ba1e29815ab5555b119"
+    },
+    {
+      "path": "main.js",
+      "sha256": "9a52af2dbbbb19ce77480f2089b3f63554646eeaaabf22f96025d6f4cde85764",
+      "fingerprint": "ec1dcdaf"
+    },
+    {
+      "path": "style.css",
+      "sha256": "0fe68a529adadf84306417e50ccd8ccecab9688291b021cd04bca3b37718b742",
+      "fingerprint": "0a637555"
+    }
+  ]
+}

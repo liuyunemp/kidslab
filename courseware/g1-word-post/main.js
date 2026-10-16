@@ -1,1 +1,1 @@
-import{startGame as m}from"./engine.js?v=eed1e137";import{config as o}from"./config.js?v=2697d6a6";m(o);
+import{startGame as m}from"./engine.js?v=0d3f2646";import{config as o}from"./config.js?v=55553797";m(o);

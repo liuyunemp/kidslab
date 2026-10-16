@@ -1,0 +1,29 @@
+{
+  "id": "volume-aquarium",
+  "version": "896fb230365ca6ac6e9bda831acaefa58d9a76c5ec8adbe54109273b38faff60",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "7fb311490a7683335cfb3af4f9cea04d78daefacf4a9639150dab46306913fda"
+    },
+    {
+      "path": "index.html",
+      "sha256": "c50b50b9ae756a2a6a1a6f225a39eb2197eaac72e16ba5c7dd9d3b550a56711f"
+    },
+    {
+      "path": "main.js",
+      "sha256": "b6f1a4c22a5586c883b1ecd7b706311bd5fc16e67e34c1158813af1a91a566ab",
+      "fingerprint": "0d4f375f"
+    },
+    {
+      "path": "style.css",
+      "sha256": "cda202cfc8926d5079cbefc6293957e13f43ca65dd6f0378c3ec38d67818b923",
+      "fingerprint": "e4a4e179"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

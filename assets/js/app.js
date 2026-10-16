@@ -2,6 +2,70 @@
    KidsLab — 平台逻辑
    levels / categories / search / i18n / themes / collapse
    ============================================================ */
+// 无 DOM 的目录规则；与页面放在同一资源内，沿用主站指纹和离线缓存。
+const CourseCatalog = (() => {
+  const gradePattern = /^g([1-9]|1[0-2])([ab])?$/;
+  const grades = (course) => new Set((Array.isArray(course.grades) ? course.grades : [])
+    .filter((value) => typeof value === 'string' && gradePattern.test(value)));
+  const hasGrade = (course, grade) => {
+    const tokens = grades(course);
+    return tokens.has(grade) || tokens.has(`${grade}a`) || tokens.has(`${grade}b`);
+  };
+  function matchesGrade(course, grade = 'all', term = 'all') {
+    if (grade === 'all') return term === 'all';
+    if (!/^g([1-9]|1[0-2])$/.test(grade)) return false;
+    if (term === 'all') return hasGrade(course, grade);
+    if (term !== 'a' && term !== 'b') return false;
+    const tokens = grades(course);
+    return tokens.has(grade) || tokens.has(`${grade}${term}`);
+  }
+  function matchesCategory(course, category = 'all', progress = () => null) {
+    if (category === 'all') return true;
+    if (category === 'recent') return !!progress(course.id);
+    if (category === 'newest') return course.badge === 'new';
+    return course.category === category;
+  }
+  function matchesScope(course, { level, grade = 'all', term = 'all', cat = 'all' }, progress) {
+    return course.listed !== false && !!course.levels?.includes(level)
+      && matchesGrade(course, grade, term) && matchesCategory(course, cat, progress);
+  }
+  function curriculumEntries(course, grade = 'all', term = 'all') {
+    const tokens = grades(course);
+    return (Array.isArray(course.curriculum) ? course.curriculum : []).filter(entry =>
+      entry && entry.bookId && entry.unitId && gradePattern.test(entry.grade)
+      && (tokens.has(entry.grade) || (/[ab]$/.test(entry.grade) && tokens.has(entry.grade.slice(0, -1))))
+      && (grade === 'all' || matchesGrade({ grades: [entry.grade] }, grade, term)));
+  }
+  function curriculumGroups(courses, { grade, term = 'all' }, include = () => true) {
+    if (!grade || grade === 'all') return [];
+    const groups = new Map();
+    for (const course of courses) {
+      for (const entry of curriculumEntries(course, grade, term)) {
+        if (!include(course, entry)) continue;
+        const key = `${entry.bookId}/${entry.unitId}`;
+        if (!groups.has(key)) groups.set(key, { ...entry, key, category: course.category, items: [] });
+        groups.get(key).items.push({ course, entry });
+      }
+    }
+    const subjects = ['math', 'chinese', 'science', 'physics', 'chemistry', 'programming', 'logic'];
+    const semester = token => token.endsWith('a') ? 0 : token.endsWith('b') ? 1 : 2;
+    const result = [...groups.values()].sort((a, b) => subjects.indexOf(a.category) - subjects.indexOf(b.category)
+      || semester(a.grade) - semester(b.grade) || a.bookId.localeCompare(b.bookId)
+      || a.unitOrder - b.unitOrder || a.unitId.localeCompare(b.unitId));
+    for (const group of result) group.items.sort((a, b) => a.entry.page - b.entry.page
+      || a.entry.lessonOrder - b.entry.lessonOrder || a.course.id.localeCompare(b.course.id)
+      || (a.entry.activity || '').localeCompare(b.entry.activity || ''));
+    return result;
+  }
+  function entryPath(course, entry) {
+    if (!entry?.activity) return course.path;
+    const [path, hash] = course.path.split('#');
+    return `${path}${path.includes('?') ? '&' : '?'}activity=${encodeURIComponent(entry.activity)}${hash ? `#${hash}` : ''}`;
+  }
+  return { grades, hasGrade, matchesGrade, matchesCategory, matchesScope, curriculumEntries, curriculumGroups, entryPath };
+})();
+
+/* ---------- 平台 UI ---------- */
 (() => {
   'use strict';
 
@@ -58,13 +122,6 @@
   const TERMS = [{ id: 'a' }, { id: 'b' }];
   const TERM_IDS = new Set(TERMS.map((tm) => tm.id));
   const LEVEL_GRADE_IDS = Object.fromEntries(LEVELS.map((lv) => [lv, new Set(GRADES.filter((g) => g.level === lv).map((g) => g.id))]));
-  const CN_GRADES = new Map([
-    ['一年级', 'g1'], ['二年级', 'g2'], ['三年级', 'g3'],
-    ['四年级', 'g4'], ['五年级', 'g5'], ['六年级', 'g6'],
-    ['七年级', 'g7'], ['八年级', 'g8'], ['九年级', 'g9'],
-    ['十年级', 'g10'], ['十一年级', 'g11'], ['十二年级', 'g12'],
-    ['高一', 'g10'], ['高二', 'g11'], ['高三', 'g12'],
-  ]);
 
   const CATS = [
     { id: 'all',         icon: '✨', color: 'var(--accent)' },
@@ -89,7 +146,6 @@
     { id: 'tangerine', sw: '#ff8a00' },
   ];
 
-  const CHIP_INK = { logic: '#4a3200' }; // 浅色底用深字
 
   /* ---------- 文案 ---------- */
   const I18N = {
@@ -111,6 +167,7 @@
       tipStarmap: '知识星图 · 换个方式探索',
       tipLang: 'Switch to English',
       tipCollapse: '收起 / 展开侧栏',
+      menu: '打开菜单', navigation: '导航', home: 'KidsLab 首页', selectLevel: '选择学段', selectGrade: '选择年级', selectTerm: '选择学期', accent: '强调色', accentNames: { candy: '糖果粉', ocean: '海洋蓝', forest: '森林绿', tangerine: '橘子橙' },
       emptyTitle: '没有找到匹配的课件',
       emptyDesc: '换个关键词，或者去别的分类逛逛吧～',
       emptyReset: '清除筛选',
@@ -125,6 +182,11 @@
       clearProgress: '清除本机进度',
       clearProgressConfirm: '清除全部本机课件进度？语言和主题设置会保留。',
       gradeAll: '全部年级',
+      otherCourses: '本年级其他课件',
+      wholeCourse: '整课探索',
+      curriculumCount: (courses, entries) => `共 ${courses} 个课件 · ${entries} 个探索入口`,
+      unitCount: (entries) => `${entries} 个探索入口`,
+      textbookPage: (page) => `教材第 ${page} 页`,
       loadErr: '课件清单加载失败，请先运行 npm run build 并通过 npm run preview 访问。',
       levels: { primary: '小学', junior: '初中', senior: '高中' },
       lvShort: { primary: '小', junior: '初', senior: '高' },
@@ -158,6 +220,7 @@
       tipStarmap: 'Knowledge star map · explore differently',
       tipLang: '切换到中文',
       tipCollapse: 'Collapse / expand sidebar',
+      menu: 'Open menu', navigation: 'Navigation', home: 'KidsLab home', selectLevel: 'Select stage', selectGrade: 'Select grade', selectTerm: 'Select term', accent: 'Accent color', accentNames: { candy: 'Candy pink', ocean: 'Ocean blue', forest: 'Forest green', tangerine: 'Tangerine orange' },
       emptyTitle: 'No courseware found',
       emptyDesc: 'Try another keyword, or explore other subjects~',
       emptyReset: 'Clear filters',
@@ -172,6 +235,11 @@
       clearProgress: 'Clear local progress',
       clearProgressConfirm: 'Clear all local course progress? Language and theme settings will stay unchanged.',
       gradeAll: 'All grades',
+      otherCourses: 'Other courses in this grade',
+      wholeCourse: 'Explore the course',
+      curriculumCount: (courses, entries) => `${courses} courses · ${entries} exploration entries`,
+      unitCount: (entries) => `${entries} exploration entries`,
+      textbookPage: (page) => `Textbook p. ${page}`,
       loadErr: 'Failed to load the manifest. Run `npm run build` then `npm run preview`.',
       levels: { primary: 'Primary', junior: 'Middle', senior: 'High' },
       lvShort: { primary: 'P', junior: 'M', senior: 'H' },
@@ -232,9 +300,13 @@
     document.title = t().docTitle;
 
     document.querySelectorAll('[data-i18n]').forEach((n) => { n.textContent = t()[n.dataset.i18n] ?? n.textContent; });
-    document.querySelectorAll('[data-i18n-title]').forEach((n) => { n.title = t()[n.dataset.i18nTitle] ?? n.title; });
+    document.querySelectorAll('[data-i18n-title]').forEach((n) => { n.title = t()[n.dataset.i18nTitle] ?? n.title; n.setAttribute('aria-label', n.title); });
     document.querySelectorAll('[data-i18n-placeholder]').forEach((n) => { n.placeholder = t()[n.dataset.i18nPlaceholder] ?? ''; });
     $('#langBtn').textContent = t().langBtn;
+    for (const [selector, key] of Object.entries({ '#menuBtn': 'menu', '#sidebar': 'navigation', '.brand': 'home', '#levelSeg': 'selectLevel', '#gradeList': 'selectGrade', '#termList': 'selectTerm', '#accentRow': 'accent', '#searchInput': 'searchPh' })) {
+      $(selector).setAttribute('aria-label', t()[key]);
+    }
+    $('#themeBtn').setAttribute('aria-pressed', String(state.theme === 'dark'));
     const hero = t().heroTitle[state.level] || t().heroTitle.primary;
     el.heroTitle.innerHTML = `${hero}<span class="hero__wave">👋</span>`;
   }
@@ -270,73 +342,27 @@
       b.addEventListener('click', () => {
         state.level = lv;
         if (state.grade !== 'all' && !LEVEL_GRADE_IDS[lv]?.has(state.grade)) { state.grade = 'all'; state.term = 'all'; }
-        if (lv === 'primary' && !PRIMARY_CATS.has(state.cat)) state.cat = 'all';
         update();
       });
       el.levelSeg.appendChild(b);
     }
   }
 
-  const inLevel = (c) => c.levels?.includes(state.level);
+  const inLevel = (c) => c.listed !== false && c.levels?.includes(state.level);
   const gradeInLevel = (grade, level = state.level) => grade === 'all' || LEVEL_GRADE_IDS[level]?.has(grade);
-
-  function normalizeGrade(value) {
-    const raw = String(value ?? '').trim();
-    const lower = raw.toLowerCase();
-    if (GRADE_IDS.has(lower)) return lower;
-    const compact = lower.replace(/\s+/g, '');
-    const en = compact.match(/^(?:grade|g)([1-9]|1[0-2])([ab])?$/);
-    if (en) return `g${en[1]}${en[2] || ''}`;
-    const ordinal = lower.match(/\b([1-9]|1[0-2])(?:st|nd|rd|th)?\s*grade\b/);
-    if (ordinal) return `g${ordinal[1]}`;
-    return CN_GRADES.get(raw) || null;
-  }
 
   const splitGrade = (token) => {
     const m = /^(g(?:[1-9]|1[0-2]))([ab])?$/.exec(String(token || ''));
     return m ? { grade: m[1], term: m[2] || null } : { grade: null, term: null };
   };
 
-  function courseGrades(c) {
-    if (c._gradeSet) return c._gradeSet;
-    const grades = new Set();
-    const scan = (value) => {
-      const direct = normalizeGrade(value);
-      if (direct) grades.add(direct);
-      const text = String(value ?? '').trim();
-      for (const [label, id] of CN_GRADES) {
-        if (text.includes(label)) grades.add(id);
-      }
-      const lower = text.toLowerCase();
-      const match = lower.match(/\b(?:grade|g)\s*[-:]?\s*([1-9]|1[0-2])\b/);
-      if (match) grades.add(`g${match[1]}`);
-    };
-    (Array.isArray(c.grades) ? c.grades : []).forEach(scan);
-    (Array.isArray(c.tags) ? c.tags : []).forEach(scan);
-    c._gradeSet = grades;
-    return grades;
-  }
-
-  // 课件是否覆盖某年级（整年级标记或任一册标记都算）
-  const courseHasGrade = (c, gradeId) => {
-    const set = courseGrades(c);
-    return set.has(gradeId) || set.has(`${gradeId}a`) || set.has(`${gradeId}b`);
-  };
-  // 该课件是否为某年级带了具体册标记（用于决定是否展示上下册切换）
-  const courseHasTerm = (c, gradeId) => courseGrades(c).has(`${gradeId}a`) || courseGrades(c).has(`${gradeId}b`);
-
-  function inGrade(c) {
-    if (state.grade === 'all') return true;
-    if (state.term === 'all') return courseHasGrade(c, state.grade);
-    // 选中具体册：整年级标记覆盖全部册，或命中该具体册
-    const set = courseGrades(c);
-    return set.has(state.grade) || set.has(`${state.grade}${state.term}`);
-  }
+  const courseGrades = CourseCatalog.grades;
+  const courseHasGrade = CourseCatalog.hasGrade;
+  const inGrade = (c) => CourseCatalog.matchesGrade(c, state.grade, state.term);
 
   function availableGrades() {
-    return GRADES.filter((g) =>
-      g.level === state.level &&
-      state.courses.some((c) => !c.pinned && inLevel(c) && courseHasGrade(c, g.id)));
+    // 零门课也保留入口，不能把合法的空筛选自动放宽成“全部”。
+    return GRADES.filter((g) => g.level === state.level);
   }
 
   function renderGrades() {
@@ -352,13 +378,13 @@
     el.gradeSec.hidden = false;
     el.gradeList.innerHTML = '';
 
-    const inCurrentScope = (c) => !c.pinned && inLevel(c) && matchesCat(c, state.cat);
+    const inCurrentScope = (c) => inLevel(c) && matchesCat(c, state.cat);
     const options = [
-      { id: 'all', label: t().gradeAll, count: state.courses.filter(inCurrentScope).length },
+      { id: 'all', label: t().gradeAll, count: state.courses.filter(c => inCurrentScope(c) && matchQuery(c, state.q, 'all', 'all')).length },
       ...grades.map((g) => ({
         id: g.id,
         label: t().grades[g.id],
-        count: state.courses.filter((c) => inCurrentScope(c) && courseHasGrade(c, g.id)).length,
+        count: state.courses.filter((c) => inCurrentScope(c) && courseHasGrade(c, g.id) && matchQuery(c, state.q, g.id, 'all')).length,
       })),
     ];
 
@@ -366,6 +392,7 @@
       const b = document.createElement('button');
       b.type = 'button';
       b.role = 'radio';
+      b.dataset.grade = opt.id;
       b.setAttribute('aria-checked', String(state.grade === opt.id));
       b.innerHTML = '<span class="grade__name"></span><span class="grade__count"></span>';
       b.querySelector('.grade__name').textContent = opt.label;
@@ -377,10 +404,8 @@
 
   function renderTerms() {
     if (!el.termSec) return;
-    // 仅当选中具体年级、且该年级下有带册标记的课件时展示上下册切换
-    const hasTermCourses = state.grade !== 'all'
-      && state.courses.some((c) => !c.pinned && inLevel(c) && courseHasTerm(c, state.grade));
-    if (!hasTermCourses) {
+    // 具体年级始终可选上下册，包括该册暂无课件的情况。
+    if (state.grade === 'all') {
       state.term = 'all';
       el.termList.innerHTML = '';
       el.termSec.hidden = true;
@@ -390,14 +415,15 @@
     el.termSec.hidden = false;
     el.termList.innerHTML = '';
 
-    const inCurrentScope = (c) => !c.pinned && inLevel(c) && matchesCat(c, state.cat) && courseHasGrade(c, state.grade);
+    const inCurrentScope = (c) => inLevel(c) && matchesCat(c, state.cat)
+      && courseHasGrade(c, state.grade);
     const countTerm = (termId) => state.courses.filter((c) => {
       if (!inCurrentScope(c)) return false;
       const set = courseGrades(c);
-      return set.has(state.grade) || set.has(`${state.grade}${termId}`);
+      return (set.has(state.grade) || set.has(`${state.grade}${termId}`)) && matchQuery(c, state.q, state.grade, termId);
     }).length;
     const options = [
-      { id: 'all', label: t().termAll, count: state.courses.filter(inCurrentScope).length },
+      { id: 'all', label: t().termAll, count: state.courses.filter(c => inCurrentScope(c) && matchQuery(c, state.q, state.grade, 'all')).length },
       ...TERMS.map((tm) => ({ id: tm.id, label: t().terms[tm.id], count: countTerm(tm.id) })),
     ];
 
@@ -405,6 +431,7 @@
       const b = document.createElement('button');
       b.type = 'button';
       b.role = 'radio';
+      b.dataset.term = opt.id;
       b.setAttribute('aria-checked', String(state.term === opt.id));
       b.innerHTML = '<span class="grade__name"></span><span class="grade__count"></span>';
       b.querySelector('.grade__name').textContent = opt.label;
@@ -416,9 +443,9 @@
 
   function renderCats() {
     el.catList.innerHTML = '';
-    const visible = state.level === 'primary' ? CATS.filter((c) => PRIMARY_CATS.has(c.id)) : CATS;
+    const visible = state.level === 'primary' ? CATS.filter((c) => PRIMARY_CATS.has(c.id) || c.id === state.cat) : CATS;
     for (const cat of visible) {
-      const n = state.courses.filter((c) => !c.pinned && inLevel(c) && inGrade(c) && matchesCat(c, cat.id)).length;
+      const n = state.courses.filter((c) => inLevel(c) && inGrade(c) && matchesCat(c, cat.id) && matchQuery(c, state.q)).length;
       const li = document.createElement('li');
       if (cat.special) li.className = 'cat-list__special';
       const b = document.createElement('button');
@@ -440,7 +467,9 @@
       const b = document.createElement('button');
       b.type = 'button';
       b.style.setProperty('--sw', a.sw);
-      b.title = a.id;
+      b.title = t().accentNames[a.id];
+      b.setAttribute('aria-label', b.title);
+      b.setAttribute('aria-pressed', String(state.accent === a.id));
       b.classList.toggle('is-active', state.accent === a.id);
       b.addEventListener('click', () => { state.accent = a.id; update(); });
       el.accentRow.appendChild(b);
@@ -448,9 +477,9 @@
   }
 
   /* ---------- 过滤 + 卡片 ---------- */
-  function matchQuery(c, q) {
+  function matchQuery(c, q, grade = state.grade, term = state.term, entry = null) {
     if (!q) return true;
-    const hay = [
+    const base = [
       c.title?.zh, c.title?.en, c.description?.zh, c.description?.en,
       ...(c.tags || []), ...(c.keywords || []), t().cats[c.category] || c.category,
       ...Array.from(courseGrades(c)).flatMap((tok) => {
@@ -460,25 +489,24 @@
         return [...base, ...termLabels, tok];
       }),
     ].join(' ').toLowerCase();
-    return q.toLowerCase().trim().split(/\s+/).every((w) => hay.includes(w));
+    const words = q.toLowerCase().trim().split(/\s+/);
+    const matches = hay => words.every(word => hay.includes(word));
+    if (matches(base)) return true;
+    return (entry ? [entry] : CourseCatalog.curriculumEntries(c, grade, term)).some(e => matches([
+      base, e.bookTitle?.zh, e.bookTitle?.en, e.unitTitle?.zh, e.unitTitle?.en,
+      e.topic?.zh, e.topic?.en, e.activityTitle?.zh, e.activityTitle?.en,
+      unitLabel(e, 'zh'), unitLabel(e, 'en'),
+    ].join(' ').toLowerCase()));
   }
 
   function matchesCat(c, catId = state.cat) {
-    if (catId === 'all') return true;
-    if (catId === 'recent') return !!courseProgressMeta(c.id);
-    if (catId === 'newest') return c.badge === 'new';
-    return c.category === catId;
+    return CourseCatalog.matchesCategory(c, catId, courseProgressMeta);
   }
 
   function filtered() {
     const q = state.q;
-    const list = state.courses.filter((c) => {
-      if (!matchQuery(c, q)) return false;
-      if (c.pinned) return true; /* 置顶课件跳过侧栏筛选 */
-      if (!inLevel(c)) return false;
-      if (!inGrade(c)) return false;
-      return matchesCat(c, state.cat);
-    });
+    const list = state.courses.filter((c) => matchQuery(c, q)
+      && CourseCatalog.matchesScope(c, state, courseProgressMeta));
 
     if (state.cat === 'recent') {
       return sortPinnedFirst(list, (a, b) => {
@@ -492,7 +520,7 @@
         return diff || a.id.localeCompare(b.id);
       });
     }
-    return list;
+    return sortPinnedFirst(list, () => 0);
   }
 
   function sortPinnedFirst(list, compare) {
@@ -525,11 +553,13 @@
     return courseProgressMeta(id)?.status || '';
   }
 
-  function card(c, i) {
+  function card(c, i, entry = null) {
     const a = document.createElement('a');
     a.className = 'card';
-    a.href = c.path;
-    a.style.setProperty('--i', i);
+    a.href = CourseCatalog.entryPath(c, entry);
+    a.dataset.courseId = c.id;
+    if (entry?.activity) a.dataset.activity = entry.activity;
+    a.style.setProperty('--i', Math.min(i, 8));
     a.style.setProperty('--cat-c', c.pinned ? 'var(--c-featured)' : catColor(c.category));
 
     const cover = document.createElement('div');
@@ -549,7 +579,7 @@
       const off = document.createElement('span');
       off.className = 'card__offline';
       off.textContent = `📥 ${t().offline}`;
-      off.title = state.lang === 'zh' ? '玩过的课件已缓存，断网也能玩' : 'Cached on this device — playable offline';
+      off.title = state.lang === 'zh' ? '本课资源已完整保存，断网也能玩' : 'Cached on this device — playable offline';
       cover.appendChild(off);
     }
 
@@ -557,18 +587,24 @@
     body.className = 'card__body';
     const h = document.createElement('h3');
     h.className = 'card__title';
-    h.textContent = c.title[state.lang];
+    h.textContent = entry?.activityTitle?.[state.lang] || c.title[state.lang];
     const p = document.createElement('p');
     p.className = 'card__desc';
-    p.textContent = c.description[state.lang];
-    body.append(h, p);
+    p.textContent = entry?.invite?.[state.lang] || c.description[state.lang];
+    body.append(h);
+    if (entry) {
+      const topic = document.createElement('p');
+      topic.className = 'card__curriculum';
+      topic.textContent = `${entry.activity ? c.title[state.lang] : t().wholeCourse} · ${entry.topic[state.lang]} · ${t().textbookPage(entry.page)}`;
+      body.append(topic);
+    }
+    body.append(p);
 
     const meta = document.createElement('div');
     meta.className = 'card__meta';
     const chip = document.createElement('span');
     chip.className = 'chip chip--cat';
     chip.textContent = t().cats[c.category] || c.category;
-    if (CHIP_INK[c.category]) chip.style.color = CHIP_INK[c.category];
     const lvs = document.createElement('span');
     lvs.className = 'card__levels';
     for (const lv of LEVELS) {
@@ -580,12 +616,59 @@
     return a;
   }
 
+  function unitLabel(entry, lang = state.lang) {
+    if (entry.unitKind === 'topic') return '';
+    const digits = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+    const n = entry.unitNumber;
+    const number = n < 10 ? digits[n] : n < 20 ? `十${n % 10 ? digits[n % 10] : ''}` : `${digits[Math.floor(n / 10)] || n}十${n % 10 ? digits[n % 10] : ''}`;
+    return lang === 'zh' ? `第${number}${entry.unitKind === 'chapter' ? '章' : '单元'}`
+      : `${entry.unitKind === 'chapter' ? 'Chapter' : 'Unit'} ${n}`;
+  }
+
   function renderGrid() {
     const list = filtered();
     el.grid.innerHTML = '';
-    list.forEach((c, i) => el.grid.appendChild(card(c, i)));
+    const groups = CourseCatalog.curriculumGroups(list, state, (c, entry) => matchQuery(c, state.q, state.grade, state.term, entry));
+    const grouped = new Set(groups.flatMap(group => group.items.map(item => item.course.id)));
+    const rest = list.filter(c => !grouped.has(c.id));
+    el.grid.classList.toggle('grid--curriculum', groups.length > 0);
+    let index = 0;
+    for (const [groupIndex, group] of groups.entries()) {
+      const section = document.createElement('section');
+      section.className = 'curriculum-unit';
+      section.dataset.book = group.bookId;
+      section.dataset.unit = group.unitId;
+      const heading = document.createElement('h2');
+      heading.id = `curriculum-unit-${groupIndex}`;
+      heading.className = 'curriculum-unit__title';
+      section.setAttribute('aria-labelledby', heading.id);
+      const book = document.createElement('p');
+      book.className = 'curriculum-unit__book';
+      book.textContent = group.bookTitle[state.lang];
+      heading.textContent = [unitLabel(group), group.unitTitle[state.lang]].filter(Boolean).join(' · ');
+      const count = document.createElement('p');
+      count.className = 'curriculum-unit__count';
+      count.textContent = t().unitCount(group.items.length);
+      const grid = document.createElement('div');
+      grid.className = 'grid curriculum-unit__grid';
+      for (const { course, entry } of group.items) grid.appendChild(card(course, index++, entry));
+      section.append(book, heading, count, grid);
+      el.grid.appendChild(section);
+    }
+    if (rest.length) {
+      const grid = groups.length ? document.createElement('section') : el.grid;
+      if (groups.length) {
+        grid.className = 'grid curriculum-unit__rest';
+        const heading = document.createElement('h2');
+        heading.className = 'curriculum-unit__title';
+        heading.textContent = t().otherCourses;
+        grid.appendChild(heading);
+        el.grid.appendChild(grid);
+      }
+      rest.forEach(c => grid.appendChild(card(c, index++)));
+    }
     el.empty.hidden = list.length > 0;
-    el.countText.textContent = t().count(list.length);
+    el.countText.textContent = groups.length ? t().curriculumCount(list.length, index) : t().count(list.length);
     el.crumb.innerHTML = `<b>${t().levels[state.level]}</b>${state.grade !== 'all' ? ` · ${t().grades[state.grade]}` : ''}${state.term !== 'all' ? ` · ${t().terms[state.term]}` : ''} · ${t().cats[state.cat]}${state.q ? ` · “${esc(state.q)}”` : ''}`;
     el.courseTotal.textContent = t().total(state.courses.length);
     el.clearProgress.hidden = !local.keys().some((key) => key.startsWith(PROGRESS_PREFIX));
@@ -608,22 +691,41 @@
   const isMobile = () => matchMedia('(max-width: 860px)').matches;
 
   function closeDrawer() {
-    if (!isMobile()) return;
+    const wasOpen = el.app.classList.contains('menu-open');
     el.app.classList.remove('menu-open');
     el.backdrop.hidden = true;
+    $('#menuBtn').setAttribute('aria-expanded', 'false');
+    $('.main').inert = false;
+    el.sidebar.inert = isMobile();
+    if (wasOpen && isMobile()) $('#menuBtn').focus();
   }
+  matchMedia('(max-width: 860px)').addEventListener('change', closeDrawer);
+  closeDrawer();
+  el.sidebar.addEventListener('keydown', (event) => {
+    if (!isMobile() || !el.app.classList.contains('menu-open') || event.key !== 'Tab') return;
+    const items = [...el.sidebar.querySelectorAll('a,button')].filter((item) => item.getClientRects().length && !item.hidden);
+    const first = items[0], last = items.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  });
 
   $('#collapseBtn').addEventListener('click', () => {
     const on = el.app.classList.toggle('is-collapsed');
     local.set(LS.collapsed, on ? '1' : '');
+    $('#collapseBtn').setAttribute('aria-expanded', String(!on));
   });
   $('#menuBtn').addEventListener('click', () => {
     el.app.classList.add('menu-open');
     el.backdrop.hidden = false;
+    el.sidebar.inert = false;
+    $('#menuBtn').setAttribute('aria-expanded', 'true');
+    $('.main').inert = true;
+    el.sidebar.querySelector('a,button').focus();
   });
   el.backdrop.addEventListener('click', closeDrawer);
   addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
   if (local.get(LS.collapsed) === '1') el.app.classList.add('is-collapsed');
+  $('#collapseBtn').setAttribute('aria-expanded', String(!el.app.classList.contains('is-collapsed')));
 
   /* ---------- 顶栏交互 ---------- */
   $('#themeBtn').addEventListener('click', () => {
@@ -648,7 +750,7 @@
     local.keys()
       .filter((key) => key.startsWith(PROGRESS_PREFIX))
       .forEach((key) => local.remove(key));
-    renderGrid();
+    update();
     closeDrawer();
   });
 
@@ -671,12 +773,20 @@
   async function refreshOfflineBadges() {
     if (!('caches' in window)) return;
     try {
-      const cache = await caches.open('kidslab-courseware');
-      const keys = await cache.keys();
+      const stateCache = await caches.open('kidslab-offline-state-v2');
+      const prefix = new URL('__offline__/courses/', document.baseURI).href;
       const next = new Set();
-      for (const req of keys) {
-        const m = new URL(req.url).pathname.match(/\/courseware\/([^/]+)\/(?:index\.html)?$/);
-        if (m) next.add(decodeURIComponent(m[1]));
+      const records = await stateCache.keys();
+      for (const key of records) {
+        if (!key.url.startsWith(prefix)) continue;
+        const record = await (await stateCache.match(key)).json();
+        const base = new URL(`courseware/${record.id}/`, document.baseURI);
+        const cache = await caches.open(record.cache);
+        const marker = await cache.match(new URL('offline.json', base).href);
+        if (!marker) continue;
+        const manifest = await marker.json();
+        const urls = new Set((await cache.keys()).map((request) => request.url));
+        if (manifest.version === record.version && manifest.assets.every((asset) => urls.has(new URL(asset.path, base).href))) next.add(record.id);
       }
       const changed = next.size !== offlineIds.size || [...next].some((id) => !offlineIds.has(id));
       offlineIds.clear();
@@ -686,6 +796,9 @@
   }
 
   if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data?.type === 'kidslab-offline-updated') refreshOfflineBadges();
+    });
     addEventListener('load', () => {
       /* 更新策略保守：不 skipWaiting，新版本等所有页面关闭后接管 */
       navigator.serviceWorker.register('sw.js').then(refreshOfflineBadges).catch(() => {});
@@ -710,7 +823,7 @@
       $('#resetBtn').hidden = true;
     });
   addEventListener('pageshow', () => {
-    if (state.courses.length) renderGrid();
+    if (state.courses.length) update();
     refreshOfflineBadges();
   });
 })();

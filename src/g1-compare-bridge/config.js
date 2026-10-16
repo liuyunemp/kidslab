@@ -2,10 +2,7 @@ export const config = {
   "id": "g1-compare-bridge",
   "kind": "compare",
   "category": "math",
-  "grades": [
-    "g1a",
-    "g1b"
-  ],
+  "grades": ["g1b"],
   "tags": [
     "比大小",
     "数的认识"

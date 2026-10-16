@@ -1,0 +1,203 @@
+// Textbook-linked, representative explorations; see facts.md for scope.
+export const course = {
+  "id": "g1-addition-depot",
+  "kind": "add",
+  "title": {
+    "zh": "加法车站",
+    "en": "Addition Depot"
+  },
+  "category": "math",
+  "icon": "🚂",
+  "tags": [
+    "加减法",
+    "数位",
+    "3D",
+    "实验"
+  ],
+  "grades": [
+    "g1b"
+  ],
+  "book": {
+    "title": "数学 一年级下册",
+    "edition": "2024年审定",
+    "url": "https://book.pep.com.cn/1221001102241/mobile/index.html"
+  },
+  "activities": [
+    {
+      "title": {
+        "zh": "合并乘客 1",
+        "en": "Join passengers 1"
+      },
+      "invite": {
+        "zh": "把两批合起来，满十再捆一捆。",
+        "en": "Join both groups, then bundle ten loose blocks."
+      },
+      "source": {
+        "unit": 4,
+        "lesson": "100以内的口算加、减法",
+        "pages": "43–55"
+      },
+      "note": {
+        "zh": "合并时总数等于两部分的和；把十个一换成一个十，总数不变。",
+        "en": "Joining adds two parts. Exchanging ten ones for one ten preserves the total."
+      },
+      "a": 20,
+      "b": 30,
+      "id": "add-1"
+    },
+    {
+      "title": {
+        "zh": "合并乘客 2",
+        "en": "Join passengers 2"
+      },
+      "invite": {
+        "zh": "把两批合起来，满十再捆一捆。",
+        "en": "Join both groups, then bundle ten loose blocks."
+      },
+      "source": {
+        "unit": 4,
+        "lesson": "100以内的口算加、减法",
+        "pages": "43–55"
+      },
+      "note": {
+        "zh": "合并时总数等于两部分的和；把十个一换成一个十，总数不变。",
+        "en": "Joining adds two parts. Exchanging ten ones for one ten preserves the total."
+      },
+      "a": 30,
+      "b": 4,
+      "id": "add-2"
+    },
+    {
+      "title": {
+        "zh": "合并乘客 3",
+        "en": "Join passengers 3"
+      },
+      "invite": {
+        "zh": "把两批合起来，满十再捆一捆。",
+        "en": "Join both groups, then bundle ten loose blocks."
+      },
+      "source": {
+        "unit": 4,
+        "lesson": "100以内的口算加、减法",
+        "pages": "43–55"
+      },
+      "note": {
+        "zh": "合并时总数等于两部分的和；把十个一换成一个十，总数不变。",
+        "en": "Joining adds two parts. Exchanging ten ones for one ten preserves the total."
+      },
+      "a": 35,
+      "b": 2,
+      "id": "add-3"
+    },
+    {
+      "title": {
+        "zh": "合并乘客 4",
+        "en": "Join passengers 4"
+      },
+      "invite": {
+        "zh": "把两批合起来，满十再捆一捆。",
+        "en": "Join both groups, then bundle ten loose blocks."
+      },
+      "source": {
+        "unit": 4,
+        "lesson": "100以内的口算加、减法",
+        "pages": "43–55"
+      },
+      "note": {
+        "zh": "合并时总数等于两部分的和；把十个一换成一个十，总数不变。",
+        "en": "Joining adds two parts. Exchanging ten ones for one ten preserves the total."
+      },
+      "a": 36,
+      "b": 7,
+      "id": "add-4"
+    },
+    {
+      "title": {
+        "zh": "合并乘客 5",
+        "en": "Join passengers 5"
+      },
+      "invite": {
+        "zh": "把两批合起来，满十再捆一捆。",
+        "en": "Join both groups, then bundle ten loose blocks."
+      },
+      "source": {
+        "unit": 4,
+        "lesson": "100以内的口算加、减法",
+        "pages": "43–55"
+      },
+      "note": {
+        "zh": "合并时总数等于两部分的和；把十个一换成一个十，总数不变。",
+        "en": "Joining adds two parts. Exchanging ten ones for one ten preserves the total."
+      },
+      "a": 40,
+      "b": 20,
+      "id": "add-5"
+    },
+    {
+      "title": {
+        "zh": "合并乘客 6",
+        "en": "Join passengers 6"
+      },
+      "invite": {
+        "zh": "把两批合起来，满十再捆一捆。",
+        "en": "Join both groups, then bundle ten loose blocks."
+      },
+      "source": {
+        "unit": 4,
+        "lesson": "100以内的口算加、减法",
+        "pages": "43–55"
+      },
+      "note": {
+        "zh": "合并时总数等于两部分的和；把十个一换成一个十，总数不变。",
+        "en": "Joining adds two parts. Exchanging ten ones for one ten preserves the total."
+      },
+      "a": 23,
+      "b": 30,
+      "id": "add-6"
+    },
+    {
+      "title": {
+        "zh": "合并乘客 7",
+        "en": "Join passengers 7"
+      },
+      "invite": {
+        "zh": "把两批合起来，满十再捆一捆。",
+        "en": "Join both groups, then bundle ten loose blocks."
+      },
+      "source": {
+        "unit": 4,
+        "lesson": "100以内的口算加、减法",
+        "pages": "43–55"
+      },
+      "note": {
+        "zh": "合并时总数等于两部分的和；把十个一换成一个十，总数不变。",
+        "en": "Joining adds two parts. Exchanging ten ones for one ten preserves the total."
+      },
+      "a": 58,
+      "b": 6,
+      "id": "add-7"
+    },
+    {
+      "title": {
+        "zh": "合并乘客 8",
+        "en": "Join passengers 8"
+      },
+      "invite": {
+        "zh": "把两批合起来，满十再捆一捆。",
+        "en": "Join both groups, then bundle ten loose blocks."
+      },
+      "source": {
+        "unit": 4,
+        "lesson": "100以内的口算加、减法",
+        "pages": "43–55"
+      },
+      "note": {
+        "zh": "合并时总数等于两部分的和；把十个一换成一个十，总数不变。",
+        "en": "Joining adds two parts. Exchanging ten ones for one ten preserves the total."
+      },
+      "a": 90,
+      "b": 10,
+      "id": "add-8"
+    }
+  ]
+};

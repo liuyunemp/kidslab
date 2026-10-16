@@ -13,11 +13,7 @@
     "primary",
     "junior"
   ],
-  "grades": [
-    "g4",
-    "g5",
-    "g6"
-  ],
+  "grades": [],
   "tags": [
     "策略",
     "推理",

@@ -1,0 +1,29 @@
+{
+  "id": "voxel-studio",
+  "version": "89f65be96a03ea1491fcdafce73973f02b7cadb3d562f6081fd1b2bded27e48d",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "92e6429cc6bde197c03e46f1126ad1ff03ad9d3fc130656b025ce9934b685c5a"
+    },
+    {
+      "path": "index.html",
+      "sha256": "7c04c60c58eeed80b818cf54a30c8983b18d530dea076a78f491e51209800ddd"
+    },
+    {
+      "path": "main.js",
+      "sha256": "aabe690f0d4f06bf396ec4416eadede6a9af631c5d9b29ef9f9483f841adce1f",
+      "fingerprint": "12399561"
+    },
+    {
+      "path": "style.css",
+      "sha256": "48af61291e7449cbff7d4a1c0f0cde01ee365a1a63aa82ddb9b92f0dd781218a",
+      "fingerprint": "166d3601"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

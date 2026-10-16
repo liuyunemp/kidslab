@@ -1,0 +1,29 @@
+{
+  "id": "plant-lab",
+  "version": "ef3b6d59d2cc765c487a7170213b2fc58fa3c15f0cd16ec34e2fb7dcdacd6b50",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "6ea3c4c8a4934b2edc86d57dcc620e73ff85e66be826fa26388281cecb6003e3"
+    },
+    {
+      "path": "index.html",
+      "sha256": "c4aa8a397e5228e75860381f4ab1e2c9b60825dd79364612f54919043d02c7c6"
+    },
+    {
+      "path": "main.js",
+      "sha256": "e8f0bef8cda3f99144af23e3fc0bbc709e6f2d6087f7eb044d60986e61c96b51",
+      "fingerprint": "97eedd2c"
+    },
+    {
+      "path": "style.css",
+      "sha256": "4605ae0edc543bf19cfc317441ac03e1e52566bc25c4b7bcf51c044541c76feb",
+      "fingerprint": "65187756"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

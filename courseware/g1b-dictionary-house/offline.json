@@ -1,0 +1,67 @@
+{
+  "id": "g1b-dictionary-house",
+  "version": "0c7c946ade11551e8a5e692e33bbd58216eafd419f847228d607492e49a65b41",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "ef7bb4c0bbafa1c81f07cc75032a3fdab8d5370e88fc4bfa85dde995f8d68acf",
+      "fingerprint": "a70c4ad1"
+    },
+    {
+      "path": "audio/lab-glow.meta.json",
+      "sha256": "0f19c1fab1e0c23085b6fdea516db47bb8ea04414919a63b1d783cb34e3bb73f"
+    },
+    {
+      "path": "audio/lab-glow.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "content.js",
+      "sha256": "4f82073c9e750d81bfffb379232c721ec33ebb06ee2ee741da36d9a59e130f5c",
+      "fingerprint": "dcef8340"
+    },
+    {
+      "path": "course.json",
+      "sha256": "1ea3c7f112a73db52e3350a9c19d5072068ca33fb761e212301f527fdb00be19"
+    },
+    {
+      "path": "exploration-model.js",
+      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
+      "fingerprint": "da11fe5b"
+    },
+    {
+      "path": "index.html",
+      "sha256": "b50be3bfe532060ef40f71bab241374d8cdcd8ab898167d82cb676c4fef757c5"
+    },
+    {
+      "path": "main.js",
+      "sha256": "39f4681ff760dda2a1d7e599a986e0d54eeed189cffb0e62f07cee54e872d931",
+      "fingerprint": "1937da26"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
+      "fingerprint": "3e5ed74b"
+    },
+    {
+      "path": "style.css",
+      "sha256": "25f72a72c996229ddab015cdd643252c0d0f5cd4aa106258ecd93367d1e9fbb9",
+      "fingerprint": "d37b54ce"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

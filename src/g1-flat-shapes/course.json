@@ -5,20 +5,23 @@
     "en": "Shape Workshop"
   },
   "description": {
-    "zh": "为小房子、风筝和车轮挑合适的平面图形。",
-    "en": "Pick flat shapes for roofs, kites, wheels and more."
+    "zh": "拖动图形，转一转，拼在一起。",
+    "en": "Move, rotate and join the shapes."
   },
   "category": "math",
-  "levels": [
-    "primary"
-  ],
   "grades": [
     "g1b"
   ],
+  "levels": [
+    "primary"
+  ],
   "tags": [
-    "平面图形"
+    "平面图形",
+    "3D",
+    "实验"
   ],
   "icon": "🔷",
-  "order": 36,
+  "order": 30,
   "badge": "new"
 }
+

@@ -16,7 +16,8 @@
     "test:e2e:shard": "node scripts/e2e-shard.mjs",
     "test:e2e:timing": "playwright test --reporter=json --output=test-results-timing",
     "icons": "node scripts/icons.mjs",
-    "vendor": "cp node_modules/three/build/three.module.min.js src/welcome/vendor/three.module.min.js"
+    "vendor": "node scripts/vendor.mjs",
+    "vendor:check": "node scripts/vendor.mjs --check"
   },
   "license": "MIT",
   "devDependencies": {

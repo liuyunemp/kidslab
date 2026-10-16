@@ -132,10 +132,18 @@ test.describe('课件离线（cache-on-visit + 离线回放）', () => {
     /* 2. 在线玩课件 → cache-on-visit 进入运行时缓存 */
     await page.goto(`${origin}/${course.path}`);
     await expect(page.locator('body')).toBeVisible();
-    await page.waitForFunction(async (coursePath) => {
-      const cache = await caches.open('kidslab-courseware');
-      return Boolean(await cache.match(new URL(coursePath, location.origin).href));
-    }, `/${course.path}`);
+    await page.waitForFunction(async (id) => {
+      const state = await caches.open('kidslab-offline-state-v2');
+      const response = await state.match(new URL(`/__offline__/courses/${id}`, location.origin).href);
+      if (!response) return false;
+      const record = await response.json();
+      const cache = await caches.open(record.cache);
+      const marker = await cache.match(new URL(`/courseware/${id}/offline.json`, location.origin).href);
+      if (!marker) return false;
+      const manifest = await marker.json();
+      const keys = new Set((await cache.keys()).map((key) => key.url));
+      return manifest.assets.every((asset) => keys.has(new URL(`/courseware/${id}/${asset.path}`, location.origin).href));
+    }, course.id);
 
     /* 3. 回主站：卡片出现「可离线」角标 */
     await page.goto(`${origin}/`);

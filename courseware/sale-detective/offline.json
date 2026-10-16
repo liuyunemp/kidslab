@@ -1,0 +1,24 @@
+{
+  "id": "sale-detective",
+  "version": "477b4b71b911a1941fbf995915dbf8dc06cdf1f7d80aa8fde2f37357d2b4442e",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "f827dc9c01a94205325550d699923c9ff38a4928625d43220709fbf1d6689dd5"
+    },
+    {
+      "path": "index.html",
+      "sha256": "10a0f99ccb233f61d5e33c258179a95cb93fc760734e71f482f723c8fe043572"
+    },
+    {
+      "path": "main.js",
+      "sha256": "469dd878422c80af50e8b48ecc511cd66cea0ac6f209c3215065db223f22b267",
+      "fingerprint": "e9dcba0a"
+    },
+    {
+      "path": "style.css",
+      "sha256": "34c8ddf873781923184cbe5e19c27e428a59a91c7753b90db327d7daf114253e",
+      "fingerprint": "7a5548e1"
+    }
+  ]
+}

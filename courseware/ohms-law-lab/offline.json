@@ -1,0 +1,58 @@
+{
+  "id": "ohms-law-lab",
+  "version": "1298fd32b452160f2db79019fa90688804c94527b58da6fa9f54812b9443eb5f",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "b2677420c3fc0da0942abbe7dece61cd5797d3fb1e348315d48d45d2a7cdb7df",
+      "fingerprint": "e9492a23"
+    },
+    {
+      "path": "audio/bgm-calm-tech-01.ogg",
+      "sha256": "045c23620feaee4f5a3fb68b6fa27b21951175cfbc6df51eba3237c88361859e"
+    },
+    {
+      "path": "course.json",
+      "sha256": "577da276e5bcd8693bfb2caf757da3d777effd8eb56be240bb9f43d0b9b9690b"
+    },
+    {
+      "path": "index.html",
+      "sha256": "ba3c54d7d1db03b2d156c739e1763d7e29d88f9e607a655739573b0a3fb1beba"
+    },
+    {
+      "path": "main.js",
+      "sha256": "3452b044ce98a0f2b96c71e500d5ce05e0256fb6208e3a791822e1bbb3163314",
+      "fingerprint": "8d99122f"
+    },
+    {
+      "path": "ohms-model.js",
+      "sha256": "009672ae45d3077cc51f9db82f62146c1ab5492fe9310e8fcee4c005af8ff2cd",
+      "fingerprint": "41e2f790"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "678d2e3ae62f7a04f6d116282ab045f6e87b82c597db18f8d5327e904c7c8350",
+      "fingerprint": "106df4b9"
+    },
+    {
+      "path": "style.css",
+      "sha256": "891187c12b37995cf38a8d0917c9b429c7d933b8904a352268e82fbc969994c8",
+      "fingerprint": "ad8fccd8"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

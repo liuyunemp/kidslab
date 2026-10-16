@@ -1,0 +1,39 @@
+{
+  "id": "electric-mouse",
+  "version": "85ee245110eccb465d9b7e13f7a57eea87baf2714a14cadfdd27a6a5e36aed68",
+  "assets": [
+    {
+      "path": "circuit-model.js",
+      "sha256": "5c1c97020e093d077d4176e822bf414359a00f663a48b1814f3db4ab5355d821",
+      "fingerprint": "a807b04b"
+    },
+    {
+      "path": "circuit-simulator.js",
+      "sha256": "833d6e8a9a4381b0d6a7a0b4eb888e61ab874b1b184f5b55bf09a0dae38544f9",
+      "fingerprint": "9fe12e52"
+    },
+    {
+      "path": "circuit-storage.js",
+      "sha256": "64effcd3d1c48f844711eeefc5f48dc78d53b7be6aaba0d3dd73c9bb89f42c72",
+      "fingerprint": "7ac85a42"
+    },
+    {
+      "path": "course.json",
+      "sha256": "49897446a6488028edd0b4a06c87e761e38ed334db765dc9b4374716bea94976"
+    },
+    {
+      "path": "index.html",
+      "sha256": "59d18f803af76c577d90b0ff19d15d8eb593a6804b197c9211f6dd589cc2bc18"
+    },
+    {
+      "path": "main.js",
+      "sha256": "84aae8feccca6078aa2d946333a4b09880ae7e769a38f94522516232787c8f60",
+      "fingerprint": "2477bcec"
+    },
+    {
+      "path": "style.css",
+      "sha256": "0a4b3204ef5268bc9d8d31a9b2ffce0b06e295a67a43aa35557a8bdc08e44fa9",
+      "fingerprint": "280fcf85"
+    }
+  ]
+}

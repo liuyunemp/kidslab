@@ -1,0 +1,43 @@
+{
+  "id": "g1-rhyme-stage",
+  "version": "d578415672cdd94cb0b7285e8eadc6ee4c70432c0e740987c067640aaed3fd60",
+  "assets": [
+    {
+      "path": "audio/bgm.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "config.js",
+      "sha256": "6c9146fb40f7035eaeae17c4aa96211629fe1d75a6608a3813edc012c6368d8d",
+      "fingerprint": "0af682a3"
+    },
+    {
+      "path": "course.json",
+      "sha256": "b1cdd45fede31ec20a002a615afadb339c0f4f42e79a0a320c2c44f5b3e69cef"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "b2f978854d86a6988dd89bf28d13d9e2b872169b9cf280083e68d960ed0853d3",
+      "fingerprint": "0d3f2646"
+    },
+    {
+      "path": "index.html",
+      "sha256": "7ea61b0aabe2f026891cf461728c954050d26bab3ace716eaa07f5201c89ccce"
+    },
+    {
+      "path": "main.js",
+      "sha256": "612fa76caf54d53af201d1546ecb7e21ccb44f81197822687340b7de8f0f98dc",
+      "fingerprint": "ea5dde83"
+    },
+    {
+      "path": "model.js",
+      "sha256": "200576b540c95c5edc0d1aa7f64f24c109559196dee9d73c057c9d01614664aa",
+      "fingerprint": "9217243d"
+    },
+    {
+      "path": "style.css",
+      "sha256": "e16d3a6aea8be84447475e9109d7dfcf70753043a85d54a4d683ab5a40ac1a22",
+      "fingerprint": "1a8bcd3f"
+    }
+  ]
+}

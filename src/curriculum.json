@@ -1,0 +1,3044 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-10-16",
+  "books": {
+    "m1b": {
+      "grade": "g1b",
+      "category": "math",
+      "title": {
+        "zh": "数学 一年级下册",
+        "en": "Math · Grade 1 · Spring"
+      },
+      "edition": "人教社公开电子教材 1221001102241",
+      "url": "https://book.pep.com.cn/1221001102241/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "认识平面图形",
+            "en": "Flat shapes"
+          },
+          "startPage": 1,
+          "endPage": 7
+        },
+        {
+          "id": "2",
+          "kind": "unit",
+          "number": 2,
+          "title": {
+            "zh": "20以内的退位减法",
+            "en": "Subtraction within 20"
+          },
+          "startPage": 8,
+          "endPage": 22
+        },
+        {
+          "id": "3",
+          "kind": "unit",
+          "number": 3,
+          "title": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "startPage": 23,
+          "endPage": 42
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "startPage": 43,
+          "endPage": 55
+        },
+        {
+          "id": "5",
+          "kind": "unit",
+          "number": 5,
+          "title": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Written addition and subtraction"
+          },
+          "startPage": 56,
+          "endPage": 68
+        },
+        {
+          "id": "6",
+          "kind": "unit",
+          "number": 6,
+          "title": {
+            "zh": "数量间的加减关系",
+            "en": "Additive relationships"
+          },
+          "startPage": 69,
+          "endPage": 76
+        },
+        {
+          "id": "shopping",
+          "kind": "topic",
+          "title": {
+            "zh": "欢乐购物街",
+            "en": "Shopping street"
+          },
+          "startPage": 77,
+          "endPage": 82
+        },
+        {
+          "id": "7",
+          "kind": "unit",
+          "number": 7,
+          "title": {
+            "zh": "复习与关联",
+            "en": "Review and connections"
+          },
+          "startPage": 83,
+          "endPage": 90
+        }
+      ]
+    },
+    "m2a": {
+      "grade": "g2a",
+      "category": "math",
+      "title": {
+        "zh": "数学 二年级上册",
+        "en": "Math · Grade 2 · Fall"
+      },
+      "edition": "人教社公开电子教材 1221001201251",
+      "url": "https://book.pep.com.cn/1221001201251/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "分类与整理",
+            "en": "Sorting and organizing"
+          },
+          "startPage": 1,
+          "endPage": 9
+        }
+      ]
+    },
+    "m2b": {
+      "grade": "g2b",
+      "category": "math",
+      "title": {
+        "zh": "数学 二年级下册",
+        "en": "Math · Grade 2 · Spring"
+      },
+      "edition": "人教社公开电子教材 1221001202251",
+      "url": "https://book.pep.com.cn/1221001202251/mobile/index.html",
+      "units": [
+        {
+          "id": "time",
+          "kind": "topic",
+          "title": {
+            "zh": "时间在哪里",
+            "en": "Where is time?"
+          },
+          "startPage": 1,
+          "endPage": 9
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "万以内的加法和减法",
+            "en": "Addition and subtraction within 10,000"
+          },
+          "startPage": 63,
+          "endPage": 82
+        }
+      ]
+    },
+    "m3b": {
+      "grade": "g3b",
+      "category": "math",
+      "title": {
+        "zh": "数学 三年级下册",
+        "en": "Math · Grade 3 · Spring"
+      },
+      "edition": "人教社公开电子教材 1221001302251",
+      "url": "https://book.pep.com.cn/1221001302251/mobile/index.html",
+      "units": [
+        {
+          "id": "3",
+          "kind": "unit",
+          "number": 3,
+          "title": {
+            "zh": "长方形和正方形",
+            "en": "Rectangles and squares"
+          },
+          "startPage": 39,
+          "endPage": 51
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "图形的面积",
+            "en": "Area of shapes"
+          },
+          "startPage": 52,
+          "endPage": 64
+        }
+      ]
+    },
+    "m4a": {
+      "grade": "g4a",
+      "category": "math",
+      "title": {
+        "zh": "数学 四年级上册",
+        "en": "Math · Grade 4 · Fall"
+      },
+      "edition": "人教社公开电子教材 1221001401261",
+      "url": "https://book.pep.com.cn/1221001401261/mobile/index.html",
+      "units": [
+        {
+          "id": "2",
+          "kind": "unit",
+          "number": 2,
+          "title": {
+            "zh": "角的度量",
+            "en": "Measuring angles"
+          },
+          "startPage": 28,
+          "endPage": 38
+        }
+      ]
+    },
+    "m4b": {
+      "grade": "g4b",
+      "category": "math",
+      "title": {
+        "zh": "数学 四年级下册",
+        "en": "Math · Grade 4 · Spring"
+      },
+      "edition": "人教社公开电子教材 1221001402131",
+      "url": "https://book.pep.com.cn/1221001402131/mobile/index.html",
+      "units": [
+        {
+          "id": "5",
+          "kind": "unit",
+          "number": 5,
+          "title": {
+            "zh": "三角形",
+            "en": "Triangles"
+          },
+          "startPage": 57,
+          "endPage": 68
+        },
+        {
+          "id": "7",
+          "kind": "unit",
+          "number": 7,
+          "title": {
+            "zh": "图形的运动（一）",
+            "en": "Moving shapes I"
+          },
+          "startPage": 79,
+          "endPage": 86
+        },
+        {
+          "id": "9",
+          "kind": "unit",
+          "number": 9,
+          "title": {
+            "zh": "数学广角——鸡兔同笼",
+            "en": "Chickens and rabbits"
+          },
+          "startPage": 99,
+          "endPage": 102
+        }
+      ]
+    },
+    "m5a": {
+      "grade": "g5a",
+      "category": "math",
+      "title": {
+        "zh": "数学 五年级上册",
+        "en": "Math · Grade 5 · Fall"
+      },
+      "edition": "人教社公开电子教材 1221001501261",
+      "url": "https://book.pep.com.cn/1221001501261/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "观察简单组合体",
+            "en": "Viewing combined solids"
+          },
+          "startPage": 1,
+          "endPage": 6
+        },
+        {
+          "id": "6",
+          "kind": "unit",
+          "number": 6,
+          "title": {
+            "zh": "多边形的面积",
+            "en": "Area of polygons"
+          },
+          "startPage": 72,
+          "endPage": 94
+        }
+      ]
+    },
+    "m5b": {
+      "grade": "g5b",
+      "category": "math",
+      "title": {
+        "zh": "数学 五年级下册",
+        "en": "Math · Grade 5 · Spring"
+      },
+      "edition": "人教社公开电子教材 1221001502141",
+      "url": "https://book.pep.com.cn/1221001502141/mobile/index.html",
+      "units": [
+        {
+          "id": "3",
+          "kind": "unit",
+          "number": 3,
+          "title": {
+            "zh": "长方体和正方体",
+            "en": "Cuboids and cubes"
+          },
+          "startPage": 18,
+          "endPage": 43
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "分数的意义和性质",
+            "en": "Meaning and properties of fractions"
+          },
+          "startPage": 45,
+          "endPage": 82
+        },
+        {
+          "id": "6",
+          "kind": "unit",
+          "number": 6,
+          "title": {
+            "zh": "分数的加法和减法",
+            "en": "Adding and subtracting fractions"
+          },
+          "startPage": 89,
+          "endPage": 101
+        }
+      ]
+    },
+    "m6a": {
+      "grade": "g6a",
+      "category": "math",
+      "title": {
+        "zh": "数学 六年级上册",
+        "en": "Math · Grade 6 · Fall"
+      },
+      "edition": "人教社公开电子教材 1221001601261",
+      "url": "https://book.pep.com.cn/1221001601261/mobile/index.html",
+      "units": [
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "圆",
+            "en": "Circles"
+          },
+          "startPage": 48,
+          "endPage": 73
+        }
+      ]
+    },
+    "m6b": {
+      "grade": "g6b",
+      "category": "math",
+      "title": {
+        "zh": "数学 六年级下册",
+        "en": "Math · Grade 6 · Spring"
+      },
+      "edition": "人教社公开电子教材 1221001602141",
+      "url": "https://book.pep.com.cn/1221001602141/mobile/index.html",
+      "units": [
+        {
+          "id": "2",
+          "kind": "unit",
+          "number": 2,
+          "title": {
+            "zh": "百分数（二）",
+            "en": "Percentages II"
+          },
+          "startPage": 8,
+          "endPage": 14
+        },
+        {
+          "id": "3",
+          "kind": "unit",
+          "number": 3,
+          "title": {
+            "zh": "圆柱与圆锥",
+            "en": "Cylinders and cones"
+          },
+          "startPage": 16,
+          "endPage": 37
+        },
+        {
+          "id": "5",
+          "kind": "unit",
+          "number": 5,
+          "title": {
+            "zh": "数学广角——鸽巢问题",
+            "en": "Pigeonhole principle"
+          },
+          "startPage": 67,
+          "endPage": 70
+        }
+      ]
+    },
+    "c1a": {
+      "grade": "g1a",
+      "category": "chinese",
+      "title": {
+        "zh": "语文 一年级上册",
+        "en": "Chinese · Grade 1 · Fall"
+      },
+      "edition": "人教社公开电子教材 1211001101241",
+      "url": "https://book.pep.com.cn/1211001101241/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "startPage": 8,
+          "endPage": 19
+        },
+        {
+          "id": "2",
+          "kind": "unit",
+          "number": 2,
+          "title": {
+            "zh": "汉语拼音",
+            "en": "Pinyin"
+          },
+          "startPage": 20,
+          "endPage": 31
+        },
+        {
+          "id": "3",
+          "kind": "unit",
+          "number": 3,
+          "title": {
+            "zh": "汉语拼音",
+            "en": "Pinyin"
+          },
+          "startPage": 32,
+          "endPage": 44
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "汉语拼音",
+            "en": "Pinyin"
+          },
+          "startPage": 45,
+          "endPage": 59
+        },
+        {
+          "id": "6",
+          "kind": "unit",
+          "number": 6,
+          "title": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "startPage": 73,
+          "endPage": 83
+        },
+        {
+          "id": "strokes",
+          "kind": "topic",
+          "title": {
+            "zh": "笔画名称表",
+            "en": "Stroke reference"
+          },
+          "startPage": 109,
+          "endPage": 109
+        }
+      ]
+    },
+    "c1b": {
+      "grade": "g1b",
+      "category": "chinese",
+      "title": {
+        "zh": "语文 一年级下册",
+        "en": "Chinese · Grade 1 · Spring"
+      },
+      "edition": "人教社公开电子教材 1211001102241",
+      "url": "https://book.pep.com.cn/1211001102241/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "startPage": 2,
+          "endPage": 14
+        },
+        {
+          "id": "2",
+          "kind": "unit",
+          "number": 2,
+          "title": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "startPage": 16,
+          "endPage": 25
+        },
+        {
+          "id": "3",
+          "kind": "unit",
+          "number": 3,
+          "title": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "startPage": 26,
+          "endPage": 38
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "startPage": 39,
+          "endPage": 47
+        },
+        {
+          "id": "5",
+          "kind": "unit",
+          "number": 5,
+          "title": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "startPage": 48,
+          "endPage": 60
+        },
+        {
+          "id": "6",
+          "kind": "unit",
+          "number": 6,
+          "title": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "startPage": 61,
+          "endPage": 76
+        },
+        {
+          "id": "7",
+          "kind": "unit",
+          "number": 7,
+          "title": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "startPage": 78,
+          "endPage": 97
+        },
+        {
+          "id": "8",
+          "kind": "unit",
+          "number": 8,
+          "title": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "startPage": 98,
+          "endPage": 113
+        }
+      ]
+    },
+    "s1a": {
+      "grade": "g1a",
+      "category": "science",
+      "title": {
+        "zh": "科学 一年级上册",
+        "en": "Science · Grade 1 · Fall"
+      },
+      "edition": "人教社公开电子教材 1244001101241",
+      "url": "https://book.pep.com.cn/1244001101241/mobile/index.html",
+      "units": [
+        {
+          "id": "2",
+          "kind": "unit",
+          "number": 2,
+          "title": {
+            "zh": "我们的感觉器官",
+            "en": "Our senses"
+          },
+          "startPage": 16,
+          "endPage": 33
+        }
+      ]
+    },
+    "s1b": {
+      "grade": "g1b",
+      "category": "science",
+      "title": {
+        "zh": "科学 一年级下册",
+        "en": "Science · Grade 1 · Spring"
+      },
+      "edition": "人教社公开电子教材 1244001102241",
+      "url": "https://book.pep.com.cn/1244001102241/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "位置和方向",
+            "en": "Position and direction"
+          },
+          "startPage": 1,
+          "endPage": 13
+        }
+      ]
+    },
+    "s2a": {
+      "grade": "g2a",
+      "category": "science",
+      "title": {
+        "zh": "科学 二年级上册",
+        "en": "Science · Grade 2 · Fall"
+      },
+      "edition": "人教社公开电子教材 1244001201251",
+      "url": "https://book.pep.com.cn/1244001201251/mobile/index.html",
+      "units": [
+        {
+          "id": "2",
+          "kind": "unit",
+          "number": 2,
+          "title": {
+            "zh": "水和空气",
+            "en": "Water and air"
+          },
+          "startPage": 17,
+          "endPage": 31
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "制作小船",
+            "en": "Making boats"
+          },
+          "startPage": 48,
+          "endPage": 62
+        }
+      ]
+    },
+    "s3a": {
+      "grade": "g3a",
+      "category": "science",
+      "title": {
+        "zh": "科学 三年级上册",
+        "en": "Science · Grade 3 · Fall"
+      },
+      "edition": "人教社公开电子教材 1244001301251",
+      "url": "https://book.pep.com.cn/1244001301251/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "有趣的磁铁",
+            "en": "Magnets"
+          },
+          "startPage": 1,
+          "endPage": 17
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "消化与呼吸",
+            "en": "Digestion and breathing"
+          },
+          "startPage": 57,
+          "endPage": 81
+        }
+      ]
+    },
+    "s3b": {
+      "grade": "g3b",
+      "category": "science",
+      "title": {
+        "zh": "科学 三年级下册",
+        "en": "Science · Grade 3 · Spring"
+      },
+      "edition": "人教社公开电子教材 1244001302251",
+      "url": "https://book.pep.com.cn/1244001302251/mobile/index.html",
+      "units": [
+        {
+          "id": "2",
+          "kind": "unit",
+          "number": 2,
+          "title": {
+            "zh": "从种子到种子",
+            "en": "From seed to seed"
+          },
+          "startPage": 15,
+          "endPage": 36
+        }
+      ]
+    },
+    "s4a": {
+      "grade": "g4a",
+      "category": "science",
+      "title": {
+        "zh": "科学 四年级上册",
+        "en": "Science · Grade 4 · Fall"
+      },
+      "edition": "人教社公开电子教材 1244001401261",
+      "url": "https://book.pep.com.cn/1244001401261/mobile/index.html",
+      "units": [
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "声音",
+            "en": "Sound"
+          },
+          "startPage": 68,
+          "endPage": 87
+        },
+        {
+          "id": "5",
+          "kind": "unit",
+          "number": 5,
+          "title": {
+            "zh": "制作简易乐器",
+            "en": "Making instruments"
+          },
+          "startPage": 88,
+          "endPage": 102
+        }
+      ]
+    },
+    "s4b": {
+      "grade": "g4b",
+      "category": "science",
+      "title": {
+        "zh": "科学 四年级下册",
+        "en": "Science · Grade 4 · Spring"
+      },
+      "edition": "人教社公开电子教材 1244001402201",
+      "url": "https://book.pep.com.cn/1244001402201/mobile/index.html",
+      "units": [
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "地球 太阳 月球",
+            "en": "Earth, Sun and Moon"
+          },
+          "startPage": 38,
+          "endPage": 48
+        }
+      ]
+    },
+    "s5b": {
+      "grade": "g5b",
+      "category": "science",
+      "title": {
+        "zh": "科学 五年级下册",
+        "en": "Science · Grade 5 · Spring"
+      },
+      "edition": "人教社公开电子教材 1244001502201",
+      "url": "https://book.pep.com.cn/1244001502201/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "昼夜与四季",
+            "en": "Day, night and seasons"
+          },
+          "startPage": 2,
+          "endPage": 10
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "简单机械",
+            "en": "Simple machines"
+          },
+          "startPage": 41,
+          "endPage": 55
+        },
+        {
+          "id": "5",
+          "kind": "unit",
+          "number": 5,
+          "title": {
+            "zh": "制作省力装置",
+            "en": "Making labor-saving devices"
+          },
+          "startPage": 56,
+          "endPage": 60
+        }
+      ]
+    },
+    "s6a": {
+      "grade": "g6a",
+      "category": "science",
+      "title": {
+        "zh": "科学 六年级上册",
+        "en": "Science · Grade 6 · Fall"
+      },
+      "edition": "人教社公开电子教材 1244001601261",
+      "url": "https://book.pep.com.cn/1244001601261/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "相互依存的生命世界",
+            "en": "Interdependent life"
+          },
+          "startPage": 1,
+          "endPage": 20
+        },
+        {
+          "id": "3",
+          "kind": "unit",
+          "number": 3,
+          "title": {
+            "zh": "水和天气",
+            "en": "Water and weather"
+          },
+          "startPage": 41,
+          "endPage": 60
+        },
+        {
+          "id": "4",
+          "kind": "unit",
+          "number": 4,
+          "title": {
+            "zh": "自然资源",
+            "en": "Natural resources"
+          },
+          "startPage": 61,
+          "endPage": 82
+        }
+      ]
+    },
+    "s6b": {
+      "grade": "g6b",
+      "category": "science",
+      "title": {
+        "zh": "科学 六年级下册",
+        "en": "Science · Grade 6 · Spring"
+      },
+      "edition": "人教社公开电子教材 1244001602201",
+      "url": "https://book.pep.com.cn/1244001602201/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "生物与环境",
+            "en": "Life and environment"
+          },
+          "startPage": 2,
+          "endPage": 13
+        }
+      ]
+    },
+    "p8a": {
+      "grade": "g8a",
+      "category": "physics",
+      "title": {
+        "zh": "物理 八年级上册",
+        "en": "Physics · Grade 8 · Fall"
+      },
+      "edition": "人教社公开电子教材 1341001201241",
+      "url": "https://book.pep.com.cn/1341001201241/mobile/index.html",
+      "units": [
+        {
+          "id": "5",
+          "kind": "chapter",
+          "number": 5,
+          "title": {
+            "zh": "透镜及其应用",
+            "en": "Lenses and their applications"
+          },
+          "startPage": 113,
+          "endPage": 137
+        },
+        {
+          "id": "6",
+          "kind": "chapter",
+          "number": 6,
+          "title": {
+            "zh": "质量与密度",
+            "en": "Mass and density"
+          },
+          "startPage": 138,
+          "endPage": 158
+        }
+      ]
+    },
+    "p9": {
+      "grade": "g9",
+      "category": "physics",
+      "title": {
+        "zh": "物理 九年级全一册",
+        "en": "Physics · Grade 9 · Full year"
+      },
+      "edition": "人教社公开电子教材 1341001303251",
+      "url": "https://book.pep.com.cn/1341001303251/mobile/index.html",
+      "units": [
+        {
+          "id": "17",
+          "kind": "chapter",
+          "number": 17,
+          "title": {
+            "zh": "欧姆定律",
+            "en": "Ohm’s law"
+          },
+          "startPage": 92,
+          "endPage": 109
+        }
+      ]
+    },
+    "h9a": {
+      "grade": "g9a",
+      "category": "chemistry",
+      "title": {
+        "zh": "化学 九年级上册",
+        "en": "Chemistry · Grade 9 · Fall"
+      },
+      "edition": "人教社公开电子教材 1342001301241",
+      "url": "https://book.pep.com.cn/1342001301241/mobile/index.html",
+      "units": [
+        {
+          "id": "5",
+          "kind": "unit",
+          "number": 5,
+          "title": {
+            "zh": "化学反应的定量关系",
+            "en": "Quantitative relationships in reactions"
+          },
+          "startPage": 109,
+          "endPage": 126
+        }
+      ]
+    },
+    "b7a": {
+      "grade": "g7a",
+      "category": "science",
+      "title": {
+        "zh": "生物学 七年级上册",
+        "en": "Biology · Grade 7 · Fall"
+      },
+      "edition": "人教社公开电子教材 1343001101241",
+      "url": "https://book.pep.com.cn/1343001101241/mobile/index.html",
+      "units": [
+        {
+          "id": "1",
+          "kind": "unit",
+          "number": 1,
+          "title": {
+            "zh": "生物和细胞",
+            "en": "Life and cells"
+          },
+          "startPage": 1,
+          "endPage": 55
+        }
+      ]
+    }
+  },
+  "courses": {
+    "alien-farm": [
+      {
+        "book": "m4b",
+        "unit": "9",
+        "page": 99,
+        "topic": {
+          "zh": "鸡兔同笼",
+          "en": "Chickens and rabbits"
+        }
+      }
+    ],
+    "angle-golf": [
+      {
+        "book": "m4a",
+        "unit": "2",
+        "page": 28,
+        "topic": {
+          "zh": "角的度量",
+          "en": "Measuring angles"
+        }
+      }
+    ],
+    "bet-party": [
+      {
+        "book": "m6b",
+        "unit": "5",
+        "page": 67,
+        "topic": {
+          "zh": "鸽巢问题",
+          "en": "Pigeonhole principle"
+        }
+      }
+    ],
+    "body-rafting": [
+      {
+        "book": "s3a",
+        "unit": "4",
+        "page": 64,
+        "topic": {
+          "zh": "消化器官与食物营养",
+          "en": "Digestion and nutrition"
+        }
+      }
+    ],
+    "carry-factory": [
+      {
+        "book": "m2b",
+        "unit": "4",
+        "page": 63,
+        "topic": {
+          "zh": "万以内的加法和减法",
+          "en": "Addition and subtraction"
+        }
+      }
+    ],
+    "clock-town": [
+      {
+        "book": "m2b",
+        "unit": "time",
+        "page": 1,
+        "topic": {
+          "zh": "认识钟面与时间",
+          "en": "Clocks and time"
+        }
+      }
+    ],
+    "cloud-factory": [
+      {
+        "book": "s6a",
+        "unit": "3",
+        "page": 42,
+        "topic": {
+          "zh": "雾和云、雨和雪",
+          "en": "Fog, clouds, rain and snow"
+        }
+      }
+    ],
+    "creature-workshop": [
+      {
+        "book": "s6b",
+        "unit": "1",
+        "page": 6,
+        "topic": {
+          "zh": "动物对环境的适应",
+          "en": "Animal adaptations"
+        }
+      }
+    ],
+    "density-detective-lab": [
+      {
+        "book": "p8a",
+        "unit": "6",
+        "page": 144,
+        "topic": {
+          "zh": "密度与密度测量",
+          "en": "Density and measurement"
+        }
+      }
+    ],
+    "earth-dj": [
+      {
+        "book": "s5b",
+        "unit": "1",
+        "page": 3,
+        "topic": {
+          "zh": "白天与黑夜、四季的形成",
+          "en": "Day, night and seasons"
+        }
+      }
+    ],
+    "eco-island": [
+      {
+        "book": "s6a",
+        "unit": "1",
+        "page": 11,
+        "topic": {
+          "zh": "有趣的食物联系",
+          "en": "Food webs"
+        }
+      }
+    ],
+    "fraction-beats": [
+      {
+        "book": "m5b",
+        "unit": "4",
+        "page": 45,
+        "topic": {
+          "zh": "分数的意义和性质",
+          "en": "Fraction meaning and equivalence"
+        }
+      },
+      {
+        "book": "m5b",
+        "unit": "6",
+        "page": 89,
+        "topic": {
+          "zh": "分数的加法和减法",
+          "en": "Adding and subtracting fractions"
+        }
+      }
+    ],
+    "g1-character-garden": [
+      {
+        "book": "c1a",
+        "unit": "1",
+        "page": 8,
+        "topic": {
+          "zh": "天地人、口耳目手足、日月山川",
+          "en": "First characters"
+        }
+      }
+    ],
+    "g1-direction-town": [
+      {
+        "book": "s1b",
+        "unit": "1",
+        "page": 2,
+        "topic": {
+          "zh": "前后左右",
+          "en": "Relative positions"
+        }
+      }
+    ],
+    "g1-pinyin-tracks": [
+      {
+        "book": "c1a",
+        "unit": "2",
+        "page": 20,
+        "topic": {
+          "zh": "汉语拼音综合（第二至四单元）",
+          "en": "Pinyin practice across Units 2–4"
+        }
+      },
+      {
+        "book": "c1a",
+        "unit": "3",
+        "page": 32,
+        "topic": {
+          "zh": "汉语拼音综合（第二至四单元）",
+          "en": "Pinyin practice across Units 2–4"
+        }
+      },
+      {
+        "book": "c1a",
+        "unit": "4",
+        "page": 45,
+        "topic": {
+          "zh": "汉语拼音综合（第二至四单元）",
+          "en": "Pinyin practice across Units 2–4"
+        }
+      }
+    ],
+    "g1-rhyme-stage": [
+      {
+        "book": "c1a",
+        "unit": "6",
+        "page": 73,
+        "topic": {
+          "zh": "对韵歌",
+          "en": "Rhyming pairs"
+        }
+      }
+    ],
+    "g1-sort-laundry": [
+      {
+        "book": "m2a",
+        "unit": "1",
+        "page": 1,
+        "topic": {
+          "zh": "分类与整理",
+          "en": "Sorting and organizing"
+        }
+      }
+    ],
+    "g1-stroke-order": [
+      {
+        "book": "c1a",
+        "unit": "1",
+        "page": 11,
+        "topic": {
+          "zh": "笔顺规则",
+          "en": "Stroke order"
+        }
+      }
+    ],
+    "g1-stroke-workshop": [
+      {
+        "book": "c1a",
+        "unit": "strokes",
+        "page": 109,
+        "topic": {
+          "zh": "笔画名称与书写方向",
+          "en": "Strokes and writing direction"
+        }
+      }
+    ],
+    "hamster-fence": [
+      {
+        "book": "m3b",
+        "unit": "3",
+        "page": 39,
+        "topic": {
+          "zh": "长方形和正方形的周长",
+          "en": "Perimeter of rectangles and squares"
+        }
+      },
+      {
+        "book": "m3b",
+        "unit": "4",
+        "page": 52,
+        "topic": {
+          "zh": "图形的面积",
+          "en": "Area of shapes"
+        }
+      }
+    ],
+    "icecream-geometry": [
+      {
+        "book": "m6b",
+        "unit": "3",
+        "page": 16,
+        "topic": {
+          "zh": "圆柱与圆锥的体积",
+          "en": "Volumes of cylinders and cones"
+        }
+      }
+    ],
+    "inkblot-monsters": [
+      {
+        "book": "m4b",
+        "unit": "7",
+        "page": 79,
+        "topic": {
+          "zh": "轴对称图形",
+          "en": "Reflection symmetry"
+        }
+      }
+    ],
+    "magnet-hockey": [
+      {
+        "book": "s3a",
+        "unit": "1",
+        "page": 2,
+        "topic": {
+          "zh": "磁铁的磁极与作用",
+          "en": "Magnetic poles and forces"
+        }
+      }
+    ],
+    "mass-conservation-lab": [
+      {
+        "book": "h9a",
+        "unit": "5",
+        "page": 110,
+        "topic": {
+          "zh": "质量守恒定律",
+          "en": "Conservation of mass"
+        }
+      }
+    ],
+    "microscope-cell-lab": [
+      {
+        "book": "b7a",
+        "unit": "1",
+        "page": 12,
+        "topic": {
+          "zh": "第二章 认识细胞",
+          "en": "Chapter 2: Cells"
+        }
+      }
+    ],
+    "mini-pyramid": [
+      {
+        "book": "s5b",
+        "unit": "4",
+        "page": 42,
+        "topic": {
+          "zh": "杠杆、滑轮与斜面",
+          "en": "Levers, pulleys and ramps"
+        }
+      },
+      {
+        "book": "s5b",
+        "unit": "5",
+        "page": 57,
+        "topic": {
+          "zh": "设计制作省力装置",
+          "en": "Designing labor-saving devices"
+        }
+      }
+    ],
+    "mystery-box": [
+      {
+        "book": "s1a",
+        "unit": "2",
+        "page": 17,
+        "topic": {
+          "zh": "我们怎样知道",
+          "en": "Using our senses"
+        }
+      }
+    ],
+    "number-fireflies": [
+      {
+        "book": "m1b",
+        "unit": "2",
+        "page": 8,
+        "topic": {
+          "zh": "20以内加减综合探索",
+          "en": "Addition and subtraction within 20"
+        },
+        "lessonOrder": 100
+      }
+    ],
+    "ohms-law-lab": [
+      {
+        "book": "p9",
+        "unit": "17",
+        "page": 93,
+        "topic": {
+          "zh": "电流与电压、电阻的关系",
+          "en": "Current, voltage and resistance"
+        }
+      }
+    ],
+    "optics-lab": [
+      {
+        "book": "p8a",
+        "unit": "5",
+        "page": 122,
+        "topic": {
+          "zh": "凸透镜成像的规律",
+          "en": "Images formed by convex lenses"
+        }
+      }
+    ],
+    "plant-xray": [
+      {
+        "book": "s3b",
+        "unit": "2",
+        "page": 16,
+        "topic": {
+          "zh": "播种发芽、根和茎、开花结果",
+          "en": "Germination and plant growth"
+        }
+      }
+    ],
+    "rolling-park": [
+      {
+        "book": "m6a",
+        "unit": "4",
+        "page": 48,
+        "topic": {
+          "zh": "圆的周长与面积",
+          "en": "Circumference and area"
+        }
+      }
+    ],
+    "sale-detective": [
+      {
+        "book": "m6b",
+        "unit": "2",
+        "page": 8,
+        "topic": {
+          "zh": "折扣与百分数",
+          "en": "Discounts and percentages"
+        }
+      }
+    ],
+    "shape-tailor": [
+      {
+        "book": "m5a",
+        "unit": "6",
+        "page": 72,
+        "topic": {
+          "zh": "多边形的面积",
+          "en": "Area of polygons"
+        }
+      }
+    ],
+    "tiny-harbor": [
+      {
+        "book": "s2a",
+        "unit": "2",
+        "page": 23,
+        "topic": {
+          "zh": "把它们放入水中",
+          "en": "Floating and sinking"
+        }
+      },
+      {
+        "book": "s2a",
+        "unit": "4",
+        "page": 49,
+        "topic": {
+          "zh": "认识船、设计和制作小船",
+          "en": "Designing and building boats"
+        }
+      }
+    ],
+    "trash-transform": [
+      {
+        "book": "s6a",
+        "unit": "4",
+        "page": 75,
+        "topic": {
+          "zh": "资源的循环利用",
+          "en": "Recycling resources"
+        }
+      }
+    ],
+    "triangle-lab": [
+      {
+        "book": "m4b",
+        "unit": "5",
+        "page": 57,
+        "topic": {
+          "zh": "三角形的特征与内角和",
+          "en": "Properties of triangles"
+        }
+      }
+    ],
+    "volume-aquarium": [
+      {
+        "book": "m5b",
+        "unit": "3",
+        "page": 18,
+        "topic": {
+          "zh": "长方体和正方体的体积、容积",
+          "en": "Volume and capacity"
+        }
+      }
+    ],
+    "voxel-studio": [
+      {
+        "book": "m5a",
+        "unit": "1",
+        "page": 1,
+        "topic": {
+          "zh": "观察简单组合体",
+          "en": "Viewing combined solids"
+        }
+      }
+    ],
+    "wave-band": [
+      {
+        "book": "s4a",
+        "unit": "4",
+        "page": 69,
+        "topic": {
+          "zh": "声音的产生、传播与变化",
+          "en": "Sound production and propagation"
+        }
+      },
+      {
+        "book": "s4a",
+        "unit": "5",
+        "page": 89,
+        "topic": {
+          "zh": "认识乐器与制作乐器",
+          "en": "Exploring and making instruments"
+        }
+      }
+    ],
+    "wolf-calendar": [
+      {
+        "book": "s4b",
+        "unit": "4",
+        "page": 45,
+        "topic": {
+          "zh": "月相的变化",
+          "en": "Moon phases"
+        }
+      }
+    ],
+    "g1b-character-lab": [
+      {
+        "book": "c1b",
+        "unit": "1",
+        "page": 6,
+        "lessonOrder": 1,
+        "activity": "character-1",
+        "topic": {
+          "zh": "小青蛙",
+          "en": "Clear water"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "1",
+        "page": 6,
+        "lessonOrder": 2,
+        "activity": "character-2",
+        "topic": {
+          "zh": "小青蛙",
+          "en": "Feelings"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "5",
+        "page": 56,
+        "lessonOrder": 3,
+        "activity": "character-3",
+        "topic": {
+          "zh": "语文园地五",
+          "en": "The 包 family"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "5",
+        "page": 52,
+        "lessonOrder": 4,
+        "activity": "character-4",
+        "topic": {
+          "zh": "操场上",
+          "en": "Hands at work"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "7",
+        "page": 93,
+        "lessonOrder": 5,
+        "activity": "character-5",
+        "topic": {
+          "zh": "语文园地七",
+          "en": "Insect radical"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "7",
+        "page": 93,
+        "lessonOrder": 6,
+        "activity": "character-6",
+        "topic": {
+          "zh": "语文园地七",
+          "en": "Bird radical"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "5",
+        "page": 56,
+        "lessonOrder": 7,
+        "activity": "character-7",
+        "topic": {
+          "zh": "语文园地五",
+          "en": "More 包 words"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "2",
+        "page": 18,
+        "lessonOrder": 8,
+        "activity": "character-8",
+        "topic": {
+          "zh": "吃水不忘挖井人（吃）／动物王国开大会（听）",
+          "en": "Mouth and speech"
+        }
+      }
+    ],
+    "g1b-writing-workshop": [
+      {
+        "book": "c1b",
+        "unit": "8",
+        "page": 101,
+        "lessonOrder": 1,
+        "activity": "writing-1",
+        "topic": {
+          "zh": "棉花姑娘／写字表",
+          "en": "Write 干"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 35,
+        "lessonOrder": 2,
+        "activity": "writing-2",
+        "topic": {
+          "zh": "语文园地三",
+          "en": "Write 千"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 35,
+        "lessonOrder": 3,
+        "activity": "writing-3",
+        "topic": {
+          "zh": "语文园地三",
+          "en": "Write 止"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 35,
+        "lessonOrder": 4,
+        "activity": "writing-4",
+        "topic": {
+          "zh": "语文园地三",
+          "en": "Write 旦"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "1",
+        "page": 5,
+        "lessonOrder": 5,
+        "activity": "writing-5",
+        "topic": {
+          "zh": "姓氏歌／写字表",
+          "en": "Write 古"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "7",
+        "page": 89,
+        "lessonOrder": 6,
+        "activity": "writing-6",
+        "topic": {
+          "zh": "动物王国开大会／写字表",
+          "en": "Write 听"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 30,
+        "lessonOrder": 7,
+        "activity": "writing-7",
+        "topic": {
+          "zh": "树和喜鹊／写字表",
+          "en": "Write 回"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "7",
+        "page": 89,
+        "lessonOrder": 8,
+        "activity": "writing-8",
+        "topic": {
+          "zh": "动物王国开大会／写字表",
+          "en": "Write 国"
+        }
+      }
+    ],
+    "g1b-word-world": [
+      {
+        "book": "c1b",
+        "unit": "1",
+        "page": 2,
+        "lessonOrder": 1,
+        "activity": "word-1",
+        "topic": {
+          "zh": "春夏秋冬／语文园地一",
+          "en": "Spring arrives"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 31,
+        "lessonOrder": 2,
+        "activity": "word-2",
+        "topic": {
+          "zh": "怎么都快乐",
+          "en": "Play together"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "4",
+        "page": 44,
+        "lessonOrder": 3,
+        "activity": "word-3",
+        "topic": {
+          "zh": "语文园地四",
+          "en": "Everyday objects"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "4",
+        "page": 42,
+        "lessonOrder": 4,
+        "activity": "word-4",
+        "topic": {
+          "zh": "端午粽",
+          "en": "Rice dumplings"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "5",
+        "page": 50,
+        "lessonOrder": 5,
+        "activity": "word-5",
+        "topic": {
+          "zh": "古对今",
+          "en": "Round and square"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "5",
+        "page": 48,
+        "lessonOrder": 6,
+        "activity": "word-6",
+        "topic": {
+          "zh": "动物儿歌",
+          "en": "Animal actions"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "6",
+        "page": 66,
+        "lessonOrder": 7,
+        "activity": "word-7",
+        "topic": {
+          "zh": "荷叶圆圆",
+          "en": "Lotus leaves"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "7",
+        "page": 93,
+        "lessonOrder": 8,
+        "activity": "word-8",
+        "topic": {
+          "zh": "语文园地七",
+          "en": "Everyday actions"
+        }
+      }
+    ],
+    "g1b-dictionary-house": [
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 34,
+        "lessonOrder": 1,
+        "activity": "dictionary-1",
+        "topic": {
+          "zh": "语文园地一字母表／语文园地三音序查字法",
+          "en": "Find 母"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 34,
+        "lessonOrder": 2,
+        "activity": "dictionary-2",
+        "topic": {
+          "zh": "语文园地一字母表／语文园地三音序查字法",
+          "en": "Find 止"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 34,
+        "lessonOrder": 3,
+        "activity": "dictionary-3",
+        "topic": {
+          "zh": "语文园地一字母表／语文园地三音序查字法",
+          "en": "Find 斤"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 34,
+        "lessonOrder": 4,
+        "activity": "dictionary-4",
+        "topic": {
+          "zh": "语文园地一字母表／语文园地三音序查字法",
+          "en": "Find 寸"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 34,
+        "lessonOrder": 5,
+        "activity": "dictionary-5",
+        "topic": {
+          "zh": "语文园地一字母表／语文园地三音序查字法",
+          "en": "Find 丁"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 34,
+        "lessonOrder": 6,
+        "activity": "dictionary-6",
+        "topic": {
+          "zh": "语文园地一字母表／语文园地三音序查字法",
+          "en": "Find 千"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 34,
+        "lessonOrder": 7,
+        "activity": "dictionary-7",
+        "topic": {
+          "zh": "语文园地一字母表／语文园地三音序查字法",
+          "en": "Find 全"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 34,
+        "lessonOrder": 8,
+        "activity": "dictionary-8",
+        "topic": {
+          "zh": "语文园地一字母表／语文园地三音序查字法",
+          "en": "Find 旦"
+        }
+      }
+    ],
+    "g1b-sentence-studio": [
+      {
+        "book": "c1b",
+        "unit": "2",
+        "page": 20,
+        "lessonOrder": 1,
+        "activity": "sentence-1",
+        "topic": {
+          "zh": "我多想去看看",
+          "en": "Places I want to see"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 26,
+        "lessonOrder": 2,
+        "activity": "sentence-2",
+        "topic": {
+          "zh": "小公鸡和小鸭子",
+          "en": "Doing things together"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 31,
+        "lessonOrder": 3,
+        "activity": "sentence-3",
+        "topic": {
+          "zh": "怎么都快乐",
+          "en": "Happy activities"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "4",
+        "page": 40,
+        "lessonOrder": 4,
+        "activity": "sentence-4",
+        "topic": {
+          "zh": "夜色",
+          "en": "Looking at the night"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "5",
+        "page": 50,
+        "lessonOrder": 5,
+        "activity": "sentence-5",
+        "topic": {
+          "zh": "古对今／语文园地五",
+          "en": "Describing things"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "6",
+        "page": 66,
+        "lessonOrder": 6,
+        "activity": "sentence-6",
+        "topic": {
+          "zh": "荷叶圆圆",
+          "en": "Friends by the lotus"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "6",
+        "page": 74,
+        "lessonOrder": 7,
+        "activity": "sentence-7",
+        "topic": {
+          "zh": "语文园地六",
+          "en": "Add detail"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "7",
+        "page": 81,
+        "lessonOrder": 8,
+        "activity": "sentence-8",
+        "topic": {
+          "zh": "一分钟",
+          "en": "Then and now"
+        }
+      }
+    ],
+    "g1b-poetry-theater": [
+      {
+        "book": "c1b",
+        "unit": "1",
+        "page": 12,
+        "lessonOrder": 1,
+        "activity": "poetry-1",
+        "topic": {
+          "zh": "语文园地一",
+          "en": "春晓 · 孟浩然"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 35,
+        "lessonOrder": 2,
+        "activity": "poetry-2",
+        "topic": {
+          "zh": "语文园地三",
+          "en": "赠汪伦 · 李白"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "4",
+        "page": 39,
+        "lessonOrder": 3,
+        "activity": "poetry-3",
+        "topic": {
+          "zh": "静夜思",
+          "en": "静夜思 · 李白"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "2",
+        "page": 23,
+        "lessonOrder": 4,
+        "activity": "poetry-4",
+        "topic": {
+          "zh": "语文园地二",
+          "en": "寻隐者不遇 · 贾岛"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "6",
+        "page": 61,
+        "lessonOrder": 5,
+        "activity": "poetry-5",
+        "topic": {
+          "zh": "古诗二首",
+          "en": "池上 · 白居易"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "6",
+        "page": 62,
+        "lessonOrder": 6,
+        "activity": "poetry-6",
+        "topic": {
+          "zh": "古诗二首",
+          "en": "小池 · 杨万里"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "8",
+        "page": 110,
+        "lessonOrder": 7,
+        "activity": "poetry-7",
+        "topic": {
+          "zh": "语文园地八",
+          "en": "画鸡 · 唐寅"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "4",
+        "page": 39,
+        "lessonOrder": 8,
+        "activity": "poetry-8",
+        "topic": {
+          "zh": "静夜思（换视角重读）",
+          "en": "再看月光 · 李白"
+        }
+      }
+    ],
+    "g1b-story-studio": [
+      {
+        "book": "c1b",
+        "unit": "2",
+        "page": 18,
+        "lessonOrder": 1,
+        "activity": "story-1",
+        "topic": {
+          "zh": "吃水不忘挖井人",
+          "en": "Remembering the well"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 26,
+        "lessonOrder": 2,
+        "activity": "story-2",
+        "topic": {
+          "zh": "小公鸡和小鸭子",
+          "en": "Helping one another"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "3",
+        "page": 29,
+        "lessonOrder": 3,
+        "activity": "story-3",
+        "topic": {
+          "zh": "树和喜鹊",
+          "en": "Trees and magpies"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "4",
+        "page": 42,
+        "lessonOrder": 4,
+        "activity": "story-4",
+        "topic": {
+          "zh": "端午粽",
+          "en": "Sharing at the festival"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "6",
+        "page": 69,
+        "lessonOrder": 5,
+        "activity": "story-5",
+        "topic": {
+          "zh": "要下雨了",
+          "en": "Before the rain"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "7",
+        "page": 95,
+        "lessonOrder": 6,
+        "activity": "story-6",
+        "topic": {
+          "zh": "语文园地七·听故事，讲故事",
+          "en": "Listen and retell"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "7",
+        "page": 84,
+        "lessonOrder": 7,
+        "activity": "story-7",
+        "topic": {
+          "zh": "动物王国开大会",
+          "en": "A complete announcement"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "8",
+        "page": 102,
+        "lessonOrder": 8,
+        "activity": "story-8",
+        "topic": {
+          "zh": "咕咚",
+          "en": "Find out what happened"
+        }
+      }
+    ],
+    "g1b-speaking-stage": [
+      {
+        "book": "c1b",
+        "unit": "1",
+        "page": 4,
+        "lessonOrder": 1,
+        "activity": "speaking-1",
+        "topic": {
+          "zh": "姓氏歌",
+          "en": "Introduce yourself"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "2",
+        "page": 20,
+        "lessonOrder": 2,
+        "activity": "speaking-2",
+        "topic": {
+          "zh": "我多想去看看",
+          "en": "Share a wish"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "1",
+        "page": 13,
+        "lessonOrder": 3,
+        "activity": "speaking-3",
+        "topic": {
+          "zh": "语文园地一·请你帮个忙",
+          "en": "Ask for help"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "4",
+        "page": 42,
+        "lessonOrder": 4,
+        "activity": "speaking-4",
+        "topic": {
+          "zh": "端午粽／语文园地四",
+          "en": "Describe a festival"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "5",
+        "page": 58,
+        "lessonOrder": 5,
+        "activity": "speaking-5",
+        "topic": {
+          "zh": "语文园地五·一起做游戏",
+          "en": "Explain an action"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "6",
+        "page": 66,
+        "lessonOrder": 6,
+        "activity": "speaking-6",
+        "topic": {
+          "zh": "荷叶圆圆／语文园地六",
+          "en": "Describe the picture"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "7",
+        "page": 84,
+        "lessonOrder": 7,
+        "activity": "speaking-7",
+        "topic": {
+          "zh": "动物王国开大会",
+          "en": "Make an announcement"
+        }
+      },
+      {
+        "book": "c1b",
+        "unit": "8",
+        "page": 110,
+        "lessonOrder": 8,
+        "activity": "speaking-8",
+        "topic": {
+          "zh": "语文园地八",
+          "en": "Talk about feelings"
+        }
+      }
+    ],
+    "g1-flat-shapes": [
+      {
+        "book": "m1b",
+        "unit": "1",
+        "page": 1,
+        "lessonOrder": 1,
+        "activity": "shape-1",
+        "topic": {
+          "zh": "认识平面图形",
+          "en": "Round wheels"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "1",
+        "page": 1,
+        "lessonOrder": 2,
+        "activity": "shape-2",
+        "topic": {
+          "zh": "认识平面图形",
+          "en": "A triangular roof"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "1",
+        "page": 1,
+        "lessonOrder": 3,
+        "activity": "shape-3",
+        "topic": {
+          "zh": "认识平面图形",
+          "en": "A square window"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "1",
+        "page": 1,
+        "lessonOrder": 4,
+        "activity": "shape-4",
+        "topic": {
+          "zh": "认识平面图形",
+          "en": "A tall door"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "1",
+        "page": 1,
+        "lessonOrder": 5,
+        "activity": "shape-5",
+        "topic": {
+          "zh": "认识平面图形",
+          "en": "A slanted flag"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "1",
+        "page": 1,
+        "lessonOrder": 6,
+        "activity": "shape-6",
+        "topic": {
+          "zh": "认识平面图形",
+          "en": "Join two pieces"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "1",
+        "page": 1,
+        "lessonOrder": 7,
+        "activity": "shape-7",
+        "topic": {
+          "zh": "认识平面图形",
+          "en": "Rotate and compare"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "1",
+        "page": 1,
+        "lessonOrder": 8,
+        "activity": "shape-8",
+        "topic": {
+          "zh": "认识平面图形",
+          "en": "Build a small town"
+        }
+      }
+    ],
+    "hundred-metro": [
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 1,
+        "activity": "count-1",
+        "topic": {
+          "zh": "100以内数的认识",
+          "en": "Ten ones"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 2,
+        "activity": "count-2",
+        "topic": {
+          "zh": "100以内数的认识",
+          "en": "Twenty-three"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 3,
+        "activity": "count-3",
+        "topic": {
+          "zh": "100以内数的认识",
+          "en": "Whole tens"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 4,
+        "activity": "count-4",
+        "topic": {
+          "zh": "100以内数的认识",
+          "en": "Across a ten"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 5,
+        "activity": "count-5",
+        "topic": {
+          "zh": "100以内数的认识",
+          "en": "Sixty-eight"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 6,
+        "activity": "count-6",
+        "topic": {
+          "zh": "100以内数的认识",
+          "en": "Nine tens"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 7,
+        "activity": "count-7",
+        "topic": {
+          "zh": "100以内数的认识",
+          "en": "Reach one hundred"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 8,
+        "activity": "count-8",
+        "topic": {
+          "zh": "100以内数的认识",
+          "en": "Ten tens"
+        }
+      }
+    ],
+    "g1-compare-bridge": [
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 101,
+        "activity": "compare-1",
+        "topic": {
+          "zh": "100以内数的认识：数的大小",
+          "en": "Compare banks 1"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 102,
+        "activity": "compare-2",
+        "topic": {
+          "zh": "100以内数的认识：数的大小",
+          "en": "Compare banks 2"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 103,
+        "activity": "compare-3",
+        "topic": {
+          "zh": "100以内数的认识：数的大小",
+          "en": "Compare banks 3"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 104,
+        "activity": "compare-4",
+        "topic": {
+          "zh": "100以内数的认识：数的大小",
+          "en": "Compare banks 4"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 105,
+        "activity": "compare-5",
+        "topic": {
+          "zh": "100以内数的认识：数的大小",
+          "en": "Compare banks 5"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 106,
+        "activity": "compare-6",
+        "topic": {
+          "zh": "100以内数的认识：数的大小",
+          "en": "Compare banks 6"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 107,
+        "activity": "compare-7",
+        "topic": {
+          "zh": "100以内数的认识：数的大小",
+          "en": "Compare banks 7"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "3",
+        "page": 23,
+        "lessonOrder": 108,
+        "activity": "compare-8",
+        "topic": {
+          "zh": "100以内数的认识：数的大小",
+          "en": "Compare banks 8"
+        }
+      }
+    ],
+    "g1-addition-depot": [
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 100,
+        "activity": "add-1",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Join passengers 1"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 101,
+        "activity": "add-2",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Join passengers 2"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 102,
+        "activity": "add-3",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Join passengers 3"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 103,
+        "activity": "add-4",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Join passengers 4"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 104,
+        "activity": "add-5",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Join passengers 5"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 105,
+        "activity": "add-6",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Join passengers 6"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 106,
+        "activity": "add-7",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Join passengers 7"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 107,
+        "activity": "add-8",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Join passengers 8"
+        }
+      }
+    ],
+    "g1-subtraction-depot": [
+      {
+        "book": "m1b",
+        "unit": "2",
+        "page": 8,
+        "lessonOrder": 1,
+        "activity": "subtract-1",
+        "topic": {
+          "zh": "20以内的退位减法",
+          "en": "Take away 1"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "2",
+        "page": 8,
+        "lessonOrder": 2,
+        "activity": "subtract-2",
+        "topic": {
+          "zh": "20以内的退位减法",
+          "en": "Take away 2"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "2",
+        "page": 8,
+        "lessonOrder": 3,
+        "activity": "subtract-3",
+        "topic": {
+          "zh": "20以内的退位减法",
+          "en": "Take away 3"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "2",
+        "page": 8,
+        "lessonOrder": 4,
+        "activity": "subtract-4",
+        "topic": {
+          "zh": "20以内的退位减法",
+          "en": "Take away 4"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "2",
+        "page": 8,
+        "lessonOrder": 5,
+        "activity": "subtract-5",
+        "topic": {
+          "zh": "20以内的退位减法",
+          "en": "Take away 5"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 205,
+        "activity": "subtract-6",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Take away 6"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 206,
+        "activity": "subtract-7",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Take away 7"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "4",
+        "page": 43,
+        "lessonOrder": 207,
+        "activity": "subtract-8",
+        "topic": {
+          "zh": "100以内的口算加、减法",
+          "en": "Take away 8"
+        }
+      }
+    ],
+    "g1b-column-workshop": [
+      {
+        "book": "m1b",
+        "unit": "5",
+        "page": 57,
+        "lessonOrder": 1,
+        "activity": "column-1",
+        "topic": {
+          "zh": "100以内的笔算加、减法",
+          "en": "Place-value bay 1"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "5",
+        "page": 57,
+        "lessonOrder": 2,
+        "activity": "column-2",
+        "topic": {
+          "zh": "100以内的笔算加、减法",
+          "en": "Place-value bay 2"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "5",
+        "page": 57,
+        "lessonOrder": 3,
+        "activity": "column-3",
+        "topic": {
+          "zh": "100以内的笔算加、减法",
+          "en": "Place-value bay 3"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "5",
+        "page": 57,
+        "lessonOrder": 4,
+        "activity": "column-4",
+        "topic": {
+          "zh": "100以内的笔算加、减法",
+          "en": "Place-value bay 4"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "5",
+        "page": 62,
+        "lessonOrder": 5,
+        "activity": "column-5",
+        "topic": {
+          "zh": "100以内的笔算加、减法",
+          "en": "Place-value bay 5"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "5",
+        "page": 62,
+        "lessonOrder": 6,
+        "activity": "column-6",
+        "topic": {
+          "zh": "100以内的笔算加、减法",
+          "en": "Place-value bay 6"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "5",
+        "page": 62,
+        "lessonOrder": 7,
+        "activity": "column-7",
+        "topic": {
+          "zh": "100以内的笔算加、减法",
+          "en": "Place-value bay 7"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "5",
+        "page": 62,
+        "lessonOrder": 8,
+        "activity": "column-8",
+        "topic": {
+          "zh": "100以内的笔算加、减法",
+          "en": "Place-value bay 8"
+        }
+      }
+    ],
+    "g1b-quantity-theater": [
+      {
+        "book": "m1b",
+        "unit": "6",
+        "page": 69,
+        "lessonOrder": 1,
+        "activity": "quantity-1",
+        "topic": {
+          "zh": "数量间的加减关系",
+          "en": "Share fruit"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "6",
+        "page": 69,
+        "lessonOrder": 2,
+        "activity": "quantity-2",
+        "topic": {
+          "zh": "数量间的加减关系",
+          "en": "Share books"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "6",
+        "page": 69,
+        "lessonOrder": 3,
+        "activity": "quantity-3",
+        "topic": {
+          "zh": "数量间的加减关系",
+          "en": "More arrive"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "6",
+        "page": 69,
+        "lessonOrder": 4,
+        "activity": "quantity-4",
+        "topic": {
+          "zh": "数量间的加减关系",
+          "en": "Some leave"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "6",
+        "page": 70,
+        "lessonOrder": 5,
+        "activity": "quantity-5",
+        "topic": {
+          "zh": "数量间的加减关系",
+          "en": "Compare flags"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "6",
+        "page": 70,
+        "lessonOrder": 6,
+        "activity": "quantity-6",
+        "topic": {
+          "zh": "数量间的加减关系",
+          "en": "Compare blocks"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "6",
+        "page": 69,
+        "lessonOrder": 7,
+        "activity": "quantity-7",
+        "topic": {
+          "zh": "数量间的加减关系",
+          "en": "Two parts"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "6",
+        "page": 69,
+        "lessonOrder": 8,
+        "activity": "quantity-8",
+        "topic": {
+          "zh": "数量间的加减关系",
+          "en": "Gifts arrive"
+        }
+      }
+    ],
+    "change-vending": [
+      {
+        "book": "m1b",
+        "unit": "shopping",
+        "page": 77,
+        "lessonOrder": 1,
+        "activity": "money-1",
+        "topic": {
+          "zh": "欢乐购物街",
+          "en": "Exchange one yuan"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "shopping",
+        "page": 77,
+        "lessonOrder": 2,
+        "activity": "money-2",
+        "topic": {
+          "zh": "欢乐购物街",
+          "en": "Exchange one jiao"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "shopping",
+        "page": 77,
+        "lessonOrder": 3,
+        "activity": "money-3",
+        "topic": {
+          "zh": "欢乐购物街",
+          "en": "Buy a snack"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "shopping",
+        "page": 77,
+        "lessonOrder": 4,
+        "activity": "money-4",
+        "topic": {
+          "zh": "欢乐购物街",
+          "en": "Buy a brush"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "shopping",
+        "page": 77,
+        "lessonOrder": 5,
+        "activity": "money-5",
+        "topic": {
+          "zh": "欢乐购物街",
+          "en": "Buy a book"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "shopping",
+        "page": 77,
+        "lessonOrder": 6,
+        "activity": "money-6",
+        "topic": {
+          "zh": "欢乐购物街",
+          "en": "Buy a toy"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "shopping",
+        "page": 77,
+        "lessonOrder": 7,
+        "activity": "money-7",
+        "topic": {
+          "zh": "欢乐购物街",
+          "en": "Try fen coins"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "shopping",
+        "page": 77,
+        "lessonOrder": 8,
+        "activity": "money-8",
+        "topic": {
+          "zh": "欢乐购物街",
+          "en": "Explore a budget"
+        }
+      }
+    ],
+    "g1-mixed-relay": [
+      {
+        "book": "m1b",
+        "unit": "7",
+        "page": 83,
+        "lessonOrder": 1,
+        "activity": "relay-1",
+        "topic": {
+          "zh": "复习与关联",
+          "en": "Town relay 1"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "7",
+        "page": 83,
+        "lessonOrder": 2,
+        "activity": "relay-2",
+        "topic": {
+          "zh": "复习与关联",
+          "en": "Town relay 2"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "7",
+        "page": 83,
+        "lessonOrder": 3,
+        "activity": "relay-3",
+        "topic": {
+          "zh": "复习与关联",
+          "en": "Town relay 3"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "7",
+        "page": 83,
+        "lessonOrder": 4,
+        "activity": "relay-4",
+        "topic": {
+          "zh": "复习与关联",
+          "en": "Town relay 4"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "7",
+        "page": 83,
+        "lessonOrder": 5,
+        "activity": "relay-5",
+        "topic": {
+          "zh": "复习与关联",
+          "en": "Town relay 5"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "7",
+        "page": 83,
+        "lessonOrder": 6,
+        "activity": "relay-6",
+        "topic": {
+          "zh": "复习与关联",
+          "en": "Town relay 6"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "7",
+        "page": 83,
+        "lessonOrder": 7,
+        "activity": "relay-7",
+        "topic": {
+          "zh": "复习与关联",
+          "en": "Town relay 7"
+        }
+      },
+      {
+        "book": "m1b",
+        "unit": "7",
+        "page": 83,
+        "lessonOrder": 8,
+        "activity": "relay-8",
+        "topic": {
+          "zh": "复习与关联",
+          "en": "Town relay 8"
+        }
+      }
+    ]
+  }
+}

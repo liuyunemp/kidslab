@@ -10,7 +10,7 @@
   },
   "category": "science",
   "levels": ["primary"],
-  "grades": ["g2", "g3", "g4"],
+  "grades": ["g6b"],
   "tags": ["动物", "适应", "实验"],
   "icon": "🦎",
   "order": 85,

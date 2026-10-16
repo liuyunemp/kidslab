@@ -1,0 +1,24 @@
+{
+  "id": "ferry-tales",
+  "version": "a951d32c83808a31f3a48d7e3481cdd96a5e0ab2c6f76f8b3d47e1dd0fb701f3",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "f4286a3f19d3e91c42e11872010583c9b2f2b64637d8a1ae60cda8fc662d2630"
+    },
+    {
+      "path": "index.html",
+      "sha256": "9a58ef37d1b674d2d2a4eafaeb92bc601bc75c1fedfc031e30ddade4b9f62c5b"
+    },
+    {
+      "path": "main.js",
+      "sha256": "f0539bc4b1616770a4da9a2a1c6bb879c00fe9d0b9e0723ccbdc1384854042e7",
+      "fingerprint": "eaef386e"
+    },
+    {
+      "path": "style.css",
+      "sha256": "21348d37533996fc6c78398341a17efd0e43fdc9902114d2c333615a9999f677",
+      "fingerprint": "41118a20"
+    }
+  ]
+}

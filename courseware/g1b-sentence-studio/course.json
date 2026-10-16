@@ -1,0 +1,27 @@
+{
+  "id": "g1b-sentence-studio",
+  "title": {
+    "zh": "句子造景台",
+    "en": "Sentence Scene Studio"
+  },
+  "description": {
+    "zh": "安排主角、地点和动作，再演一遍。",
+    "en": "Choose who, where and an action, then play the scene."
+  },
+  "category": "chinese",
+  "grades": [
+    "g1b"
+  ],
+  "levels": [
+    "primary"
+  ],
+  "tags": [
+    "识字",
+    "3D",
+    "实验"
+  ],
+  "icon": "🎬",
+  "order": 224,
+  "badge": "new"
+}
+

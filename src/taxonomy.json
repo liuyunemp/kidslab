@@ -103,6 +103,8 @@
     "轻重": { "en": "Weight & Balance", "kind": "knowledge", "aliases": ["轻重", "比轻重", "重", "轻", "heavier", "lighter", "weight"] },
     "位置": { "en": "Position & Direction", "kind": "knowledge", "aliases": ["位置", "方向", "前后左右", "上下", "position", "direction", "front", "back", "left", "right", "up", "down"] },
     "人民币": { "en": "Currency (RMB)", "kind": "knowledge", "aliases": ["人民币", "元角分", "钱币", "钱", "money", "coins", "yuan", "jiao", "fen"] },
-    "七巧板": { "en": "Tangram", "kind": "knowledge", "aliases": ["七巧板", "tangram", "拼图"] }
+    "七巧板": { "en": "Tangram", "kind": "knowledge", "aliases": ["七巧板", "tangram", "拼图"] },
+    "古诗": { "en": "Ancient Poems", "kind": "knowledge", "aliases": ["古诗", "poem", "poems", "poetry", "诗句", "咏鹅", "静夜思", "ancient poems"] },
+    "笔顺": { "en": "Stroke Order", "kind": "knowledge", "aliases": ["笔顺", "stroke order", "笔顺规则", "writing order", "先横后竖"] }
   }
 }

@@ -1,0 +1,23 @@
+{
+  "id": "g1-poem-stage",
+  "title": {
+    "zh": "诗画猜猜台",
+    "en": "Poem Picture Stage"
+  },
+  "description": {
+    "zh": "看画面猜诗句、接上下句，再把整首诗排回原顺序。",
+    "en": "Match lines to pictures, finish couplets and order whole poems."
+  },
+  "category": "chinese",
+  "levels": [
+    "primary"
+  ],
+  "grades": [],
+  "tags": [
+    "识字",
+    "古诗"
+  ],
+  "icon": "🖼️",
+  "order": 228,
+  "badge": "new"
+}

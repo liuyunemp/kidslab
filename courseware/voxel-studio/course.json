@@ -12,11 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g2",
-    "g3",
-    "g4"
-  ],
+  "grades": ["g5a"],
   "tags": [
     "三视图",
     "空间想象",

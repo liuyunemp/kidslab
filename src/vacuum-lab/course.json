@@ -10,7 +10,7 @@
   },
   "category": "programming",
   "levels": ["primary"],
-  "grades": ["g3", "g4"],
+  "grades": [],
   "tags": ["算法", "策略", "实验"],
   "icon": "🤖",
   "order": 59,

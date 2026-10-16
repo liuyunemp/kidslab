@@ -1,0 +1,34 @@
+{
+  "id": "solar-explorer",
+  "version": "62a6fb3ae368b1dc78d550c6352936e0bd347f5c7932b1c4b508c5d675cc7258",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "6760756b15452b5c95320863b9a65acf7daa2311eedd295d383cf763c1af7a49"
+    },
+    {
+      "path": "index.html",
+      "sha256": "7db2091cfabae4be48f357edf10302a4aa804ceeaa2c867ac082827534f9f1ab"
+    },
+    {
+      "path": "main.js",
+      "sha256": "1b7c7ae9ce06a4bc08104e0a2f36e09d35da0a4a21baa3d3e8a81e9af0bc03cf",
+      "fingerprint": "73710158"
+    },
+    {
+      "path": "orbits.js",
+      "sha256": "62faf9795cf9e9df6302586709c925cee54e9fcdb884361b08122c1b3c097b79",
+      "fingerprint": "62215120"
+    },
+    {
+      "path": "style.css",
+      "sha256": "9259f85f038051a2f4d9a3c06e36b70888d6aa3bd14252cfca0bea03632c5cc6",
+      "fingerprint": "55d2a955"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

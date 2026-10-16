@@ -1,0 +1,54 @@
+{
+  "id": "magic-cube",
+  "version": "633a617e844430ee0da23cdc7286fc1da30ef4efba2b6469aa9defd0bb0805a9",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "c9862592edde364a7fb9534ae3b0ece0bb64468c8a681a1b20cefb3eabbc6923",
+      "fingerprint": "44db9293"
+    },
+    {
+      "path": "course.json",
+      "sha256": "07f6c81124c7cba595681feb7a5f8a783ec529903681da40698e02ed7753f25d"
+    },
+    {
+      "path": "cube3d.js",
+      "sha256": "4121eeaa17b520d63496d613084776bc038d2d5d43ea628120425bcad981868c",
+      "fingerprint": "e5879ea7"
+    },
+    {
+      "path": "index.html",
+      "sha256": "5e3b186e3c0d671f163061905da9f9e2745a4ca761f38588e28b4adbe74b5cc4"
+    },
+    {
+      "path": "main.js",
+      "sha256": "a4188dd249f6693b8b9c273ed68c5eee932bbb4fd9e5b759975ac5d5ab51eec3",
+      "fingerprint": "64792122"
+    },
+    {
+      "path": "solver.js",
+      "sha256": "ec7149509b98b5eda80063bc86c60ff50a03c143ea1972cf931c2935ee0d80e5",
+      "fingerprint": "e3dafabb"
+    },
+    {
+      "path": "style.css",
+      "sha256": "261649ae3834f0704855beaecbab77e24ccc611ff7725a63041d53645defd061",
+      "fingerprint": "eb25b5b9"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

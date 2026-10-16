@@ -1,0 +1,68 @@
+{
+  "id": "ice-maker-lab",
+  "version": "0ef97c7c07dc766976be089ca6e48d803928caadd8c9ad205bc4dd65ef04154d",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "625e95f6ed177be22628d382375ad64343491bc1a657843743ee6053d25a517a",
+      "fingerprint": "072263ac"
+    },
+    {
+      "path": "audio/bgm-ice-lab.ogg",
+      "sha256": "045c23620feaee4f5a3fb68b6fa27b21951175cfbc6df51eba3237c88361859e"
+    },
+    {
+      "path": "camera-orbit.js",
+      "sha256": "6fbdef8712cbf3d19630b4e1ad442670ebd7fcf3f2bac9fc9bf74428c82f883f",
+      "fingerprint": "8b15d357"
+    },
+    {
+      "path": "course.json",
+      "sha256": "3676e0829ba971ed6ee2d0b194501d6e4516cfd9094c538bdf8f1a03fee2d929"
+    },
+    {
+      "path": "ice-model.js",
+      "sha256": "c3498412c894366bf89683c79bff04e28e994f5a52412b9733800bc9337f296a",
+      "fingerprint": "c02966b1"
+    },
+    {
+      "path": "index.html",
+      "sha256": "d8aedbff83d1235371eb71f398aad7ddfd3bb0e639862041048afc42b8f0594a"
+    },
+    {
+      "path": "main.js",
+      "sha256": "233c50a3a8da20d4892167f6cb7d9452197c4778124bbbcbb9a4d686ec6603af",
+      "fingerprint": "c68eb85d"
+    },
+    {
+      "path": "scene3d.js",
+      "sha256": "a372278b4e135d5e100f1f21d74315acdc2f8b828144736ef8602307e8fb9c1a",
+      "fingerprint": "c73f0316"
+    },
+    {
+      "path": "style.css",
+      "sha256": "2718a57466753a1be7807349ec106bc20cc63817df1c42786ca50e7ce4ee0790",
+      "fingerprint": "b4bf4ba8"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    },
+    {
+      "path": "view-size.js",
+      "sha256": "30da4cb328e4dd6514843aac55dc073d40b0d1024e7b470e6d5a37641d92fd70",
+      "fingerprint": "8bd683cd"
+    }
+  ]
+}

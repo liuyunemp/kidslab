@@ -1,0 +1,29 @@
+{
+  "id": "earth-dj",
+  "version": "db07c5703cfca3b7b9bac1e4ae0a6e15d47f5c2afab61528d4836f4fef16cf8a",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "415fcb73608c986fa2372ff5836988df357b8d98ce4a1952a1f4befaea3b1573"
+    },
+    {
+      "path": "index.html",
+      "sha256": "6d56a69ac81dd32b042febd298db9db353e1d91573804fd74a527973d734220e"
+    },
+    {
+      "path": "main.js",
+      "sha256": "496a11d3c0293bbefd3eed8ab0963f90e54120b1aabeee21f214dce401521902",
+      "fingerprint": "1f7a121b"
+    },
+    {
+      "path": "style.css",
+      "sha256": "8414004431af01de9560a07dd591eb7eb13882115c664c1a14d7e00d93ea2e41",
+      "fingerprint": "9653ba74"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

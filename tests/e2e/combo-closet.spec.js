@@ -30,6 +30,8 @@ test.describe('combo closet multiplication principle', () => {
   });
 
   test('recovers from a duplicate and completes collecting and both stock orders', async ({ page }) => {
+    // This journey enumerates both clothing collections and submits two full stock orders.
+    test.slow();
     // 试衣间 2×2：穿戴即自动拍照，重穿已有搭配要能原地恢复
     await tapItem(page, '草帽');
     await tapItem(page, '星星上衣');

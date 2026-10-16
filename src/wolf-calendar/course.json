@@ -12,12 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g3",
-    "g4",
-    "g5",
-    "g6"
-  ],
+  "grades": ["g4b"],
   "tags": [
     "月相",
     "月球",

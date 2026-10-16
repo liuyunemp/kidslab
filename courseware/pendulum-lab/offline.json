@@ -1,0 +1,29 @@
+{
+  "id": "pendulum-lab",
+  "version": "3d02350bb3bbeb4316a43f5cf8aca467c539cf25dc5b925b2599a932fcaf0e6f",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "d9be8308b11623ff5a4d7fad5638cb52dfe8426e2d73fa9a10dc9c2c78d33129"
+    },
+    {
+      "path": "index.html",
+      "sha256": "2cd1ee4b3a497a5a245fe438ba3f95f67f885f5e1abab6394ffcaa6ce5c6f5e4"
+    },
+    {
+      "path": "main.js",
+      "sha256": "9621ca5257e5ff0ed577c9a0baaed77edade9b1b079334ff4fb975e108749c56",
+      "fingerprint": "d692803c"
+    },
+    {
+      "path": "style.css",
+      "sha256": "c467bd01206f407f0308f116d0117941de23f779235baba6f7d9d950e2ecca52",
+      "fingerprint": "25477e62"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

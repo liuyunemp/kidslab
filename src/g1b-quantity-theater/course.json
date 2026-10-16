@@ -1,0 +1,28 @@
+{
+  "id": "g1b-quantity-theater",
+  "title": {
+    "zh": "数量故事台",
+    "en": "Quantity Stories"
+  },
+  "description": {
+    "zh": "改变一组物件，看看数量之间的联系。",
+    "en": "Change a group and observe how the quantities relate."
+  },
+  "category": "math",
+  "grades": [
+    "g1b"
+  ],
+  "levels": [
+    "primary"
+  ],
+  "tags": [
+    "加减法",
+    "比多少",
+    "3D",
+    "实验"
+  ],
+  "icon": "🎪",
+  "order": 36,
+  "badge": "new"
+}
+

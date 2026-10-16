@@ -1,0 +1,29 @@
+{
+  "id": "wolf-calendar",
+  "version": "a0bb2991d2986d30ea748ad67acae33330d4ce15bbde331d91f3d9aa1bf6b97f",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "e7e49fe1094bf81638cea740d0d31f1dfa2b1e2c95acb34388df7351e189c2ed"
+    },
+    {
+      "path": "index.html",
+      "sha256": "15ca093df10daf80543b90fd73cd727c0cee1bc1717c311aa2598dccdee85ad8"
+    },
+    {
+      "path": "main.js",
+      "sha256": "f5f2425802c0a5276a0f4e4916d329987fb44e9927e61b47d429d2a97c9076cd",
+      "fingerprint": "b6fc3eab"
+    },
+    {
+      "path": "style.css",
+      "sha256": "fd09035c5ddcaf2d2b2fd14dc5f17bfc50fcef4edc2684db030bd9c93a3acfc5",
+      "fingerprint": "46ac3c48"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

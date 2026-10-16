@@ -1,0 +1,24 @@
+{
+  "id": "detective-board",
+  "version": "f5c4d011c9c5ee84b5a118ee5393a4d388b988194d54683545d74c33b60ed73d",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "a98c3eebf2bf37999fc19ec7aa218edc8b0cd6633e0cba464cd1d110c9f1e8fd"
+    },
+    {
+      "path": "index.html",
+      "sha256": "4df1f4055b54a254a966d50f6eb03e9e2ad1e9cda82c0212d72540889e7de98a"
+    },
+    {
+      "path": "main.js",
+      "sha256": "db5b4fcc24bc3e3f4215315e5949fe0ca4194a4e66a1c4ae3f36c08fa65ee3bd",
+      "fingerprint": "017f48ab"
+    },
+    {
+      "path": "style.css",
+      "sha256": "30d583613db495ad86fe1553292954bcfc426e27209fbe5c21af9a6db5d0bfef",
+      "fingerprint": "353ec83f"
+    }
+  ]
+}

@@ -2,9 +2,7 @@ export const config = {
   "id": "g1-sentence-train",
   "kind": "sentence",
   "category": "chinese",
-  "grades": [
-    "g1a"
-  ],
+  "grades": [],
   "tags": [
     "识字"
   ],

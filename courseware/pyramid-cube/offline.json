@@ -1,0 +1,49 @@
+{
+  "id": "pyramid-cube",
+  "version": "91812b009dc126d7dcb9a69de3dfe68a1b8590c3d11c8d2c4a0c671ddeb25d7d",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "e2e3b9f9deb0e777d56bf980f4815e154ffbcbbc1b8296b3caad76d2391b5139",
+      "fingerprint": "88875ac6"
+    },
+    {
+      "path": "course.json",
+      "sha256": "2634641d8df8cc04ce5b2fd27797b86781b97d92596118bc470853041f07aead"
+    },
+    {
+      "path": "index.html",
+      "sha256": "9bfb4e2e7db78d079d408eeae2c370933252439e24c487e5ad7566863ebebc4b"
+    },
+    {
+      "path": "main.js",
+      "sha256": "035eab706c9293cf8655e42a30991197af33737e495a5670139506ce29c25159",
+      "fingerprint": "7fb0aca3"
+    },
+    {
+      "path": "pyraminx3d.js",
+      "sha256": "447fa6f8920353f886a3bd766385ca6a2e2ecb391cebad0a44a7ae2d8580dd61",
+      "fingerprint": "30da840b"
+    },
+    {
+      "path": "solver.js",
+      "sha256": "21c0824d6bbc64da6d9c3c253c0518e74d6034fd16ca6750df836b628ab7404f",
+      "fingerprint": "40decd9d"
+    },
+    {
+      "path": "style.css",
+      "sha256": "6d8d14d44619a22ffc1bd8fc5187fd948ae8f29271cef22879426a8d8e14493c",
+      "fingerprint": "56b88f9e"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "wizard-jars",
+  "version": "8ce5c05c067ae93dcde2e2c456fcfebf8b9a7f3dd4b178855dab7bea443656e4",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "4621bbe82c82d49e608dd4c57c32f921bde9d7b6cb59b659bf559d05f746bd16"
+    },
+    {
+      "path": "index.html",
+      "sha256": "9dba1ed43096b6085f6b68353e4ae97846f95212da08cb3f38b6d829437fefad"
+    },
+    {
+      "path": "main.js",
+      "sha256": "1779ef6bff0650128f512a2a5d03d8ead31001b5a8e225da73c186c269be9f50",
+      "fingerprint": "1d7c8e46"
+    },
+    {
+      "path": "style.css",
+      "sha256": "a156f30023bc77b25672571e11bd3c9ec0950fdfadb73f321a293a64fd945f4a",
+      "fingerprint": "19f94b35"
+    }
+  ]
+}

@@ -10,7 +10,7 @@
   },
   "category": "science",
   "levels": ["primary"],
-  "grades": ["g3", "g4"],
+  "grades": [],
   "tags": ["空气", "质量", "观察", "实验"],
   "icon": "🎈",
   "order": 69,

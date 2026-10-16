@@ -1,0 +1,58 @@
+{
+  "id": "mass-conservation-lab",
+  "version": "accfcab1bcef6b9af63da55582afd7248d5526cc5db36190fd71c2ceea41f393",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "d32202130d713f87cf13d1d6e22c6566184383c12491f11267641c170f6b0ffb",
+      "fingerprint": "33cea273"
+    },
+    {
+      "path": "audio/bgm-process-flow-01.ogg",
+      "sha256": "d755b2c7993a20eee751f8fc0b2fb7b28f54a6028738665264cdda73ab3bc1a6"
+    },
+    {
+      "path": "course.json",
+      "sha256": "3806c6a294f1b8575b0f75d7599218c68f43b276f817ca0cae78026592242ff8"
+    },
+    {
+      "path": "index.html",
+      "sha256": "2d1bb5a47fa7b12ddfaa4ff40ba652350758fe2b1601509e8c2f07e5a9e9b0c7"
+    },
+    {
+      "path": "main.js",
+      "sha256": "90e51748e86cbbc18d9bf2bc0bce64465a12516119a95e946ed358fa7830be18",
+      "fingerprint": "e75d2d05"
+    },
+    {
+      "path": "mass-model.js",
+      "sha256": "76cf1602739421f18d99b4c58a287bb2e9a9aa8575a627659691dc1c4afb107a",
+      "fingerprint": "ed597d2f"
+    },
+    {
+      "path": "scene3d.js",
+      "sha256": "6e236c7236c8c53070ab2c67bfb4be5b6d3fa31f16ddab91b507b0b3aba624b3",
+      "fingerprint": "dc9d7105"
+    },
+    {
+      "path": "style.css",
+      "sha256": "4907ca6c353946cadf2422ed124981e88ea6a87e03e4be92a1b7af9fdd20bd10",
+      "fingerprint": "53a25b0e"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "mini-pyramid",
+  "version": "715e67d110473568594b467ba631e66e61df9ea847e30473b5180d1b2e603212",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "c8f5a0fffd453e89aa17527271f14cbac8111bcacb5fefa7f09d505ca8943381"
+    },
+    {
+      "path": "index.html",
+      "sha256": "7b05c856730bf69ad99056b4c069f231ea03bf2f2690e5fa1d2a62d928404a99"
+    },
+    {
+      "path": "main.js",
+      "sha256": "4b0b9aaa8b562926c9e95fb68e5de901b26652ba9fdc4c44f7772b26e5d83727",
+      "fingerprint": "356bb1e9"
+    },
+    {
+      "path": "pyramid-model.js",
+      "sha256": "2e2630b25d9b1cabdac8dea22d08beb77115a90e21f3d1143b435d93af0052ac",
+      "fingerprint": "f4c996a3"
+    },
+    {
+      "path": "style.css",
+      "sha256": "e7676128a3182d8f0517a584c3f514ad49145d148f2806d8d16d88e6b1224b08",
+      "fingerprint": "834d1eb9"
+    }
+  ]
+}

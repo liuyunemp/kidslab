@@ -10,7 +10,7 @@
   },
   "category": "programming",
   "levels": ["primary", "junior"],
-  "grades": ["g4", "g5", "g6", "g7"],
+  "grades": [],
   "tags": ["计算机原理", "编程启蒙", "实验"],
   "icon": "🖥️",
   "order": 81,

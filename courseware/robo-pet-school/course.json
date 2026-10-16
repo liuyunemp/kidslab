@@ -10,7 +10,7 @@
   },
   "category": "programming",
   "levels": ["primary"],
-  "grades": ["g5", "g6"],
+  "grades": [],
   "tags": ["分类", "观察", "编程启蒙", "实验"],
   "icon": "🐶",
   "order": 72,

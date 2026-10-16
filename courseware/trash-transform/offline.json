@@ -1,0 +1,24 @@
+{
+  "id": "trash-transform",
+  "version": "212a744b738383aa28640de44c44cfc9e7b343298cb3b62312264039de12c8fa",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "d68d6989a5c14e3772bb3f47d4f80c7f96090fbc37c68e3142b26aba80d3127f"
+    },
+    {
+      "path": "index.html",
+      "sha256": "8b64b957406ff4bdeed8810534e3fb007701390c4c6fb37d5056be96203d4ad8"
+    },
+    {
+      "path": "main.js",
+      "sha256": "5f8b9ad373308ada4c104288ed9d728b75ebf53cb6b39e4f31d5e44959aafb0b",
+      "fingerprint": "f215391b"
+    },
+    {
+      "path": "style.css",
+      "sha256": "68e68218e2d17683176c84215cb2a4b08408bd09e9c857ee8eac8c8e837ef026",
+      "fingerprint": "01c88c66"
+    }
+  ]
+}

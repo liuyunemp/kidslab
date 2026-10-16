@@ -10,7 +10,7 @@
   },
   "category": "programming",
   "levels": ["primary"],
-  "grades": ["g3", "g4", "g5"],
+  "grades": [],
   "tags": ["编程启蒙", "二进制"],
   "icon": "🖼️",
   "order": 58,

@@ -1,0 +1,24 @@
+{
+  "id": "potion-ratio",
+  "version": "91c70f348b5b0720bf29be4f70c039fa85e5be600dbe335a4a26ef738cde0344",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "b644f14e9889d99a9eafa5faca7c8e9360a2052a3da56f54c7476daa6710cfdd"
+    },
+    {
+      "path": "index.html",
+      "sha256": "5a5d0b83eaf2ec69b59224f045f64116fcf7e8e5f11a389cb2031eab82b463b0"
+    },
+    {
+      "path": "main.js",
+      "sha256": "df2d6b52209d793fe72c8f014811016a6cfe5cc8ce2ef2a337f7f4ea8178d981",
+      "fingerprint": "08d23d14"
+    },
+    {
+      "path": "style.css",
+      "sha256": "e41ef98ea20d042dca97ae0381207772e8d3a47d3f62a21442901dbbdfc9a90f",
+      "fingerprint": "0eb9c49e"
+    }
+  ]
+}

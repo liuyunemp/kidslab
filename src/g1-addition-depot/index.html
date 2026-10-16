@@ -1,33 +1,41 @@
 <!doctype html>
 <html lang="zh-CN" data-theme="light">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#dc6b43">
-  <title>加法车站 · KidsLab</title>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4eee2"><title>一年级探索工坊 · KidsLab</title>
   <link rel="stylesheet" href="./style.css">
   <script src="../../scripts/sdk/core.js" data-kidslab-sdk></script>
-  <script>try{document.documentElement.dataset.theme=localStorage.getItem('kidslab.theme')||'light'}catch{}</script>
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
 </head>
 <body>
+  <canvas id="scene" aria-label="3D 探索舞台"></canvas>
   <header class="topbar">
-    <a class="back" id="back" href="../../index.html">← 返回</a>
-    <h1 id="title">🚂 加法车站</h1>
-    <div class="top-actions">
-      <button class="icon-button" id="speechBtn" type="button" aria-label="关闭朗读" aria-pressed="true">🔊</button>
-      <button class="icon-button" id="musicBtn" type="button" aria-label="关闭音乐" aria-pressed="true">♫</button>
-      <button class="icon-button" id="effectsBtn" type="button" aria-label="关闭音效" aria-pressed="true">🔔</button>
-      <button class="icon-button" id="themeBtn" type="button" aria-label="切换主题">🌙</button>
-      <button class="icon-button" id="languageBtn" type="button" aria-label="切换语言">EN</button>
-    </div>
+    <a id="back" href="../../index.html" class="icon" aria-label="返回平台">←</a>
+    <h1 id="title"></h1>
+    <button id="muteBtn" class="icon" type="button">🔊</button>
+    <button id="settingsBtn" class="icon" type="button" aria-expanded="false">♫</button>
+    <button id="themeBtn" class="icon" type="button">🌙</button>
+    <button id="langBtn" class="icon" type="button">EN</button>
   </header>
-  <main class="game">
-    <button class="intro" id="intro" type="button"><span class="speak-icon" aria-hidden="true">🔊</span><span id="introText">开动十位和个位小火车，把两批乘客合在一起。</span></button>
-    <div class="progress-row"><span class="count" id="count">1/8</span><div class="track" id="track" aria-hidden="true"></div><span class="stars" id="stars">⭐ 0</span></div>
-    <section class="stage" id="stage" aria-live="polite"></section>
-    <p class="praise" id="praise" aria-live="polite" hidden></p>
-    <p class="feedback" id="feedback" aria-live="polite"></p>
-  </main>
+  <div id="soundMenu" class="sound-menu" hidden>
+    <button id="musicBtn" type="button"></button>
+    <button id="soundBtn" type="button"></button>
+    <button id="speechBtn" type="button"></button>
+  </div>
+  <section class="status-strip"><span id="unitBadge"></span><strong id="progress" aria-live="polite">0/8</strong></section>
+  <button id="coach" class="coach" type="button"></button>
+  <section id="stageReadout" class="stage-readout" aria-live="polite"></section>
+  <p id="feedback" class="feedback" role="status" hidden></p>
+  <aside id="panel" class="panel">
+    <button id="panelHandle" type="button" aria-controls="panelBody" aria-expanded="true"><span data-t="tools"></span><span id="panelArrow">▾</span></button>
+    <div id="panelBody">
+      <div class="route"><label class="sr-only" for="activitySelect" data-t="choose"></label><select id="activitySelect"></select><button id="freeBtn" type="button" data-t="free" aria-pressed="false"></button></div>
+      <div id="controls"></div>
+      <div class="utility"><button id="undoBtn" type="button" data-t="undo"></button><button id="resetBtn" type="button" data-t="reset"></button><button id="lessonBtn" type="button" data-t="discover" aria-expanded="false"></button></div>
+      <section id="lesson" hidden><p id="lessonText"></p><p id="bookSource"></p><a id="bookLink" target="_blank" rel="noopener" data-t="source"></a></section>
+    </div>
+  </aside>
+  <section id="nogl" class="nogl" hidden><h2 data-t="no3d"></h2><p data-t="no3dHint"></p><a href="../../index.html" data-t="back"></a></section>
   <script type="module" src="./main.js"></script>
 </body>
 </html>

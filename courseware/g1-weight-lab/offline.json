@@ -1,0 +1,43 @@
+{
+  "id": "g1-weight-lab",
+  "version": "1b41d6407b32011260bcc5bc35cf3d82ab7be50053fb274633f188052a7db7c1",
+  "assets": [
+    {
+      "path": "audio/bgm.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "config.js",
+      "sha256": "53fe789af7b056cb5bf6e6c782642b010bcdbf34b8292fc330cdd887bf4a6d30",
+      "fingerprint": "051f67d7"
+    },
+    {
+      "path": "course.json",
+      "sha256": "cd4c55df6eca969e3c905f47119ff1d773787a2296d31c772d91ad792f7cf030"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "b2f978854d86a6988dd89bf28d13d9e2b872169b9cf280083e68d960ed0853d3",
+      "fingerprint": "0d3f2646"
+    },
+    {
+      "path": "index.html",
+      "sha256": "0462e9428e27e195ce157d4b9ec3f7a5108624cfbff4dd369083f0c8aa16b991"
+    },
+    {
+      "path": "main.js",
+      "sha256": "b98fc379de8f0e1fad64aab9b7e67e9e0cf19287cf6fdfaac726924c5a05b6be",
+      "fingerprint": "b5e8f122"
+    },
+    {
+      "path": "model.js",
+      "sha256": "200576b540c95c5edc0d1aa7f64f24c109559196dee9d73c057c9d01614664aa",
+      "fingerprint": "9217243d"
+    },
+    {
+      "path": "style.css",
+      "sha256": "e16d3a6aea8be84447475e9109d7dfcf70753043a85d54a4d683ab5a40ac1a22",
+      "fingerprint": "1a8bcd3f"
+    }
+  ]
+}

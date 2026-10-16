@@ -10,7 +10,7 @@
   },
   "category": "math",
   "levels": ["primary"],
-  "grades": ["g3", "g4", "g5", "g6"],
+  "grades": [],
   "tags": ["分类", "运算", "实验"],
   "icon": "📊",
   "order": 27,

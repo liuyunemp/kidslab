@@ -12,11 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g1",
-    "g2",
-    "g3"
-  ],
+  "grades": [],
   "tags": [
     "集合",
     "分类",

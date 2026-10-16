@@ -1,0 +1,29 @@
+{
+  "id": "plant-xray",
+  "version": "8a59f3b29fe65342c4ddd0e9a9db483d0454787929cdd11f17c03b7b437c2e2f",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "b73baa44f3701e4fa9446932ed6f98fea5cd57421a6230d7286a111bd2e5f674"
+    },
+    {
+      "path": "index.html",
+      "sha256": "a990a65e5333a5046b279a7a2ab8f18470fac9bb4f0fd94ee9b0a2282f6037bb"
+    },
+    {
+      "path": "main.js",
+      "sha256": "8f2d37568868d404a31460351271de144c93bf9682d830a652e056876f68bdbb",
+      "fingerprint": "36befb00"
+    },
+    {
+      "path": "plant-model.js",
+      "sha256": "79d5692b37d0405ecb99ac9228a9544cb4553944abfd584e0663bcc064dcc6cd",
+      "fingerprint": "bf80664b"
+    },
+    {
+      "path": "style.css",
+      "sha256": "fd60edf6e893d46172dda4af003c585d2415aed1661f50977a2604ddb6bf79c1",
+      "fingerprint": "3ed0431f"
+    }
+  ]
+}

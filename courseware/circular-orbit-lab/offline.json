@@ -1,0 +1,62 @@
+{
+  "id": "circular-orbit-lab",
+  "version": "7084ff3771bb0015f90659dadf9248a7c39282b0006e1e14621edde0dd5d0dfc",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "aa248ece1d444d07d7bc7f10aff7d6d43f9c0a57ad1259911824ca5f08c7668f",
+      "fingerprint": "0eff1f3d"
+    },
+    {
+      "path": "audio/orbit-glow.meta.json",
+      "sha256": "611cb89c962986be4a34b473d461c33b13f3fe445fed18889126ed86389f2395"
+    },
+    {
+      "path": "audio/orbit-glow.ogg",
+      "sha256": "8d2f41c58f9355ab90e84f2ccb43b7d6c253e0a0054578a36e75d56192613a8f"
+    },
+    {
+      "path": "course.json",
+      "sha256": "38f863f27aca0f0360a0d40d4eaff7849021aa2bc6af00578ee221edb0343c65"
+    },
+    {
+      "path": "index.html",
+      "sha256": "48f896430cd684b31ed9750f0bcd533fe3d53d8c14c649c70594270ac5ec4c2a"
+    },
+    {
+      "path": "lab-model.js",
+      "sha256": "75a6087b4d232ebab1c2f5e71ccedc0e9554ca770d39cf163df365773b95aab3",
+      "fingerprint": "f69f35c3"
+    },
+    {
+      "path": "main.js",
+      "sha256": "3110649da225a397a4f44d9a98287eef5fe592b973857019c62ac49f4bb67634",
+      "fingerprint": "31e01d03"
+    },
+    {
+      "path": "orbit-model.js",
+      "sha256": "b300d950ec2454d6e219eada851c0cf980193cd9fbac3a664f8c76f11a1b42e3",
+      "fingerprint": "761ca007"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "a263004ca900c7063736b5a186288aae3929c41442a339896eb46a9d9826d586",
+      "fingerprint": "ccdc3405"
+    },
+    {
+      "path": "style.css",
+      "sha256": "6ee77c11ffeaee3cd639efc285042f7701442300f88ccb58f7e7fc8b5d92ec58",
+      "fingerprint": "99329017"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

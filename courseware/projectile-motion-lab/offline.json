@@ -1,0 +1,62 @@
+{
+  "id": "projectile-motion-lab",
+  "version": "6e51311dd387e985a9a9715c5b5eecd90064d18ca1a9ca883ad515f3a46b1ccf",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "b4e024b64914358911d68f86fa5164cdcf6f054749f5b26298a7465811e3b5bb",
+      "fingerprint": "39423f9b"
+    },
+    {
+      "path": "audio/lab-glow.meta.json",
+      "sha256": "0f19c1fab1e0c23085b6fdea516db47bb8ea04414919a63b1d783cb34e3bb73f"
+    },
+    {
+      "path": "audio/lab-glow.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "course.json",
+      "sha256": "fbb763a28b3e42f9ddfb38736c88d742a889b2fb25a01c9572648480caeba844"
+    },
+    {
+      "path": "index.html",
+      "sha256": "d23c260b3dd9fd265c0c975c666a626cd5367ba5af3f179fe5541eb0def09e4b"
+    },
+    {
+      "path": "lab-model.js",
+      "sha256": "7ba6fcf7aa7479326bf4d947b86f87cab3a57cec830192fc97509c537e0ed617",
+      "fingerprint": "de35f65c"
+    },
+    {
+      "path": "main.js",
+      "sha256": "9e5e6ebab550142759f6c375cabe4b5f657192f905d1c5727cded477d828e6ff",
+      "fingerprint": "a1cac03b"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "d482384da62bf7e7b6ac69dc0dd72ffcec1fa68bf77cd8948dc7940cb1738680",
+      "fingerprint": "f24c7f08"
+    },
+    {
+      "path": "style.css",
+      "sha256": "8b09ccdc64e7dc7e0a64d4cb2f46eddf627b382aeb67197d77c5641b08885c0d",
+      "fingerprint": "0a0faca3"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

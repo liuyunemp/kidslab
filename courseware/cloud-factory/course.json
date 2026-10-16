@@ -12,10 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g3",
-    "g4"
-  ],
+  "grades": ["g6a"],
   "tags": [
     "水循环",
     "天气",

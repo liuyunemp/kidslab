@@ -1,6 +1,6 @@
 # KidsLab 计划状态清单
 
-最后核验：2026-10-13
+最后核验：2026-10-16
 
 事实来源：`src/*/course.json`、`docs/courseware-plan/*.md`、`README.md`、`AGENTS.md`。本文件负责回答“哪些已完成、哪些未实现、后续 Agent 完成计划后要更新哪里”。
 
@@ -29,14 +29,17 @@ KidsLab 应该是一组孩子打开就想玩的交互课件，而不是题库或
 
 ## 当前能力清单
 
+- 教材单元浏览（已构建，桌面/手机单元浏览 E2E 通过）：58 个明确年级课件映射到 26 个教材版本、184 个目录入口，其中 136 个可直达现有探索活动。页面按教材单元/章节和核心页码排序，去重课件数与入口数分别显示。维护及验收见 [curriculum-units.md](curriculum-units.md)；课程数量及规划完成数不变。
+- 年级与科目校准（2026-10-16，已构建，桌面/手机筛选 E2E 复测通过）：已核查 132 个可见课件，58 个保留明确教材年级，74 个仅在全部年级显示；2 张旧导航页仍隐藏。年级只读取 `grades`，学段/年级/册次/科目/搜索取交集，置顶不越过过滤，合法零结果保留选择。逐课版本、章节与待核准依据见 [classification-audit.md](classification-audit.md)。构建产物已更新，规划完成数不变。
+- 本轮验证：此前分类相关70项、单元浏览相关62项单测通过。后续构建退出码0；全量 E2E 为884通过、5跳过、3失败，修复手机筛选测试辅助函数后，受影响文件12项复测全通过。合并覆盖887个通过用例、5个既有条件跳过，无未解决失败；首轮全量退出码1，受影响文件复测退出码0。命令及边界见 [验收记录](verification-2026-10-16.md)。
 - 主站课程浏览：`index.html`、`assets/js/app.js` 支持学段、年级、分类、搜索、双语、主题、强调色与置顶课件。
 - 静态构建发布：`scripts/build.mjs` 校验 `course.json`、压缩资源、生成 `courseware/index.json`；GitHub Pages workflow 在 `main` 推送后构建发布。
-- 课件源码库：当前 `src/` 下有 121 个课件目录，其中小学规划内按 ID 直接完成 97 个，初高中两轮规划内已上线 16 个。
-- 小学课件规划：`docs/courseware-plan/` 覆盖数学、语文、编程、逻辑、科学 97 个小学目标课件。
+- 课件源码库：当前 `src/` 下有 134 个课件目录，其中小学规划内按 ID 直接完成 110 个，初高中两轮规划内已上线 16 个。
+- 小学课件规划：`docs/courseware-plan/` 覆盖数学、语文、编程、逻辑、科学 110 个小学目标课件。
 - 学段战略（方案 B）：初高中入口保持可见，产品语言与小学游戏叙事分开；决策记录在 [`README.md`](./README.md)，初中物理试点路径见 [`junior-physics.md`](./junior-physics.md)。
 - 课件模板：`docs/courseware-template/` 提供双语、主题、静态独立课件起点。
 - 交互音效：当前游戏课件含语义交互音效与静音控制（含新建 `cpu-lab` 与 `mini-pyramid`）；`huarong-dao` 与 `venn-port` 使用 ScoreKit 循环配乐和通关短曲；存量改进优先级见 `docs/courseware-audio-audit.md`。
-- 语音朗读（平台 SDK `window.cool.speech`）：一年级 13 款语数游戏的题面与引导语可点一下朗读，答对只在连对 3 题与通关两个里程碑给语音夸奖；共用顶栏「🔊 语音」开关并持久化到 `kidslab.speech`，无语音能力时静默降级。组句是无 DOM 纯函数，逐题型保证不念出答案。用法见 `docs/sdk.md`。
+- 语音朗读（平台 SDK `window.cool.speech`）：一年级现有11款生成式游戏保留题面点读和里程碑语音；下册17款探索提供动作引导点读，朗读、音乐、音效与总静音可分别控制并持久化。引导组句是无 DOM 纯函数，不读隐藏结果；语音缺失不影响操作。用法见 `docs/sdk.md`。
 - 行为分析：`docs/analytics.md`、`scripts/track.js`、`cloudflare/analytics/` 提供可选埋点链路。
 
 ## 非目标（铁律）
@@ -65,16 +68,16 @@ Agent 每次完成计划项后必须同步更新：
 
 ## 汇总
 
-小学规划口径：数学 38 个规划项 + 1 个既有课件，语文 6 个规划项，编程 14 个规划项 + 1 个既有课件，逻辑 13 个规划项 + 2 个既有课件，科学 21 个规划项 + 1 个既有课件，共 97 个目标课件。旧 `g1-math`、`g1-chinese` 仅作隐藏导航页。
+小学规划口径：数学 41 个规划项 + 1 个既有课件，语文 16 个规划项，编程 14 个规划项 + 1 个既有课件，逻辑 13 个规划项 + 2 个既有课件，科学 21 个规划项 + 1 个既有课件，共 110 个目标课件。旧 `g1-math`、`g1-chinese` 仅作隐藏导航页。
 
 | 学科 | 目标数 | 已完成（按规划 ID） | 未实现 | 备注 |
 | --- | ---: | ---: | ---: | --- |
-| 数学 | 39 | 39 | 0 | 新增一年级独立游戏 7 款；规划项已全部完成 |
-| 语文 | 6 | 6 | 0 | 一年级上册六款独立游戏，见 `chinese.md` |
+| 数学 | 42 | 42 | 0 | 上册新增分类洗衣坊；下册新增竖式、数量关系两款，升级七款不重复计数 |
+| 语文 | 16 | 16 | 0 | 上册八款（新增诗画猜猜台、笔顺快车站）、下册八款，见 `chinese.md` |
 | 编程 | 15 | 15 | 0 | P0 已完成；规划项已全部完成 |
 | 逻辑 | 15 | 15 | 0 | P0 已完成；规划项已全部完成；`magic-cube`、`huarong-dao` 为规划外补充 |
 | 科学 | 22 | 22 | 0 | `plant-xray`、`creature-workshop`、`eco-island`、`mini-pyramid` 与 `air-garage` 已按规划 ID 上线；`plant-lab` 仍是规划外养成实验 |
-| 合计 | 97 | 97 | 0 | 另有规划外已上线课件；两张旧综合卡隐藏为导航 |
+| 合计 | 110 | 110 | 0 | 另有规划外已上线课件；两张旧综合卡隐藏为导航 |
 
 初高中采用独立规划口径，不计入上方小学汇总。第一轮 26 个见 [`secondary-labs.md`](./secondary-labs.md)；第二轮 20 个见 [`secondary-labs-wave2.md`](./secondary-labs-wave2.md)；合计 46 个目标。
 
@@ -110,7 +113,10 @@ Agent 每次完成计划项后必须同步更新：
 - [x] 加减接力 `g1-mixed-relay`
 - [x] 轻重天平 `g1-weight-lab`
 - [x] 方位小镇 `g1-direction-town`
+- [x] 分类洗衣坊 `g1-sort-laundry`
 - [x] 图形拼搭 `g1-flat-shapes`
+- [x] 竖式搭建厂 `g1b-column-workshop`
+- [x] 数量故事台 `g1b-quantity-theater`
 - [x] 进位工厂 `carry-factory` · M1 · D
 - [x] 立体影子剧场 `shadow-theater`
 - [x] 果园订单 `orchard-orders`
@@ -148,6 +154,19 @@ Agent 每次完成计划项后必须同步更新：
 - [x] 词语邮局 `g1-word-post`
 - [x] 对韵小剧场 `g1-rhyme-stage`
 - [x] 句子列车 `g1-sentence-train`
+- [x] 诗画猜猜台 `g1-poem-stage`
+- [x] 笔顺快车站 `g1-stroke-order`
+
+### 语文（一年级下册）
+
+- [x] 汉字变变屋 `g1b-character-lab`
+- [x] 写字小工坊 `g1b-writing-workshop`
+- [x] 词语生活馆 `g1b-word-world`
+- [x] 音序小书屋 `g1b-dictionary-house`
+- [x] 句子造景台 `g1b-sentence-studio`
+- [x] 古诗小剧场 `g1b-poetry-theater`
+- [x] 故事放映屋 `g1b-story-studio`
+- [x] 表达小舞台 `g1b-speaking-stage`
 
 ### 编程
 
@@ -297,8 +316,8 @@ Agent 每次完成计划项后必须同步更新：
 | `pendulum-lab` 单摆实验室 | physics | junior/senior · `g8,g11` | 已归属 [`junior-physics.md`](./junior-physics.md) 试点第 1 课 + 第一轮存量；`grades` 已补。升级债：重复测量与拟合 |
 | `optics-lab` 光学实验室 | physics | junior/senior | 已纳入初高中实验规划与初中物理路径；补记录与归纳闭环 |
 | `ph-lab` 酸碱魔法水 | chemistry | junior/senior · `g8-g10` | 已归属 [`secondary-labs.md`](./secondary-labs.md) 存量化学；3D 观测壳已完成，L3 稀释/中和/滴定仍待做 |
-| `ice-maker-lab` 制冰实验室 | physics | primary/junior | 已升级为全屏 three.js 观测实验：灌水/压缩机/开门对照，热账本 Q_h=Q_c+W；不计入小学 97 项规划 ID |
-| `cpu-lab` 电脑原理实验室 | programming | primary/junior | 计算机组成/冯·诺依曼与取指-译码-执行扩展，不计入小学 97 项规划 ID |
+| `ice-maker-lab` 制冰实验室 | physics | primary/junior | 已升级为全屏 three.js 观测实验：灌水/压缩机/开门对照，热账本 Q_h=Q_c+W；不计入小学 107 项规划 ID |
+| `cpu-lab` 电脑原理实验室 | programming | primary/junior | 计算机组成/冯·诺依曼与取指-译码-执行扩展，不计入小学 107 项规划 ID |
 | `g1-math` 一年级数学游戏地图 | math | primary · `g1` | 旧网址导航页，`listed:false`，不计入规划完成数；旧进度不迁移 |
 | `g1-chinese` 一年级语文游戏地图 | chinese | primary · `g1a` | 旧网址导航页，`listed:false`，不计入规划完成数；旧进度不迁移 |
 
@@ -308,7 +327,7 @@ Agent 每次完成计划项后必须同步更新：
 - `plant-xray` 已按规划玩法单独上线；`plant-lab` 保留为规划外养成实验，不再用它顶替透视园条目。
 - 为主站过滤、课件核心交互和构建发布补充可重复验收证据；当前主要依赖 `npm run build` 与人工走查。
 - 按 `docs/courseware-audio-audit.md` 的 P0 → P1 → P2 顺序补齐交互音效；先消除高频堆叠音源，再统一静音控制，最后分批覆盖无音频课件。
-- 初高中扩展按方案 B：产品语言与小学分开，入口不隐藏。清单仍按 `secondary-labs.md` 与 `secondary-labs-wave2.md` 独立维护，不混入小学 97 项状态。初中物理试点顺序见 `junior-physics.md`。优先完成第一轮剩余 P0；若要先补主站数学/生物空洞，可将第二轮 P0 的一次函数、二次函数、单位圆、光合、孟德尔与第一轮 P0 交错。第二轮 P1 的光电效应、DNA、导数不要插队。实现前同步扩充 taxonomy 与模型单测。
+- 初高中扩展按方案 B：产品语言与小学分开，入口不隐藏。清单仍按 `secondary-labs.md` 与 `secondary-labs-wave2.md` 独立维护，不混入小学 107 项状态。初中物理试点顺序见 `junior-physics.md`。优先完成第一轮剩余 P0；若要先补主站数学/生物空洞，可将第二轮 P0 的一次函数、二次函数、单位圆、光合、孟德尔与第一轮 P0 交错。第二轮 P1 的光电效应、DNA、导数不要插队。实现前同步扩充 taxonomy 与模型单测。
 
 ## 完成的样子
 
@@ -324,6 +343,8 @@ Agent 每次完成计划项后必须同步更新：
 
 ## 验收矩阵（业务能力覆盖矩阵）
 
+一年级下册17款（新增10、升级7）的教材范围、自动化结果与人工复核缺口分别记录在 [g1b-acceptance.md](g1b-acceptance.md)。实现完成不等于已进行真人教学测评。
+
 覆盖底线（硬性规定）：
 
 1. 每个一级功能至少有一条 Happy Path E2E。
@@ -336,13 +357,16 @@ Agent 每次完成计划项后必须同步更新：
 
 | 一级功能 | 风险级别 | Happy Path E2E | 失败路径 | 权限角色覆盖 | 失败恢复/回滚 | 证据（测试路径/用例） |
 | --- | --- | --- | --- | --- | --- | --- |
-| 主站浏览与筛选 | 中 | 部分：学段切换 + 搜索/分类 | 缺口：非法筛选组合 | 不适用：纯静态无角色 | 不适用：只读 UI | `tests/e2e/smoke.spec.js`（搜索/分类）；`tests/e2e/stage-strategy.spec.js`（小学问候、初高中实验室问候、三课仍在货架、不标建设中） |
-| 一年级数学独立游戏 | 中 | 13 款新语数游戏中的 7 款数学均由 E2E 完整完成 8 题；找零和七巧板也验收完整 8 单/8 幕 | 每款新游戏首题错答原地恢复；找零错币后调整、七巧板错放后继续 | 不适用：纯静态无角色 | 新游戏第 3 题后重载续玩、重复提交不重复领奖；第 1–7 题不得完成整课 | `tests/e2e/g1-independent-games.spec.js`、`change-vending.spec.js`、`tangram-theater.spec.js`；`tests/unit/g1-independent-games.test.mjs` |
-| 一年级语文独立游戏 | 中 | 六款语文游戏均由 E2E 完整完成 8 题 | 每款首题错答后原地重试 | 不适用：纯静态无角色 | 第 3 题后重载续玩，第 8 题才写整课完成，重玩换题 | `tests/e2e/g1-independent-games.spec.js`；`tests/unit/g1-independent-games.test.mjs` |
-| 一年级课件题面朗读与语音夸奖 | 中 | 已覆盖：13 款游戏在桌面与手机两档均验证题面朗读按钮可见、命中区 ≥44×44px、可点击；连对三题出现奖章、通关出现夸奖文案与「再听一次」；语音开关文案随语言切换 | 缺口：真实发音质量、硬件缺中文音色时的听感无法自动化验证；只验证了不报错与视觉反馈不缺席 | 不适用：纯静态无角色 | 已覆盖：关闭语音会立即停播且重载后保持关闭；语音不可用时仍然给出奖章、星标跳动与文案 | `tests/e2e/g1-independent-games.spec.js`（题面朗读、语言切换、语音开关持久化、375×667 无横向溢出与零报错用例）；`tests/unit/g1-speech.test.mjs`（13 款 × 每题的朗读文本不泄露答案、拼音不念声母韵母声调、里程碑边界、夸奖语中英轮转与长度）；`docs/sdk.md` |
+| 教材单元与活动入口 | 中 | 已通过：单元数字顺序、单元内知识顺序、册次/科目隔离、活动直达、双语与手机标题 | 错误教材映射由单测拒绝；搜索零结果及非法活动ID恢复已有存档 | 不适用：纯静态无角色 | 直达保留原进度和撤销记录；切换后刷新保持活动；单测和桌面/手机浏览器用例通过 | `tests/unit/curriculum.test.mjs`；`tests/e2e/curriculum.spec.js`。相关单测62项通过；构建及本文件桌面/手机10项 E2E 通过，见 [验收记录](verification-2026-10-16.md) |
+| 主站浏览与筛选 | 中 | 已通过：学段/年级/上下册/科目/搜索交集，无年级与置顶，跨年级和侧栏计数；桌面及手机已复测 | 合法零结果保持空态、未归属课不泄漏到具体年级；非法参数由单测拒绝 | 不适用：纯静态无角色 | 已通过：刷新及无参数重开恢复偏好、清除筛选恢复目录、清除最近进度同步计数 | `tests/unit/catalog-filter.test.mjs`、`tests/unit/grades.test.mjs`；`tests/e2e/catalog-filters.spec.js`、`smoke.spec.js`、`g1-math.spec.js`、`stage-strategy.spec.js`。构建已执行；筛选文件桌面/手机12项复测通过，详见 [验收记录](verification-2026-10-16.md) |
+| 主列表儿童可读性与手机导航 | 中 | 两档视口、中英文和深浅主题检查按钮 ≥44×44px、核心文字 ≥16px，手机搜索独占一行，无横向溢出 | 收起的手机侧栏不能获得焦点；菜单支持 Escape 关闭 | 不适用：纯静态无角色 | 打开菜单聚焦侧栏，关闭恢复菜单按钮焦点 | `tests/e2e/main-accessibility.spec.js`；首屏视觉与颜色仍需人工检查，星图内部布局不在本轮范围 |
+| 一年级数学独立游戏 | 中 | 生成式语数游戏中 8 款数学（含新增分类洗衣坊）由 E2E 用例覆盖完整 8 题；找零和七巧板也验收完整 8 单/8 幕。缺口：三款 2026-10 新增课（分类洗衣坊等）的 E2E 分支已写好，完整浏览器通关验收待本地运行 `npm run test:e2e` 确认 | 每款新游戏首题错答原地恢复；分类题错筐弹回；找零错币后调整、七巧板错放后继续 | 不适用：纯静态无角色 | 新游戏第 3 题后重载续玩、重复提交不重复领奖；第 1–7 题不得完成整课 | `tests/e2e/g1-independent-games.spec.js`、`change-vending.spec.js`、`tangram-theater.spec.js`；`tests/unit/g1-independent-games.test.mjs`（11 款边界 + 新题型答案串/候选专项，已通过） |
+| 一年级语文独立游戏 | 中 | 八款上册语文游戏（新增诗画猜猜台三题型、笔顺快车站逐位校验）由 E2E 用例覆盖完整 8 题。缺口：新课完整浏览器通关验收待本地运行 `npm run test:e2e` 确认 | 每款首题错答后原地重试；诗句排序与笔顺装车点错卡片立即弹回且不推进进度 | 不适用：纯静态无角色 | 第 3 题后重载续玩，第 8 题才写整课完成，重玩换题 | `tests/e2e/g1-independent-games.spec.js`；`tests/unit/g1-independent-games.test.mjs`（已通过） |
+| 一年级课件题面朗读与语音夸奖 | 中 | 16 款生成式游戏的朗读用例自动纳入新课；朗读文本不泄露答案已由单测验证。缺口：三款新课在桌面与手机两档的题面朗读按钮、奖章与「再听一次」待本地 E2E 确认 | 缺口：真实发音质量、硬件缺中文音色时的听感无法自动化验证；只验证了不报错与视觉反馈不缺席 | 不适用：纯静态无角色 | 已覆盖：关闭语音会立即停播且重载后保持关闭；语音不可用时仍然给出奖章、星标跳动与文案 | `tests/e2e/g1-independent-games.spec.js`（题面朗读、语言切换、语音开关持久化、375×667 无横向溢出与零报错用例）；`tests/unit/g1-speech.test.mjs`（16 款 × 每题的朗读文本不泄露答案、拼音不念声母韵母声调、里程碑边界、夸奖语中英轮转与长度，已通过）；`docs/sdk.md` |
+| 下册17款探索（136活动） | 高 | 每款八关实际UI闭环、语言/主题、双视口、独立进度 | 非法笔迹、借位失败、金额不足、WebGL/音频/存储失败 | 不适用：纯静态无角色 | 撤销、重置、连点、动画中重开、损坏存档、旧记录保留、离线快照 | `tests/e2e/g1b-explorations.spec.js`、`tests/e2e/change-vending.spec.js`、`tests/unit/g1b-explorations.test.mjs`；真人听测与教研复核见专门记录 |
 | 旧综合网址导航 | 低 | 数学与语文旧网址可打开并链接独立游戏，旧卡不进入主站清单 | 不适用：只读导航 | 不适用：纯静态无角色 | 不适用：只读导航 | `tests/e2e/g1-math.spec.js` |
-| 课件构建与 manifest 生成 | 中 | 部分：`npm run build` | 部分：`scripts/build.mjs` 校验非法 `course.json` | 不适用：本地构建无角色 | 部分：构建失败不应写入错误 manifest，需补回归验证 | `scripts/build.mjs`、`.github/workflows/deploy.yml` |
-| PWA 壳与课件离线缓存 | 高 | 已覆盖：manifest 合法性 + SW 激活预缓存 + cache-on-visit 角标 | 已覆盖：杀死服务器后离线回放已玩课件与主站壳 | 不适用：纯静态无角色 | 已覆盖：断网时 SW 缓存兜底，联网 network-first 自动恢复最新内容 | `tests/e2e/pwa.spec.js` |
+| 课件构建与 manifest 生成 | 中 | 生成完整课件、资源指纹与逐课 SHA-256 离线清单；LF/CRLF 输入产生一致文本产物，二进制不变 | 损坏或缺失元数据、入口缺失、脚本压缩失败均拒绝构建 | 不适用：本地构建无角色 | 替换失败恢复全部原产物，恢复失败保留备份并报告位置；修复输入后可重新构建 | `tests/unit/build-recovery.test.mjs`、`tests/unit/build-cache-bust.test.mjs` |
+| PWA 壳与课件离线缓存 | 高 | 访问后自动补齐并校验全部资源，完整版本才显示角标；离线读取延迟资源与音频 Range | 部分下载、哈希不匹配、配额写入失败不发布新版本；503 回放、404 保留；杀死服务器真实断网重开 | 不适用：纯静态无角色 | 下载失败保留上次完整版本并可重试；同名音频更新；离线文档固定版本；所有页面关闭后 SW 换代保留完整缓存 | `tests/unit/offline-cache.test.mjs`、`tests/e2e/offline-complete.spec.js`、`tests/e2e/pwa.spec.js`；真实音频听感仍需人工验收 |
 | 电工鼠开放电路实验室 | 高 | 已覆盖：桌面与触屏完成端口接线、合闸点亮、实时电流读数和触屏放置 | 已覆盖：制造短路并显示故障 | 不适用：纯静态无角色 | 已覆盖：撤销短路恢复通路；保存后清空并加载恢复作品 | `tests/e2e/electric-mouse.spec.js`；`tests/unit/electric-lab.test.mjs` |
 | 密度侦探实验室 | 高 | 已覆盖：桌面与触屏完成三次天平/排水现场读数、数据入表、质量—体积图，并由斜率锁定铝 | 已覆盖：先浸没被拒绝后可称重并原地改正 | 不适用：纯静态无角色 | 已覆盖：静音选择重载后保持；非法操作不写入数据表 | `tests/e2e/density-detective-lab.spec.js`；`tests/unit/density-detective-lab.test.mjs` |
 | 运动追踪实验室 | 高 | 已覆盖：桌面与触屏完成水平匀速打点、s-t / v-t 图生长、20° 斜面加速对照，以及直播播放让图自己长出来；中英与深浅主题切换无控制台错误 | 已覆盖：未点到小车被拒绝且不写入打点 | 不适用：纯静态无角色 | 已覆盖：打偏后可继续打点；音效静音选择重载后保持 | `tests/e2e/motion-tracker-lab.spec.js`；`tests/unit/motion-tracker-lab.test.mjs` |

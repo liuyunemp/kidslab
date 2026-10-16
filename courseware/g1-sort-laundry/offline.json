@@ -1,0 +1,43 @@
+{
+  "id": "g1-sort-laundry",
+  "version": "6ae70e627ac4f055c6ec118237844551aeec36e12998de8797fd948b904814a8",
+  "assets": [
+    {
+      "path": "audio/bgm.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "config.js",
+      "sha256": "9c543a1748f81b6b1e5d2b8946c864e6d8d1fdc9c6d6cf3dac850a65afe56bc8",
+      "fingerprint": "359d3a2f"
+    },
+    {
+      "path": "course.json",
+      "sha256": "ab685e2dadecb01a155cf1b6a15aa31cc36fefde30a6cc931b7d54498539d8d5"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "b2f978854d86a6988dd89bf28d13d9e2b872169b9cf280083e68d960ed0853d3",
+      "fingerprint": "0d3f2646"
+    },
+    {
+      "path": "index.html",
+      "sha256": "ae53ce267cb95d0ed28281b4173ec9cdf015b59724ad594e32593af52dfb9e70"
+    },
+    {
+      "path": "main.js",
+      "sha256": "e36d3c2a78ab9a1cc23bf4c8a76d34498b3208c098c5989e7035862396e77bcf",
+      "fingerprint": "a831814c"
+    },
+    {
+      "path": "model.js",
+      "sha256": "200576b540c95c5edc0d1aa7f64f24c109559196dee9d73c057c9d01614664aa",
+      "fingerprint": "9217243d"
+    },
+    {
+      "path": "style.css",
+      "sha256": "e16d3a6aea8be84447475e9109d7dfcf70753043a85d54a4d683ab5a40ac1a22",
+      "fingerprint": "1a8bcd3f"
+    }
+  ]
+}

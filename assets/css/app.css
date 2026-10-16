@@ -49,7 +49,7 @@
   --card: #fffdf7;
   --ink: #2b2440;
   --ink-soft: #6f6885;
-  --ink-faint: #a49cb8;
+  --ink-faint: #70677f;
   --line: #e5dccb;
   --line-strong: #2b2440;
   --shadow: rgba(43, 36, 64, 0.92);
@@ -69,7 +69,7 @@
   --card: #221d40;
   --ink: #f3efff;
   --ink-soft: #a9a1c6;
-  --ink-faint: #6f6790;
+  --ink-faint: #b0a7ce;
   --line: #35305a;
   --line-strong: #0b0918;
   --shadow: rgba(5, 4, 14, 0.9);
@@ -168,7 +168,7 @@ button { font-family: inherit; color: inherit; }
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .brand:hover .brand__mark { transform: rotate(-8deg) scale(1.06); }
-.brand__text { display: flex; flex-direction: column; line-height: 1.05; white-space: nowrap; }
+.brand__text { display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
 .brand__text b {
   font-family: var(--font-display);
   font-weight: 800;
@@ -178,8 +178,8 @@ button { font-family: inherit; color: inherit; }
 .brand__text small {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 11.5px;
-  letter-spacing: 2.2px;
+  font-size: 14px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--accent);
 }
@@ -207,7 +207,7 @@ button { font-family: inherit; color: inherit; }
 
 .side-sec__label {
   margin: 0 0 9px 4px;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 2.6px;
   text-transform: uppercase;
@@ -231,7 +231,7 @@ button { font-family: inherit; color: inherit; }
   background: transparent;
   border-radius: 9px;
   padding: 7px 2px;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--ink-soft);
   cursor: pointer;
@@ -263,7 +263,7 @@ button { font-family: inherit; color: inherit; }
   flex: none;
   margin: 0;
   padding: 0 2px;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 2.2px;
   text-transform: uppercase;
@@ -289,7 +289,7 @@ button { font-family: inherit; color: inherit; }
   border-radius: 99px;
   background: color-mix(in srgb, var(--card) 54%, transparent);
   color: var(--ink-soft);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   cursor: pointer;
   transition: transform 0.16s, border-color 0.16s, background var(--speed), color var(--speed);
@@ -318,9 +318,9 @@ button { font-family: inherit; color: inherit; }
   background: var(--seg-bg);
   color: var(--ink-soft);
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 14px;
 }
-.grade-list button[aria-checked="true"] .grade__count { background: var(--accent); color: #fff; }
+.grade-list button[aria-checked="true"] .grade__count { background: var(--accent); color: #241c36; }
 
 /* 分类 categories */
 .cat-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
@@ -361,7 +361,7 @@ button { font-family: inherit; color: inherit; }
 .cat-list .cat__name { flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; }
 .cat-list .cat__count {
   font-family: var(--font-display);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   padding: 1px 8px;
   border-radius: 99px;
@@ -398,7 +398,7 @@ button { font-family: inherit; color: inherit; }
   background: transparent;
   color: var(--ink-faint);
   font: inherit;
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
@@ -409,7 +409,7 @@ button { font-family: inherit; color: inherit; }
   background: var(--seg-bg);
 }
 .progress-clear[hidden] { display: none; }
-.sidebar__ver { margin: 0; padding: 0 4px; font-size: 11.5px; color: var(--ink-faint); white-space: nowrap; }
+.sidebar__ver { margin: 0; padding: 0 4px; font-size: 14px; color: var(--ink-faint); white-space: nowrap; }
 
 /* --- collapsed rail --- */
 .is-collapsed .sidebar { padding: 18px 10px; }
@@ -485,7 +485,7 @@ button { font-family: inherit; color: inherit; }
 .search input::-webkit-search-cancel-button { -webkit-appearance: none; }
 .search kbd {
   font-family: var(--font-display);
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 700;
   padding: 1px 8px;
   border-radius: 7px;
@@ -495,7 +495,7 @@ button { font-family: inherit; color: inherit; }
   color: var(--ink-faint);
 }
 
-.lang-btn { width: auto; padding: 0 11px; font-family: var(--font-display); font-weight: 800; font-size: 13px; letter-spacing: 1px; }
+.lang-btn { width: auto; padding: 0 11px; font-family: var(--font-display); font-weight: 800; font-size: 14px; letter-spacing: 1px; }
 .ico-moon { display: none; }
 :root[data-theme="dark"] .ico-moon { display: block; }
 :root[data-theme="dark"] .ico-sun { display: none; }
@@ -517,7 +517,7 @@ button { font-family: inherit; color: inherit; }
   30% { transform: rotate(14deg); } 42% { transform: rotate(-4deg); }
 }
 .hero__sub { margin: 7px 0 0 2px; font-size: 14px; font-weight: 600; color: var(--ink-soft); }
-.hero__sub b { color: var(--accent-deep, var(--accent)); }
+.hero__sub b { color: var(--ink); }
 
 /* ============ GRID / CARDS ============ */
 .grid {
@@ -526,6 +526,16 @@ button { font-family: inherit; color: inherit; }
   gap: 22px;
   padding: 18px 2px 10px;
 }
+
+/* 教材单元占满主区域，每个单元沿用响应式课件网格。 */
+.grid--curriculum { display: flex; flex-direction: column; gap: 32px; }
+.curriculum-unit { min-width: 0; }
+.curriculum-unit__book { margin: 0 0 6px; color: var(--ink-soft); font-size: 16px; line-height: 1.5; }
+.curriculum-unit__title { margin: 0; font-size: 22px; line-height: 1.45; overflow-wrap: anywhere; }
+.curriculum-unit__count { margin: 6px 0 0; color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
+.curriculum-unit__grid { padding-top: 14px; }
+.curriculum-unit__rest > h2 { grid-column: 1 / -1; }
+.card__curriculum { margin: 8px 0; color: var(--ink-soft); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
 
 .card {
   --cat-c: var(--accent);
@@ -585,7 +595,7 @@ button { font-family: inherit; color: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 800;
   padding: 3px 10px 3px 8px;
   color: #4a3200;
@@ -600,7 +610,7 @@ button { font-family: inherit; color: inherit; }
   right: 10px;
   bottom: 10px;
   padding: 4px 10px;
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 800;
   color: #263323;
   border: 2px solid var(--line-strong);
@@ -614,7 +624,7 @@ button { font-family: inherit; color: inherit; }
   left: 10px;
   bottom: 10px;
   padding: 4px 10px;
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 800;
   color: #0d3b4f;
   background: #aee3f5;
@@ -634,7 +644,7 @@ button { font-family: inherit; color: inherit; }
 }
 .card__desc {
   margin: 6px 0 0;
-  font-size: 13.2px;
+  font-size: 14px;
   line-height: 1.62;
   color: var(--ink-soft);
   display: -webkit-box;
@@ -652,7 +662,7 @@ button { font-family: inherit; color: inherit; }
   margin-top: auto;
 }
 .chip {
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 800;
   padding: 3px 10px;
   border-radius: 99px;
@@ -701,7 +711,7 @@ button { font-family: inherit; color: inherit; }
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  font-size: 12.5px;
+  font-size: 14px;
   color: var(--ink-faint);
 }
 .foot a { color: var(--ink-soft); font-weight: 700; text-decoration-color: var(--accent); text-underline-offset: 3px; }
@@ -757,12 +767,42 @@ button { font-family: inherit; color: inherit; }
   .card__cover { height: 104px; }
   .card__emoji { width: 60px; height: 60px; font-size: 34px; }
   .card__desc { display: none; }
-  .card__title { font-size: 15.5px; }
+  .card__title { font-size: 16px; }
   .main { padding: 12px 12px 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* 主列表儿童可读性：字号与命中区独立于卡片数量。 */
+.app .icon-btn { width: 44px; height: 44px; min-width: 44px; font-size: 16px; }
+.app .lang-btn { width: auto; }
+.level-seg button, .grade-list button, .cat-list button, .progress-clear, .btn-reset {
+  min-width: 44px; min-height: 44px; font-size: 16px; line-height: 1.45;
+}
+.search { min-height: 48px; }
+.search input { font-size: 16px; line-height: 1.5; }
+.card__title { line-height: 1.45; overflow-wrap: anywhere; }
+.accent-row button { width: 44px; height: 44px; flex: 0 0 44px; }
+.sidebar { overflow-y: auto; }
+.sidebar__body { flex: 1 0 auto; }
+.level-seg button[aria-checked="true"], .cat-list button.is-active .cat__count,
+.chip--cat, .card__pin, .card__progress, .card__offline { color: #241c36; }
+.grade__count, .cat__count { color: var(--ink-soft); }
+.chip--cat { background: color-mix(in srgb, var(--cat-c) 20%, var(--card)); color: var(--ink); }
+.cat-list button.is-active .cat__count { background: var(--seg-bg); color: var(--ink); }
+.cat-list .cat__name { white-space: normal; overflow: visible; text-overflow: clip; }
+.lv { font-size: 14px; min-width: 24px; }
+.card__meta { flex-wrap: wrap; }
+.card__levels { flex-wrap: wrap; }
+@media (max-width: 480px) {
+  .topbar { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 10px; }
+  .topbar__menu { grid-column: 1; grid-row: 1; }
+  .starmap-btn { grid-column: 2; grid-row: 1; justify-self: end; }
+  .topbar__actions { grid-column: 3; grid-row: 1; }
+  .search { grid-column: 1 / -1; grid-row: 2; width: 100%; }
+  .card__title { font-size: 16px; }
 }
 
 /* ---------- 星图模式 star map · 儿童天文台控制台 ---------- */

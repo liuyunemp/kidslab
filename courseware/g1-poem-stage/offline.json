@@ -1,0 +1,43 @@
+{
+  "id": "g1-poem-stage",
+  "version": "f06598a02d019719bd2fa9dfe6be1c021a86b75c0de0dd9a03af2103a74852e4",
+  "assets": [
+    {
+      "path": "audio/bgm.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "config.js",
+      "sha256": "2348872f5b0b3001b6bd06939731086d19b39f1b0226362f00ae2c8707d9399b",
+      "fingerprint": "591297ec"
+    },
+    {
+      "path": "course.json",
+      "sha256": "cd47e8ee949f0e08812c84a46825cd9d4a18ecd22c3eecc791461341fcbe515a"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "b2f978854d86a6988dd89bf28d13d9e2b872169b9cf280083e68d960ed0853d3",
+      "fingerprint": "0d3f2646"
+    },
+    {
+      "path": "index.html",
+      "sha256": "d9a96133a5ceddcd2089d29581f6d0ecfb43f73777986eea4cf8dfe28157162d"
+    },
+    {
+      "path": "main.js",
+      "sha256": "c3a67efea5e8b33ac89f33403cd3bc28cc0338f0454448c5317256bade2bffe8",
+      "fingerprint": "65adbcc1"
+    },
+    {
+      "path": "model.js",
+      "sha256": "200576b540c95c5edc0d1aa7f64f24c109559196dee9d73c057c9d01614664aa",
+      "fingerprint": "9217243d"
+    },
+    {
+      "path": "style.css",
+      "sha256": "e16d3a6aea8be84447475e9109d7dfcf70753043a85d54a4d683ab5a40ac1a22",
+      "fingerprint": "1a8bcd3f"
+    }
+  ]
+}

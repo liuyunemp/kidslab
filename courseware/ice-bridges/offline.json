@@ -1,0 +1,24 @@
+{
+  "id": "ice-bridges",
+  "version": "2c8089465ffcd179c04d4f137a57e601611706f130b9564913ffafb9ed34be96",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "08e3b03fe7b6b8f750502f990f1341ad6c46d9020f62b89e0ecd91b6e06020e4"
+    },
+    {
+      "path": "index.html",
+      "sha256": "afbf203967392552a95c500194f6da55830904fd85419f74bfc9268c0126309a"
+    },
+    {
+      "path": "main.js",
+      "sha256": "a58f86f5362086e719e7ceb474b8392e55d6d8eb0ae9ba6cc8e72164cbfc72fb",
+      "fingerprint": "57113919"
+    },
+    {
+      "path": "style.css",
+      "sha256": "68c0a4b9f10fc15f192796d4013b3cb6023e2b741f8cff17bade9ecc1bbbda39",
+      "fingerprint": "82c69be8"
+    }
+  ]
+}

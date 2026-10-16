@@ -1,0 +1,24 @@
+{
+  "id": "wave-band",
+  "version": "a0dca5e8c6081f3df4c9c30b52d470495206b26fba4b8ad858f4b174f6d59c1c",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "09b862239790ff6663537162e69226abb2571179f9c147d625197b6f186328bd"
+    },
+    {
+      "path": "index.html",
+      "sha256": "2565cdc00cb2de54f770156afe47e87d9de056db59276498d7d7ddd13f799107"
+    },
+    {
+      "path": "main.js",
+      "sha256": "fc8f6e239f057571f93f53b7ad7a33dcc815eadeaf7ef017acbce13b31c51444",
+      "fingerprint": "74bdca27"
+    },
+    {
+      "path": "style.css",
+      "sha256": "6cc3db5112e93517f8a14046af0b725659abbb4e7c220766fdd501aa19276f81",
+      "fingerprint": "9f85d603"
+    }
+  ]
+}

@@ -5,22 +5,22 @@
     "en": "Number Bridge"
   },
   "description": {
-    "zh": "给数字桥装上大于、小于或等于的桥牌，比较 20 和 100 以内的数。",
-    "en": "Fit the greater, less or equal bridge sign between numbers up to 100."
+    "zh": "给两边添一些，看看桥牌怎么变。",
+    "en": "Add or remove blocks and watch the comparison sign."
   },
   "category": "math",
+  "grades": ["g1b"],
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g1a",
-    "g1b"
-  ],
   "tags": [
     "比大小",
-    "数的认识"
+    "数的认识",
+    "3D",
+    "实验"
   ],
-  "icon": "🐊",
-  "order": 30,
+  "icon": "🌉",
+  "order": 32,
   "badge": "new"
 }
+

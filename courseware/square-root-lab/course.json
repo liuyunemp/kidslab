@@ -13,11 +13,7 @@
     "junior",
     "senior"
   ],
-  "grades": [
-    "g7",
-    "g8",
-    "g9"
-  ],
+  "grades": [],
   "tags": [
     "平方根",
     "运算",

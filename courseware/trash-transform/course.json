@@ -10,7 +10,7 @@
   },
   "category": "science",
   "levels": ["primary"],
-  "grades": ["g1", "g2", "g3"],
+  "grades": ["g6a"],
   "tags": ["分类", "观察", "益智游戏"],
   "icon": "♻️",
   "order": 69,

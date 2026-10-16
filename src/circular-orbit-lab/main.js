@@ -395,15 +395,16 @@ function applyResult(result, { okMessage } = {}) {
   if (lab.phase === 'complete') window.cool?.complete?.();
 }
 
-async function unlockAll() {
+// 首次手势必须先完成玩法动作：音频解锁会加载 BGM，不能让孩子第一次点按钮没有反应。
+function unlockAll() {
   if (unlocked) return;
   unlocked = true;
-  await audio.unlock();
+  audio.unlock().catch(() => {});
   window.cool?.stage?.('observe');
 }
 
-$('launchBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('launchBtn').addEventListener('click', () => {
+  unlockAll();
   const result = launch(lab);
   if (result.ok) {
     audio.launch();
@@ -415,38 +416,38 @@ $('launchBtn').addEventListener('click', async () => {
   applyResult(result, { okMessage: 'launched' });
 });
 
-$('abortBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('abortBtn').addEventListener('click', () => {
+  unlockAll();
   audio.click();
   applyResult(abort(lab), { okMessage: 'aborted' });
 });
 
-$('vectorBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('vectorBtn').addEventListener('click', () => {
+  unlockAll();
   audio.click();
   applyResult(setShowVectors(lab, !lab.showVectors));
 });
 
-$('altitudeRange').addEventListener('input', async () => {
-  await unlockAll();
+$('altitudeRange').addEventListener('input', () => {
+  unlockAll();
   applyResult(setAltitudeKm(lab, Number($('altitudeRange').value)));
 });
 
-$('speedRange').addEventListener('input', async () => {
-  await unlockAll();
+$('speedRange').addEventListener('input', () => {
+  unlockAll();
   applyResult(setSpeedRatio(lab, Number($('speedRange').value) / 1000));
 });
 
 $('presetRow').addEventListener('click', async (event) => {
   const button = event.target.closest('[data-altitude]');
   if (!button) return;
-  await unlockAll();
+  unlockAll();
   audio.click();
   applyResult(setAltitudeKm(lab, Number(button.dataset.altitude)));
 });
 
-$('recordBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('recordBtn').addEventListener('click', () => {
+  unlockAll();
   const result = recordTrial(lab);
   if (result.ok) {
     audio.record();
@@ -455,8 +456,8 @@ $('recordBtn').addEventListener('click', async () => {
   applyResult(result, { okMessage: 'recorded' });
 });
 
-$('resetBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('resetBtn').addEventListener('click', () => {
+  unlockAll();
   audio.click();
   applyResult(resetLab(lab), { okMessage: 'feedbackIdle' });
   try {
@@ -465,13 +466,13 @@ $('resetBtn').addEventListener('click', async () => {
   } catch { /* private mode */ }
 });
 
-musicBtn.addEventListener('click', async () => {
-  await unlockAll();
+musicBtn.addEventListener('click', () => {
+  unlockAll();
   audio.setMusic(!audio.musicOn);
   renderChrome();
 });
-soundBtn.addEventListener('click', async () => {
-  await unlockAll();
+soundBtn.addEventListener('click', () => {
+  unlockAll();
   audio.setSfx(!audio.sfxOn);
   renderChrome();
 });

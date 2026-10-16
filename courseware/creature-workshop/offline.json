@@ -1,0 +1,29 @@
+{
+  "id": "creature-workshop",
+  "version": "e432991805bdfca6964bff5d61d2c5bcca985049329670efa620a4ba9dd338da",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "62a643cedd2d3f7dff93a8f644d847894bb72154d66344ba1bdbd3d19dd5384e"
+    },
+    {
+      "path": "creature-model.js",
+      "sha256": "bcd9d73af7078213f2ecfc2b65469bf98945d78b9b99512bfc571036c407a500",
+      "fingerprint": "c71b23e9"
+    },
+    {
+      "path": "index.html",
+      "sha256": "780bfcfbc023f8abffd744ac3ba5223df1e96996f361e06da4b2bc7b50af10c5"
+    },
+    {
+      "path": "main.js",
+      "sha256": "5bb4c68aa51be5ab21cee4418f9583ee384fa6a67a03c35b354eaaaab1118e13",
+      "fingerprint": "39ddc52f"
+    },
+    {
+      "path": "style.css",
+      "sha256": "6908ba3840afdcf3619d15d917844291fe01aaf5059677abcead9c9bde3745e0",
+      "fingerprint": "6846cc15"
+    }
+  ]
+}

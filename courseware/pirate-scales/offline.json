@@ -1,0 +1,24 @@
+{
+  "id": "pirate-scales",
+  "version": "750c18d0b5ad37a4be0299e4e75927765791cc8cc4e448fb46317555967a7cb4",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "24c242474559328be83e9806841e74f1f4c7463a07f2eb30629b8aca9ff9c65b"
+    },
+    {
+      "path": "index.html",
+      "sha256": "cdf3c3505ef5e58c16b0acfb6be916960d674fe1f24d605efdfd5f822342f394"
+    },
+    {
+      "path": "main.js",
+      "sha256": "77af6e6226d710fabf9863f79fc8315c0be246d2bd2f9ed4e5ec4607ad190199",
+      "fingerprint": "9887b6df"
+    },
+    {
+      "path": "style.css",
+      "sha256": "cd7e21b7714b993cb37ad303922c6fa935c8a3cef8847704115fe7a78277ca20",
+      "fingerprint": "22b89be9"
+    }
+  ]
+}

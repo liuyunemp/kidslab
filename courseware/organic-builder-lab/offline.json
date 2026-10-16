@@ -1,0 +1,48 @@
+{
+  "id": "organic-builder-lab",
+  "version": "253ba14a22ecb663344fe14e203e506a734e9aba921b21471e83ba69f7f0efef",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "65e367805dd5c9db53547e44655a9de496cad4d718298abfa8e446bb7d25472e",
+      "fingerprint": "54c8e6e5"
+    },
+    {
+      "path": "audio/bgm-lab.ogg",
+      "sha256": "d755b2c7993a20eee751f8fc0b2fb7b28f54a6028738665264cdda73ab3bc1a6"
+    },
+    {
+      "path": "course.json",
+      "sha256": "775d75302b6733348ecfa5dead13f4356551e6182889da81cbcdfc8509b860c0"
+    },
+    {
+      "path": "index.html",
+      "sha256": "d3cb0753ee8bf3cfdf218605143252768cb4728f7e88d724607a326d2516a3d4"
+    },
+    {
+      "path": "main.js",
+      "sha256": "d842b1657a27c6e5d2d325bcec381b23210bd40c0351aad0e805a7fe3e3b9236",
+      "fingerprint": "185a958c"
+    },
+    {
+      "path": "molecule-model.js",
+      "sha256": "ce391809474fd658c3e08ce93524a6251709b90fcbd14aa25cbe17b38d84e3d7",
+      "fingerprint": "bb96d838"
+    },
+    {
+      "path": "style.css",
+      "sha256": "3e2dc42fb47e085f4c5b1614331258620e56d055ad81ae4085f9b0448d7b0ad2",
+      "fingerprint": "1f6ee9b9"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

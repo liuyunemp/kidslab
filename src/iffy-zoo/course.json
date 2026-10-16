@@ -12,10 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g3",
-    "g4"
-  ],
+  "grades": [],
   "tags": [
     "条件判断",
     "编程启蒙"

@@ -16,6 +16,6 @@
 
 ## 来源
 
-- [S1] 人民教育出版社《义务教育教科书·数学》六年级上册“数学广角——数与形 / 抽屉原理”相关内容：用“最不利原则”说明 \(n+1\) 只鸽子进 \(n\) 个鸽巢必有一巢至少两只。
+- [S1] 人民教育出版社《义务教育教科书·数学》六年级下册“数学广角——鸽巢问题”，67–70页：用最不利情况说明必然性。官方电子教材版本 1221001602141：https://book.pep.com.cn/1221001602141/mobile/index.html 。
 - [S2] Wikipedia, “Pigeonhole principle” (Dirichlet’s box principle; generalized form \(n(k-1)+1\)), https://en.wikipedia.org/wiki/Pigeonhole_principle
 - [S3] 公历月份为 12 个互斥类别；生日“月份”分类与抽屉原理的经典教学例题一致（不涉及具体日期概率）。

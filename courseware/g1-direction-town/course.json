@@ -8,13 +8,11 @@
     "zh": "在小镇地图上找前后、左右、上下的位置。",
     "en": "Find neighbors in front, behind, left, right, above and below on a town map."
   },
-  "category": "math",
+  "category": "science",
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g1a"
-  ],
+  "grades": ["g1b"],
   "tags": [
     "位置"
   ],

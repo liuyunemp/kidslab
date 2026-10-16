@@ -1,0 +1,27 @@
+{
+  "id": "g1b-poetry-theater",
+  "title": {
+    "zh": "古诗小剧场",
+    "en": "Poetry Theater"
+  },
+  "description": {
+    "zh": "动一动景物，让诗句慢慢出现。",
+    "en": "Move the scenery to reveal the poem one line at a time."
+  },
+  "category": "chinese",
+  "grades": [
+    "g1b"
+  ],
+  "levels": [
+    "primary"
+  ],
+  "tags": [
+    "识字",
+    "3D",
+    "实验"
+  ],
+  "icon": "🌙",
+  "order": 225,
+  "badge": "new"
+}
+

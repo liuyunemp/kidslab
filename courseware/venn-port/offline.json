@@ -1,0 +1,65 @@
+{
+  "id": "venn-port",
+  "version": "bff393431667e22b8fbb322ca15de132217ffef6b8607818ee136daa286c5737",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "c754eebb52e1ba8232ecd07c6b2950654e5d53ebe60dd85479f17a0a4996674e",
+      "fingerprint": "93da206f"
+    },
+    {
+      "path": "audio/clear-to-dock.meta.json",
+      "sha256": "a853147f2fe2e5428e9e2efb0cea27371aacdef9d6684a88a3bbe3ac678af0bf"
+    },
+    {
+      "path": "audio/clear-to-dock.ogg",
+      "sha256": "9107c373b270a0fef8b9e01244dfb503aa6914ab59ace3b3c328e71be0c9a068"
+    },
+    {
+      "path": "audio/orbital-customs.meta.json",
+      "sha256": "1e6e5e66c6ad2ba92d9e81bdc82cc58d0ebfdc1029ca8be43fd2eef4405d187c"
+    },
+    {
+      "path": "audio/orbital-customs.ogg",
+      "sha256": "8d2f41c58f9355ab90e84f2ccb43b7d6c253e0a0054578a36e75d56192613a8f"
+    },
+    {
+      "path": "course.json",
+      "sha256": "2d6d44f5c8e428db0bd366bb826c978e4b0d0348bd935c6ccbd6e7178836d54d"
+    },
+    {
+      "path": "game3d.js",
+      "sha256": "1de85e0059c37985c739b32cd3bf12c7b8488016f800fa2b4679504eaebbb32b",
+      "fingerprint": "80fdbb38"
+    },
+    {
+      "path": "index.html",
+      "sha256": "dad85d54f77b07036952e80bcd6f81e308068a77c958e297eaa592e8d68051f1"
+    },
+    {
+      "path": "main.js",
+      "sha256": "622dcd983363715b1c302e57f753580f3dfee2b0b8462bd25d7867cd0dc167e1",
+      "fingerprint": "30316412"
+    },
+    {
+      "path": "model.js",
+      "sha256": "6b647a7594116031efb1a59e9251dba5713e65fd0fc11cb4632f1b57a592f4be",
+      "fingerprint": "d68b4175"
+    },
+    {
+      "path": "style.css",
+      "sha256": "3b415e754d800bc6072773ade8204c9b04e9459aad888a1222199fabe8be0a83",
+      "fingerprint": "aa7ba149"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

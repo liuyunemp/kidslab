@@ -1,0 +1,24 @@
+{
+  "id": "laser-mirrors",
+  "version": "68784005237a13e4721b321aef1c6bdeabceea8f3301330bc6805c71ec333455",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "1502827cbf6054c8db4fd11cb49648c9a23f71ffc3951782a4b6a96379af82f1"
+    },
+    {
+      "path": "index.html",
+      "sha256": "256ebd09ec2cc91533d195f679969cd0ceca38fc21c3bc4ac5f1cc0108c271b0"
+    },
+    {
+      "path": "main.js",
+      "sha256": "87c7314cabad46bedd366754f2f5f90dd726ad863951791581248d48ee55eb97",
+      "fingerprint": "4c3e6558"
+    },
+    {
+      "path": "style.css",
+      "sha256": "76b1a1c8282bd277c6371223c65e89278ad05899cda92372cdd6a68cbc58dce8",
+      "fingerprint": "a30029db"
+    }
+  ]
+}

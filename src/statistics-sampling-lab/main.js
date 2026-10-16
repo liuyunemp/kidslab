@@ -485,16 +485,17 @@ function applyResult(result, { okMessage } = {}) {
   }
 }
 
-async function unlockAll() {
+// 首次手势必须先完成玩法动作：音频解锁会加载 BGM，不能让孩子第一次点按钮没有反应。
+function unlockAll() {
   if (unlocked) return;
   unlocked = true;
-  await audio.unlock();
+  audio.unlock().catch(() => {});
   window.cool?.stage?.('observe');
 }
 
 for (const button of document.querySelectorAll('[data-method]')) {
-  button.addEventListener('click', async () => {
-    await unlockAll();
+  button.addEventListener('click', () => {
+    unlockAll();
     audio.click();
     const result = setMethod(lab, button.dataset.method);
     if (result.ok) window.cool?.track?.('method', { method: result.lab.method });
@@ -502,19 +503,19 @@ for (const button of document.querySelectorAll('[data-method]')) {
   });
 }
 
-$('nRange').addEventListener('input', async () => {
-  await unlockAll();
+$('nRange').addEventListener('input', () => {
+  unlockAll();
   applyResult(setN(lab, Number($('nRange').value)));
 });
 
-$('welcomeSkip').addEventListener('click', async () => {
-  await unlockAll();
+$('welcomeSkip').addEventListener('click', () => {
+  unlockAll();
   audio.click();
   dismissWelcome();
 });
 
-$('drawBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('drawBtn').addEventListener('click', () => {
+  unlockAll();
   const result = drawSample(lab);
   if (result.ok) {
     audio.sample();
@@ -524,8 +525,8 @@ $('drawBtn').addEventListener('click', async () => {
   applyResult(result, { okMessage: 'drawn' });
 });
 
-$('recordBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('recordBtn').addEventListener('click', () => {
+  unlockAll();
   const result = recordTrial(lab);
   if (result.ok) {
     audio.record();
@@ -543,21 +544,21 @@ function runRepeat(k, okMessage) {
   applyResult(result, { okMessage });
 }
 
-$('batch50Btn').addEventListener('click', async () => {
-  await unlockAll();
+$('batch50Btn').addEventListener('click', () => {
+  unlockAll();
   runRepeat(50, 'batched');
 });
-$('batch100Btn').addEventListener('click', async () => {
-  await unlockAll();
+$('batch100Btn').addEventListener('click', () => {
+  unlockAll();
   runRepeat(100, 'batched');
 });
-$('compareBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('compareBtn').addEventListener('click', () => {
+  unlockAll();
   runRepeat('compare', 'compared');
 });
 
-$('censusBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('censusBtn').addEventListener('click', () => {
+  unlockAll();
   const result = runCensus(lab);
   if (result.ok) {
     audio.census();
@@ -566,8 +567,8 @@ $('censusBtn').addEventListener('click', async () => {
   applyResult(result, { okMessage: 'censusTip' });
 });
 
-$('resetBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('resetBtn').addEventListener('click', () => {
+  unlockAll();
   audio.click();
   window.cool?.track?.('reset');
   applyResult(resetLab(lab));
@@ -580,13 +581,13 @@ $('resetBtn').addEventListener('click', async () => {
   paint();
 });
 
-musicBtn.addEventListener('click', async () => {
-  await unlockAll();
+musicBtn.addEventListener('click', () => {
+  unlockAll();
   audio.setMusic(!audio.musicOn);
   renderChrome();
 });
-soundBtn.addEventListener('click', async () => {
-  await unlockAll();
+soundBtn.addEventListener('click', () => {
+  unlockAll();
   audio.setSfx(!audio.sfxOn);
   renderChrome();
 });

@@ -174,8 +174,9 @@ test.describe('circular orbit lab', () => {
     await soundBtn.click();
     await expect(soundBtn).toHaveAttribute('aria-pressed', 'true');
     const box = await soundBtn.boundingBox();
-    expect(box.width).toBeGreaterThanOrEqual(44);
-    expect(box.height).toBeGreaterThanOrEqual(44);
+    // GPU-composited transforms can report 43.999999 for a 44px CSS box.
+    expect(Math.round(box.width * 1000) / 1000).toBeGreaterThanOrEqual(44);
+    expect(Math.round(box.height * 1000) / 1000).toBeGreaterThanOrEqual(44);
 
     const expanded = await page.locator('#panelHandle').getAttribute('aria-expanded');
     await page.locator('#panelHandle').click();

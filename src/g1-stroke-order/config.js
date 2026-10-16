@@ -1,0 +1,330 @@
+export const config = {
+  "id": "g1-stroke-order",
+  "kind": "stroke-order",
+  "category": "chinese",
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "识字",
+    "笔顺"
+  ],
+  "icon": "🚉",
+  "title": {
+    "zh": "笔顺快车站",
+    "en": "Stroke Order Station"
+  },
+  "description": {
+    "zh": "按笔顺规则把笔画卡片依次装上小火车。",
+    "en": "Load the stroke cards onto the train in writing order."
+  },
+  "accent": "#2f9e8f",
+  "backdrop": "#e7f7f2",
+  "mascot": "🚉",
+  "tasks": [
+    {
+      "id": "q1",
+      "char": "十",
+      "strokes": [
+        {
+          "key": "h1",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        },
+        {
+          "key": "v1",
+          "name": {
+            "zh": "竖",
+            "en": "vertical"
+          }
+        }
+      ],
+      "answer": "h1|v1",
+      "hints": {
+        "1": {
+          "zh": "先写横，再写竖。",
+          "en": "Horizontal first, then vertical."
+        }
+      }
+    },
+    {
+      "id": "q2",
+      "char": "人",
+      "strokes": [
+        {
+          "key": "p1",
+          "name": {
+            "zh": "撇",
+            "en": "left-falling"
+          }
+        },
+        {
+          "key": "n1",
+          "name": {
+            "zh": "捺",
+            "en": "right-falling"
+          }
+        }
+      ],
+      "answer": "p1|n1",
+      "hints": {
+        "1": {
+          "zh": "先写撇，再写捺。",
+          "en": "Left-falling first, then right-falling."
+        }
+      }
+    },
+    {
+      "id": "q3",
+      "char": "八",
+      "strokes": [
+        {
+          "key": "p1",
+          "name": {
+            "zh": "撇",
+            "en": "left-falling"
+          }
+        },
+        {
+          "key": "n1",
+          "name": {
+            "zh": "捺",
+            "en": "right-falling"
+          }
+        }
+      ],
+      "answer": "p1|n1"
+    },
+    {
+      "id": "q4",
+      "char": "三",
+      "strokes": [
+        {
+          "key": "h1",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        },
+        {
+          "key": "h2",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        },
+        {
+          "key": "h3",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        }
+      ],
+      "answer": "h1|h2|h3",
+      "hints": {
+        "0": {
+          "zh": "三的三个横，从上到下写。",
+          "en": "Write the three horizontals from top to bottom."
+        }
+      }
+    },
+    {
+      "id": "q5",
+      "char": "大",
+      "strokes": [
+        {
+          "key": "h1",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        },
+        {
+          "key": "p1",
+          "name": {
+            "zh": "撇",
+            "en": "left-falling"
+          }
+        },
+        {
+          "key": "n1",
+          "name": {
+            "zh": "捺",
+            "en": "right-falling"
+          }
+        }
+      ],
+      "answer": "h1|p1|n1"
+    },
+    {
+      "id": "q6",
+      "char": "川",
+      "strokes": [
+        {
+          "key": "p1",
+          "name": {
+            "zh": "撇",
+            "en": "left-falling"
+          }
+        },
+        {
+          "key": "v1",
+          "name": {
+            "zh": "竖",
+            "en": "vertical"
+          }
+        },
+        {
+          "key": "v2",
+          "name": {
+            "zh": "竖",
+            "en": "vertical"
+          }
+        }
+      ],
+      "answer": "p1|v1|v2"
+    },
+    {
+      "id": "q7",
+      "char": "木",
+      "strokes": [
+        {
+          "key": "h1",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        },
+        {
+          "key": "v1",
+          "name": {
+            "zh": "竖",
+            "en": "vertical"
+          }
+        },
+        {
+          "key": "p1",
+          "name": {
+            "zh": "撇",
+            "en": "left-falling"
+          }
+        },
+        {
+          "key": "n1",
+          "name": {
+            "zh": "捺",
+            "en": "right-falling"
+          }
+        }
+      ],
+      "answer": "h1|v1|p1|n1"
+    },
+    {
+      "id": "q8",
+      "char": "口",
+      "strokes": [
+        {
+          "key": "v1",
+          "name": {
+            "zh": "竖",
+            "en": "vertical"
+          }
+        },
+        {
+          "key": "t1",
+          "name": {
+            "zh": "横折",
+            "en": "horizontal turn"
+          }
+        },
+        {
+          "key": "h1",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        }
+      ],
+      "answer": "v1|t1|h1",
+      "hints": {
+        "2": {
+          "zh": "先外后内再封口。",
+          "en": "Outside first, then inside, then close it."
+        }
+      }
+    },
+    {
+      "id": "q9",
+      "char": "日",
+      "strokes": [
+        {
+          "key": "v1",
+          "name": {
+            "zh": "竖",
+            "en": "vertical"
+          }
+        },
+        {
+          "key": "t1",
+          "name": {
+            "zh": "横折",
+            "en": "horizontal turn"
+          }
+        },
+        {
+          "key": "h1",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        },
+        {
+          "key": "h2",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        }
+      ],
+      "answer": "v1|t1|h1|h2"
+    },
+    {
+      "id": "q10",
+      "char": "月",
+      "strokes": [
+        {
+          "key": "p1",
+          "name": {
+            "zh": "撇",
+            "en": "left-falling"
+          }
+        },
+        {
+          "key": "t1",
+          "name": {
+            "zh": "横折钩",
+            "en": "hooked turn"
+          }
+        },
+        {
+          "key": "h1",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        },
+        {
+          "key": "h2",
+          "name": {
+            "zh": "横",
+            "en": "horizontal"
+          }
+        }
+      ],
+      "answer": "p1|t1|h1|h2"
+    }
+  ]
+};

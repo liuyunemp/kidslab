@@ -5,22 +5,24 @@
     "en": "Change Machine"
   },
   "description": {
-    "zh": "变身会算账的售货机，为小动物配出刚刚好的找零；零钱不够时，把 1 元换成 10 个 1 角继续营业。",
-    "en": "Become a change-making vending machine for animal customers, and exchange one yuan for ten jiao when the coin tubes run short."
+    "zh": "换开零钱，放进托盘，再买一买。",
+    "en": "Exchange money, fill the tray and try a purchase."
   },
   "category": "math",
-  "levels": [
-    "primary"
-  ],
   "grades": [
     "g1b"
   ],
+  "levels": [
+    "primary"
+  ],
   "tags": [
+    "人民币",
     "加减法",
-    "计量单位",
-    "益智游戏"
+    "3D",
+    "实验"
   ],
   "icon": "🪙",
-  "order": 14,
+  "order": 37,
   "badge": "new"
 }
+

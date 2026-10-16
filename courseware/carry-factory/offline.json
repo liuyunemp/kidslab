@@ -1,0 +1,24 @@
+{
+  "id": "carry-factory",
+  "version": "fec282f2cbc2e51f41118f9c56c277247c3f4a95f5572b2663e46efce6217bdb",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "88ce434f53e21d7d2321af812eacde758a157c1f3cf742fceffe09acfea419a3"
+    },
+    {
+      "path": "index.html",
+      "sha256": "9b71868cf97605a623b9aa46dfb6ee2ddfaa950987426b1bae9712320103fb5d"
+    },
+    {
+      "path": "main.js",
+      "sha256": "27854f1fa2777a980fca300f7df87e052f675de21e55ee5ab52119e718e96245",
+      "fingerprint": "e86f97de"
+    },
+    {
+      "path": "style.css",
+      "sha256": "0802ee177bec256557d0037e59796ac803cb22c8f1f114d812c3099de99d4a90",
+      "fingerprint": "337d1e35"
+    }
+  ]
+}

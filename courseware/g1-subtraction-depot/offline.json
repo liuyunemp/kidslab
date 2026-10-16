@@ -1,0 +1,86 @@
+{
+  "id": "g1-subtraction-depot",
+  "version": "12096964ca520295d0d427213b9b7fa30c39e5115cd051ceeda480eba4c6f1e1",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "ef7bb4c0bbafa1c81f07cc75032a3fdab8d5370e88fc4bfa85dde995f8d68acf",
+      "fingerprint": "a70c4ad1"
+    },
+    {
+      "path": "audio/bgm.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "audio/lab-glow.meta.json",
+      "sha256": "0f19c1fab1e0c23085b6fdea516db47bb8ea04414919a63b1d783cb34e3bb73f"
+    },
+    {
+      "path": "audio/lab-glow.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "config.js",
+      "sha256": "cedede571ecac8227c90e96843184c40b65f97d6cea2522174042f1d6a79019a",
+      "fingerprint": "812819ce"
+    },
+    {
+      "path": "content.js",
+      "sha256": "2e4bb854f98c9c8c88e6341381f94698ace1b123965b6646525b1806e84050d6",
+      "fingerprint": "2d89838a"
+    },
+    {
+      "path": "course.json",
+      "sha256": "75bfb1a237ec0fa0deece109fdfd902abfe5a52f5a37d7e2502d3f9b7b48cc41"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "778edc27c71099c37cec318ed689a75f06e43902ed45f33c63792dd3271d203a",
+      "fingerprint": "eed1e137"
+    },
+    {
+      "path": "exploration-model.js",
+      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
+      "fingerprint": "da11fe5b"
+    },
+    {
+      "path": "index.html",
+      "sha256": "66baf8c4acf37f8ac029d193da59289ae02c212aff766381adf48ed91849ff8a"
+    },
+    {
+      "path": "main.js",
+      "sha256": "eeec8c93b453d9f1046314655ee3b2250af6bded288d77937d7a2fd6e8698243",
+      "fingerprint": "0f37190c"
+    },
+    {
+      "path": "model.js",
+      "sha256": "21b3e073e17122756cf610ad003ecc95c8eef8266c1bbd64a6a35ecbb70277a3",
+      "fingerprint": "ccfea184"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
+      "fingerprint": "3e5ed74b"
+    },
+    {
+      "path": "style.css",
+      "sha256": "25f72a72c996229ddab015cdd643252c0d0f5cd4aa106258ecd93367d1e9fbb9",
+      "fingerprint": "d37b54ce"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

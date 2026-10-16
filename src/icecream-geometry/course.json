@@ -13,9 +13,7 @@
     "primary",
     "junior"
   ],
-  "grades": [
-    "g6"
-  ],
+  "grades": ["g6b"],
   "tags": [
     "立体图形",
     "体积",

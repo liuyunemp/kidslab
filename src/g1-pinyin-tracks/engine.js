@@ -14,6 +14,9 @@ export const WORDS = {
     pinyin: '接上声母、韵母和声调车厢', initial: '声母', final: '韵母', tone: '声调', check: '拼好啦',
     stroke: '从亮点出发，顺着箭头描一描', word: '把词语送到这幅图的信箱', rhyme: '谁和它是一对？',
     sentence: '按“谁 → 在哪里 → 做什么”连车厢', clear: '重新排列',
+    sort: '分一分：它该进哪个筐？', sorted: '已分好的',
+    poem: '看看画面，选出配得上的一句诗', poemNext: '下一句是哪一句？', poemOrder: '把诗句按原文顺序排好',
+    strokeOrder: '按笔顺把笔画卡片装上车',
     speechOn: '关闭朗读', speechOff: '打开朗读', hearAgain: '再听一次',
     names: { circle: '圆形', triangle: '三角形', square: '正方形', rectangle: '长方形', parallelogram: '平行四边形' },
   },
@@ -29,6 +32,9 @@ export const WORDS = {
     pinyin: 'Join an initial, final and tone', initial: 'Initial', final: 'Final', tone: 'Tone', check: 'Check',
     stroke: 'Start at the glowing dot and trace the line', word: 'Deliver a word to this picture', rhyme: 'Which word pairs with it?',
     sentence: 'Link who → where → action', clear: 'Start arrangement again',
+    sort: 'Which basket does it go in?', sorted: 'Sorted',
+    poem: 'Pick the line that matches the picture', poemNext: 'Which line comes next?', poemOrder: 'Put the lines in order',
+    strokeOrder: 'Load the strokes in writing order',
     speechOn: 'Turn reading off', speechOff: 'Turn reading on', hearAgain: 'Hear it again',
     names: { circle: 'Circle', triangle: 'Triangle', square: 'Square', rectangle: 'Rectangle', parallelogram: 'Parallelogram' },
   },
@@ -54,6 +60,7 @@ export function startGame(config) {
   let draft = null;
   let phase = 0;
   let sentenceParts = [];
+  let seqParts = [];
   let syllable = { initial: '', final: '', tone: '' };
   let busy = false;
   let gestureSeen = false;
@@ -222,6 +229,7 @@ export function startGame(config) {
     draft = null;
     phase = 0;
     sentenceParts = [];
+    seqParts = [];
     syllable = { initial: '', final: '', tone: '' };
   }
   function choiceButtons(values, answer, className = 'choice') {
@@ -263,6 +271,30 @@ export function startGame(config) {
       const choices = rotate(task.words, state.done.length % task.words.length);
       return `${promptButton(esc(words.sentence))}<div class="sentence-track">${sentenceParts.map((part) => `<span>${esc(part)}</span>`).join('')}${Array.from({ length: 3 - sentenceParts.length }, () => '<span class="empty">＋</span>').join('')}</div><div class="choices">${choices.map((part) => `<button class="word-choice" type="button" data-word="${esc(part)}" ${sentenceParts.includes(part) ? 'disabled' : ''}>${esc(part)}</button>`).join('')}</div><button class="subtle" type="button" data-clear>${esc(words.clear)}</button>`;
     }
+    if (k === 'sort') {
+      const lang = cool.preferences.lang;
+      const baskets = task.baskets.map(([id, zh, en, emoji]) =>
+        `<button class="sort-basket" type="button" data-answer="${esc(id)}"><span class="basket-icon" aria-hidden="true">${emoji}</span><b>${esc(lang === 'en' ? en : zh)}</b></button>`).join('');
+      const shelf = state.done.length
+        ? `<div class="sorted-shelf"><i>${esc(words.sorted)}</i>${state.done.map((id) => { const done = config.tasks.find((entry) => entry.id === id); return done ? `<span aria-hidden="true">${done.item}</span>` : ''; }).join('')}</div>`
+        : '';
+      return `${promptButton(esc(words.sort))}<div class="sort-item" aria-hidden="true">${task.item}</div><div class="sort-criterion">${esc(t(task.criterion))}</div><div class="choices">${baskets}</div>${shelf}`;
+    }
+    if (k === 'poem') {
+      if (task.form === 'guess') return `${promptButton(esc(words.poem))}<div class="poem-scene"><span class="poem-picture" aria-hidden="true">${task.scene}</span><b>${esc(t(task.title))}</b></div><div class="choices">${choiceButtons(task.choices, task.answer, 'poem-line')}</div>`;
+      if (task.form === 'next') return `${promptButton(esc(words.poemNext))}<div class="poem-given">${esc(task.line)}</div><div class="choices">${choiceButtons(task.choices, task.answer, 'poem-line')}</div>`;
+      const slots = task.lines.map((line, index) => `<span class="${index < seqParts.length ? '' : 'empty'}">${index < seqParts.length ? esc(seqParts[index]) : '＋'}</span>`).join('');
+      const cards = task.lines.filter((line) => !seqParts.includes(line))
+        .map((line) => `<button class="poem-line" type="button" data-word="${esc(line)}">${esc(line)}</button>`).join('');
+      return `${promptButton(esc(words.poemOrder))}<div class="sentence-track poem-track">${slots}</div><div class="choices">${cards}</div>`;
+    }
+    if (k === 'stroke-order') {
+      const slots = task.strokes.map((entry, index) =>
+        `<span class="${index < seqParts.length ? 'filled' : ''}">${index < seqParts.length ? esc(t(entry.name)) : '○'}</span>`).join('');
+      const cards = task.strokes.filter((entry) => !seqParts.includes(entry.key))
+        .map((entry) => `<button class="stroke-card" type="button" data-word="${esc(entry.key)}"><b>${esc(t(entry.name))}</b></button>`).join('');
+      return `${promptButton(esc(words.strokeOrder))}<div class="stroke-char">${esc(task.char)}<div class="stroke-slots">${slots}</div></div><div class="choices">${cards}</div>`;
+    }
     return '';
   }
   function render() {
@@ -303,6 +335,27 @@ export function startGame(config) {
     if (state.done.length === ROUND_COUNT) cool.complete?.();
     setTimeout(() => { busy = false; resetDraft(); feedback(''); render(); }, 650);
   }
+  /* 顺序点击题型（诗句排序、笔顺装车）：逐位校验，点错当场弹回，不推进进度。 */
+  function advanceSequence(value) {
+    const task = currentTask(config, state);
+    if (!task) return;
+    const steps = config.kind === 'poem' ? task.lines : task.strokes;
+    const expected = config.kind === 'poem' ? task.lines[seqParts.length] : task.strokes[seqParts.length]?.key;
+    if (value !== expected) {
+      streak = 0;
+      sound('wrong');
+      const hint = task.hints?.[seqParts.length];
+      feedback(hint ? t(hint) : w().tryAgain, true);
+      $('#stage').classList.remove('wobble');
+      void $('#stage').offsetWidth;
+      $('#stage').classList.add('wobble');
+      return;
+    }
+    seqParts = [...seqParts, value];
+    if (seqParts.length === steps.length) return answer(seqParts.join('|'));
+    sound('good');
+    render();
+  }
   function wireStroke(task) {
     const svg = $('#trace');
     let active = false;
@@ -338,6 +391,7 @@ export function startGame(config) {
     if (button.dataset.step !== undefined) { draft = Math.max(0, Math.min(100, (draft ?? 0) + Number(button.dataset.step))); render(); return; }
     if (button.dataset.part) { syllable[button.dataset.part] = button.dataset.value; render(); return; }
     if (button.dataset.word) {
+      if (config.kind === 'poem' || config.kind === 'stroke-order') return advanceSequence(button.dataset.word);
       sentenceParts.push(button.dataset.word);
       if (sentenceParts.length === 3) { answer(sentenceParts.join('|')); if (!busy) { sentenceParts = []; render(); } }
       else render();

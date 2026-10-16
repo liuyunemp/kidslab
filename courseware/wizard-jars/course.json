@@ -10,7 +10,7 @@
   },
   "category": "programming",
   "levels": ["primary"],
-  "grades": ["g4", "g5"],
+  "grades": [],
   "tags": ["变量", "编程启蒙"],
   "icon": "🫙",
   "order": 55,

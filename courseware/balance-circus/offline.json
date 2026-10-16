@@ -1,0 +1,24 @@
+{
+  "id": "balance-circus",
+  "version": "148e250974217130dcb02729c4f8e7a1452eb17c3a7c3875c43a0872748c54cb",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "e6171bf51a575ae2c6c6da764f53a7e7a148b66670e0a10726c9a6ce7026756a"
+    },
+    {
+      "path": "index.html",
+      "sha256": "bc94f495a212ee7debe479ec9aa0e2cc2e4afc4a22e47862bf7d0be35d37a5a5"
+    },
+    {
+      "path": "main.js",
+      "sha256": "88ea61b33fb17e37a41adb5195f7ce6c280eb6d4376c07253e91b064b642dbd4",
+      "fingerprint": "a6caabf2"
+    },
+    {
+      "path": "style.css",
+      "sha256": "da426264d810ccdc126ccf91b453e84b0425996a28a52bd1449e317b5849c0ca",
+      "fingerprint": "0ae95ff8"
+    }
+  ]
+}

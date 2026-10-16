@@ -1,0 +1,25 @@
+{
+  "id": "g1-stroke-order",
+  "title": {
+    "zh": "笔顺快车站",
+    "en": "Stroke Order Station"
+  },
+  "description": {
+    "zh": "按笔顺规则把笔画卡片依次装上小火车。",
+    "en": "Load the stroke cards onto the train in writing order."
+  },
+  "category": "chinese",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1a"
+  ],
+  "tags": [
+    "识字",
+    "笔顺"
+  ],
+  "icon": "🚉",
+  "order": 229,
+  "badge": "new"
+}

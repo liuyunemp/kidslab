@@ -1,0 +1,29 @@
+{
+  "id": "icecream-geometry",
+  "version": "56dbdbb6636b9eea08fe43849c822ebbc0bb311a16024c046032ff8e11dd8a1c",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "6d071d9b82abac745ded6ab1876c79673be66dc3f578b05d9d08146bd77c9e35"
+    },
+    {
+      "path": "index.html",
+      "sha256": "c82b54260f38ee14aa32b4cd5a0022130ecd1b36bf79d837731f64b90001cf90"
+    },
+    {
+      "path": "main.js",
+      "sha256": "9bbfc63245c9e2f150f1fb86ed5f8b718a196c0a1dde943d8890ebce66f5fd8c",
+      "fingerprint": "e444a080"
+    },
+    {
+      "path": "style.css",
+      "sha256": "23e4e9625981a13a04b5839600ee5cb0eb08cf67387ca433b7f954b6785a058a",
+      "fingerprint": "65106c4d"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

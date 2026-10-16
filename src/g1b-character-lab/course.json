@@ -1,0 +1,27 @@
+{
+  "id": "g1b-character-lab",
+  "title": {
+    "zh": "汉字变变屋",
+    "en": "Character Workshop"
+  },
+  "description": {
+    "zh": "换个部件，看看字怎样变。",
+    "en": "Swap a part and watch the character change."
+  },
+  "category": "chinese",
+  "grades": [
+    "g1b"
+  ],
+  "levels": [
+    "primary"
+  ],
+  "tags": [
+    "识字",
+    "3D",
+    "实验"
+  ],
+  "icon": "🏡",
+  "order": 220,
+  "badge": "new"
+}
+

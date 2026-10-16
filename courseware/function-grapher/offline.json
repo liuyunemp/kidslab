@@ -1,0 +1,24 @@
+{
+  "id": "function-grapher",
+  "version": "138411abb6ba17e77beead0d2662acb43ebc7e41803c8e099016932e25b58e6d",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "939da0beacf557308fa30e05a1c2a1243023ecfd501e573ac0afb1a9dd4ff920"
+    },
+    {
+      "path": "index.html",
+      "sha256": "88c28189c9c84664ccf1a9199d2dbf43c3426a8d699188ec5596d0904fdc3ffe"
+    },
+    {
+      "path": "main.js",
+      "sha256": "ec85863a9752dc5113727003cd5fac3a9d8e27eff192460db5a4bafe066a5719",
+      "fingerprint": "63b0b5ba"
+    },
+    {
+      "path": "style.css",
+      "sha256": "692e374d6e4b53ecb06e488b8db269461ac0865c7c05bc8641cff2ea56af593b",
+      "fingerprint": "4c45b854"
+    }
+  ]
+}

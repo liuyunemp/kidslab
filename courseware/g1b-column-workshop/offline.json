@@ -1,0 +1,67 @@
+{
+  "id": "g1b-column-workshop",
+  "version": "a7f4911a6c8df719742631e2f5a95516b27b9565cc3f9d008cbae2c1ab948942",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "ef7bb4c0bbafa1c81f07cc75032a3fdab8d5370e88fc4bfa85dde995f8d68acf",
+      "fingerprint": "a70c4ad1"
+    },
+    {
+      "path": "audio/lab-glow.meta.json",
+      "sha256": "0f19c1fab1e0c23085b6fdea516db47bb8ea04414919a63b1d783cb34e3bb73f"
+    },
+    {
+      "path": "audio/lab-glow.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "content.js",
+      "sha256": "015be5d5ca6db85e1c4d818e1c9030dc692b61d6bf3dc082a1fe747eec25acc5",
+      "fingerprint": "01d72aad"
+    },
+    {
+      "path": "course.json",
+      "sha256": "a21bcb11559d1510f15dafa352d1e8c1afc695f3d7b79f5220f42a6dc20f49b0"
+    },
+    {
+      "path": "exploration-model.js",
+      "sha256": "0e287b132c2b43be337d98c529ceb01b056e21d98594d0fd0e44655d737cf746",
+      "fingerprint": "da11fe5b"
+    },
+    {
+      "path": "index.html",
+      "sha256": "82b14d077c322412ce84a11071563cf6293100795d547083a9654357eb45ff53"
+    },
+    {
+      "path": "main.js",
+      "sha256": "978566f66fffb808769fb6e58ae5b9a144d9244f1611556c690a7acfa1416143",
+      "fingerprint": "3d9f4484"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "5ebd773c6e775969d0200eb0f0940beccfcf6e966b778964abe5df30d8e619ba",
+      "fingerprint": "3e5ed74b"
+    },
+    {
+      "path": "style.css",
+      "sha256": "25f72a72c996229ddab015cdd643252c0d0f5cd4aa106258ecd93367d1e9fbb9",
+      "fingerprint": "d37b54ce"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

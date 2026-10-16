@@ -1,0 +1,62 @@
+{
+  "id": "microscope-cell-lab",
+  "version": "54f7e61f19d5c8c9d60157870e7bd71db20292b5ce59c4a4cbfe58aeb6a7370c",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "12fe2b9956741367c7300a36ba5c3256c912085d46bd424adc548dd30663a274",
+      "fingerprint": "9363383f"
+    },
+    {
+      "path": "audio/lab-glow.meta.json",
+      "sha256": "0f19c1fab1e0c23085b6fdea516db47bb8ea04414919a63b1d783cb34e3bb73f"
+    },
+    {
+      "path": "audio/lab-glow.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "course.json",
+      "sha256": "9a0a625641617f2b8689d532b718fc8ef0607e390f393c75a223ec2a6d23c692"
+    },
+    {
+      "path": "index.html",
+      "sha256": "cf293910598d2bcb22b4f1e9ef29616cffa27faef829555217a016706b784f13"
+    },
+    {
+      "path": "lab-model.js",
+      "sha256": "6b111c7955cec19b1023904ee7e254dfc8eb942e41047a397a39bd065dc8725d",
+      "fingerprint": "0c4da8fb"
+    },
+    {
+      "path": "main.js",
+      "sha256": "a1d92f8f114e456f25ab03d79653f860c7116a80e3b18510ead97c41721668a6",
+      "fingerprint": "b2e105b6"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "a67e6617e2ce708f9670fa995a9569f61999fd00dbfe8ef05a28ccd08150d849",
+      "fingerprint": "58353a34"
+    },
+    {
+      "path": "style.css",
+      "sha256": "1f240c3c19421fdae56ab074da49735c18c29d2d3a2ebc2c101d6b9b06b4436a",
+      "fingerprint": "75f5d630"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

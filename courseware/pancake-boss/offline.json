@@ -1,0 +1,24 @@
+{
+  "id": "pancake-boss",
+  "version": "d26cd54d8e1905f5d8f4c9fec7b6b53914d1c322145f8e6a52db37322a528d13",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "0ead62621f3a2d0315fcfc4a7810ed938fb5f355b545c7df047f640ab5bd8b92"
+    },
+    {
+      "path": "index.html",
+      "sha256": "557c30fced58bd2224a59bf89c8334baf3511976221e29f92ebbf2b65100f4f4"
+    },
+    {
+      "path": "main.js",
+      "sha256": "6b6e7e13552e514605ff9e804fa41bec7df7493a2fe5ce96b796ace245baf9d0",
+      "fingerprint": "caf92d4c"
+    },
+    {
+      "path": "style.css",
+      "sha256": "f9a04b857c248387c8306119a4f5de1244ec17fd37ab32107bc6629ac76671cb",
+      "fingerprint": "fb0430fd"
+    }
+  ]
+}

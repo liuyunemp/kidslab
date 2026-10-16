@@ -48,6 +48,16 @@ async function solve(page, course, task) {
     case 'sentence':
       for (const word of task.words) await page.locator(`[data-word="${word}"]`).click();
       break;
+    case 'poem':
+      if (task.form === 'order') {
+        for (const line of task.lines) await page.locator(`[data-word="${line}"]`).click();
+      } else {
+        await page.locator(`[data-answer="${task.answer}"]`).click();
+      }
+      break;
+    case 'stroke-order':
+      for (const stroke of task.strokes) await page.locator(`[data-word="${stroke.key}"]`).click();
+      break;
     default:
       await page.locator(`[data-answer="${task.answer}"]`).click();
   }
@@ -62,6 +72,10 @@ async function makeMistake(page, course, task) {
     await page.mouse.down(); await page.mouse.up();
   } else if (course.kind === 'sentence') {
     for (const word of [...task.words].reverse()) await page.locator(`[data-word="${word}"]`).click();
+  } else if (course.kind === 'poem' && task.form === 'order') {
+    await page.locator(`[data-word="${task.lines[task.lines.length - 1]}"]`).click();
+  } else if (course.kind === 'stroke-order') {
+    await page.locator(`[data-word="${task.strokes[task.strokes.length - 1].key}"]`).click();
   } else {
     const wrong = course.kind === 'direction' ? String((Number(task.answer) + 1) % task.items.length) :
       course.kind === 'compare' ? (task.answer === '>' ? '<' : '>') :

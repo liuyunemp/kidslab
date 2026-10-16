@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T05:59:06.346Z",
+  "generatedAt": "2026-10-16T05:32:33.709Z",
   "tags": {
     "3D": {
       "en": "3D",
@@ -31,6 +31,10 @@
     },
     "人体": {
       "en": "Human Body",
+      "kind": "knowledge"
+    },
+    "人民币": {
+      "en": "Currency (RMB)",
       "kind": "knowledge"
     },
     "估算": {
@@ -91,6 +95,10 @@
     },
     "变量": {
       "en": "Variables",
+      "kind": "knowledge"
+    },
+    "古诗": {
+      "en": "Ancient Poems",
       "kind": "knowledge"
     },
     "周长": {
@@ -229,6 +237,10 @@
       "en": "Ohm's Law",
       "kind": "knowledge"
     },
+    "比多少": {
+      "en": "Comparison (More/Less)",
+      "kind": "knowledge"
+    },
     "比大小": {
       "en": "Compare Numbers",
       "kind": "knowledge"
@@ -283,6 +295,10 @@
     },
     "立体图形": {
       "en": "3D Shapes",
+      "kind": "knowledge"
+    },
+    "笔顺": {
+      "en": "Stroke Order",
       "kind": "knowledge"
     },
     "策略": {
@@ -461,11 +477,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3a",
-        "g5",
-        "g6a"
-      ],
+      "grades": [],
       "tags": [
         "分数",
         "小数"
@@ -502,8 +514,7 @@
         "primary"
       ],
       "grades": [
-        "g1",
-        "g1a"
+        "g1b"
       ],
       "tags": [
         "加减法",
@@ -512,6 +523,30 @@
       ],
       "icon": "✨",
       "order": 11,
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "20以内的退位减法",
+            "en": "Subtraction within 20"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 8,
+          "page": 8,
+          "lessonOrder": 100,
+          "topic": {
+            "zh": "20以内加减综合探索",
+            "en": "Addition and subtraction within 20"
+          }
+        }
+      ],
       "keywords": [
         "Addition & Subtraction",
         "addition",
@@ -548,9 +583,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g2"
-      ],
+      "grades": [],
       "tags": [
         "乘法",
         "运算"
@@ -586,10 +619,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g2",
-        "g3"
-      ],
+      "grades": [],
       "tags": [
         "乘法",
         "运算",
@@ -632,10 +662,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4"
-      ],
+      "grades": [],
       "tags": [
         "乘法",
         "运算",
@@ -677,7 +704,7 @@
         "primary"
       ],
       "grades": [
-        "g3"
+        "g3b"
       ],
       "tags": [
         "周长",
@@ -686,6 +713,52 @@
       ],
       "icon": "🐹",
       "order": 13,
+      "curriculum": [
+        {
+          "bookId": "m3b",
+          "bookTitle": {
+            "zh": "数学 三年级下册",
+            "en": "Math · Grade 3 · Spring"
+          },
+          "grade": "g3b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "长方形和正方形",
+            "en": "Rectangles and squares"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 39,
+          "page": 39,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "长方形和正方形的周长",
+            "en": "Perimeter of rectangles and squares"
+          }
+        },
+        {
+          "bookId": "m3b",
+          "bookTitle": {
+            "zh": "数学 三年级下册",
+            "en": "Math · Grade 3 · Spring"
+          },
+          "grade": "g3b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "图形的面积",
+            "en": "Area of shapes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 52,
+          "page": 52,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "图形的面积",
+            "en": "Area of shapes"
+          }
+        }
+      ],
       "keywords": [
         "Perimeter",
         "perimeter",
@@ -702,53 +775,6 @@
       "path": "courseware/hamster-fence/index.html"
     },
     {
-      "id": "change-vending",
-      "title": {
-        "zh": "找零售货机",
-        "en": "Change Machine"
-      },
-      "description": {
-        "zh": "变身会算账的售货机，为小动物配出刚刚好的找零；零钱不够时，把 1 元换成 10 个 1 角继续营业。",
-        "en": "Become a change-making vending machine for animal customers, and exchange one yuan for ten jiao when the coin tubes run short."
-      },
-      "category": "math",
-      "levels": [
-        "primary"
-      ],
-      "grades": [
-        "g1b"
-      ],
-      "tags": [
-        "加减法",
-        "计量单位",
-        "益智游戏"
-      ],
-      "icon": "🪙",
-      "order": 14,
-      "badge": "new",
-      "keywords": [
-        "Addition & Subtraction",
-        "addition",
-        "subtraction",
-        "凑十法",
-        "make ten",
-        "数的分解",
-        "number bonds",
-        "Units & Measurement",
-        "units",
-        "measurement",
-        "单位换算",
-        "unit conversion",
-        "cubic units",
-        "Puzzle Game",
-        "puzzle",
-        "game",
-        "益智",
-        "游戏"
-      ],
-      "path": "courseware/change-vending/index.html"
-    },
-    {
       "id": "zoom-ten",
       "title": {
         "zh": "数字宇宙",
@@ -763,10 +789,7 @@
         "primary",
         "junior"
       ],
-      "grades": [
-        "g4",
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "数位",
         "小数",
@@ -812,7 +835,7 @@
         "junior"
       ],
       "grades": [
-        "g6"
+        "g6a"
       ],
       "tags": [
         "圆",
@@ -821,6 +844,30 @@
       ],
       "icon": "🎡",
       "order": 15,
+      "curriculum": [
+        {
+          "bookId": "m6a",
+          "bookTitle": {
+            "zh": "数学 六年级上册",
+            "en": "Math · Grade 6 · Fall"
+          },
+          "grade": "g6a",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "圆",
+            "en": "Circles"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 48,
+          "page": 48,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "圆的周长与面积",
+            "en": "Circumference and area"
+          }
+        }
+      ],
       "keywords": [
         "Circles",
         "circle",
@@ -850,9 +897,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g1a"
-      ],
+      "grades": [],
       "tags": [
         "立体图形",
         "平面图形",
@@ -900,9 +945,7 @@
         "primary"
       ],
       "grades": [
-        "g2",
-        "g3",
-        "g4"
+        "g5a"
       ],
       "tags": [
         "三视图",
@@ -912,6 +955,30 @@
       ],
       "icon": "📷",
       "order": 17,
+      "curriculum": [
+        {
+          "bookId": "m5a",
+          "bookTitle": {
+            "zh": "数学 五年级上册",
+            "en": "Math · Grade 5 · Fall"
+          },
+          "grade": "g5a",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "观察简单组合体",
+            "en": "Viewing combined solids"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "观察简单组合体",
+            "en": "Viewing combined solids"
+          }
+        }
+      ],
       "keywords": [
         "Three Views",
         "three views",
@@ -953,7 +1020,7 @@
         "junior"
       ],
       "grades": [
-        "g5"
+        "g5b"
       ],
       "tags": [
         "体积",
@@ -962,6 +1029,30 @@
       ],
       "icon": "🐠",
       "order": 18,
+      "curriculum": [
+        {
+          "bookId": "m5b",
+          "bookTitle": {
+            "zh": "数学 五年级下册",
+            "en": "Math · Grade 5 · Spring"
+          },
+          "grade": "g5b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "长方体和正方体",
+            "en": "Cuboids and cubes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 18,
+          "page": 18,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "长方体和正方体的体积、容积",
+            "en": "Volume and capacity"
+          }
+        }
+      ],
       "keywords": [
         "Volume",
         "volume",
@@ -1004,7 +1095,7 @@
         "junior"
       ],
       "grades": [
-        "g6"
+        "g6b"
       ],
       "tags": [
         "立体图形",
@@ -1013,6 +1104,30 @@
       ],
       "icon": "🍦",
       "order": 19,
+      "curriculum": [
+        {
+          "bookId": "m6b",
+          "bookTitle": {
+            "zh": "数学 六年级下册",
+            "en": "Math · Grade 6 · Spring"
+          },
+          "grade": "g6b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "圆柱与圆锥",
+            "en": "Cylinders and cones"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 16,
+          "page": 16,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "圆柱与圆锥的体积",
+            "en": "Volumes of cylinders and cones"
+          }
+        }
+      ],
       "keywords": [
         "3D Shapes",
         "3d shapes",
@@ -1052,12 +1167,7 @@
         "junior",
         "senior"
       ],
-      "grades": [
-        "g8",
-        "g9",
-        "g10",
-        "g11"
-      ],
+      "grades": [],
       "tags": [
         "函数"
       ],
@@ -1078,46 +1188,6 @@
       "path": "courseware/function-grapher/index.html"
     },
     {
-      "id": "hundred-metro",
-      "title": {
-        "zh": "百数地铁",
-        "en": "Hundred-Chart Metro"
-      },
-      "description": {
-        "zh": "把百数表变成地铁图：乘坐 ±10 快车和 ±1 慢车，用最少步数把乘客送到目标站，发现十位与个位的路线秘密。",
-        "en": "Turn the hundred chart into a metro map. Ride the ±10 express and ±1 local to reach each stop in the fewest moves and uncover the tens-and-ones route secret."
-      },
-      "category": "math",
-      "levels": [
-        "primary"
-      ],
-      "grades": [
-        "g1b"
-      ],
-      "tags": [
-        "数的认识",
-        "数位"
-      ],
-      "icon": "🚇",
-      "order": 20,
-      "badge": "new",
-      "keywords": [
-        "Numbers & Counting",
-        "百数表",
-        "hundred chart",
-        "数序",
-        "number order",
-        "100以内的数",
-        "counting",
-        "Place Value",
-        "place value",
-        "十进制",
-        "大数",
-        "powers of ten"
-      ],
-      "path": "courseware/hundred-metro/index.html"
-    },
-    {
       "id": "clock-town",
       "title": {
         "zh": "时钟小镇",
@@ -1132,7 +1202,7 @@
         "primary"
       ],
       "grades": [
-        "g1a"
+        "g2b"
       ],
       "tags": [
         "时间"
@@ -1140,6 +1210,29 @@
       "icon": "🕰️",
       "order": 21,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m2b",
+          "bookTitle": {
+            "zh": "数学 二年级下册",
+            "en": "Math · Grade 2 · Spring"
+          },
+          "grade": "g2b",
+          "unitId": "time",
+          "unitTitle": {
+            "zh": "时间在哪里",
+            "en": "Where is time?"
+          },
+          "unitKind": "topic",
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "认识钟面与时间",
+            "en": "Clocks and time"
+          }
+        }
+      ],
       "keywords": [
         "Time & Clocks",
         "telling time",
@@ -1168,7 +1261,7 @@
         "primary"
       ],
       "grades": [
-        "g4"
+        "g4a"
       ],
       "tags": [
         "平面图形",
@@ -1178,6 +1271,30 @@
       "icon": "⛳",
       "order": 24,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m4a",
+          "bookTitle": {
+            "zh": "数学 四年级上册",
+            "en": "Math · Grade 4 · Fall"
+          },
+          "grade": "g4a",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "角的度量",
+            "en": "Measuring angles"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 28,
+          "page": 28,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "角的度量",
+            "en": "Measuring angles"
+          }
+        }
+      ],
       "keywords": [
         "2D Shapes",
         "2d shapes",
@@ -1211,8 +1328,7 @@
         "primary"
       ],
       "grades": [
-        "g2",
-        "g3"
+        "g2b"
       ],
       "tags": [
         "加减法",
@@ -1223,6 +1339,30 @@
       "icon": "⚙️",
       "order": 24,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m2b",
+          "bookTitle": {
+            "zh": "数学 二年级下册",
+            "en": "Math · Grade 2 · Spring"
+          },
+          "grade": "g2b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "万以内的加法和减法",
+            "en": "Addition and subtraction within 10,000"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 63,
+          "page": 63,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "万以内的加法和减法",
+            "en": "Addition and subtraction"
+          }
+        }
+      ],
       "keywords": [
         "Addition & Subtraction",
         "addition",
@@ -1263,11 +1403,7 @@
         "junior",
         "senior"
       ],
-      "grades": [
-        "g7",
-        "g8",
-        "g9"
-      ],
+      "grades": [],
       "tags": [
         "平方根",
         "运算",
@@ -1315,8 +1451,7 @@
         "primary"
       ],
       "grades": [
-        "g3",
-        "g4"
+        "g4b"
       ],
       "tags": [
         "平面图形",
@@ -1326,6 +1461,30 @@
       "icon": "🎨",
       "order": 25,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m4b",
+          "bookTitle": {
+            "zh": "数学 四年级下册",
+            "en": "Math · Grade 4 · Spring"
+          },
+          "grade": "g4b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "图形的运动（一）",
+            "en": "Moving shapes I"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 79,
+          "page": 79,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "轴对称图形",
+            "en": "Reflection symmetry"
+          }
+        }
+      ],
       "keywords": [
         "2D Shapes",
         "2d shapes",
@@ -1358,8 +1517,7 @@
         "primary"
       ],
       "grades": [
-        "g3",
-        "g4"
+        "g5b"
       ],
       "tags": [
         "分数",
@@ -1369,6 +1527,52 @@
       "icon": "🎵",
       "order": 26,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m5b",
+          "bookTitle": {
+            "zh": "数学 五年级下册",
+            "en": "Math · Grade 5 · Spring"
+          },
+          "grade": "g5b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "分数的意义和性质",
+            "en": "Meaning and properties of fractions"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 45,
+          "page": 45,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "分数的意义和性质",
+            "en": "Fraction meaning and equivalence"
+          }
+        },
+        {
+          "bookId": "m5b",
+          "bookTitle": {
+            "zh": "数学 五年级下册",
+            "en": "Math · Grade 5 · Spring"
+          },
+          "grade": "g5b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "分数的加法和减法",
+            "en": "Adding and subtracting fractions"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 89,
+          "page": 89,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "分数的加法和减法",
+            "en": "Adding and subtracting fractions"
+          }
+        }
+      ],
       "keywords": [
         "Fractions",
         "fraction",
@@ -1405,12 +1609,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4",
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "分类",
         "运算",
@@ -1449,10 +1648,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4"
-      ],
+      "grades": [],
       "tags": [
         "时间",
         "运算",
@@ -1497,10 +1693,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "运算",
         "变量",
@@ -1559,10 +1752,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "数的认识",
         "乘法",
@@ -1652,48 +1842,296 @@
       "path": "courseware/plant-lab/index.html"
     },
     {
-      "id": "g1-compare-bridge",
+      "id": "g1-flat-shapes",
       "title": {
-        "zh": "比大小桥",
-        "en": "Number Bridge"
+        "zh": "图形拼搭",
+        "en": "Shape Workshop"
       },
       "description": {
-        "zh": "给数字桥装上大于、小于或等于的桥牌，比较 20 和 100 以内的数。",
-        "en": "Fit the greater, less or equal bridge sign between numbers up to 100."
+        "zh": "拖动图形，转一转，拼在一起。",
+        "en": "Move, rotate and join the shapes."
       },
       "category": "math",
+      "grades": [
+        "g1b"
+      ],
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g1a",
-        "g1b"
-      ],
       "tags": [
-        "比大小",
-        "数的认识"
+        "平面图形",
+        "3D",
+        "实验"
       ],
-      "icon": "🐊",
+      "icon": "🔷",
       "order": 30,
       "badge": "new",
-      "keywords": [
-        "Compare Numbers",
-        "比大小",
-        "大于",
-        "小于",
-        "等于",
-        "compare numbers",
-        "greater than",
-        "less than",
-        "Numbers & Counting",
-        "百数表",
-        "hundred chart",
-        "数序",
-        "number order",
-        "100以内的数",
-        "counting"
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "认识平面图形",
+            "en": "Flat shapes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "认识平面图形",
+            "en": "Round wheels"
+          },
+          "activity": "shape-1",
+          "activityTitle": {
+            "zh": "圆圆的轮子",
+            "en": "Round wheels"
+          },
+          "invite": {
+            "zh": "拖动图形，转一转，拼在一起。",
+            "en": "Move, rotate and join the shapes."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "认识平面图形",
+            "en": "Flat shapes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "认识平面图形",
+            "en": "A triangular roof"
+          },
+          "activity": "shape-2",
+          "activityTitle": {
+            "zh": "三角屋顶",
+            "en": "A triangular roof"
+          },
+          "invite": {
+            "zh": "拖动图形，转一转，拼在一起。",
+            "en": "Move, rotate and join the shapes."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "认识平面图形",
+            "en": "Flat shapes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "认识平面图形",
+            "en": "A square window"
+          },
+          "activity": "shape-3",
+          "activityTitle": {
+            "zh": "方方的窗",
+            "en": "A square window"
+          },
+          "invite": {
+            "zh": "拖动图形，转一转，拼在一起。",
+            "en": "Move, rotate and join the shapes."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "认识平面图形",
+            "en": "Flat shapes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "认识平面图形",
+            "en": "A tall door"
+          },
+          "activity": "shape-4",
+          "activityTitle": {
+            "zh": "长长的门",
+            "en": "A tall door"
+          },
+          "invite": {
+            "zh": "拖动图形，转一转，拼在一起。",
+            "en": "Move, rotate and join the shapes."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "认识平面图形",
+            "en": "Flat shapes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "认识平面图形",
+            "en": "A slanted flag"
+          },
+          "activity": "shape-5",
+          "activityTitle": {
+            "zh": "斜斜的旗",
+            "en": "A slanted flag"
+          },
+          "invite": {
+            "zh": "拖动图形，转一转，拼在一起。",
+            "en": "Move, rotate and join the shapes."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "认识平面图形",
+            "en": "Flat shapes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "认识平面图形",
+            "en": "Join two pieces"
+          },
+          "activity": "shape-6",
+          "activityTitle": {
+            "zh": "两块拼一拼",
+            "en": "Join two pieces"
+          },
+          "invite": {
+            "zh": "拖动图形，转一转，拼在一起。",
+            "en": "Move, rotate and join the shapes."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "认识平面图形",
+            "en": "Flat shapes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "认识平面图形",
+            "en": "Rotate and compare"
+          },
+          "activity": "shape-7",
+          "activityTitle": {
+            "zh": "旋转后再看",
+            "en": "Rotate and compare"
+          },
+          "invite": {
+            "zh": "拖动图形，转一转，拼在一起。",
+            "en": "Move, rotate and join the shapes."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "认识平面图形",
+            "en": "Flat shapes"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "认识平面图形",
+            "en": "Build a small town"
+          },
+          "activity": "shape-8",
+          "activityTitle": {
+            "zh": "自由造小镇",
+            "en": "Build a small town"
+          },
+          "invite": {
+            "zh": "拖动图形，转一转，拼在一起。",
+            "en": "Move, rotate and join the shapes."
+          }
+        }
       ],
-      "path": "courseware/g1-compare-bridge/index.html"
+      "keywords": [
+        "2D Shapes",
+        "2d shapes",
+        "长方形",
+        "rectangle",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1-flat-shapes/index.html"
     },
     {
       "id": "pendulum-lab",
@@ -1710,10 +2148,7 @@
         "junior",
         "senior"
       ],
-      "grades": [
-        "g8",
-        "g11"
-      ],
+      "grades": [],
       "tags": [
         "单摆",
         "重力",
@@ -1756,9 +2191,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "分数",
         "乘法",
@@ -1797,44 +2230,305 @@
       "path": "courseware/potion-ratio/index.html"
     },
     {
-      "id": "g1-addition-depot",
+      "id": "hundred-metro",
       "title": {
-        "zh": "加法车站",
-        "en": "Addition Depot"
+        "zh": "百数地铁",
+        "en": "Hundred-Chart Metro"
       },
       "description": {
-        "zh": "开动十位和个位小火车，把两批乘客合在一起。",
-        "en": "Drive tens and ones trains to join two groups of passengers."
+        "zh": "捆一捆，拆一拆，开动百数小车。",
+        "en": "Bundle, unbundle and move the number train."
       },
       "category": "math",
-      "levels": [
-        "primary"
-      ],
       "grades": [
         "g1b"
       ],
-      "tags": [
-        "加减法",
-        "数位"
+      "levels": [
+        "primary"
       ],
-      "icon": "🚂",
+      "tags": [
+        "数的认识",
+        "数位",
+        "3D",
+        "实验"
+      ],
+      "icon": "🚇",
       "order": 31,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "100以内数的认识",
+            "en": "Ten ones"
+          },
+          "activity": "count-1",
+          "activityTitle": {
+            "zh": "十个一",
+            "en": "Ten ones"
+          },
+          "invite": {
+            "zh": "捆一捆，拆一拆，开动百数小车。",
+            "en": "Bundle, unbundle and move the number train."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "100以内数的认识",
+            "en": "Twenty-three"
+          },
+          "activity": "count-2",
+          "activityTitle": {
+            "zh": "二十三",
+            "en": "Twenty-three"
+          },
+          "invite": {
+            "zh": "捆一捆，拆一拆，开动百数小车。",
+            "en": "Bundle, unbundle and move the number train."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "100以内数的认识",
+            "en": "Whole tens"
+          },
+          "activity": "count-3",
+          "activityTitle": {
+            "zh": "整十数",
+            "en": "Whole tens"
+          },
+          "invite": {
+            "zh": "捆一捆，拆一拆，开动百数小车。",
+            "en": "Bundle, unbundle and move the number train."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "100以内数的认识",
+            "en": "Across a ten"
+          },
+          "activity": "count-4",
+          "activityTitle": {
+            "zh": "过一个十",
+            "en": "Across a ten"
+          },
+          "invite": {
+            "zh": "捆一捆，拆一拆，开动百数小车。",
+            "en": "Bundle, unbundle and move the number train."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "100以内数的认识",
+            "en": "Sixty-eight"
+          },
+          "activity": "count-5",
+          "activityTitle": {
+            "zh": "六十八",
+            "en": "Sixty-eight"
+          },
+          "invite": {
+            "zh": "捆一捆，拆一拆，开动百数小车。",
+            "en": "Bundle, unbundle and move the number train."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "100以内数的认识",
+            "en": "Nine tens"
+          },
+          "activity": "count-6",
+          "activityTitle": {
+            "zh": "九个十",
+            "en": "Nine tens"
+          },
+          "invite": {
+            "zh": "捆一捆，拆一拆，开动百数小车。",
+            "en": "Bundle, unbundle and move the number train."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "100以内数的认识",
+            "en": "Reach one hundred"
+          },
+          "activity": "count-7",
+          "activityTitle": {
+            "zh": "走到一百",
+            "en": "Reach one hundred"
+          },
+          "invite": {
+            "zh": "捆一捆，拆一拆，开动百数小车。",
+            "en": "Bundle, unbundle and move the number train."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "100以内数的认识",
+            "en": "Ten tens"
+          },
+          "activity": "count-8",
+          "activityTitle": {
+            "zh": "十个十",
+            "en": "Ten tens"
+          },
+          "invite": {
+            "zh": "捆一捆，拆一拆，开动百数小车。",
+            "en": "Bundle, unbundle and move the number train."
+          }
+        }
+      ],
       "keywords": [
-        "Addition & Subtraction",
-        "addition",
-        "subtraction",
-        "凑十法",
-        "make ten",
-        "数的分解",
-        "number bonds",
+        "Numbers & Counting",
+        "百数表",
+        "hundred chart",
+        "数序",
+        "number order",
+        "100以内的数",
+        "counting",
         "Place Value",
         "place value",
         "十进制",
         "大数",
-        "powers of ten"
+        "powers of ten",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
       ],
-      "path": "courseware/g1-addition-depot/index.html"
+      "path": "courseware/hundred-metro/index.html"
     },
     {
       "id": "updown-world",
@@ -1850,9 +2544,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "数的认识",
         "加减法",
@@ -1890,44 +2582,308 @@
       "path": "courseware/updown-world/index.html"
     },
     {
-      "id": "g1-subtraction-depot",
+      "id": "g1-compare-bridge",
       "title": {
-        "zh": "减法车站",
-        "en": "Subtraction Depot"
+        "zh": "比大小桥",
+        "en": "Number Bridge"
       },
       "description": {
-        "zh": "让乘客下车，沿数线退回正确的站台。",
-        "en": "Let passengers off and move back to the right stop on the number line."
+        "zh": "给两边添一些，看看桥牌怎么变。",
+        "en": "Add or remove blocks and watch the comparison sign."
       },
       "category": "math",
-      "levels": [
-        "primary"
-      ],
       "grades": [
         "g1b"
       ],
-      "tags": [
-        "加减法",
-        "数位"
+      "levels": [
+        "primary"
       ],
-      "icon": "🚋",
+      "tags": [
+        "比大小",
+        "数的认识",
+        "3D",
+        "实验"
+      ],
+      "icon": "🌉",
       "order": 32,
       "badge": "new",
-      "keywords": [
-        "Addition & Subtraction",
-        "addition",
-        "subtraction",
-        "凑十法",
-        "make ten",
-        "数的分解",
-        "number bonds",
-        "Place Value",
-        "place value",
-        "十进制",
-        "大数",
-        "powers of ten"
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 101,
+          "topic": {
+            "zh": "100以内数的认识：数的大小",
+            "en": "Compare banks 1"
+          },
+          "activity": "compare-1",
+          "activityTitle": {
+            "zh": "两岸比一比 1",
+            "en": "Compare banks 1"
+          },
+          "invite": {
+            "zh": "给两边添一些，看看桥牌怎么变。",
+            "en": "Add or remove blocks and watch the comparison sign."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 102,
+          "topic": {
+            "zh": "100以内数的认识：数的大小",
+            "en": "Compare banks 2"
+          },
+          "activity": "compare-2",
+          "activityTitle": {
+            "zh": "两岸比一比 2",
+            "en": "Compare banks 2"
+          },
+          "invite": {
+            "zh": "给两边添一些，看看桥牌怎么变。",
+            "en": "Add or remove blocks and watch the comparison sign."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 103,
+          "topic": {
+            "zh": "100以内数的认识：数的大小",
+            "en": "Compare banks 3"
+          },
+          "activity": "compare-3",
+          "activityTitle": {
+            "zh": "两岸比一比 3",
+            "en": "Compare banks 3"
+          },
+          "invite": {
+            "zh": "给两边添一些，看看桥牌怎么变。",
+            "en": "Add or remove blocks and watch the comparison sign."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 104,
+          "topic": {
+            "zh": "100以内数的认识：数的大小",
+            "en": "Compare banks 4"
+          },
+          "activity": "compare-4",
+          "activityTitle": {
+            "zh": "两岸比一比 4",
+            "en": "Compare banks 4"
+          },
+          "invite": {
+            "zh": "给两边添一些，看看桥牌怎么变。",
+            "en": "Add or remove blocks and watch the comparison sign."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 105,
+          "topic": {
+            "zh": "100以内数的认识：数的大小",
+            "en": "Compare banks 5"
+          },
+          "activity": "compare-5",
+          "activityTitle": {
+            "zh": "两岸比一比 5",
+            "en": "Compare banks 5"
+          },
+          "invite": {
+            "zh": "给两边添一些，看看桥牌怎么变。",
+            "en": "Add or remove blocks and watch the comparison sign."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 106,
+          "topic": {
+            "zh": "100以内数的认识：数的大小",
+            "en": "Compare banks 6"
+          },
+          "activity": "compare-6",
+          "activityTitle": {
+            "zh": "两岸比一比 6",
+            "en": "Compare banks 6"
+          },
+          "invite": {
+            "zh": "给两边添一些，看看桥牌怎么变。",
+            "en": "Add or remove blocks and watch the comparison sign."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 107,
+          "topic": {
+            "zh": "100以内数的认识：数的大小",
+            "en": "Compare banks 7"
+          },
+          "activity": "compare-7",
+          "activityTitle": {
+            "zh": "两岸比一比 7",
+            "en": "Compare banks 7"
+          },
+          "invite": {
+            "zh": "给两边添一些，看看桥牌怎么变。",
+            "en": "Add or remove blocks and watch the comparison sign."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "100以内数的认识",
+            "en": "Numbers within 100"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 23,
+          "page": 23,
+          "lessonOrder": 108,
+          "topic": {
+            "zh": "100以内数的认识：数的大小",
+            "en": "Compare banks 8"
+          },
+          "activity": "compare-8",
+          "activityTitle": {
+            "zh": "两岸比一比 8",
+            "en": "Compare banks 8"
+          },
+          "invite": {
+            "zh": "给两边添一些，看看桥牌怎么变。",
+            "en": "Add or remove blocks and watch the comparison sign."
+          }
+        }
       ],
-      "path": "courseware/g1-subtraction-depot/index.html"
+      "keywords": [
+        "Compare Numbers",
+        "比大小",
+        "大于",
+        "小于",
+        "等于",
+        "compare numbers",
+        "greater than",
+        "less than",
+        "Numbers & Counting",
+        "百数表",
+        "hundred chart",
+        "数序",
+        "number order",
+        "100以内的数",
+        "counting",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1-compare-bridge/index.html"
     },
     {
       "id": "sale-detective",
@@ -1944,7 +2900,7 @@
         "primary"
       ],
       "grades": [
-        "g6"
+        "g6b"
       ],
       "tags": [
         "分数",
@@ -1955,6 +2911,30 @@
       "icon": "🕵️",
       "order": 32,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m6b",
+          "bookTitle": {
+            "zh": "数学 六年级下册",
+            "en": "Math · Grade 6 · Spring"
+          },
+          "grade": "g6b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "百分数（二）",
+            "en": "Percentages II"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 8,
+          "page": 8,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "折扣与百分数",
+            "en": "Discounts and percentages"
+          }
+        }
+      ],
       "keywords": [
         "Fractions",
         "fraction",
@@ -1993,9 +2973,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "空间想象",
         "计量单位",
@@ -2029,29 +3007,281 @@
       "path": "courseware/drone-post/index.html"
     },
     {
-      "id": "g1-mixed-relay",
+      "id": "g1-addition-depot",
       "title": {
-        "zh": "加减接力",
-        "en": "Add-Subtract Relay"
+        "zh": "加法车站",
+        "en": "Addition Depot"
       },
       "description": {
-        "zh": "沿数线先接住一批、再送走一批，完成两步接力。",
-        "en": "Take a group on, then let a group off to finish each two-step relay."
+        "zh": "把两批合起来，满十再捆一捆。",
+        "en": "Join both groups, then bundle ten loose blocks."
       },
       "category": "math",
-      "levels": [
-        "primary"
-      ],
       "grades": [
         "g1b"
       ],
+      "levels": [
+        "primary"
+      ],
       "tags": [
         "加减法",
-        "运算"
+        "数位",
+        "3D",
+        "实验"
       ],
-      "icon": "🏃",
+      "icon": "🚂",
       "order": 33,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 100,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Join passengers 1"
+          },
+          "activity": "add-1",
+          "activityTitle": {
+            "zh": "合并乘客 1",
+            "en": "Join passengers 1"
+          },
+          "invite": {
+            "zh": "把两批合起来，满十再捆一捆。",
+            "en": "Join both groups, then bundle ten loose blocks."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 101,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Join passengers 2"
+          },
+          "activity": "add-2",
+          "activityTitle": {
+            "zh": "合并乘客 2",
+            "en": "Join passengers 2"
+          },
+          "invite": {
+            "zh": "把两批合起来，满十再捆一捆。",
+            "en": "Join both groups, then bundle ten loose blocks."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 102,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Join passengers 3"
+          },
+          "activity": "add-3",
+          "activityTitle": {
+            "zh": "合并乘客 3",
+            "en": "Join passengers 3"
+          },
+          "invite": {
+            "zh": "把两批合起来，满十再捆一捆。",
+            "en": "Join both groups, then bundle ten loose blocks."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 103,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Join passengers 4"
+          },
+          "activity": "add-4",
+          "activityTitle": {
+            "zh": "合并乘客 4",
+            "en": "Join passengers 4"
+          },
+          "invite": {
+            "zh": "把两批合起来，满十再捆一捆。",
+            "en": "Join both groups, then bundle ten loose blocks."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 104,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Join passengers 5"
+          },
+          "activity": "add-5",
+          "activityTitle": {
+            "zh": "合并乘客 5",
+            "en": "Join passengers 5"
+          },
+          "invite": {
+            "zh": "把两批合起来，满十再捆一捆。",
+            "en": "Join both groups, then bundle ten loose blocks."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 105,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Join passengers 6"
+          },
+          "activity": "add-6",
+          "activityTitle": {
+            "zh": "合并乘客 6",
+            "en": "Join passengers 6"
+          },
+          "invite": {
+            "zh": "把两批合起来，满十再捆一捆。",
+            "en": "Join both groups, then bundle ten loose blocks."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 106,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Join passengers 7"
+          },
+          "activity": "add-7",
+          "activityTitle": {
+            "zh": "合并乘客 7",
+            "en": "Join passengers 7"
+          },
+          "invite": {
+            "zh": "把两批合起来，满十再捆一捆。",
+            "en": "Join both groups, then bundle ten loose blocks."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 107,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Join passengers 8"
+          },
+          "activity": "add-8",
+          "activityTitle": {
+            "zh": "合并乘客 8",
+            "en": "Join passengers 8"
+          },
+          "invite": {
+            "zh": "把两批合起来，满十再捆一捆。",
+            "en": "Join both groups, then bundle ten loose blocks."
+          }
+        }
+      ],
       "keywords": [
         "Addition & Subtraction",
         "addition",
@@ -2060,12 +3290,22 @@
         "make ten",
         "数的分解",
         "number bonds",
-        "Arithmetic",
-        "arithmetic",
-        "operations",
-        "四则运算"
+        "Place Value",
+        "place value",
+        "十进制",
+        "大数",
+        "powers of ten",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
       ],
-      "path": "courseware/g1-mixed-relay/index.html"
+      "path": "courseware/g1-addition-depot/index.html"
     },
     {
       "id": "carnival-truth",
@@ -2081,9 +3321,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "分数",
         "运算",
@@ -2134,7 +3372,7 @@
         "junior"
       ],
       "grades": [
-        "g8"
+        "g8a"
       ],
       "tags": [
         "密度",
@@ -2146,6 +3384,30 @@
       "icon": "⚖️",
       "order": 34,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "p8a",
+          "bookTitle": {
+            "zh": "物理 八年级上册",
+            "en": "Physics · Grade 8 · Fall"
+          },
+          "grade": "g8a",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "质量与密度",
+            "en": "Mass and density"
+          },
+          "unitKind": "chapter",
+          "unitNumber": 6,
+          "unitOrder": 138,
+          "page": 144,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "密度与密度测量",
+            "en": "Density and measurement"
+          }
+        }
+      ],
       "keywords": [
         "Density",
         "density",
@@ -2182,6 +3444,307 @@
       "path": "courseware/density-detective-lab/index.html"
     },
     {
+      "id": "g1-subtraction-depot",
+      "title": {
+        "zh": "减法车站",
+        "en": "Subtraction Depot"
+      },
+      "description": {
+        "zh": "不够拿时拆开一个十，再送走一些。",
+        "en": "Unbundle a ten when needed, then take some blocks away."
+      },
+      "category": "math",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "加减法",
+        "数位",
+        "3D",
+        "实验"
+      ],
+      "icon": "🚋",
+      "order": 34,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "20以内的退位减法",
+            "en": "Subtraction within 20"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 8,
+          "page": 8,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "20以内的退位减法",
+            "en": "Take away 1"
+          },
+          "activity": "subtract-1",
+          "activityTitle": {
+            "zh": "十几减几 1",
+            "en": "Take away 1"
+          },
+          "invite": {
+            "zh": "不够拿时拆开一个十，再送走一些。",
+            "en": "Unbundle a ten when needed, then take some blocks away."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "20以内的退位减法",
+            "en": "Subtraction within 20"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 8,
+          "page": 8,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "20以内的退位减法",
+            "en": "Take away 2"
+          },
+          "activity": "subtract-2",
+          "activityTitle": {
+            "zh": "十几减几 2",
+            "en": "Take away 2"
+          },
+          "invite": {
+            "zh": "不够拿时拆开一个十，再送走一些。",
+            "en": "Unbundle a ten when needed, then take some blocks away."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "20以内的退位减法",
+            "en": "Subtraction within 20"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 8,
+          "page": 8,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "20以内的退位减法",
+            "en": "Take away 3"
+          },
+          "activity": "subtract-3",
+          "activityTitle": {
+            "zh": "十几减几 3",
+            "en": "Take away 3"
+          },
+          "invite": {
+            "zh": "不够拿时拆开一个十，再送走一些。",
+            "en": "Unbundle a ten when needed, then take some blocks away."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "20以内的退位减法",
+            "en": "Subtraction within 20"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 8,
+          "page": 8,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "20以内的退位减法",
+            "en": "Take away 4"
+          },
+          "activity": "subtract-4",
+          "activityTitle": {
+            "zh": "十几减几 4",
+            "en": "Take away 4"
+          },
+          "invite": {
+            "zh": "不够拿时拆开一个十，再送走一些。",
+            "en": "Unbundle a ten when needed, then take some blocks away."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "20以内的退位减法",
+            "en": "Subtraction within 20"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 8,
+          "page": 8,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "20以内的退位减法",
+            "en": "Take away 5"
+          },
+          "activity": "subtract-5",
+          "activityTitle": {
+            "zh": "十几减几 5",
+            "en": "Take away 5"
+          },
+          "invite": {
+            "zh": "不够拿时拆开一个十，再送走一些。",
+            "en": "Unbundle a ten when needed, then take some blocks away."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 205,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Take away 6"
+          },
+          "activity": "subtract-6",
+          "activityTitle": {
+            "zh": "百以内减法 1",
+            "en": "Take away 6"
+          },
+          "invite": {
+            "zh": "不够拿时拆开一个十，再送走一些。",
+            "en": "Unbundle a ten when needed, then take some blocks away."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 206,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Take away 7"
+          },
+          "activity": "subtract-7",
+          "activityTitle": {
+            "zh": "百以内减法 2",
+            "en": "Take away 7"
+          },
+          "invite": {
+            "zh": "不够拿时拆开一个十，再送走一些。",
+            "en": "Unbundle a ten when needed, then take some blocks away."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "100以内的口算加、减法",
+            "en": "Mental addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 43,
+          "page": 43,
+          "lessonOrder": 207,
+          "topic": {
+            "zh": "100以内的口算加、减法",
+            "en": "Take away 8"
+          },
+          "activity": "subtract-8",
+          "activityTitle": {
+            "zh": "百以内减法 3",
+            "en": "Take away 8"
+          },
+          "invite": {
+            "zh": "不够拿时拆开一个十，再送走一些。",
+            "en": "Unbundle a ten when needed, then take some blocks away."
+          }
+        }
+      ],
+      "keywords": [
+        "Addition & Subtraction",
+        "addition",
+        "subtraction",
+        "凑十法",
+        "make ten",
+        "数的分解",
+        "number bonds",
+        "Place Value",
+        "place value",
+        "十进制",
+        "大数",
+        "powers of ten",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1-subtraction-depot/index.html"
+    },
+    {
       "id": "g1-weight-lab",
       "title": {
         "zh": "轻重天平",
@@ -2195,9 +3758,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g1a"
-      ],
+      "grades": [],
       "tags": [
         "轻重",
         "计量单位"
@@ -2233,12 +3794,12 @@
         "zh": "在小镇地图上找前后、左右、上下的位置。",
         "en": "Find neighbors in front, behind, left, right, above and below on a town map."
       },
-      "category": "math",
+      "category": "science",
       "levels": [
         "primary"
       ],
       "grades": [
-        "g1a"
+        "g1b"
       ],
       "tags": [
         "位置"
@@ -2246,6 +3807,30 @@
       "icon": "🧭",
       "order": 35,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "s1b",
+          "bookTitle": {
+            "zh": "科学 一年级下册",
+            "en": "Science · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "位置和方向",
+            "en": "Position and direction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 2,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "前后左右",
+            "en": "Relative positions"
+          }
+        }
+      ],
       "keywords": [
         "Position & Direction",
         "位置",
@@ -2264,6 +3849,307 @@
       "path": "courseware/g1-direction-town/index.html"
     },
     {
+      "id": "g1b-column-workshop",
+      "title": {
+        "zh": "竖式搭建厂",
+        "en": "Column Workshop"
+      },
+      "description": {
+        "zh": "把数位对齐，再操作计数棒。",
+        "en": "Align the place values, then work with the rods."
+      },
+      "category": "math",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "加减法",
+        "数位",
+        "3D",
+        "实验"
+      ],
+      "icon": "🏭",
+      "order": 35,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Written addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 56,
+          "page": 57,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Place-value bay 1"
+          },
+          "activity": "column-1",
+          "activityTitle": {
+            "zh": "数位工位 1",
+            "en": "Place-value bay 1"
+          },
+          "invite": {
+            "zh": "把数位对齐，再操作计数棒。",
+            "en": "Align the place values, then work with the rods."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Written addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 56,
+          "page": 57,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Place-value bay 2"
+          },
+          "activity": "column-2",
+          "activityTitle": {
+            "zh": "数位工位 2",
+            "en": "Place-value bay 2"
+          },
+          "invite": {
+            "zh": "把数位对齐，再操作计数棒。",
+            "en": "Align the place values, then work with the rods."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Written addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 56,
+          "page": 57,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Place-value bay 3"
+          },
+          "activity": "column-3",
+          "activityTitle": {
+            "zh": "数位工位 3",
+            "en": "Place-value bay 3"
+          },
+          "invite": {
+            "zh": "把数位对齐，再操作计数棒。",
+            "en": "Align the place values, then work with the rods."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Written addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 56,
+          "page": 57,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Place-value bay 4"
+          },
+          "activity": "column-4",
+          "activityTitle": {
+            "zh": "数位工位 4",
+            "en": "Place-value bay 4"
+          },
+          "invite": {
+            "zh": "把数位对齐，再操作计数棒。",
+            "en": "Align the place values, then work with the rods."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Written addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 56,
+          "page": 62,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Place-value bay 5"
+          },
+          "activity": "column-5",
+          "activityTitle": {
+            "zh": "数位工位 5",
+            "en": "Place-value bay 5"
+          },
+          "invite": {
+            "zh": "把数位对齐，再操作计数棒。",
+            "en": "Align the place values, then work with the rods."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Written addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 56,
+          "page": 62,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Place-value bay 6"
+          },
+          "activity": "column-6",
+          "activityTitle": {
+            "zh": "数位工位 6",
+            "en": "Place-value bay 6"
+          },
+          "invite": {
+            "zh": "把数位对齐，再操作计数棒。",
+            "en": "Align the place values, then work with the rods."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Written addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 56,
+          "page": 62,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Place-value bay 7"
+          },
+          "activity": "column-7",
+          "activityTitle": {
+            "zh": "数位工位 7",
+            "en": "Place-value bay 7"
+          },
+          "invite": {
+            "zh": "把数位对齐，再操作计数棒。",
+            "en": "Align the place values, then work with the rods."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Written addition and subtraction"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 56,
+          "page": 62,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "100以内的笔算加、减法",
+            "en": "Place-value bay 8"
+          },
+          "activity": "column-8",
+          "activityTitle": {
+            "zh": "数位工位 8",
+            "en": "Place-value bay 8"
+          },
+          "invite": {
+            "zh": "把数位对齐，再操作计数棒。",
+            "en": "Align the place values, then work with the rods."
+          }
+        }
+      ],
+      "keywords": [
+        "Addition & Subtraction",
+        "addition",
+        "subtraction",
+        "凑十法",
+        "make ten",
+        "数的分解",
+        "number bonds",
+        "Place Value",
+        "place value",
+        "十进制",
+        "大数",
+        "powers of ten",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-column-workshop/index.html"
+    },
+    {
       "id": "lantern-lane",
       "title": {
         "zh": "灯笼街",
@@ -2277,9 +4163,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "运算",
         "找规律",
@@ -2328,10 +4212,7 @@
         "junior",
         "senior"
       ],
-      "grades": [
-        "g8",
-        "g10"
-      ],
+      "grades": [],
       "tags": [
         "运动",
         "速度",
@@ -2395,10 +4276,7 @@
         "senior"
       ],
       "grades": [
-        "g8",
-        "g9",
-        "g10",
-        "g11"
+        "g8a"
       ],
       "tags": [
         "光学",
@@ -2409,6 +4287,30 @@
       "icon": "🔬",
       "badge": "new",
       "order": 35,
+      "curriculum": [
+        {
+          "bookId": "p8a",
+          "bookTitle": {
+            "zh": "物理 八年级上册",
+            "en": "Physics · Grade 8 · Fall"
+          },
+          "grade": "g8a",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "透镜及其应用",
+            "en": "Lenses and their applications"
+          },
+          "unitKind": "chapter",
+          "unitNumber": 5,
+          "unitOrder": 113,
+          "page": 122,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "凸透镜成像的规律",
+            "en": "Images formed by convex lenses"
+          }
+        }
+      ],
       "keywords": [
         "Optics",
         "optics",
@@ -2440,35 +4342,306 @@
       "path": "courseware/optics-lab/index.html"
     },
     {
-      "id": "g1-flat-shapes",
+      "id": "g1b-quantity-theater",
       "title": {
-        "zh": "图形拼搭",
-        "en": "Shape Workshop"
+        "zh": "数量故事台",
+        "en": "Quantity Stories"
       },
       "description": {
-        "zh": "为小房子、风筝和车轮挑合适的平面图形。",
-        "en": "Pick flat shapes for roofs, kites, wheels and more."
+        "zh": "改变一组物件，看看数量之间的联系。",
+        "en": "Change a group and observe how the quantities relate."
       },
       "category": "math",
-      "levels": [
-        "primary"
-      ],
       "grades": [
         "g1b"
       ],
-      "tags": [
-        "平面图形"
+      "levels": [
+        "primary"
       ],
-      "icon": "🔷",
+      "tags": [
+        "加减法",
+        "比多少",
+        "3D",
+        "实验"
+      ],
+      "icon": "🎪",
       "order": 36,
       "badge": "new",
-      "keywords": [
-        "2D Shapes",
-        "2d shapes",
-        "长方形",
-        "rectangle"
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "数量间的加减关系",
+            "en": "Additive relationships"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 69,
+          "page": 69,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "数量间的加减关系",
+            "en": "Share fruit"
+          },
+          "activity": "quantity-1",
+          "activityTitle": {
+            "zh": "分水果",
+            "en": "Share fruit"
+          },
+          "invite": {
+            "zh": "移一个物件，再展开关系图。",
+            "en": "Move an object, then open the relation diagram."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "数量间的加减关系",
+            "en": "Additive relationships"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 69,
+          "page": 69,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "数量间的加减关系",
+            "en": "Share books"
+          },
+          "activity": "quantity-2",
+          "activityTitle": {
+            "zh": "分书本",
+            "en": "Share books"
+          },
+          "invite": {
+            "zh": "移一个物件，再展开关系图。",
+            "en": "Move an object, then open the relation diagram."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "数量间的加减关系",
+            "en": "Additive relationships"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 69,
+          "page": 69,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "数量间的加减关系",
+            "en": "More arrive"
+          },
+          "activity": "quantity-3",
+          "activityTitle": {
+            "zh": "又拿来了",
+            "en": "More arrive"
+          },
+          "invite": {
+            "zh": "把送来的物件放在一起。",
+            "en": "Join the arriving objects."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "数量间的加减关系",
+            "en": "Additive relationships"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 69,
+          "page": 69,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "数量间的加减关系",
+            "en": "Some leave"
+          },
+          "activity": "quantity-4",
+          "activityTitle": {
+            "zh": "送走一些",
+            "en": "Some leave"
+          },
+          "invite": {
+            "zh": "送走一些物件，看看剩下多少。",
+            "en": "Move some objects away and observe what remains."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "数量间的加减关系",
+            "en": "Additive relationships"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 69,
+          "page": 70,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "数量间的加减关系",
+            "en": "Compare flags"
+          },
+          "activity": "quantity-5",
+          "activityTitle": {
+            "zh": "比一比红旗",
+            "en": "Compare flags"
+          },
+          "invite": {
+            "zh": "改变一组数量，再对齐看看。",
+            "en": "Change a group, then line up the objects."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "数量间的加减关系",
+            "en": "Additive relationships"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 69,
+          "page": 70,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "数量间的加减关系",
+            "en": "Compare blocks"
+          },
+          "activity": "quantity-6",
+          "activityTitle": {
+            "zh": "比一比积木",
+            "en": "Compare blocks"
+          },
+          "invite": {
+            "zh": "改变一组数量，再对齐看看。",
+            "en": "Change a group, then line up the objects."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "数量间的加减关系",
+            "en": "Additive relationships"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 69,
+          "page": 69,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "数量间的加减关系",
+            "en": "Two parts"
+          },
+          "activity": "quantity-7",
+          "activityTitle": {
+            "zh": "分成两部分",
+            "en": "Two parts"
+          },
+          "invite": {
+            "zh": "移一个物件，再展开关系图。",
+            "en": "Move an object, then open the relation diagram."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "数量间的加减关系",
+            "en": "Additive relationships"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 69,
+          "page": 69,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "数量间的加减关系",
+            "en": "Gifts arrive"
+          },
+          "activity": "quantity-8",
+          "activityTitle": {
+            "zh": "朋友送礼物",
+            "en": "Gifts arrive"
+          },
+          "invite": {
+            "zh": "把送来的物件放在一起。",
+            "en": "Join the arriving objects."
+          }
+        }
       ],
-      "path": "courseware/g1-flat-shapes/index.html"
+      "keywords": [
+        "Addition & Subtraction",
+        "addition",
+        "subtraction",
+        "凑十法",
+        "make ten",
+        "数的分解",
+        "number bonds",
+        "Comparison (More/Less)",
+        "比多少",
+        "多和少",
+        "同样多",
+        "more and less",
+        "compare",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-quantity-theater/index.html"
     },
     {
       "id": "shape-tailor",
@@ -2485,7 +4658,7 @@
         "primary"
       ],
       "grades": [
-        "g5"
+        "g5a"
       ],
       "tags": [
         "面积",
@@ -2495,6 +4668,30 @@
       "icon": "✂️",
       "order": 36,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m5a",
+          "bookTitle": {
+            "zh": "数学 五年级上册",
+            "en": "Math · Grade 5 · Fall"
+          },
+          "grade": "g5a",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "多边形的面积",
+            "en": "Area of polygons"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 72,
+          "page": 72,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "多边形的面积",
+            "en": "Area of polygons"
+          }
+        }
+      ],
       "keywords": [
         "Area",
         "area",
@@ -2512,6 +4709,304 @@
       "path": "courseware/shape-tailor/index.html"
     },
     {
+      "id": "change-vending",
+      "title": {
+        "zh": "找零售货机",
+        "en": "Change Machine"
+      },
+      "description": {
+        "zh": "换开零钱，放进托盘，再买一买。",
+        "en": "Exchange money, fill the tray and try a purchase."
+      },
+      "category": "math",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "人民币",
+        "加减法",
+        "3D",
+        "实验"
+      ],
+      "icon": "🪙",
+      "order": 37,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "shopping",
+          "unitTitle": {
+            "zh": "欢乐购物街",
+            "en": "Shopping street"
+          },
+          "unitKind": "topic",
+          "unitOrder": 77,
+          "page": 77,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "欢乐购物街",
+            "en": "Exchange one yuan"
+          },
+          "activity": "money-1",
+          "activityTitle": {
+            "zh": "换开一元",
+            "en": "Exchange one yuan"
+          },
+          "invite": {
+            "zh": "换开零钱，放进托盘，再买一买。",
+            "en": "Exchange money, fill the tray and try a purchase."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "shopping",
+          "unitTitle": {
+            "zh": "欢乐购物街",
+            "en": "Shopping street"
+          },
+          "unitKind": "topic",
+          "unitOrder": 77,
+          "page": 77,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "欢乐购物街",
+            "en": "Exchange one jiao"
+          },
+          "activity": "money-2",
+          "activityTitle": {
+            "zh": "换开一角",
+            "en": "Exchange one jiao"
+          },
+          "invite": {
+            "zh": "换开零钱，放进托盘，再买一买。",
+            "en": "Exchange money, fill the tray and try a purchase."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "shopping",
+          "unitTitle": {
+            "zh": "欢乐购物街",
+            "en": "Shopping street"
+          },
+          "unitKind": "topic",
+          "unitOrder": 77,
+          "page": 77,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "欢乐购物街",
+            "en": "Buy a snack"
+          },
+          "activity": "money-3",
+          "activityTitle": {
+            "zh": "买一份点心",
+            "en": "Buy a snack"
+          },
+          "invite": {
+            "zh": "换开零钱，放进托盘，再买一买。",
+            "en": "Exchange money, fill the tray and try a purchase."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "shopping",
+          "unitTitle": {
+            "zh": "欢乐购物街",
+            "en": "Shopping street"
+          },
+          "unitKind": "topic",
+          "unitOrder": 77,
+          "page": 77,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "欢乐购物街",
+            "en": "Buy a brush"
+          },
+          "activity": "money-4",
+          "activityTitle": {
+            "zh": "买一支画笔",
+            "en": "Buy a brush"
+          },
+          "invite": {
+            "zh": "换开零钱，放进托盘，再买一买。",
+            "en": "Exchange money, fill the tray and try a purchase."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "shopping",
+          "unitTitle": {
+            "zh": "欢乐购物街",
+            "en": "Shopping street"
+          },
+          "unitKind": "topic",
+          "unitOrder": 77,
+          "page": 77,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "欢乐购物街",
+            "en": "Buy a book"
+          },
+          "activity": "money-5",
+          "activityTitle": {
+            "zh": "买一本书",
+            "en": "Buy a book"
+          },
+          "invite": {
+            "zh": "换开零钱，放进托盘，再买一买。",
+            "en": "Exchange money, fill the tray and try a purchase."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "shopping",
+          "unitTitle": {
+            "zh": "欢乐购物街",
+            "en": "Shopping street"
+          },
+          "unitKind": "topic",
+          "unitOrder": 77,
+          "page": 77,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "欢乐购物街",
+            "en": "Buy a toy"
+          },
+          "activity": "money-6",
+          "activityTitle": {
+            "zh": "买一个玩具",
+            "en": "Buy a toy"
+          },
+          "invite": {
+            "zh": "换开零钱，放进托盘，再买一买。",
+            "en": "Exchange money, fill the tray and try a purchase."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "shopping",
+          "unitTitle": {
+            "zh": "欢乐购物街",
+            "en": "Shopping street"
+          },
+          "unitKind": "topic",
+          "unitOrder": 77,
+          "page": 77,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "欢乐购物街",
+            "en": "Try fen coins"
+          },
+          "activity": "money-7",
+          "activityTitle": {
+            "zh": "试试分币",
+            "en": "Try fen coins"
+          },
+          "invite": {
+            "zh": "换开零钱，放进托盘，再买一买。",
+            "en": "Exchange money, fill the tray and try a purchase."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "shopping",
+          "unitTitle": {
+            "zh": "欢乐购物街",
+            "en": "Shopping street"
+          },
+          "unitKind": "topic",
+          "unitOrder": 77,
+          "page": 77,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "欢乐购物街",
+            "en": "Explore a budget"
+          },
+          "activity": "money-8",
+          "activityTitle": {
+            "zh": "比较预算",
+            "en": "Explore a budget"
+          },
+          "invite": {
+            "zh": "换开零钱，放进托盘，再买一买。",
+            "en": "Exchange money, fill the tray and try a purchase."
+          }
+        }
+      ],
+      "keywords": [
+        "Currency (RMB)",
+        "人民币",
+        "元角分",
+        "钱币",
+        "钱",
+        "money",
+        "coins",
+        "yuan",
+        "jiao",
+        "fen",
+        "Addition & Subtraction",
+        "addition",
+        "subtraction",
+        "凑十法",
+        "make ten",
+        "数的分解",
+        "number bonds",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/change-vending/index.html"
+    },
+    {
       "id": "projectile-motion-lab",
       "title": {
         "zh": "抛体运动实验室",
@@ -2525,9 +5020,7 @@
       "levels": [
         "senior"
       ],
-      "grades": [
-        "g10"
-      ],
+      "grades": [],
       "tags": [
         "抛体运动",
         "运动",
@@ -2583,6 +5076,307 @@
       "path": "courseware/projectile-motion-lab/index.html"
     },
     {
+      "id": "g1-mixed-relay",
+      "title": {
+        "zh": "加减接力",
+        "en": "Add-Subtract Relay"
+      },
+      "description": {
+        "zh": "先接一批，再送一批，看看每站变化。",
+        "en": "Pick up a group, then drop one off and compare the stops."
+      },
+      "category": "math",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "加减法",
+        "数位",
+        "3D",
+        "实验"
+      ],
+      "icon": "🏃",
+      "order": 38,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "复习与关联",
+            "en": "Review and connections"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 83,
+          "page": 83,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "复习与关联",
+            "en": "Town relay 1"
+          },
+          "activity": "relay-1",
+          "activityTitle": {
+            "zh": "小镇接力 1",
+            "en": "Town relay 1"
+          },
+          "invite": {
+            "zh": "先接一批，再送一批，看看每站变化。",
+            "en": "Pick up a group, then drop one off and compare the stops."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "复习与关联",
+            "en": "Review and connections"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 83,
+          "page": 83,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "复习与关联",
+            "en": "Town relay 2"
+          },
+          "activity": "relay-2",
+          "activityTitle": {
+            "zh": "小镇接力 2",
+            "en": "Town relay 2"
+          },
+          "invite": {
+            "zh": "先接一批，再送一批，看看每站变化。",
+            "en": "Pick up a group, then drop one off and compare the stops."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "复习与关联",
+            "en": "Review and connections"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 83,
+          "page": 83,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "复习与关联",
+            "en": "Town relay 3"
+          },
+          "activity": "relay-3",
+          "activityTitle": {
+            "zh": "小镇接力 3",
+            "en": "Town relay 3"
+          },
+          "invite": {
+            "zh": "先接一批，再送一批，看看每站变化。",
+            "en": "Pick up a group, then drop one off and compare the stops."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "复习与关联",
+            "en": "Review and connections"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 83,
+          "page": 83,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "复习与关联",
+            "en": "Town relay 4"
+          },
+          "activity": "relay-4",
+          "activityTitle": {
+            "zh": "小镇接力 4",
+            "en": "Town relay 4"
+          },
+          "invite": {
+            "zh": "先接一批，再送一批，看看每站变化。",
+            "en": "Pick up a group, then drop one off and compare the stops."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "复习与关联",
+            "en": "Review and connections"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 83,
+          "page": 83,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "复习与关联",
+            "en": "Town relay 5"
+          },
+          "activity": "relay-5",
+          "activityTitle": {
+            "zh": "小镇接力 5",
+            "en": "Town relay 5"
+          },
+          "invite": {
+            "zh": "先接一批，再送一批，看看每站变化。",
+            "en": "Pick up a group, then drop one off and compare the stops."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "复习与关联",
+            "en": "Review and connections"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 83,
+          "page": 83,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "复习与关联",
+            "en": "Town relay 6"
+          },
+          "activity": "relay-6",
+          "activityTitle": {
+            "zh": "小镇接力 6",
+            "en": "Town relay 6"
+          },
+          "invite": {
+            "zh": "先接一批，再送一批，看看每站变化。",
+            "en": "Pick up a group, then drop one off and compare the stops."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "复习与关联",
+            "en": "Review and connections"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 83,
+          "page": 83,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "复习与关联",
+            "en": "Town relay 7"
+          },
+          "activity": "relay-7",
+          "activityTitle": {
+            "zh": "小镇接力 7",
+            "en": "Town relay 7"
+          },
+          "invite": {
+            "zh": "先接一批，再送一批，看看每站变化。",
+            "en": "Pick up a group, then drop one off and compare the stops."
+          }
+        },
+        {
+          "bookId": "m1b",
+          "bookTitle": {
+            "zh": "数学 一年级下册",
+            "en": "Math · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "复习与关联",
+            "en": "Review and connections"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 83,
+          "page": 83,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "复习与关联",
+            "en": "Town relay 8"
+          },
+          "activity": "relay-8",
+          "activityTitle": {
+            "zh": "小镇接力 8",
+            "en": "Town relay 8"
+          },
+          "invite": {
+            "zh": "先接一批，再送一批，看看每站变化。",
+            "en": "Pick up a group, then drop one off and compare the stops."
+          }
+        }
+      ],
+      "keywords": [
+        "Addition & Subtraction",
+        "addition",
+        "subtraction",
+        "凑十法",
+        "make ten",
+        "数的分解",
+        "number bonds",
+        "Place Value",
+        "place value",
+        "十进制",
+        "大数",
+        "powers of ten",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1-mixed-relay/index.html"
+    },
+    {
       "id": "statistics-sampling-lab",
       "title": {
         "zh": "抽样统计实验室",
@@ -2596,11 +5390,7 @@
       "levels": [
         "senior"
       ],
-      "grades": [
-        "g10",
-        "g11",
-        "g12"
-      ],
+      "grades": [],
       "tags": [
         "统计与抽样",
         "实验",
@@ -2645,6 +5435,60 @@
       "path": "courseware/statistics-sampling-lab/index.html"
     },
     {
+      "id": "g1-sort-laundry",
+      "title": {
+        "zh": "分类洗衣坊",
+        "en": "Sorting Laundry"
+      },
+      "description": {
+        "zh": "把洗衣篮里的东西分进合适的筐，还能换个标准再分一次。",
+        "en": "Sort the laundry into the right baskets, then try a different rule."
+      },
+      "category": "math",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g2a"
+      ],
+      "tags": [
+        "分类"
+      ],
+      "icon": "🧺",
+      "order": 39,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m2a",
+          "bookTitle": {
+            "zh": "数学 二年级上册",
+            "en": "Math · Grade 2 · Fall"
+          },
+          "grade": "g2a",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "分类与整理",
+            "en": "Sorting and organizing"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 1,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "分类与整理",
+            "en": "Sorting and organizing"
+          }
+        }
+      ],
+      "keywords": [
+        "Classification",
+        "classification",
+        "categorize"
+      ],
+      "path": "courseware/g1-sort-laundry/index.html"
+    },
+    {
       "id": "ph-lab",
       "title": {
         "zh": "酸碱魔法水",
@@ -2659,11 +5503,7 @@
         "junior",
         "senior"
       ],
-      "grades": [
-        "g8",
-        "g9",
-        "g10"
-      ],
+      "grades": [],
       "tags": [
         "酸碱",
         "溶液",
@@ -2718,10 +5558,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "编程启蒙",
         "算法",
@@ -2808,10 +5645,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g1",
-        "g2"
-      ],
+      "grades": [],
       "tags": [
         "顺序执行",
         "编程启蒙"
@@ -2844,10 +5678,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g2",
-        "g3"
-      ],
+      "grades": [],
       "tags": [
         "循环",
         "编程启蒙",
@@ -2887,10 +5718,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4"
-      ],
+      "grades": [],
       "tags": [
         "条件判断",
         "编程启蒙"
@@ -2925,11 +5753,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4",
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "调试"
       ],
@@ -2962,10 +5786,7 @@
         "primary",
         "junior"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "排序算法",
         "算法"
@@ -3001,10 +5822,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g4",
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "变量",
         "编程启蒙"
@@ -3043,10 +5861,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "函数",
         "编程启蒙"
@@ -3086,10 +5901,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g4",
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "事件驱动",
         "编程启蒙"
@@ -3127,11 +5939,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g4",
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "二进制",
         "编程启蒙"
@@ -3170,8 +5978,7 @@
         "primary"
       ],
       "grades": [
-        "g3",
-        "g4"
+        "g4a"
       ],
       "tags": [
         "音乐",
@@ -3180,6 +5987,52 @@
       "icon": "🎸",
       "order": 57,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "s4a",
+          "bookTitle": {
+            "zh": "科学 四年级上册",
+            "en": "Science · Grade 4 · Fall"
+          },
+          "grade": "g4a",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "声音",
+            "en": "Sound"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 68,
+          "page": 69,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "声音的产生、传播与变化",
+            "en": "Sound production and propagation"
+          }
+        },
+        {
+          "bookId": "s4a",
+          "bookTitle": {
+            "zh": "科学 四年级上册",
+            "en": "Science · Grade 4 · Fall"
+          },
+          "grade": "g4a",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "制作简易乐器",
+            "en": "Making instruments"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 88,
+          "page": 89,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "认识乐器与制作乐器",
+            "en": "Exploring and making instruments"
+          }
+        }
+      ],
       "keywords": [
         "Music",
         "music",
@@ -3208,11 +6061,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4",
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "编程启蒙",
         "二进制"
@@ -3250,10 +6099,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g4",
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "光学",
         "实验"
@@ -3292,10 +6138,7 @@
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2",
-        "g3",
-        "g5"
+        "g2a"
       ],
       "tags": [
         "观察",
@@ -3304,6 +6147,52 @@
       "icon": "⛵",
       "order": 58,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "s2a",
+          "bookTitle": {
+            "zh": "科学 二年级上册",
+            "en": "Science · Grade 2 · Fall"
+          },
+          "grade": "g2a",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "水和空气",
+            "en": "Water and air"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 17,
+          "page": 23,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "把它们放入水中",
+            "en": "Floating and sinking"
+          }
+        },
+        {
+          "bookId": "s2a",
+          "bookTitle": {
+            "zh": "科学 二年级上册",
+            "en": "Science · Grade 2 · Fall"
+          },
+          "grade": "g2a",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "制作小船",
+            "en": "Making boats"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 48,
+          "page": 49,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "认识船、设计和制作小船",
+            "en": "Designing and building boats"
+          }
+        }
+      ],
       "keywords": [
         "Observation",
         "observation",
@@ -3333,8 +6222,7 @@
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2"
+        "g1a"
       ],
       "tags": [
         "观察",
@@ -3343,6 +6231,30 @@
       "icon": "📦",
       "order": 59,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "s1a",
+          "bookTitle": {
+            "zh": "科学 一年级上册",
+            "en": "Science · Grade 1 · Fall"
+          },
+          "grade": "g1a",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "我们的感觉器官",
+            "en": "Our senses"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 16,
+          "page": 17,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "我们怎样知道",
+            "en": "Using our senses"
+          }
+        }
+      ],
       "keywords": [
         "Observation",
         "observation",
@@ -3379,10 +6291,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4"
-      ],
+      "grades": [],
       "tags": [
         "算法",
         "策略",
@@ -3423,10 +6332,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g2",
-        "g3"
-      ],
+      "grades": [],
       "tags": [
         "生态",
         "观察",
@@ -3523,8 +6429,7 @@
         "primary"
       ],
       "grades": [
-        "g3",
-        "g4"
+        "g6a"
       ],
       "tags": [
         "水循环",
@@ -3533,6 +6438,30 @@
       ],
       "icon": "☁️",
       "order": 61,
+      "curriculum": [
+        {
+          "bookId": "s6a",
+          "bookTitle": {
+            "zh": "科学 六年级上册",
+            "en": "Science · Grade 6 · Fall"
+          },
+          "grade": "g6a",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "水和天气",
+            "en": "Water and weather"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 41,
+          "page": 42,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "雾和云、雨和雪",
+            "en": "Fog, clouds, rain and snow"
+          }
+        }
+      ],
       "keywords": [
         "Water Cycle",
         "water cycle",
@@ -3565,11 +6494,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4",
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "物质三态",
         "分子运动",
@@ -3613,11 +6538,7 @@
         "primary",
         "junior"
       ],
-      "grades": [
-        "g4",
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "电路",
         "实验"
@@ -3660,9 +6581,7 @@
         "junior"
       ],
       "grades": [
-        "g4",
-        "g5",
-        "g6"
+        "g5b"
       ],
       "tags": [
         "地球运动",
@@ -3670,6 +6589,30 @@
       ],
       "icon": "🌍",
       "order": 64,
+      "curriculum": [
+        {
+          "bookId": "s5b",
+          "bookTitle": {
+            "zh": "科学 五年级下册",
+            "en": "Science · Grade 5 · Spring"
+          },
+          "grade": "g5b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "昼夜与四季",
+            "en": "Day, night and seasons"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 2,
+          "page": 3,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "白天与黑夜、四季的形成",
+            "en": "Day, night and seasons"
+          }
+        }
+      ],
       "keywords": [
         "Earth's Motion",
         "自转",
@@ -3705,10 +6648,7 @@
         "primary"
       ],
       "grades": [
-        "g3",
-        "g4",
-        "g5",
-        "g6"
+        "g4b"
       ],
       "tags": [
         "月相",
@@ -3718,6 +6658,30 @@
       ],
       "icon": "🌕",
       "order": 65,
+      "curriculum": [
+        {
+          "bookId": "s4b",
+          "bookTitle": {
+            "zh": "科学 四年级下册",
+            "en": "Science · Grade 4 · Spring"
+          },
+          "grade": "g4b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "地球 太阳 月球",
+            "en": "Earth, Sun and Moon"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 38,
+          "page": 45,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "月相的变化",
+            "en": "Moon phases"
+          }
+        }
+      ],
       "keywords": [
         "Moon Phases",
         "moon phases",
@@ -3760,10 +6724,7 @@
         "primary",
         "junior"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "星座",
         "天文",
@@ -3807,9 +6768,7 @@
         "primary"
       ],
       "grades": [
-        "g3",
-        "g4",
-        "g5"
+        "g3a"
       ],
       "tags": [
         "人体",
@@ -3818,6 +6777,30 @@
       ],
       "icon": "🚣",
       "order": 67,
+      "curriculum": [
+        {
+          "bookId": "s3a",
+          "bookTitle": {
+            "zh": "科学 三年级上册",
+            "en": "Science · Grade 3 · Fall"
+          },
+          "grade": "g3a",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "消化与呼吸",
+            "en": "Digestion and breathing"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 57,
+          "page": 64,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "消化器官与食物营养",
+            "en": "Digestion and nutrition"
+          }
+        }
+      ],
       "keywords": [
         "Human Body",
         "human body",
@@ -3845,8 +6828,7 @@
         "primary"
       ],
       "grades": [
-        "g2",
-        "g3"
+        "g3a"
       ],
       "tags": [
         "磁铁",
@@ -3854,6 +6836,30 @@
       ],
       "icon": "🏒",
       "order": 68,
+      "curriculum": [
+        {
+          "bookId": "s3a",
+          "bookTitle": {
+            "zh": "科学 三年级上册",
+            "en": "Science · Grade 3 · Fall"
+          },
+          "grade": "g3a",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "有趣的磁铁",
+            "en": "Magnets"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 2,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "磁铁的磁极与作用",
+            "en": "Magnetic poles and forces"
+          }
+        }
+      ],
       "keywords": [
         "Magnets",
         "magnets",
@@ -3885,8 +6891,7 @@
         "primary"
       ],
       "grades": [
-        "g5",
-        "g6"
+        "g5b"
       ],
       "tags": [
         "观察",
@@ -3895,6 +6900,52 @@
       "icon": "🏗️",
       "order": 68,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "s5b",
+          "bookTitle": {
+            "zh": "科学 五年级下册",
+            "en": "Science · Grade 5 · Spring"
+          },
+          "grade": "g5b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "简单机械",
+            "en": "Simple machines"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 41,
+          "page": 42,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "杠杆、滑轮与斜面",
+            "en": "Levers, pulleys and ramps"
+          }
+        },
+        {
+          "bookId": "s5b",
+          "bookTitle": {
+            "zh": "科学 五年级下册",
+            "en": "Science · Grade 5 · Spring"
+          },
+          "grade": "g5b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "制作省力装置",
+            "en": "Making labor-saving devices"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 56,
+          "page": 57,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "设计制作省力装置",
+            "en": "Designing labor-saving devices"
+          }
+        }
+      ],
       "keywords": [
         "Observation",
         "observation",
@@ -3923,10 +6974,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4"
-      ],
+      "grades": [],
       "tags": [
         "空气",
         "质量",
@@ -3982,9 +7030,7 @@
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2",
-        "g3"
+        "g6a"
       ],
       "tags": [
         "分类",
@@ -3994,6 +7040,30 @@
       "icon": "♻️",
       "order": 69,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "s6a",
+          "bookTitle": {
+            "zh": "科学 六年级上册",
+            "en": "Science · Grade 6 · Fall"
+          },
+          "grade": "g6a",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "自然资源",
+            "en": "Natural resources"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 61,
+          "page": 75,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "资源的循环利用",
+            "en": "Recycling resources"
+          }
+        }
+      ],
       "keywords": [
         "Classification",
         "classification",
@@ -4070,10 +7140,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4"
-      ],
+      "grades": [],
       "tags": [
         "溶液",
         "混合物",
@@ -4134,10 +7201,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "算法",
         "编程启蒙",
@@ -4222,10 +7286,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4"
-      ],
+      "grades": [],
       "tags": [
         "化石",
         "地层",
@@ -4280,9 +7341,7 @@
         "primary"
       ],
       "grades": [
-        "g3",
-        "g4",
-        "g5"
+        "g6a"
       ],
       "tags": [
         "生态",
@@ -4293,6 +7352,30 @@
       "icon": "🌿",
       "order": 72,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "s6a",
+          "bookTitle": {
+            "zh": "科学 六年级上册",
+            "en": "Science · Grade 6 · Fall"
+          },
+          "grade": "g6a",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "相互依存的生命世界",
+            "en": "Interdependent life"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 11,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "有趣的食物联系",
+            "en": "Food webs"
+          }
+        }
+      ],
       "keywords": [
         "Ecology",
         "ecology",
@@ -4331,15 +7414,7 @@
         "junior",
         "senior"
       ],
-      "grades": [
-        "g3",
-        "g4",
-        "g5",
-        "g6",
-        "g7",
-        "g8",
-        "g9"
-      ],
+      "grades": [],
       "tags": [
         "空间想象",
         "推理",
@@ -4404,10 +7479,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "推理",
         "策略",
@@ -4459,9 +7531,7 @@
         "primary"
       ],
       "grades": [
-        "g1",
-        "g2",
-        "g3"
+        "g3b"
       ],
       "tags": [
         "植物",
@@ -4471,6 +7541,30 @@
       "icon": "🌱",
       "order": 72,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "s3b",
+          "bookTitle": {
+            "zh": "科学 三年级下册",
+            "en": "Science · Grade 3 · Spring"
+          },
+          "grade": "g3b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "从种子到种子",
+            "en": "From seed to seed"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 15,
+          "page": 16,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "播种发芽、根和茎、开花结果",
+            "en": "Germination and plant growth"
+          }
+        }
+      ],
       "keywords": [
         "Plants",
         "plants",
@@ -4505,15 +7599,7 @@
         "junior",
         "senior"
       ],
-      "grades": [
-        "g3",
-        "g4",
-        "g5",
-        "g6",
-        "g7",
-        "g8",
-        "g9"
-      ],
+      "grades": [],
       "tags": [
         "魔方",
         "空间想象",
@@ -4557,10 +7643,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "分类",
         "观察",
@@ -4653,9 +7736,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g1b"
-      ],
+      "grades": [],
       "tags": [
         "找规律",
         "推理"
@@ -4699,7 +7780,7 @@
         "primary"
       ],
       "grades": [
-        "g4"
+        "g4b"
       ],
       "tags": [
         "平面图形",
@@ -4709,6 +7790,30 @@
       "icon": "🔺",
       "order": 73,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m4b",
+          "bookTitle": {
+            "zh": "数学 四年级下册",
+            "en": "Math · Grade 4 · Spring"
+          },
+          "grade": "g4b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "三角形",
+            "en": "Triangles"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 57,
+          "page": 57,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "三角形的特征与内角和",
+            "en": "Properties of triangles"
+          }
+        }
+      ],
       "keywords": [
         "2D Shapes",
         "2d shapes",
@@ -4742,9 +7847,7 @@
         "primary"
       ],
       "grades": [
-        "g4",
-        "g5",
-        "g6"
+        "g4b"
       ],
       "tags": [
         "运算",
@@ -4754,6 +7857,30 @@
       "icon": "👽",
       "order": 74,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m4b",
+          "bookTitle": {
+            "zh": "数学 四年级下册",
+            "en": "Math · Grade 4 · Spring"
+          },
+          "grade": "g4b",
+          "unitId": "9",
+          "unitTitle": {
+            "zh": "数学广角——鸡兔同笼",
+            "en": "Chickens and rabbits"
+          },
+          "unitKind": "unit",
+          "unitNumber": 9,
+          "unitOrder": 99,
+          "page": 99,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "鸡兔同笼",
+            "en": "Chickens and rabbits"
+          }
+        }
+      ],
       "keywords": [
         "Arithmetic",
         "arithmetic",
@@ -4795,11 +7922,7 @@
         "primary",
         "junior"
       ],
-      "grades": [
-        "g4",
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "推理",
         "益智游戏"
@@ -4842,11 +7965,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g1",
-        "g2",
-        "g3"
-      ],
+      "grades": [],
       "tags": [
         "集合",
         "分类",
@@ -4887,11 +8006,7 @@
         "primary",
         "junior"
       ],
-      "grades": [
-        "g4",
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "策略",
         "推理",
@@ -4941,9 +8056,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g1b"
-      ],
+      "grades": [],
       "tags": [
         "平面图形",
         "空间想象",
@@ -4983,11 +8096,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g2",
-        "g3",
-        "g4"
-      ],
+      "grades": [],
       "tags": [
         "推理",
         "策略",
@@ -5039,11 +8148,7 @@
         "primary",
         "junior"
       ],
-      "grades": [
-        "g4",
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "推理",
         "策略",
@@ -5094,11 +8199,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4",
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "推理",
         "益智游戏"
@@ -5142,11 +8243,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g4",
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "空间想象",
         "推理",
@@ -5195,11 +8292,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g3",
-        "g4",
-        "g5"
-      ],
+      "grades": [],
       "tags": [
         "空间想象",
         "推理",
@@ -5256,10 +8349,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g5",
-        "g6"
-      ],
+      "grades": [],
       "tags": [
         "推理",
         "策略",
@@ -5311,11 +8401,7 @@
         "primary",
         "junior"
       ],
-      "grades": [
-        "g5",
-        "g6",
-        "g7"
-      ],
+      "grades": [],
       "tags": [
         "物质三态",
         "分子运动",
@@ -5360,14 +8446,13 @@
         "zh": "派对魔法师专赌「必然」：先拼命给客人排不同生日月份想赢他，再接过魔法棒，用抽屉原理开出稳赢的袜子与同名赌局。",
         "en": "A party wizard only bets on sure things. First try to beat him by seating guests with different birth months—then take the wand and open sure-win sock and name bets with the pigeonhole principle."
       },
-      "category": "logic",
+      "category": "math",
       "levels": [
         "primary",
         "junior"
       ],
       "grades": [
-        "g5",
-        "g6"
+        "g6b"
       ],
       "tags": [
         "推理",
@@ -5377,6 +8462,30 @@
       "icon": "🎈",
       "order": 81,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "m6b",
+          "bookTitle": {
+            "zh": "数学 六年级下册",
+            "en": "Math · Grade 6 · Spring"
+          },
+          "grade": "g6b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "数学广角——鸽巢问题",
+            "en": "Pigeonhole principle"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 67,
+          "page": 67,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "鸽巢问题",
+            "en": "Pigeonhole principle"
+          }
+        }
+      ],
       "keywords": [
         "Reasoning",
         "reasoning",
@@ -5420,12 +8529,7 @@
         "primary",
         "junior"
       ],
-      "grades": [
-        "g4",
-        "g5",
-        "g6",
-        "g7"
-      ],
+      "grades": [],
       "tags": [
         "计算机原理",
         "编程启蒙",
@@ -5482,10 +8586,7 @@
       "levels": [
         "senior"
       ],
-      "grades": [
-        "g10",
-        "g12"
-      ],
+      "grades": [],
       "tags": [
         "有机化合物",
         "官能团",
@@ -5555,9 +8656,7 @@
       "levels": [
         "senior"
       ],
-      "grades": [
-        "g11"
-      ],
+      "grades": [],
       "tags": [
         "圆周运动",
         "万有引力",
@@ -5622,9 +8721,7 @@
       "levels": [
         "senior"
       ],
-      "grades": [
-        "g12"
-      ],
+      "grades": [],
       "tags": [
         "DNA",
         "遗传",
@@ -5692,9 +8789,7 @@
         "primary"
       ],
       "grades": [
-        "g2",
-        "g3",
-        "g4"
+        "g6b"
       ],
       "tags": [
         "动物",
@@ -5704,6 +8799,30 @@
       "icon": "🦎",
       "order": 85,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "s6b",
+          "bookTitle": {
+            "zh": "科学 六年级下册",
+            "en": "Science · Grade 6 · Spring"
+          },
+          "grade": "g6b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "生物与环境",
+            "en": "Life and environment"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 2,
+          "page": 6,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "动物对环境的适应",
+            "en": "Animal adaptations"
+          }
+        }
+      ],
       "keywords": [
         "Animals",
         "animals",
@@ -5744,8 +8863,7 @@
         "senior"
       ],
       "grades": [
-        "g9",
-        "g11"
+        "g9"
       ],
       "tags": [
         "欧姆定律",
@@ -5755,6 +8873,30 @@
       ],
       "icon": "⚡",
       "order": 174,
+      "curriculum": [
+        {
+          "bookId": "p9",
+          "bookTitle": {
+            "zh": "物理 九年级全一册",
+            "en": "Physics · Grade 9 · Full year"
+          },
+          "grade": "g9",
+          "unitId": "17",
+          "unitTitle": {
+            "zh": "欧姆定律",
+            "en": "Ohm’s law"
+          },
+          "unitKind": "chapter",
+          "unitNumber": 17,
+          "unitOrder": 92,
+          "page": 93,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "电流与电压、电阻的关系",
+            "en": "Current, voltage and resistance"
+          }
+        }
+      ],
       "keywords": [
         "Ohm's Law",
         "ohm's law",
@@ -5805,7 +8947,7 @@
         "junior"
       ],
       "grades": [
-        "g9"
+        "g9a"
       ],
       "tags": [
         "质量",
@@ -5816,6 +8958,30 @@
       "icon": "⚗️",
       "order": 175,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "h9a",
+          "bookTitle": {
+            "zh": "化学 九年级上册",
+            "en": "Chemistry · Grade 9 · Fall"
+          },
+          "grade": "g9a",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "化学反应的定量关系",
+            "en": "Quantitative relationships in reactions"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 109,
+          "page": 110,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "质量守恒定律",
+            "en": "Conservation of mass"
+          }
+        }
+      ],
       "keywords": [
         "Mass",
         "mass",
@@ -5858,7 +9024,7 @@
         "junior"
       ],
       "grades": [
-        "g7"
+        "g7a"
       ],
       "tags": [
         "显微镜",
@@ -5871,6 +9037,30 @@
       "icon": "🔬",
       "order": 176,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "b7a",
+          "bookTitle": {
+            "zh": "生物学 七年级上册",
+            "en": "Biology · Grade 7 · Fall"
+          },
+          "grade": "g7a",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "生物和细胞",
+            "en": "Life and cells"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 1,
+          "page": 12,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "第二章 认识细胞",
+            "en": "Chapter 2: Cells"
+          }
+        }
+      ],
       "keywords": [
         "Microscope",
         "microscope",
@@ -5946,6 +9136,30 @@
       "icon": "🌱",
       "order": 208,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1a",
+          "bookTitle": {
+            "zh": "语文 一年级上册",
+            "en": "Chinese · Grade 1 · Fall"
+          },
+          "grade": "g1a",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 8,
+          "page": 8,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "天地人、口耳目手足、日月山川",
+            "en": "First characters"
+          }
+        }
+      ],
       "keywords": [
         "Character Recognition",
         "识字",
@@ -5980,6 +9194,74 @@
       "icon": "🚃",
       "order": 209,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1a",
+          "bookTitle": {
+            "zh": "语文 一年级上册",
+            "en": "Chinese · Grade 1 · Fall"
+          },
+          "grade": "g1a",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "汉语拼音",
+            "en": "Pinyin"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 20,
+          "page": 20,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "汉语拼音综合（第二至四单元）",
+            "en": "Pinyin practice across Units 2–4"
+          }
+        },
+        {
+          "bookId": "c1a",
+          "bookTitle": {
+            "zh": "语文 一年级上册",
+            "en": "Chinese · Grade 1 · Fall"
+          },
+          "grade": "g1a",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "汉语拼音",
+            "en": "Pinyin"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 32,
+          "page": 32,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "汉语拼音综合（第二至四单元）",
+            "en": "Pinyin practice across Units 2–4"
+          }
+        },
+        {
+          "bookId": "c1a",
+          "bookTitle": {
+            "zh": "语文 一年级上册",
+            "en": "Chinese · Grade 1 · Fall"
+          },
+          "grade": "g1a",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "汉语拼音",
+            "en": "Pinyin"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 45,
+          "page": 45,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "汉语拼音综合（第二至四单元）",
+            "en": "Pinyin practice across Units 2–4"
+          }
+        }
+      ],
       "keywords": [
         "Pinyin",
         "pinyin",
@@ -6014,6 +9296,29 @@
       "icon": "🖌️",
       "order": 210,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1a",
+          "bookTitle": {
+            "zh": "语文 一年级上册",
+            "en": "Chinese · Grade 1 · Fall"
+          },
+          "grade": "g1a",
+          "unitId": "strokes",
+          "unitTitle": {
+            "zh": "笔画名称表",
+            "en": "Stroke reference"
+          },
+          "unitKind": "topic",
+          "unitOrder": 109,
+          "page": 109,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "笔画名称与书写方向",
+            "en": "Strokes and writing direction"
+          }
+        }
+      ],
       "keywords": [
         "Character Recognition",
         "识字",
@@ -6039,9 +9344,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g1a"
-      ],
+      "grades": [],
       "tags": [
         "识字"
       ],
@@ -6083,6 +9386,30 @@
       "icon": "🥁",
       "order": 212,
       "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1a",
+          "bookTitle": {
+            "zh": "语文 一年级上册",
+            "en": "Chinese · Grade 1 · Fall"
+          },
+          "grade": "g1a",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 73,
+          "page": 73,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "对韵歌",
+            "en": "Rhyming pairs"
+          }
+        }
+      ],
       "keywords": [
         "Character Recognition",
         "识字",
@@ -6113,9 +9440,7 @@
       "levels": [
         "primary"
       ],
-      "grades": [
-        "g1a"
-      ],
+      "grades": [],
       "tags": [
         "识字"
       ],
@@ -6132,6 +9457,2481 @@
         "chinese characters"
       ],
       "path": "courseware/g1-sentence-train/index.html"
+    },
+    {
+      "id": "g1b-character-lab",
+      "title": {
+        "zh": "汉字变变屋",
+        "en": "Character Workshop"
+      },
+      "description": {
+        "zh": "换个部件，看看字怎样变。",
+        "en": "Swap a part and watch the character change."
+      },
+      "category": "chinese",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "识字",
+        "3D",
+        "实验"
+      ],
+      "icon": "🏡",
+      "order": 220,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 2,
+          "page": 6,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "小青蛙",
+            "en": "Clear water"
+          },
+          "activity": "character-1",
+          "activityTitle": {
+            "zh": "清水",
+            "en": "Clear water"
+          },
+          "invite": {
+            "zh": "换个部件，看看字怎样变。",
+            "en": "Swap a part and watch the character change."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 2,
+          "page": 6,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "小青蛙",
+            "en": "Feelings"
+          },
+          "activity": "character-2",
+          "activityTitle": {
+            "zh": "好心情",
+            "en": "Feelings"
+          },
+          "invite": {
+            "zh": "换个部件，看看字怎样变。",
+            "en": "Swap a part and watch the character change."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 48,
+          "page": 56,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "语文园地五",
+            "en": "The 包 family"
+          },
+          "activity": "character-3",
+          "activityTitle": {
+            "zh": "包字变一变",
+            "en": "The 包 family"
+          },
+          "invite": {
+            "zh": "换个部件，看看字怎样变。",
+            "en": "Swap a part and watch the character change."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 48,
+          "page": 52,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "操场上",
+            "en": "Hands at work"
+          },
+          "activity": "character-4",
+          "activityTitle": {
+            "zh": "手的动作",
+            "en": "Hands at work"
+          },
+          "invite": {
+            "zh": "换个部件，看看字怎样变。",
+            "en": "Swap a part and watch the character change."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 78,
+          "page": 93,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "语文园地七",
+            "en": "Insect radical"
+          },
+          "activity": "character-5",
+          "activityTitle": {
+            "zh": "虫字旁",
+            "en": "Insect radical"
+          },
+          "invite": {
+            "zh": "换个部件，看看字怎样变。",
+            "en": "Swap a part and watch the character change."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 78,
+          "page": 93,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "语文园地七",
+            "en": "Bird radical"
+          },
+          "activity": "character-6",
+          "activityTitle": {
+            "zh": "鸟字旁",
+            "en": "Bird radical"
+          },
+          "invite": {
+            "zh": "换个部件，看看字怎样变。",
+            "en": "Swap a part and watch the character change."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 48,
+          "page": 56,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "语文园地五",
+            "en": "More 包 words"
+          },
+          "activity": "character-7",
+          "activityTitle": {
+            "zh": "再看包字",
+            "en": "More 包 words"
+          },
+          "invite": {
+            "zh": "换个部件，看看字怎样变。",
+            "en": "Swap a part and watch the character change."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 16,
+          "page": 18,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "吃水不忘挖井人（吃）／动物王国开大会（听）",
+            "en": "Mouth and speech"
+          },
+          "activity": "character-8",
+          "activityTitle": {
+            "zh": "口与问",
+            "en": "Mouth and speech"
+          },
+          "invite": {
+            "zh": "换个部件，看看字怎样变。",
+            "en": "Swap a part and watch the character change."
+          }
+        }
+      ],
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-character-lab/index.html"
+    },
+    {
+      "id": "g1b-writing-workshop",
+      "title": {
+        "zh": "写字小工坊",
+        "en": "Little Writing Studio"
+      },
+      "description": {
+        "zh": "从亮点出发，慢慢写一笔。",
+        "en": "Start at the glowing dot and trace a stroke."
+      },
+      "category": "chinese",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "识字",
+        "3D",
+        "实验"
+      ],
+      "icon": "🖌️",
+      "order": 221,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "8",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 8,
+          "unitOrder": 98,
+          "page": 101,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "棉花姑娘／写字表",
+            "en": "Write 干"
+          },
+          "activity": "writing-1",
+          "activityTitle": {
+            "zh": "写「干」",
+            "en": "Write 干"
+          },
+          "invite": {
+            "zh": "从亮点出发，慢慢写一笔。",
+            "en": "Start at the glowing dot and trace a stroke."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 35,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "语文园地三",
+            "en": "Write 千"
+          },
+          "activity": "writing-2",
+          "activityTitle": {
+            "zh": "写「千」",
+            "en": "Write 千"
+          },
+          "invite": {
+            "zh": "从亮点出发，慢慢写一笔。",
+            "en": "Start at the glowing dot and trace a stroke."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 35,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "语文园地三",
+            "en": "Write 止"
+          },
+          "activity": "writing-3",
+          "activityTitle": {
+            "zh": "写「止」",
+            "en": "Write 止"
+          },
+          "invite": {
+            "zh": "从亮点出发，慢慢写一笔。",
+            "en": "Start at the glowing dot and trace a stroke."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 35,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "语文园地三",
+            "en": "Write 旦"
+          },
+          "activity": "writing-4",
+          "activityTitle": {
+            "zh": "写「旦」",
+            "en": "Write 旦"
+          },
+          "invite": {
+            "zh": "从亮点出发，慢慢写一笔。",
+            "en": "Start at the glowing dot and trace a stroke."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 2,
+          "page": 5,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "姓氏歌／写字表",
+            "en": "Write 古"
+          },
+          "activity": "writing-5",
+          "activityTitle": {
+            "zh": "写「古」",
+            "en": "Write 古"
+          },
+          "invite": {
+            "zh": "从亮点出发，慢慢写一笔。",
+            "en": "Start at the glowing dot and trace a stroke."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 78,
+          "page": 89,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "动物王国开大会／写字表",
+            "en": "Write 听"
+          },
+          "activity": "writing-6",
+          "activityTitle": {
+            "zh": "写「听」",
+            "en": "Write 听"
+          },
+          "invite": {
+            "zh": "从亮点出发，慢慢写一笔。",
+            "en": "Start at the glowing dot and trace a stroke."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 30,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "树和喜鹊／写字表",
+            "en": "Write 回"
+          },
+          "activity": "writing-7",
+          "activityTitle": {
+            "zh": "写「回」",
+            "en": "Write 回"
+          },
+          "invite": {
+            "zh": "从亮点出发，慢慢写一笔。",
+            "en": "Start at the glowing dot and trace a stroke."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 78,
+          "page": 89,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "动物王国开大会／写字表",
+            "en": "Write 国"
+          },
+          "activity": "writing-8",
+          "activityTitle": {
+            "zh": "写「国」",
+            "en": "Write 国"
+          },
+          "invite": {
+            "zh": "从亮点出发，慢慢写一笔。",
+            "en": "Start at the glowing dot and trace a stroke."
+          }
+        }
+      ],
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-writing-workshop/index.html"
+    },
+    {
+      "id": "g1b-word-world",
+      "title": {
+        "zh": "词语生活馆",
+        "en": "Words in Motion"
+      },
+      "description": {
+        "zh": "把物件放到台上，让词语动起来。",
+        "en": "Put an object on the stage and set its word in motion."
+      },
+      "category": "chinese",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "识字",
+        "3D",
+        "实验"
+      ],
+      "icon": "🌿",
+      "order": 222,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 2,
+          "page": 2,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "春夏秋冬／语文园地一",
+            "en": "Spring arrives"
+          },
+          "activity": "word-1",
+          "activityTitle": {
+            "zh": "春天来了",
+            "en": "Spring arrives"
+          },
+          "invite": {
+            "zh": "把物件放到台上，让词语动起来。",
+            "en": "Put an object on the stage and set its word in motion."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 31,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "怎么都快乐",
+            "en": "Play together"
+          },
+          "activity": "word-2",
+          "activityTitle": {
+            "zh": "一起玩",
+            "en": "Play together"
+          },
+          "invite": {
+            "zh": "把物件放到台上，让词语动起来。",
+            "en": "Put an object on the stage and set its word in motion."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 39,
+          "page": 44,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "语文园地四",
+            "en": "Everyday objects"
+          },
+          "activity": "word-3",
+          "activityTitle": {
+            "zh": "生活中的物件",
+            "en": "Everyday objects"
+          },
+          "invite": {
+            "zh": "把物件放到台上，让词语动起来。",
+            "en": "Put an object on the stage and set its word in motion."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 39,
+          "page": 42,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "端午粽",
+            "en": "Rice dumplings"
+          },
+          "activity": "word-4",
+          "activityTitle": {
+            "zh": "好吃的粽子",
+            "en": "Rice dumplings"
+          },
+          "invite": {
+            "zh": "把物件放到台上，让词语动起来。",
+            "en": "Put an object on the stage and set its word in motion."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 48,
+          "page": 50,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "古对今",
+            "en": "Round and square"
+          },
+          "activity": "word-5",
+          "activityTitle": {
+            "zh": "圆和方",
+            "en": "Round and square"
+          },
+          "invite": {
+            "zh": "把物件放到台上，让词语动起来。",
+            "en": "Put an object on the stage and set its word in motion."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 48,
+          "page": 48,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "动物儿歌",
+            "en": "Animal actions"
+          },
+          "activity": "word-6",
+          "activityTitle": {
+            "zh": "动物在哪里",
+            "en": "Animal actions"
+          },
+          "invite": {
+            "zh": "把物件放到台上，让词语动起来。",
+            "en": "Put an object on the stage and set its word in motion."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 61,
+          "page": 66,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "荷叶圆圆",
+            "en": "Lotus leaves"
+          },
+          "activity": "word-7",
+          "activityTitle": {
+            "zh": "荷叶圆圆",
+            "en": "Lotus leaves"
+          },
+          "invite": {
+            "zh": "把物件放到台上，让词语动起来。",
+            "en": "Put an object on the stage and set its word in motion."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 78,
+          "page": 93,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "语文园地七",
+            "en": "Everyday actions"
+          },
+          "activity": "word-8",
+          "activityTitle": {
+            "zh": "整理生活",
+            "en": "Everyday actions"
+          },
+          "invite": {
+            "zh": "把物件放到台上，让词语动起来。",
+            "en": "Put an object on the stage and set its word in motion."
+          }
+        }
+      ],
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-word-world/index.html"
+    },
+    {
+      "id": "g1b-dictionary-house",
+      "title": {
+        "zh": "音序小书屋",
+        "en": "Alphabet Dictionary"
+      },
+      "description": {
+        "zh": "翻首字母，再找音节和汉字。",
+        "en": "Open the initial, then find the syllable and character."
+      },
+      "category": "chinese",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "识字",
+        "拼音",
+        "3D",
+        "实验"
+      ],
+      "icon": "📖",
+      "order": 223,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 34,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "语文园地一字母表／语文园地三音序查字法",
+            "en": "Find 母"
+          },
+          "activity": "dictionary-1",
+          "activityTitle": {
+            "zh": "查「母」",
+            "en": "Find 母"
+          },
+          "invite": {
+            "zh": "翻首字母，再找音节和汉字。",
+            "en": "Open the initial, then find the syllable and character."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 34,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "语文园地一字母表／语文园地三音序查字法",
+            "en": "Find 止"
+          },
+          "activity": "dictionary-2",
+          "activityTitle": {
+            "zh": "查「止」",
+            "en": "Find 止"
+          },
+          "invite": {
+            "zh": "翻首字母，再找音节和汉字。",
+            "en": "Open the initial, then find the syllable and character."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 34,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "语文园地一字母表／语文园地三音序查字法",
+            "en": "Find 斤"
+          },
+          "activity": "dictionary-3",
+          "activityTitle": {
+            "zh": "查「斤」",
+            "en": "Find 斤"
+          },
+          "invite": {
+            "zh": "翻首字母，再找音节和汉字。",
+            "en": "Open the initial, then find the syllable and character."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 34,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "语文园地一字母表／语文园地三音序查字法",
+            "en": "Find 寸"
+          },
+          "activity": "dictionary-4",
+          "activityTitle": {
+            "zh": "查「寸」",
+            "en": "Find 寸"
+          },
+          "invite": {
+            "zh": "翻首字母，再找音节和汉字。",
+            "en": "Open the initial, then find the syllable and character."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 34,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "语文园地一字母表／语文园地三音序查字法",
+            "en": "Find 丁"
+          },
+          "activity": "dictionary-5",
+          "activityTitle": {
+            "zh": "查「丁」",
+            "en": "Find 丁"
+          },
+          "invite": {
+            "zh": "翻首字母，再找音节和汉字。",
+            "en": "Open the initial, then find the syllable and character."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 34,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "语文园地一字母表／语文园地三音序查字法",
+            "en": "Find 千"
+          },
+          "activity": "dictionary-6",
+          "activityTitle": {
+            "zh": "查「千」",
+            "en": "Find 千"
+          },
+          "invite": {
+            "zh": "翻首字母，再找音节和汉字。",
+            "en": "Open the initial, then find the syllable and character."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 34,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "语文园地一字母表／语文园地三音序查字法",
+            "en": "Find 全"
+          },
+          "activity": "dictionary-7",
+          "activityTitle": {
+            "zh": "查「全」",
+            "en": "Find 全"
+          },
+          "invite": {
+            "zh": "翻首字母，再找音节和汉字。",
+            "en": "Open the initial, then find the syllable and character."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 34,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "语文园地一字母表／语文园地三音序查字法",
+            "en": "Find 旦"
+          },
+          "activity": "dictionary-8",
+          "activityTitle": {
+            "zh": "查「旦」",
+            "en": "Find 旦"
+          },
+          "invite": {
+            "zh": "翻首字母，再找音节和汉字。",
+            "en": "Open the initial, then find the syllable and character."
+          }
+        }
+      ],
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "Pinyin",
+        "pinyin",
+        "汉语拼音",
+        "声母",
+        "韵母",
+        "initials",
+        "finals",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-dictionary-house/index.html"
+    },
+    {
+      "id": "g1b-sentence-studio",
+      "title": {
+        "zh": "句子造景台",
+        "en": "Sentence Scene Studio"
+      },
+      "description": {
+        "zh": "安排主角、地点和动作，再演一遍。",
+        "en": "Choose who, where and an action, then play the scene."
+      },
+      "category": "chinese",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "识字",
+        "3D",
+        "实验"
+      ],
+      "icon": "🎬",
+      "order": 224,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 16,
+          "page": 20,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "我多想去看看",
+            "en": "Places I want to see"
+          },
+          "activity": "sentence-1",
+          "activityTitle": {
+            "zh": "我想去看看",
+            "en": "Places I want to see"
+          },
+          "invite": {
+            "zh": "安排主角、地点和动作，再演一遍。",
+            "en": "Choose who, where and an action, then play the scene."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 26,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "小公鸡和小鸭子",
+            "en": "Doing things together"
+          },
+          "activity": "sentence-2",
+          "activityTitle": {
+            "zh": "一起做事",
+            "en": "Doing things together"
+          },
+          "invite": {
+            "zh": "安排主角、地点和动作，再演一遍。",
+            "en": "Choose who, where and an action, then play the scene."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 31,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "怎么都快乐",
+            "en": "Happy activities"
+          },
+          "activity": "sentence-3",
+          "activityTitle": {
+            "zh": "一个人也快乐",
+            "en": "Happy activities"
+          },
+          "invite": {
+            "zh": "安排主角、地点和动作，再演一遍。",
+            "en": "Choose who, where and an action, then play the scene."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 39,
+          "page": 40,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "夜色",
+            "en": "Looking at the night"
+          },
+          "activity": "sentence-4",
+          "activityTitle": {
+            "zh": "勇敢看夜色",
+            "en": "Looking at the night"
+          },
+          "invite": {
+            "zh": "安排主角、地点和动作，再演一遍。",
+            "en": "Choose who, where and an action, then play the scene."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 48,
+          "page": 50,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "古对今／语文园地五",
+            "en": "Describing things"
+          },
+          "activity": "sentence-5",
+          "activityTitle": {
+            "zh": "词语有节奏",
+            "en": "Describing things"
+          },
+          "invite": {
+            "zh": "安排主角、地点和动作，再演一遍。",
+            "en": "Choose who, where and an action, then play the scene."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 61,
+          "page": 66,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "荷叶圆圆",
+            "en": "Friends by the lotus"
+          },
+          "activity": "sentence-6",
+          "activityTitle": {
+            "zh": "荷叶上的朋友",
+            "en": "Friends by the lotus"
+          },
+          "invite": {
+            "zh": "安排主角、地点和动作，再演一遍。",
+            "en": "Choose who, where and an action, then play the scene."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 61,
+          "page": 74,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "语文园地六",
+            "en": "Add detail"
+          },
+          "activity": "sentence-7",
+          "activityTitle": {
+            "zh": "把句子说具体",
+            "en": "Add detail"
+          },
+          "invite": {
+            "zh": "安排主角、地点和动作，再演一遍。",
+            "en": "Choose who, where and an action, then play the scene."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 78,
+          "page": 81,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "一分钟",
+            "en": "Then and now"
+          },
+          "activity": "sentence-8",
+          "activityTitle": {
+            "zh": "把经过说清楚",
+            "en": "Then and now"
+          },
+          "invite": {
+            "zh": "安排主角、地点和动作，再演一遍。",
+            "en": "Choose who, where and an action, then play the scene."
+          }
+        }
+      ],
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-sentence-studio/index.html"
+    },
+    {
+      "id": "g1b-poetry-theater",
+      "title": {
+        "zh": "古诗小剧场",
+        "en": "Poetry Theater"
+      },
+      "description": {
+        "zh": "动一动景物，让诗句慢慢出现。",
+        "en": "Move the scenery to reveal the poem one line at a time."
+      },
+      "category": "chinese",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "识字",
+        "3D",
+        "实验"
+      ],
+      "icon": "🌙",
+      "order": 225,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 2,
+          "page": 12,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "语文园地一",
+            "en": "春晓 · 孟浩然"
+          },
+          "activity": "poetry-1",
+          "activityTitle": {
+            "zh": "春晓",
+            "en": "春晓 · 孟浩然"
+          },
+          "invite": {
+            "zh": "动一动景物，让诗句慢慢出现。",
+            "en": "Move the scenery to reveal the poem one line at a time."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 35,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "语文园地三",
+            "en": "赠汪伦 · 李白"
+          },
+          "activity": "poetry-2",
+          "activityTitle": {
+            "zh": "赠汪伦",
+            "en": "赠汪伦 · 李白"
+          },
+          "invite": {
+            "zh": "动一动景物，让诗句慢慢出现。",
+            "en": "Move the scenery to reveal the poem one line at a time."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 39,
+          "page": 39,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "静夜思",
+            "en": "静夜思 · 李白"
+          },
+          "activity": "poetry-3",
+          "activityTitle": {
+            "zh": "静夜思",
+            "en": "静夜思 · 李白"
+          },
+          "invite": {
+            "zh": "动一动景物，让诗句慢慢出现。",
+            "en": "Move the scenery to reveal the poem one line at a time."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 16,
+          "page": 23,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "语文园地二",
+            "en": "寻隐者不遇 · 贾岛"
+          },
+          "activity": "poetry-4",
+          "activityTitle": {
+            "zh": "寻隐者不遇",
+            "en": "寻隐者不遇 · 贾岛"
+          },
+          "invite": {
+            "zh": "动一动景物，让诗句慢慢出现。",
+            "en": "Move the scenery to reveal the poem one line at a time."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 61,
+          "page": 61,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "古诗二首",
+            "en": "池上 · 白居易"
+          },
+          "activity": "poetry-5",
+          "activityTitle": {
+            "zh": "池上",
+            "en": "池上 · 白居易"
+          },
+          "invite": {
+            "zh": "动一动景物，让诗句慢慢出现。",
+            "en": "Move the scenery to reveal the poem one line at a time."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 61,
+          "page": 62,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "古诗二首",
+            "en": "小池 · 杨万里"
+          },
+          "activity": "poetry-6",
+          "activityTitle": {
+            "zh": "小池",
+            "en": "小池 · 杨万里"
+          },
+          "invite": {
+            "zh": "动一动景物，让诗句慢慢出现。",
+            "en": "Move the scenery to reveal the poem one line at a time."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "8",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 8,
+          "unitOrder": 98,
+          "page": 110,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "语文园地八",
+            "en": "画鸡 · 唐寅"
+          },
+          "activity": "poetry-7",
+          "activityTitle": {
+            "zh": "画鸡",
+            "en": "画鸡 · 唐寅"
+          },
+          "invite": {
+            "zh": "动一动景物，让诗句慢慢出现。",
+            "en": "Move the scenery to reveal the poem one line at a time."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 39,
+          "page": 39,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "静夜思（换视角重读）",
+            "en": "再看月光 · 李白"
+          },
+          "activity": "poetry-8",
+          "activityTitle": {
+            "zh": "再看月光",
+            "en": "再看月光 · 李白"
+          },
+          "invite": {
+            "zh": "动一动景物，让诗句慢慢出现。",
+            "en": "Move the scenery to reveal the poem one line at a time."
+          }
+        }
+      ],
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-poetry-theater/index.html"
+    },
+    {
+      "id": "g1b-story-studio",
+      "title": {
+        "zh": "故事放映屋",
+        "en": "Story Projection Room"
+      },
+      "description": {
+        "zh": "移动故事片段，再播放看看。",
+        "en": "Move the story pieces, then play your sequence."
+      },
+      "category": "chinese",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "识字",
+        "3D",
+        "实验"
+      ],
+      "icon": "🎞️",
+      "order": 226,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 16,
+          "page": 18,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "吃水不忘挖井人",
+            "en": "Remembering the well"
+          },
+          "activity": "story-1",
+          "activityTitle": {
+            "zh": "井边的记忆",
+            "en": "Remembering the well"
+          },
+          "invite": {
+            "zh": "移动故事片段，再播放看看。",
+            "en": "Move the story pieces, then play your sequence."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 26,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "小公鸡和小鸭子",
+            "en": "Helping one another"
+          },
+          "activity": "story-2",
+          "activityTitle": {
+            "zh": "互相帮助",
+            "en": "Helping one another"
+          },
+          "invite": {
+            "zh": "移动故事片段，再播放看看。",
+            "en": "Move the story pieces, then play your sequence."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "3",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 3,
+          "unitOrder": 26,
+          "page": 29,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "树和喜鹊",
+            "en": "Trees and magpies"
+          },
+          "activity": "story-3",
+          "activityTitle": {
+            "zh": "树和喜鹊",
+            "en": "Trees and magpies"
+          },
+          "invite": {
+            "zh": "移动故事片段，再播放看看。",
+            "en": "Move the story pieces, then play your sequence."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 39,
+          "page": 42,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "端午粽",
+            "en": "Sharing at the festival"
+          },
+          "activity": "story-4",
+          "activityTitle": {
+            "zh": "端午的分享",
+            "en": "Sharing at the festival"
+          },
+          "invite": {
+            "zh": "移动故事片段，再播放看看。",
+            "en": "Move the story pieces, then play your sequence."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 61,
+          "page": 69,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "要下雨了",
+            "en": "Before the rain"
+          },
+          "activity": "story-5",
+          "activityTitle": {
+            "zh": "下雨前后",
+            "en": "Before the rain"
+          },
+          "invite": {
+            "zh": "移动故事片段，再播放看看。",
+            "en": "Move the story pieces, then play your sequence."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 78,
+          "page": 95,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "语文园地七·听故事，讲故事",
+            "en": "Listen and retell"
+          },
+          "activity": "story-6",
+          "activityTitle": {
+            "zh": "听故事，讲故事",
+            "en": "Listen and retell"
+          },
+          "invite": {
+            "zh": "移动故事片段，再播放看看。",
+            "en": "Move the story pieces, then play your sequence."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 78,
+          "page": 84,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "动物王国开大会",
+            "en": "A complete announcement"
+          },
+          "activity": "story-7",
+          "activityTitle": {
+            "zh": "说清通知",
+            "en": "A complete announcement"
+          },
+          "invite": {
+            "zh": "移动故事片段，再播放看看。",
+            "en": "Move the story pieces, then play your sequence."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "8",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 8,
+          "unitOrder": 98,
+          "page": 102,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "咕咚",
+            "en": "Find out what happened"
+          },
+          "activity": "story-8",
+          "activityTitle": {
+            "zh": "遇事先问明白",
+            "en": "Find out what happened"
+          },
+          "invite": {
+            "zh": "移动故事片段，再播放看看。",
+            "en": "Move the story pieces, then play your sequence."
+          }
+        }
+      ],
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-story-studio/index.html"
+    },
+    {
+      "id": "g1b-speaking-stage",
+      "title": {
+        "zh": "表达小舞台",
+        "en": "Speaking Stage"
+      },
+      "description": {
+        "zh": "把想说的话摆好，演给朋友看。",
+        "en": "Arrange your message and play it for a friend."
+      },
+      "category": "chinese",
+      "grades": [
+        "g1b"
+      ],
+      "levels": [
+        "primary"
+      ],
+      "tags": [
+        "识字",
+        "3D",
+        "实验"
+      ],
+      "icon": "🎭",
+      "order": 227,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 2,
+          "page": 4,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "姓氏歌",
+            "en": "Introduce yourself"
+          },
+          "activity": "speaking-1",
+          "activityTitle": {
+            "zh": "介绍我的姓",
+            "en": "Introduce yourself"
+          },
+          "invite": {
+            "zh": "把想说的话摆好，演给朋友看。",
+            "en": "Arrange your message and play it for a friend."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "2",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 2,
+          "unitOrder": 16,
+          "page": 20,
+          "lessonOrder": 2,
+          "topic": {
+            "zh": "我多想去看看",
+            "en": "Share a wish"
+          },
+          "activity": "speaking-2",
+          "activityTitle": {
+            "zh": "我想去看看",
+            "en": "Share a wish"
+          },
+          "invite": {
+            "zh": "把想说的话摆好，演给朋友看。",
+            "en": "Arrange your message and play it for a friend."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 2,
+          "page": 13,
+          "lessonOrder": 3,
+          "topic": {
+            "zh": "语文园地一·请你帮个忙",
+            "en": "Ask for help"
+          },
+          "activity": "speaking-3",
+          "activityTitle": {
+            "zh": "请你帮个忙",
+            "en": "Ask for help"
+          },
+          "invite": {
+            "zh": "把想说的话摆好，演给朋友看。",
+            "en": "Arrange your message and play it for a friend."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "4",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 4,
+          "unitOrder": 39,
+          "page": 42,
+          "lessonOrder": 4,
+          "topic": {
+            "zh": "端午粽／语文园地四",
+            "en": "Describe a festival"
+          },
+          "activity": "speaking-4",
+          "activityTitle": {
+            "zh": "说说端午",
+            "en": "Describe a festival"
+          },
+          "invite": {
+            "zh": "把想说的话摆好，演给朋友看。",
+            "en": "Arrange your message and play it for a friend."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "5",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 5,
+          "unitOrder": 48,
+          "page": 58,
+          "lessonOrder": 5,
+          "topic": {
+            "zh": "语文园地五·一起做游戏",
+            "en": "Explain an action"
+          },
+          "activity": "speaking-5",
+          "activityTitle": {
+            "zh": "介绍一个动作",
+            "en": "Explain an action"
+          },
+          "invite": {
+            "zh": "把想说的话摆好，演给朋友看。",
+            "en": "Arrange your message and play it for a friend."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "6",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 6,
+          "unitOrder": 61,
+          "page": 66,
+          "lessonOrder": 6,
+          "topic": {
+            "zh": "荷叶圆圆／语文园地六",
+            "en": "Describe the picture"
+          },
+          "activity": "speaking-6",
+          "activityTitle": {
+            "zh": "看图说话",
+            "en": "Describe the picture"
+          },
+          "invite": {
+            "zh": "把想说的话摆好，演给朋友看。",
+            "en": "Arrange your message and play it for a friend."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "7",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 7,
+          "unitOrder": 78,
+          "page": 84,
+          "lessonOrder": 7,
+          "topic": {
+            "zh": "动物王国开大会",
+            "en": "Make an announcement"
+          },
+          "activity": "speaking-7",
+          "activityTitle": {
+            "zh": "通知小伙伴",
+            "en": "Make an announcement"
+          },
+          "invite": {
+            "zh": "把想说的话摆好，演给朋友看。",
+            "en": "Arrange your message and play it for a friend."
+          }
+        },
+        {
+          "bookId": "c1b",
+          "bookTitle": {
+            "zh": "语文 一年级下册",
+            "en": "Chinese · Grade 1 · Spring"
+          },
+          "grade": "g1b",
+          "unitId": "8",
+          "unitTitle": {
+            "zh": "阅读",
+            "en": "Reading"
+          },
+          "unitKind": "unit",
+          "unitNumber": 8,
+          "unitOrder": 98,
+          "page": 110,
+          "lessonOrder": 8,
+          "topic": {
+            "zh": "语文园地八",
+            "en": "Talk about feelings"
+          },
+          "activity": "speaking-8",
+          "activityTitle": {
+            "zh": "说说心情",
+            "en": "Talk about feelings"
+          },
+          "invite": {
+            "zh": "把想说的话摆好，演给朋友看。",
+            "en": "Arrange your message and play it for a friend."
+          }
+        }
+      ],
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "3D",
+        "3d",
+        "三维",
+        "three.js",
+        "Experiment",
+        "experiment",
+        "simulation",
+        "lab",
+        "模拟"
+      ],
+      "path": "courseware/g1b-speaking-stage/index.html"
+    },
+    {
+      "id": "g1-poem-stage",
+      "title": {
+        "zh": "诗画猜猜台",
+        "en": "Poem Picture Stage"
+      },
+      "description": {
+        "zh": "看画面猜诗句、接上下句，再把整首诗排回原顺序。",
+        "en": "Match lines to pictures, finish couplets and order whole poems."
+      },
+      "category": "chinese",
+      "levels": [
+        "primary"
+      ],
+      "grades": [],
+      "tags": [
+        "识字",
+        "古诗"
+      ],
+      "icon": "🖼️",
+      "order": 228,
+      "badge": "new",
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "Ancient Poems",
+        "古诗",
+        "poem",
+        "poems",
+        "poetry",
+        "诗句",
+        "咏鹅",
+        "静夜思",
+        "ancient poems"
+      ],
+      "path": "courseware/g1-poem-stage/index.html"
+    },
+    {
+      "id": "g1-stroke-order",
+      "title": {
+        "zh": "笔顺快车站",
+        "en": "Stroke Order Station"
+      },
+      "description": {
+        "zh": "按笔顺规则把笔画卡片依次装上小火车。",
+        "en": "Load the stroke cards onto the train in writing order."
+      },
+      "category": "chinese",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1a"
+      ],
+      "tags": [
+        "识字",
+        "笔顺"
+      ],
+      "icon": "🚉",
+      "order": 229,
+      "badge": "new",
+      "curriculum": [
+        {
+          "bookId": "c1a",
+          "bookTitle": {
+            "zh": "语文 一年级上册",
+            "en": "Chinese · Grade 1 · Fall"
+          },
+          "grade": "g1a",
+          "unitId": "1",
+          "unitTitle": {
+            "zh": "识字",
+            "en": "Characters"
+          },
+          "unitKind": "unit",
+          "unitNumber": 1,
+          "unitOrder": 8,
+          "page": 11,
+          "lessonOrder": 1,
+          "topic": {
+            "zh": "笔顺规则",
+            "en": "Stroke order"
+          }
+        }
+      ],
+      "keywords": [
+        "Character Recognition",
+        "识字",
+        "汉字",
+        "认字",
+        "生字",
+        "character recognition",
+        "chinese characters",
+        "Stroke Order",
+        "笔顺",
+        "stroke order",
+        "笔顺规则",
+        "writing order",
+        "先横后竖"
+      ],
+      "path": "courseware/g1-stroke-order/index.html"
     }
   ]
 }

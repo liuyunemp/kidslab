@@ -12,9 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g3"
-  ],
+  "grades": ["g3b"],
   "tags": [
     "周长",
     "面积",

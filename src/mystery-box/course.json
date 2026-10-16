@@ -12,10 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g1",
-    "g2"
-  ],
+  "grades": ["g1a"],
   "tags": [
     "观察",
     "推理"

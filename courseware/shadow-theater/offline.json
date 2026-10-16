@@ -1,0 +1,29 @@
+{
+  "id": "shadow-theater",
+  "version": "1b1945eb43ec0a32862d69340db45768aa0b4554430e3a5bc89d90849d0eb1de",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "71ebca7ecb9d6652ad5dddbf906a7a91856c826a1d3cac09e62f6484f46c3034"
+    },
+    {
+      "path": "index.html",
+      "sha256": "9e2342a84f3da2a442bf250a8ddb85d0dd41abc5b7f72ecc91272e20a54f83a5"
+    },
+    {
+      "path": "main.js",
+      "sha256": "fa315da0afbec4fe623eb6c0536f9ff37f330beb8ff426939173d328a00d6831",
+      "fingerprint": "14a20af3"
+    },
+    {
+      "path": "style.css",
+      "sha256": "68a4b41444004eecd8a08d3767cb598a233b20c87317f251c3536cf251ad6c00",
+      "fingerprint": "d41723ee"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

@@ -243,7 +243,12 @@ input[type="range"]::-moz-range-thumb {
   .bar { padding: 8px 10px; gap: 6px; }
   .bar .pill { min-height: 44px; min-width: 44px; padding: 6px 12px; font-size: 15px; }
   .bar > a.pill span { display: none; }
-  .bar__title { font-size: 17px; white-space: nowrap; }
+  /* 标题必须可压缩：固定 nowrap 会把 4 个动作按钮挤出 375px 视口，语言键点不到。 */
+  .bar__title {
+    font-size: 17px; white-space: nowrap;
+    flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  }
+  .bar__actions { gap: 6px; flex: 0 0 auto; }
   .pill--icon { min-width: 44px; padding: 6px 10px; }
 
   .hud { top: 58px; left: 10px; right: 10px; justify-content: space-between; gap: 8px; }

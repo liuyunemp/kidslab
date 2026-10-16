@@ -1,0 +1,27 @@
+{
+  "id": "g1b-word-world",
+  "title": {
+    "zh": "词语生活馆",
+    "en": "Words in Motion"
+  },
+  "description": {
+    "zh": "把物件放到台上，让词语动起来。",
+    "en": "Put an object on the stage and set its word in motion."
+  },
+  "category": "chinese",
+  "grades": [
+    "g1b"
+  ],
+  "levels": [
+    "primary"
+  ],
+  "tags": [
+    "识字",
+    "3D",
+    "实验"
+  ],
+  "icon": "🌿",
+  "order": 222,
+  "badge": "new"
+}
+

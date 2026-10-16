@@ -10,7 +10,7 @@
   },
   "category": "math",
   "levels": ["primary"],
-  "grades": ["g3", "g4"],
+  "grades": ["g4b"],
   "tags": ["平面图形", "空间想象", "益智游戏"],
   "icon": "🎨",
   "order": 25,

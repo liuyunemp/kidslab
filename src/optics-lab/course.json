@@ -13,12 +13,7 @@
     "junior",
     "senior"
   ],
-  "grades": [
-    "g8",
-    "g9",
-    "g10",
-    "g11"
-  ],
+  "grades": ["g8a"],
   "tags": [
     "光学",
     "透镜",

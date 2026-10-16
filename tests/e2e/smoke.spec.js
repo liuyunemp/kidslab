@@ -180,21 +180,21 @@ test.describe('main site', () => {
     await expect(page.locator('#catList button[data-cat="recent"] .cat__count')).toHaveText('2');
     await page.locator('#catList button[data-cat="recent"]').click();
 
-    await expect.poll(async () => cards.count()).toBe(3); /* welcome 置顶 + 2 个探索过 */
-    await expect(cards.nth(1)).toHaveAttribute('href', newer.path);
-    await expect(cards.nth(2)).toHaveAttribute('href', older.path);
+    await expect.poll(async () => cards.count()).toBe(2);
+    await expect(cards.nth(0)).toHaveAttribute('href', newer.path);
+    await expect(cards.nth(1)).toHaveAttribute('href', older.path);
 
     await openMenuIfNeeded();
     await page.locator('#catList button[data-cat="newest"]').click();
     await expect.poll(async () => {
       const hrefs = await cards.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
-      return hrefs.filter((href) => href !== 'courseware/welcome/index.html').length;
+      return hrefs.length;
     }).toBe(newestCourses.length);
 
     const visibleNewest = await cards.evaluateAll((nodes) =>
       nodes
         .map((node) => node.getAttribute('href'))
-        .filter((href) => href && href !== 'courseware/welcome/index.html'));
+        .filter(Boolean));
     const expectedNewest = [...newestCourses]
       .sort((a, b) => (b.order ?? 0) - (a.order ?? 0) || a.id.localeCompare(b.id))
       .map((course) => course.path);

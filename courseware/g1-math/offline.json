@@ -1,0 +1,54 @@
+{
+  "id": "g1-math",
+  "version": "db3341a528f1c595a999dcd0e0de1af584e279a39181cd7895a1bb618c8b2f38",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "8cb9707b7afd65639d3ec9c7e16ea9043413c39907a2d2564024ffabaccfe932",
+      "fingerprint": "d2f16ab1"
+    },
+    {
+      "path": "course.json",
+      "sha256": "3c70d0af4cad95ad3233de11ffb20bd815002a2dfe5b4e0bff240e9efb1d88a6"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "d8bc38b0b0783136f993d908c43b2777bcbd074e1fc9216d21b3a1ed2dde4ce6",
+      "fingerprint": "629c397a"
+    },
+    {
+      "path": "hub.css",
+      "sha256": "bac98f7f6367c0a3a638f5623d4bd177d53fbae663cdd1ecfdcf2ff15f84ce13",
+      "fingerprint": "e7716385"
+    },
+    {
+      "path": "hub.js",
+      "sha256": "3ff642b72b1689c51cc976b7cf5ed442fd85f603414d295695315b0bffb8a238",
+      "fingerprint": "28516a8e"
+    },
+    {
+      "path": "index.html",
+      "sha256": "58a6a538f359c4208a4ca8ecaf88a83b3abc91e367e4f770a1dee5dc33eaa23f"
+    },
+    {
+      "path": "level-model.js",
+      "sha256": "e99f9861154090f441162148665aa7ddfc3667e1592f49ea12119c7495ea9505",
+      "fingerprint": "5bdcafd2"
+    },
+    {
+      "path": "levels.js",
+      "sha256": "46f02e0f73f829705793b04a37cfefff53f2a3004b5c6a973e3a5b1632a9460a",
+      "fingerprint": "0c6f0d1f"
+    },
+    {
+      "path": "main.js",
+      "sha256": "6354c18f4fee93bb25cf8299e3a4f39d6d58729310678dac0a9522a685d261d4",
+      "fingerprint": "b6dc6161"
+    },
+    {
+      "path": "style.css",
+      "sha256": "668cb52871293731c331e5433f4d21fac29517887f0926dae397c3112bbc1a15",
+      "fingerprint": "458eb8b7"
+    }
+  ]
+}

@@ -259,16 +259,17 @@ function applyResult(result, { okMessage } = {}) {
   if (lab.phase === 'complete') window.cool?.complete?.();
 }
 
-async function unlockAll() {
+// 首次手势必须先完成玩法动作：音频解锁会加载 BGM，不能让孩子第一次点按钮没有反应。
+function unlockAll() {
   if (unlocked) return;
   unlocked = true;
-  await audio.unlock();
+  audio.unlock().catch(() => {});
   window.cool?.stage?.('observe');
 }
 
 function bindObjective(id, mag) {
-  $(id).addEventListener('click', async () => {
-    await unlockAll();
+  $(id).addEventListener('click', () => {
+    unlockAll();
     audio.click();
     applyResult(setObjective(lab, mag));
   });
@@ -277,40 +278,40 @@ bindObjective('obj4', 4);
 bindObjective('obj10', 10);
 bindObjective('obj40', 40);
 
-$('slideOnion').addEventListener('click', async () => {
-  await unlockAll();
+$('slideOnion').addEventListener('click', () => {
+  unlockAll();
   audio.click();
   applyResult(setSlide(lab, 'onion'));
 });
-$('slideCheek').addEventListener('click', async () => {
-  await unlockAll();
+$('slideCheek').addEventListener('click', () => {
+  unlockAll();
   audio.click();
   applyResult(setSlide(lab, 'cheek'));
 });
 
-$('lightRange').addEventListener('input', async () => {
-  await unlockAll();
+$('lightRange').addEventListener('input', () => {
+  unlockAll();
   applyResult(setLight(lab, Number($('lightRange').value)));
 });
-$('coarseRange').addEventListener('input', async () => {
-  await unlockAll();
+$('coarseRange').addEventListener('input', () => {
+  unlockAll();
   applyResult(setCoarseUm(lab, Number($('coarseRange').value)));
 });
-$('fineRange').addEventListener('input', async () => {
-  await unlockAll();
+$('fineRange').addEventListener('input', () => {
+  unlockAll();
   applyResult(setFineUm(lab, Number($('fineRange').value)));
 });
 
-$('recordBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('recordBtn').addEventListener('click', () => {
+  unlockAll();
   const result = recordTrial(lab);
   if (result.ok) audio.record();
   applyResult(result, { okMessage: 'recorded' });
   if (result.ok) window.cool?.track?.('record', { mag: result.lab.trials.at(-1).totalMag });
 });
 
-$('resetBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('resetBtn').addEventListener('click', () => {
+  unlockAll();
   audio.click();
   applyResult(resetLab(lab));
   feedback.textContent = t('feedbackIdle');
@@ -323,13 +324,13 @@ $('resetBtn').addEventListener('click', async () => {
   paint();
 });
 
-musicBtn.addEventListener('click', async () => {
-  await unlockAll();
+musicBtn.addEventListener('click', () => {
+  unlockAll();
   audio.setMusic(!audio.musicOn);
   renderChrome();
 });
-soundBtn.addEventListener('click', async () => {
-  await unlockAll();
+soundBtn.addEventListener('click', () => {
+  unlockAll();
   audio.setSfx(!audio.sfxOn);
   renderChrome();
 });

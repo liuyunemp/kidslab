@@ -1,0 +1,27 @@
+{
+  "id": "g1b-story-studio",
+  "title": {
+    "zh": "故事放映屋",
+    "en": "Story Projection Room"
+  },
+  "description": {
+    "zh": "移动故事片段，再播放看看。",
+    "en": "Move the story pieces, then play your sequence."
+  },
+  "category": "chinese",
+  "grades": [
+    "g1b"
+  ],
+  "levels": [
+    "primary"
+  ],
+  "tags": [
+    "识字",
+    "3D",
+    "实验"
+  ],
+  "icon": "🎞️",
+  "order": 226,
+  "badge": "new"
+}
+

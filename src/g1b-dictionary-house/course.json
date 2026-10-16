@@ -1,0 +1,28 @@
+{
+  "id": "g1b-dictionary-house",
+  "title": {
+    "zh": "音序小书屋",
+    "en": "Alphabet Dictionary"
+  },
+  "description": {
+    "zh": "翻首字母，再找音节和汉字。",
+    "en": "Open the initial, then find the syllable and character."
+  },
+  "category": "chinese",
+  "grades": [
+    "g1b"
+  ],
+  "levels": [
+    "primary"
+  ],
+  "tags": [
+    "识字",
+    "拼音",
+    "3D",
+    "实验"
+  ],
+  "icon": "📖",
+  "order": 223,
+  "badge": "new"
+}
+

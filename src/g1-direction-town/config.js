@@ -1,10 +1,8 @@
 export const config = {
   "id": "g1-direction-town",
   "kind": "direction",
-  "category": "math",
-  "grades": [
-    "g1a"
-  ],
+  "category": "science",
+  "grades": ["g1b"],
   "tags": [
     "位置"
   ],

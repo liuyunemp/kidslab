@@ -12,11 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g3",
-    "g4",
-    "g5"
-  ],
+  "grades": ["g3a"],
   "tags": [
     "人体",
     "消化系统",

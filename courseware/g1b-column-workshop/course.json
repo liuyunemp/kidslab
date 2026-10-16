@@ -1,0 +1,28 @@
+{
+  "id": "g1b-column-workshop",
+  "title": {
+    "zh": "竖式搭建厂",
+    "en": "Column Workshop"
+  },
+  "description": {
+    "zh": "把数位对齐，再操作计数棒。",
+    "en": "Align the place values, then work with the rods."
+  },
+  "category": "math",
+  "grades": [
+    "g1b"
+  ],
+  "levels": [
+    "primary"
+  ],
+  "tags": [
+    "加减法",
+    "数位",
+    "3D",
+    "实验"
+  ],
+  "icon": "🏭",
+  "order": 35,
+  "badge": "new"
+}
+

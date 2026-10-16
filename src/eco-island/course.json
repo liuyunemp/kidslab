@@ -10,7 +10,7 @@
   },
   "category": "science",
   "levels": ["primary"],
-  "grades": ["g3", "g4", "g5"],
+  "grades": ["g6a"],
   "tags": ["生态", "观察", "实验", "植物"],
   "icon": "🌿",
   "order": 72,

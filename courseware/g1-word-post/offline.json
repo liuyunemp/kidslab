@@ -1,0 +1,43 @@
+{
+  "id": "g1-word-post",
+  "version": "e446cd3cd420e8161461e1b2e8b52cab2cf11e149a6975cc0446005c3442c539",
+  "assets": [
+    {
+      "path": "audio/bgm.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "config.js",
+      "sha256": "3c7b3664ece78d3633183bf1b32fa3bce2f2ffc8ba782a081c8af83ddc127bd1",
+      "fingerprint": "55553797"
+    },
+    {
+      "path": "course.json",
+      "sha256": "663c759823563a869bf3be8bf33ed3171e44c32b64b1c21eca32fbfdc9a7debe"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "b2f978854d86a6988dd89bf28d13d9e2b872169b9cf280083e68d960ed0853d3",
+      "fingerprint": "0d3f2646"
+    },
+    {
+      "path": "index.html",
+      "sha256": "3056de7229fa364dab39700f4e7684e49ddd013053ceb72d8390e80f87b8228a"
+    },
+    {
+      "path": "main.js",
+      "sha256": "1c2fa23b6bd0af42e371896d1602fa6af0c2e5446ff8263db4de3bc4525a07eb",
+      "fingerprint": "241fa19d"
+    },
+    {
+      "path": "model.js",
+      "sha256": "200576b540c95c5edc0d1aa7f64f24c109559196dee9d73c057c9d01614664aa",
+      "fingerprint": "9217243d"
+    },
+    {
+      "path": "style.css",
+      "sha256": "e16d3a6aea8be84447475e9109d7dfcf70753043a85d54a4d683ab5a40ac1a22",
+      "fingerprint": "1a8bcd3f"
+    }
+  ]
+}

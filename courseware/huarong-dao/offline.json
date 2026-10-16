@@ -1,0 +1,70 @@
+{
+  "id": "huarong-dao",
+  "version": "97c5b54de307d1d3a38279208c347afaf4b27ec777da8a18927880991b00a9fd",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "26e0181d6961325fead6d631c0c4d3e6ad5f89125ee80090eb43f3fb89597011",
+      "fingerprint": "08f13f9a"
+    },
+    {
+      "path": "audio/pass-clear.meta.json",
+      "sha256": "6ea503914d2ef35b265d6232866764e61ad500f43de17081ad76291e7d6c24d8"
+    },
+    {
+      "path": "audio/pass-clear.ogg",
+      "sha256": "3ea46e273dbc33ca76c95c0f93ce2840570e884cb9a6ad4c235d22f968ea8995"
+    },
+    {
+      "path": "audio/wooden-gate.meta.json",
+      "sha256": "0ccc858c952d0699323cf6b257eae03b5afbb0d5e1b540554100ab6378ca3b73"
+    },
+    {
+      "path": "audio/wooden-gate.ogg",
+      "sha256": "7dbf8ed6f8735e4e2a02ec135ec01461cc6671c81b463ce0510b1905b55b4842"
+    },
+    {
+      "path": "course.json",
+      "sha256": "500523d0a91a65a266226da0df2392e16fbf1fb6868fb9590899b6898dd6d626"
+    },
+    {
+      "path": "game3d.js",
+      "sha256": "cfad9e1bd1bc86c480fc92322c63ae7fb896c26e5a957a5446b1af87d1cfd742",
+      "fingerprint": "694df0a6"
+    },
+    {
+      "path": "index.html",
+      "sha256": "e81028dbd610f809a163b5b5eab1473d33ffd27b24cf62b20dc200d9c179cc5a"
+    },
+    {
+      "path": "main.js",
+      "sha256": "803c784c68f0d2cd98e9773fd5a3d0105f73daab38edbd10281e8b8495ee1fc4",
+      "fingerprint": "e5a6e496"
+    },
+    {
+      "path": "puzzle.js",
+      "sha256": "97060b5d9f058dd4dfd2b259966e5bc03e831789603fe60f9c4df578c0342307",
+      "fingerprint": "282c4f60"
+    },
+    {
+      "path": "style.css",
+      "sha256": "60fc6825c116fdeadc67533a59206ef0c7c67e655f7f449b958b44a243e68be0",
+      "fingerprint": "ca77394b"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

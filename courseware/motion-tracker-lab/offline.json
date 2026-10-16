@@ -1,0 +1,58 @@
+{
+  "id": "motion-tracker-lab",
+  "version": "33299834b903db764b58e48c3af4ada104d5eedb828790d9ef0ae9081fac95ee",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "80cb075585f3deb414f36247bcda7196131625e11c4695055511f7c5938b0aab",
+      "fingerprint": "8c6a7e13"
+    },
+    {
+      "path": "audio/bgm-hope-01.ogg",
+      "sha256": "6c9842234a115447ca377dad13b9639381a6aa820d1410708be4da1b494d0967"
+    },
+    {
+      "path": "course.json",
+      "sha256": "82e159a334eb41e51d664b52121a3284d3869162bc9bd1494fc4d854632235e2"
+    },
+    {
+      "path": "index.html",
+      "sha256": "490635a974c35f32ca7176224f7743ca8e62b1ed0637d8d032a434e9ce195328"
+    },
+    {
+      "path": "main.js",
+      "sha256": "649f49694a819520c3517daae9b4961e53cc652b74251b8b7c66f677f88aff9f",
+      "fingerprint": "3e3031bc"
+    },
+    {
+      "path": "motion-model.js",
+      "sha256": "2661cff431157af5a7d09798ae9b3ea04f68bd7ede466f0881a37e929eb29458",
+      "fingerprint": "30aa60c7"
+    },
+    {
+      "path": "scene3d.js",
+      "sha256": "e127d4b11c50dde9b3baa405793770085750b65ba09cc5d18e8e9e3fff5ce929",
+      "fingerprint": "87d807de"
+    },
+    {
+      "path": "style.css",
+      "sha256": "230063768c4b0a5986dafc01a6d4d65cc54252586d8c5e769acecb5c3db9d631",
+      "fingerprint": "ef037965"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

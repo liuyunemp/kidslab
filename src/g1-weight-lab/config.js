@@ -2,9 +2,7 @@ export const config = {
   "id": "g1-weight-lab",
   "kind": "weight",
   "category": "math",
-  "grades": [
-    "g1a"
-  ],
+  "grades": [],
   "tags": [
     "轻重",
     "计量单位"

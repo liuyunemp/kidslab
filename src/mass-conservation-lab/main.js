@@ -138,7 +138,12 @@ function render() {
 }
 
 function run() {
-  if (running) return;
+  if (running) {
+    notice = 'duplicate';
+    els.feedback.textContent = t(notice);
+    audio.beep('bad');
+    return;
+  }
   const result = recordTrial(lab, selected);
   if (!result.ok) {
     notice = result.reason === 'duplicate-trial' ? 'duplicate' : 'benchReady';
@@ -146,14 +151,15 @@ function run() {
     audio.beep('bad');
     return;
   }
+  // 记录必须立即提交：若等到动画结束再赋值，动画期间重按会绕过重复校验再记一次。
+  lab = result.lab;
   running = true;
-  const trial = result.lab.trials.at(-1);
+  save();
+  const trial = lab.trials.at(-1);
   $('#coachTitle').textContent = t('reacting');
   lab3d?.playReaction({ massAfterG: trial.massAfterG });
   setTimeout(() => {
-    lab = result.lab;
     running = false;
-    save();
     notice = selected === 'open' ? 'openDone' : 'sealedDone';
     els.feedback.textContent = t(notice);
     audio.beep('good');

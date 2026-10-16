@@ -34,7 +34,9 @@ export default defineConfig({
             // 缺少该开关时 three.js 课件（plant-lab/magic-cube）初始化挂起导致超时
             '--enable-unsafe-swiftshader',
           ]
-        : [],
+        // Headless shell otherwise selects SwiftShader on Windows despite an available GPU.
+        // Keep its window-independent animation behavior while using native D3D rendering.
+        : process.platform === 'win32' ? ['--use-angle=d3d11'] : [],
     },
   },
   webServer: {

@@ -1,0 +1,29 @@
+{
+  "id": "island-water",
+  "version": "2120e0251ec71ec11b6db88f3c50b5581bb9d3721b3377dab25c188f808c7973",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "648a96c757d3642146aa473497472b1e5a09e262332bf6cbbcd7dca3e3c005f3"
+    },
+    {
+      "path": "index.html",
+      "sha256": "615bb15cb6d50c48302bbf55971bd3d1b0c22e851646a1ee5dc825ef1c7655e5"
+    },
+    {
+      "path": "main.js",
+      "sha256": "107f8b39cde6d6f465738b835c759b1d236c6246215f6b25190c62ece0d29779",
+      "fingerprint": "4be23ce8"
+    },
+    {
+      "path": "style.css",
+      "sha256": "900acccbd9e2679674eb9f6846a29ee29c881e79aa0954fc46976930d0babadb",
+      "fingerprint": "3e152283"
+    },
+    {
+      "path": "water-model.js",
+      "sha256": "d04370d452691edced8985b348b802d43190745cf442149d7d262a30db130914",
+      "fingerprint": "a14c32da"
+    }
+  ]
+}

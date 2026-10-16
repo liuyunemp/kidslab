@@ -1,0 +1,34 @@
+{
+  "id": "dna-replication-lab",
+  "version": "cb2e753d74bf2ace0ec01b2112b1ed4a15d1a4693aa9c850cf1b465c57984889",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "f93959ca6c989371fa6197bc2c4c215c9c8c38b8dd453c7c59d486d6ed9555b5"
+    },
+    {
+      "path": "dna-model.js",
+      "sha256": "3d7be7d662d4f0ea821bddff00c0f0282ef33e56419851c8465a14ff239e2629",
+      "fingerprint": "da8edbbb"
+    },
+    {
+      "path": "index.html",
+      "sha256": "d22b405d4d54aee4e8ee1a1a3e0381d5f6d89455dabbdfc45a2164f1d1d97d6e"
+    },
+    {
+      "path": "main.js",
+      "sha256": "e3555a20f5f1a69bf6ee979c3620189a4644ae04c1992cfd1c49a08edaa3ddd7",
+      "fingerprint": "04df59a1"
+    },
+    {
+      "path": "style.css",
+      "sha256": "c81bc201be6a3f31b7de1670c701f6347d634ae091a63a22d1e0c0e67b2cb38d",
+      "fingerprint": "19db515e"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    }
+  ]
+}

@@ -122,6 +122,22 @@ export function speakText({ kind, task, words = {}, phase = 0, lang = 'zh' } = {
     case 'sentence':
       push(words.sentence);
       break;
+    case 'sort':
+      /* 筐的编号正是答案，只念指令与分类标准。 */
+      push(words.sort);
+      push(pickText(task.criterion, lang));
+      break;
+    case 'poem':
+      /* 排序题念出诗句就等于念出答案，只有它只念指令。 */
+      if (task.form === 'guess') { push(words.poem); push(pickText(task.title, lang)); }
+      else if (task.form === 'next') { push(words.poemNext); push(pickText(task.line, lang)); }
+      else push(words.poemOrder);
+      break;
+    case 'stroke-order':
+      /* 笔画顺序正是答案，只念指令与要写的字。 */
+      push(words.strokeOrder);
+      push(task.char);
+      break;
     default:
       return '';
   }

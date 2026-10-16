@@ -277,10 +277,11 @@ function applyResult(result, { okMessage } = {}) {
   if (lab.phase === 'complete') window.cool?.complete?.();
 }
 
-async function unlockAll() {
+// 首次手势必须先完成玩法动作：音频解锁会加载 BGM，不能让孩子第一次点按钮没有反应。
+function unlockAll() {
   if (unlocked) return;
   unlocked = true;
-  await audio.unlock();
+  audio.unlock().catch(() => {});
   window.cool?.stage?.('observe');
 }
 
@@ -297,24 +298,24 @@ function fire(withDrop) {
   applyResult(result, { okMessage: 'tip0' });
 }
 
-$('compareBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('compareBtn').addEventListener('click', () => {
+  unlockAll();
   fire(true);
 });
-$('launchBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('launchBtn').addEventListener('click', () => {
+  unlockAll();
   fire(false);
 });
 
-pauseBtn.addEventListener('click', async () => {
-  await unlockAll();
+pauseBtn.addEventListener('click', () => {
+  unlockAll();
   audio.click();
   applyResult(setPaused(lab, !lab.paused));
 });
 
 function bindRange(id, setter) {
-  $(id).addEventListener('input', async () => {
-    await unlockAll();
+  $(id).addEventListener('input', () => {
+    unlockAll();
     applyResult(setter(lab, Number($(id).value)));
   });
 }
@@ -323,8 +324,8 @@ bindRange('speedRange', setSpeed);
 bindRange('angleRange', setAngle);
 bindRange('gRange', setG);
 
-$('recordBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('recordBtn').addEventListener('click', () => {
+  unlockAll();
   const result = recordTrial(lab);
   if (result.ok) {
     audio.record();
@@ -336,8 +337,8 @@ $('recordBtn').addEventListener('click', async () => {
   applyResult(result, { okMessage: 'recorded' });
 });
 
-$('resetBtn').addEventListener('click', async () => {
-  await unlockAll();
+$('resetBtn').addEventListener('click', () => {
+  unlockAll();
   audio.click();
   applyResult(resetLab(lab));
   feedback.textContent = t('feedbackIdle');
@@ -350,13 +351,13 @@ $('resetBtn').addEventListener('click', async () => {
   paint();
 });
 
-musicBtn.addEventListener('click', async () => {
-  await unlockAll();
+musicBtn.addEventListener('click', () => {
+  unlockAll();
   audio.setMusic(!audio.musicOn);
   renderChrome();
 });
-soundBtn.addEventListener('click', async () => {
-  await unlockAll();
+soundBtn.addEventListener('click', () => {
+  unlockAll();
   audio.setSfx(!audio.sfxOn);
   renderChrome();
 });

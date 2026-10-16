@@ -5,21 +5,24 @@
     "en": "Addition Depot"
   },
   "description": {
-    "zh": "开动十位和个位小火车，把两批乘客合在一起。",
-    "en": "Drive tens and ones trains to join two groups of passengers."
+    "zh": "把两批合起来，满十再捆一捆。",
+    "en": "Join both groups, then bundle ten loose blocks."
   },
   "category": "math",
-  "levels": [
-    "primary"
-  ],
   "grades": [
     "g1b"
   ],
+  "levels": [
+    "primary"
+  ],
   "tags": [
     "加减法",
-    "数位"
+    "数位",
+    "3D",
+    "实验"
   ],
   "icon": "🚂",
-  "order": 31,
+  "order": 33,
   "badge": "new"
 }
+

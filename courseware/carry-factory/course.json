@@ -12,10 +12,7 @@
   "levels": [
     "primary"
   ],
-  "grades": [
-    "g2",
-    "g3"
-  ],
+  "grades": ["g2b"],
   "tags": [
     "加减法",
     "数位",

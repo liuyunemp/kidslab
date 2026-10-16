@@ -1,0 +1,27 @@
+{
+  "id": "g1b-speaking-stage",
+  "title": {
+    "zh": "表达小舞台",
+    "en": "Speaking Stage"
+  },
+  "description": {
+    "zh": "把想说的话摆好，演给朋友看。",
+    "en": "Arrange your message and play it for a friend."
+  },
+  "category": "chinese",
+  "grades": [
+    "g1b"
+  ],
+  "levels": [
+    "primary"
+  ],
+  "tags": [
+    "识字",
+    "3D",
+    "实验"
+  ],
+  "icon": "🎭",
+  "order": 227,
+  "badge": "new"
+}
+

@@ -1,0 +1,24 @@
+{
+  "id": "cpu-lab",
+  "version": "9472c90975df351b8924ebfed2a11a0b2c2877d35e435721baa3568aae537ea4",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "f36500bc4f471367a7d9d87ace6e32b88895269450400d8eb53eb0e89d57f2a5"
+    },
+    {
+      "path": "index.html",
+      "sha256": "074d2325ac074e467c0b5ef64db90b649ed0d0f1c0d7fb5e4fbf3f197500f542"
+    },
+    {
+      "path": "main.js",
+      "sha256": "25934f9114f94ba68a09a5330255c3b44a83dc93742e05f42f309a4c16294fc9",
+      "fingerprint": "798f9ad3"
+    },
+    {
+      "path": "style.css",
+      "sha256": "900e8749883cb2bcd4b58ba59058c7ae3ce1466f201e504b8e909fbe3672c28b",
+      "fingerprint": "75bd418a"
+    }
+  ]
+}

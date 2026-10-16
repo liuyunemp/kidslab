@@ -1,0 +1,29 @@
+{
+  "id": "eco-island",
+  "version": "45a32e995b0011e63dd3e75626afde8a3aae333f07e1e53475dabf21e2469266",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "89b7349cf865d6a869930c8463f8cffad21e6f307df254fd1cd8b1b1d5d117d5"
+    },
+    {
+      "path": "eco-model.js",
+      "sha256": "3716a04a3c7789ffb7ab596bd90c3d1c5a3121dc528d296bfac2a21d2f2543fa",
+      "fingerprint": "657f04be"
+    },
+    {
+      "path": "index.html",
+      "sha256": "40f1ea5b0210a59567f24a76689c7e4817c25e4278d474686f0f20bc6add3186"
+    },
+    {
+      "path": "main.js",
+      "sha256": "36caf52a21194b4ba8404336c70f534d260a39335a1b5baed9b2266c36b5086c",
+      "fingerprint": "42ac1699"
+    },
+    {
+      "path": "style.css",
+      "sha256": "94c0af6d4b173484cd1efd15953db5aa8d0737cad950de6b91df116acd7b63ef",
+      "fingerprint": "e0d88883"
+    }
+  ]
+}

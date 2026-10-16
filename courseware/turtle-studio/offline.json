@@ -1,0 +1,24 @@
+{
+  "id": "turtle-studio",
+  "version": "51ebc9c424db8420b6763ca9a153238332714d4ef590a97141b352f5230ec9b5",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "14ed782e5730e8406e612e2dc070415c82d8c51cc1f91e739e48d61b43c03f08"
+    },
+    {
+      "path": "index.html",
+      "sha256": "ccc9402b576518f1e196df7e63725656ef4f05b575cc085ae5c331c41b23ef93"
+    },
+    {
+      "path": "main.js",
+      "sha256": "37f33a77a7bf75a5408c92445912e9a85317624518eeb27a9be7ce86dca10c98",
+      "fingerprint": "6e635b87"
+    },
+    {
+      "path": "style.css",
+      "sha256": "4652ef31d9a9b1eff3f01922c96bbd1d530b5b35132d8e69c1603e4eb807c31a",
+      "fingerprint": "f0efaa3a"
+    }
+  ]
+}

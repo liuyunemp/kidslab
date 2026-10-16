@@ -1,0 +1,24 @@
+{
+  "id": "tiny-harbor",
+  "version": "28a97b62cf284b3af3ad977ffc37d6616714ad08fed66cabde35172ba958b6fd",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "e2750c516aeb57a9a316cc4f05f7b31dbc6dc3703bec6edf4e8d5f1928233c6f"
+    },
+    {
+      "path": "index.html",
+      "sha256": "d5f7fa3ba2ed14ffd65ee59c2c1a2e109da83ab4b4023d4c96a3763991d09720"
+    },
+    {
+      "path": "main.js",
+      "sha256": "b85cb9c740ec59ab21beace5d68e1a6f89adfbc95df67d07ac9dfdd3c1aa23fb",
+      "fingerprint": "e8c918b2"
+    },
+    {
+      "path": "style.css",
+      "sha256": "a26b69f5653217c955ef5ce4d2bd768d222a05da77119ab640d9e19d2669bc6e",
+      "fingerprint": "5f81dc60"
+    }
+  ]
+}

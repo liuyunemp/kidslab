@@ -1,0 +1,24 @@
+{
+  "id": "tangram-theater",
+  "version": "6c12f09e86d6a9e701dc8cfa541be4a37a323b7012a321f66c6572adb7e89b91",
+  "assets": [
+    {
+      "path": "course.json",
+      "sha256": "54617a738224fc6443b6010ae211d69f776f3a1cbae3535ba9b433a404363b14"
+    },
+    {
+      "path": "index.html",
+      "sha256": "0ebab216f341ca891f811670895046877b0aa69d99a0073bed8cb9c98e4b1686"
+    },
+    {
+      "path": "main.js",
+      "sha256": "46ea8537a1be595443c28a7025d6bb1f4a14437186b6ad7b8a4d8068126ced11",
+      "fingerprint": "9518a0dd"
+    },
+    {
+      "path": "style.css",
+      "sha256": "5f47611023918ae08780f7eb066cb4c461fe38aaa15c24060d8e31853ba811b4",
+      "fingerprint": "e57374b2"
+    }
+  ]
+}

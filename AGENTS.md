@@ -8,13 +8,18 @@
 
 ```bash
 npm ci            # 安装依赖(esbuild、three)
-npm run build     # 构建:校验 course.json + 压缩 js/css → courseware/ + 生成 index.json
-npm run test:unit # 知识断言格式与覆盖门禁
+npm run build     # 构建:校验 course.json + 压缩 js/css → courseware/(分阶段+可回滚) + index.json + 逐课 offline.json
+npm run test:unit # 知识断言格式与覆盖门禁 + 构建/离线缓存单测
 npm run preview   # 本地预览 http://localhost:8080
-npm run test:e2e  # Playwright smoke:主站交互 + 全课件桌面/手机加载验收
-npm run vendor    # 更新 three.js 到 src/welcome/vendor/
+npm run test:e2e  # Playwright smoke:主站交互 + 全课件桌面/手机加载验收 + 离线完整性
+npm run test:e2e:shard  # 分片跑 E2E(重型 WebGL 课件单独排队),本地大改后可用
+npm run test:e2e:timing # 带耗时报表跑 E2E,定位慢用例
+npm run vendor    # 同步 three.js 到全部课件 vendor 副本(47 份 src/ + 模板)
+npm run vendor:check # 只校验各副本与 node_modules 是否一致(有漂移则退出码 1)
 npm run icons     # logo.svg 变更后重新生成 PWA 图标(assets/icons/)
 ```
+
+> **three.js 副本必须逐字一致**:每个用到 three 的课件都自带一份 `vendor/three.module.min.js`(共 47 份 + `docs/courseware-template/` 1 份)。改过或升级 three 后必须 `npm run vendor`,由 `tests/unit/vendor-sync.test.mjs` 守住「所有副本 == node_modules 分发」这条不变量。
 
 没有 lint;改动后必须运行 `npm run build` 与 `npm run test:e2e` 并确保通过(退出码 0)。`npm run test:e2e` 是提交前必须在本地跑过的强制自检项,不在 GitHub Actions 中运行(见下方「部署」)。课件改动提交前,还必须逐项过一遍下方「提交前自检清单」。
 
@@ -51,12 +56,35 @@ cloudflare/analytics/  # 埋点接收 Worker(push 时经 deploy-analytics.yml �
 
 主站是可安装 PWA(`manifest.webmanifest`,`display: fullscreen`)。缓存分层见 `scripts/sw.js` 模板注释:
 
-- **主站壳**(index.html + assets + 课件清单)按预缓存内容整体 hash 版本化预缓存,发版自动换代清理
-- **课件** network-first + cache-on-visit(`kidslab-courseware` 运行时缓存):在线永远最新(发版不"粘死"),玩过的课件断网可重玩;主站卡片据 Cache API 显示「可离线」角标
+- **主站壳**(index.html + assets + 课件清单)按预缓存内容整体 hash 版本化预缓存为 `kidslab-shell-<hash>`,发版换代时只删过期壳缓存
+- **课件 = 完整快照 + 完整性校验**,不是 cache-on-visit:
+  - 构建为每个课件产出 `courseware/<id>/offline.json`(逐资源 SHA-256 + 汇总 `version`)
+  - 首次访问后**后台补齐该课全部资源**到 `kidslab-course-v2-<scope>-<id>-<version>`,下载并发 ≤2
+  - 全部资源校验通过才写入 `kidslab-offline-state-v2` 的完成记录,主站卡片此时才显示「可离线」角标
+  - 任一下载/校验失败:保留上一份完整版本,不写完成记录;断网时沿用旧完整快照
+  - 同一课件重复访问仅在 `version` 变化时重下,否则复用既有快照;`cleanupSnapshots` 只清理该课件自己的旧版本
+- **离线文档与媒体**:快照内的页面文档按记录版本固定返回;音频/视频请求支持 `Range`(206),保证离线可拖动播放
 - **更新保守**:不 `skipWaiting`,新 SW 等所有页面关闭后接管,避免孩子玩到一半被刷新
 - SW 只拦截同源 GET;analytics 上报离线时自然丢弃(尽力而为语义,无离线队列)
 - 触控:主站 CSS 与注入式 SDK 均设 `touch-action: manipulation`,消除双击缩放手势仲裁延迟;课件内 `touch-action: none` 的拖拽画布不受影响
-- 本地离线验证:`npm run preview` 访问主站与某课件后停掉服务器,重开页面应能从缓存加载;e2e 由 `tests/e2e/pwa.spec.js` 覆盖
+- 本地离线验证:`npm run preview` 访问主站与某课件后停掉服务器,重开页面应能从缓存加载;e2e 由 `tests/e2e/pwa.spec.js` 与 `tests/e2e/offline-complete.spec.js` 覆盖,单测见 `tests/unit/offline-cache.test.mjs`
+
+> ⚠️ 首次访问某课件会增加该课全量资源流量(含 three.js 的课件约 1.5 MB)。这是「可离线」的代价,文档与 README 需如实说明。
+
+## 构建产物与分阶段发布
+
+`npm run build` 不再直接改写仓库根目录,而是:
+
+1. 在仓库根下建临时目录 `.kidslab-build-*`,全部产物先写进去
+2. 文本资源(html/css/js/mjs/json/svg/md/txt/webmanifest/gltf)统一 **LF 归一化**后写入,避免 Windows/Linux 换行差异污染指纹
+3. 为每个课件生成 `offline.json`(见上),并对全部资源算 SHA-256
+4. 逐资源复核哈希后,把 `courseware/`、`index.html`、`sw.js` 原子替换进仓库根(`publishArtifacts`)
+5. 任一步失败:回滚到替换前状态并清理临时目录;回滚也失败时保留临时目录并在错误里给出路径,便于人工抢救
+
+- `scripts/build-workspace.mjs` 提供 `createBuildWorkspace` / `publishArtifacts` / `removeBuildWorkspace`,并对重命名做 `EBUSY|EPERM|EACCES|UNKNOWN` 重试
+- ⚠️ `courseware/<id>/offline.json` 是构建产物,和 `courseware/` 一样**不要手改**;`src/<id>/offline.json` 是保留名,写了会被构建拒绝
+- 单测见 `tests/unit/build-recovery.test.mjs`(校验失败不改动产物、回滚、保留临时目录、LF 归一化)
+- 仓库使用 `.gitattributes` 强制 `* text=auto eol=lf`,二进制类型显式标记
 
 ## 添加新课件
 
@@ -141,6 +169,9 @@ cloudflare/analytics/  # 埋点接收 Worker(push 时经 deploy-analytics.yml �
 - **3D 必做**:场景必须 three.js,精细模型(灯光、阴影、Standard/Physical 材质),禁止默认灰盒;WebGL 失败要有 `#nogl`
 - **BGM 必做**:本地可循环背景音乐 + 独立音乐/音效开关;首次用户手势后才播放
 - **逻辑必须可单测**:玩法抽成无 DOM 的 `*-model.js`,在 `tests/unit/<id>.test.mjs` 覆盖恒等式、边界、非法拒绝、失败恢复
+- **首次手势不得阻塞玩法**:音频解锁会触发 `AudioContext.resume()` 与 BGM 加载(约 740 KB),**绝不能 `await` 在玩法动作之前**,否则孩子第一次点按钮要等音频下载完才有反应。正确写法是 `unlockAll()` 同步发起、`audio.unlock().catch(() => {})` 不等待,状态变更立即执行
+- **状态提交要早于动画**:用 `setTimeout` 播放反应动画时,新状态必须在动画**开始前**写入,否则动画期间重复点击会绕过校验(如重复记录同一组实验)
+- **顶栏必须能在 375px 内放下**:标题用 `flex: 1 1 auto; min-width: 0` + `text-overflow: ellipsis` 允许压缩,不要给标题 `white-space: nowrap` 又不给 `min-width: 0`——会把语言/主题按钮挤出视口,手机上永远点不到。改完顶栏要在 375px 下实测每个按钮的可点性
 - **进度与行为埋点**:`window.cool?.stage('level2')` 始终把课件记为“玩过”;在最终通关边界调用 `window.cool?.complete?.()`,可无限复玩的课件则在首个完整成功闭环调用;`window.cool?.track('flip')` 仅在配置 analytics 时上报核心动作。给"孩子做了什么"起名而非"点了哪个按钮",每课件 5~10 个即可,详见 `docs/sdk.md` 与 `docs/analytics.md`
 - **低年级题面可朗读**:`g1`/`g2` 课件的题面与引导语必须能点一下就用 `window.cool.speech` 念出来,按钮命中区 ≥44×44px,可单独静音并持久化。**朗读只念题面与动作指令,绝不念出答案**;组句抽成无 DOM 纯函数单独单测。语音是纯旁白:不得用 `utterance.onend` 推进玩法节奏,关闭语音或缺中文音色时视觉反馈必须照常发生。语音夸奖要克制——按里程碑(如连对、通关)给,不要每题复读同一句,详见 `docs/sdk.md`
 
@@ -231,6 +262,9 @@ cloudflare/analytics/  # 埋点接收 Worker(push 时经 deploy-analytics.yml �
 - [ ] 有本地 BGM(可循环、手势后播放、可单独关闭);核心操作、成功、错误与通关(按玩法实际状态)有语义明确的音效;静音开关可见可访问且能关闭全部声音,连续拖拽/物理循环不会高频堆叠音源,音频失败时可静默降级
 - [ ] 形态是观测/调试/实验,不是考试卷;左侧 3D 场景 + 右侧可收拢参数面板
 - [ ] 玩法模型有单测:恒等式、边界、非法输入拒绝、失败后可恢复
+- [ ] 首次点击立即生效:第一次点玩法按钮时不等待音频解锁/BGM 下载,`unlockAll()` 不阻塞动作
+- [ ] 375px 下顶栏每个按钮都点得到(语言/主题/静音不漏到视口外),标题可压缩省略
+- [ ] 带 `setTimeout` 动画的玩法:动画期间重复点击不会绕过校验重复记录状态
 - [ ] 深浅主题切换即时生效(含 Canvas/three.js 重绘),无硬编码颜色
 - [ ] 若完成或新增计划项,已同步更新 `docs/courseware-plan/status.md`、必要的学科规划文档和 README
 
