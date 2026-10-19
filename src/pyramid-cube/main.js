@@ -1,10 +1,15 @@
+const rounds=createRounds('pyramid-cube');
+const ROUND_BASES={},ROUNDS={};
+for(const size of [0])for(const diff of [0,1,2]){const id=`${size}-${diff}`,base=twistBase('pyramid',size,diff);ROUND_BASES[id]=base;ROUNDS[id]=rounds.define(id,base,twistTask,validTwist,twistIdentity);}
 /* ============================================================
    金属金字塔魔方 · KidsLab
    玩法胶水：双语/主题 + 状态机 + 提示/演示/小课堂
    ============================================================ */
 import { createPyraminxApp } from './pyraminx3d.js';
 import { createAudio } from './audio.js';
-import { solvePyraminx } from './solver.js';
+import {createRounds} from './random-rounds.js';
+import {runRoundWorker} from './random-worker-client.js';
+import {twistBase,twistTask,validTwist,twistIdentity,twistPath,twistIsSolved,twistInverse,validTwistPlay} from './random-model.js';
 
 const I18N = {
   zh: {
@@ -251,6 +256,35 @@ function boot() {
   const bestKey = () => String(S.diff);
   const bests = (() => { try { return JSON.parse(store.get(LS.best) || '{}') || {}; } catch { return {}; } })();
 
+  const roundId=()=>`${0}-${S.diff}`;
+  const active=String(rounds.active||'0-0').split('-').map(Number);
+  if(ROUND_BASES[active.join('-')]){S.diff=active[1];}
+  let displaySnapshot=null,winTimer=0;
+  function captureRound(){
+    if(displaySnapshot)return displaySnapshot;
+    return {history:S.history.map(m=>({...m})),userStack:S.userStack.map(m=>({...m})),moves:S.moves,hints:S.hints,
+      seconds:S.startAt?(performance.now()-S.startAt)/1000:S.elapsed,started:!!S.startAt,
+      phase:S.phase==='idle'?'idle':'playing',won:!!S.won,state:twistPath(ROUND_BASES[roundId()],S.history)};
+  }
+  function restoreRound(p){
+    if(!validTwistPlay(p,ROUND_BASES[roundId()]))throw new Error('Invalid saved twist');
+    S.gen++;hinting=false;clearTimeout(winTimer);clearTimeout(notationTimer);displaySnapshot=null;cube.build();cube.setSkin(S.skin);cube.setIdleSpin(false);
+    S.history=p.history;S.userStack=p.userStack;S.moves=p.moves;S.hints=p.hints;S.elapsed=p.seconds;S.startAt=p.started?performance.now()-p.seconds*1000:0;
+    for(const m of S.history)cube.applyInstant(m);
+    S.won=!!p.won&&cube.isSolved();setPhase(p.phase);setTip(cube.isSolved()?'tipSolvedIdle':'tipPlay');
+    $('win').hidden=!S.won;if(S.won){$('winTitle').textContent=t('winTitle');$('winStats').textContent=t('winStats')(fmtTime(S.elapsed),S.moves);}
+  }
+  function currentSolution(){
+    const base=ROUND_BASES[roundId()],state=twistPath(base,S.history),fallback=S.history.slice().reverse().map(m=>({...twistInverse(m,base),stage:'rewind'}));
+    return runRoundWorker({payload:{state,size:S.size},fallback:()=>fallback,
+      validate:path=>{try{return Array.isArray(path)&&twistIsSolved(twistPath(base,path,state),base);}catch{return false;}},
+      workerFactory:()=>new Worker(new URL('./solver-worker.js',import.meta.url),{type:'module'})});
+  }
+  function changeDifficulty(size,diff){
+    rounds.checkpoint();S.diff=diff;
+    ROUNDS[roundId()]=rounds.next(roundId());reset();rounds.checkpoint();
+  }
+
   let notationTimer = 0;
   function showNotation(mv) {
     const info = cube.notation(mv);
@@ -306,13 +340,14 @@ function boot() {
   }
 
   onUserTwistRef = (mv) => {
-    audio.click(0.9 + Math.random() * 0.25);
+    S.won=false;audio.click(0.9 + Math.random() * 0.25);
     invalidateHint();
     pushHistory(mv);
     showNotation(mv);
     markMoved();
     window.cool?.track?.('twist');
     if (S.phase === 'playing') {
+      window.cool?.stage?.(roundId());
       if (!S.startAt) S.startAt = performance.now();
       S.userStack.push(mv);
       S.moves += 1;
@@ -321,34 +356,12 @@ function boot() {
       S.userStack.push(mv);
       if (cube.isSolved()) { S.history = []; S.userStack = []; }
     }
-    render();
+    render();rounds.checkpoint();
   };
 
-  async function scramble() {
-    if (cube.isBusy() || S.phase === 'scrambling' || S.phase === 'solving') return;
-    audio.ensure();
-    cube.setIdleSpin(false);
-    cube.build();
-    cube.setSkin(S.skin);
-    stageHide();
-    invalidateHint();
-    const gen = ++S.gen;
-    S.history = []; S.userStack = [];
-    S.moves = 0; S.hints = 0; S.startAt = 0; S.elapsed = 0;
-    setPhase('scrambling');
-    setTip('tipScrambling');
-    window.cool?.stage?.(`diff${S.diff}`);
-    const useTips = S.diff > 0;
-    for (const mv of cube.randomScramble(SCRAMBLE[S.diff], { tips: useTips })) {
-      pushHistory(mv);
-      await cube.animateMove(mv, 0.09);
-      if (S.gen !== gen) return;
-      audio.whoosh();
-    }
-    S.startAt = 0;
-    markMoved();
-    setPhase('playing');
-    setTip('tipPlay');
+  function scramble() {
+    audio.ensure();rounds.checkpoint();
+    ROUNDS[roundId()]=rounds.next(roundId());reset();rounds.checkpoint();
   }
 
   async function undo() {
@@ -357,12 +370,12 @@ function boot() {
     const gen = S.gen;
     const mv = S.userStack.pop();
     const inv = cube.invert(mv);
+    pushHistory(inv);if(S.phase==='playing')S.moves=Math.max(0,S.moves-1);rounds.checkpoint();
     render();
     await cube.animateMove(inv, baseDur());
     if (S.gen !== gen) return;
     audio.click(0.75);
-    pushHistory(inv);
-    if (S.phase === 'playing') S.moves = Math.max(0, S.moves - 1);
+
     markMoved();
     if (cube.isSolved()) {
       if (S.phase === 'playing') { onWin(false); return; }
@@ -377,91 +390,49 @@ function boot() {
   const invalidateHint = () => { hintPlan = null; };
 
   async function hint() {
-    if (hinting || cube.isBusy() || S.phase !== 'playing' || !S.history.length) return;
-    const gen = S.gen;
-    let step; let stageKey;
-    if (!hintPlan || hintPlan.idx >= hintPlan.steps.length || hintPlan.nextSig !== stateSig()) {
-      let sol = solvePyraminx(cube.getState());
-      if (!sol || !sol.length) {
-        /* 倒带兜底 */
-        sol = S.history.slice().reverse().map((mv) => ({ ...cube.invert(mv), stage: 'rewind' }));
-      }
-      if (!sol.length) return;
-      hintPlan = { steps: sol, idx: 0, nextSig: stateSig() };
-    }
-    step = hintPlan.steps[hintPlan.idx];
-    stageKey = step.stage || 'rewind';
-    hinting = true;
-    cube.setLocked(true);
-    S.hints += 1;
-    S.moves += 1;
-    if (!S.startAt) S.startAt = performance.now();
-    S.userStack = [];
-    render();
+    if(hinting||cube.isBusy()||S.phase!=='playing'||!S.history.length)return;
+    const gen=S.gen;hinting=true;cube.setLocked(true);render();
     try {
-      stageShow(stageKey);
-      const turnDur = baseDur() * 1.45;
-      cube.flashMove(step, 0.55 + turnDur + 0.55);
-      audio.click(1.3);
-      await sleep(550);
-      if (S.gen !== gen || S.phase !== 'playing') return;
-      showNotation(step);
-      await cube.animateMove(step, turnDur);
-      if (S.gen !== gen) return;
-      audio.click(1.15);
-      pushHistory(step);
-      hintPlan.idx += 1;
-      hintPlan.nextSig = stateSig();
-      markMoved();
-      window.cool?.track?.('hint');
-      if (cube.isSolved()) { onWin(false); return; }
-    } finally {
-      hinting = false;
-      setPhase(S.phase);
-    }
+      if(!hintPlan||hintPlan.idx>=hintPlan.steps.length||hintPlan.nextSig!==stateSig()){
+        const steps=await currentSolution();if(gen!==S.gen)return;
+        hintPlan={steps,idx:0,nextSig:stateSig()};
+      }
+      const step=hintPlan.steps[hintPlan.idx];if(!step)return;
+      S.hints++;S.moves++;S.userStack=[];if(!S.startAt)S.startAt=performance.now();
+      stageShow(step.stage||'rewind');showNotation(step);pushHistory(step);
+      if(twistIsSolved(twistPath(ROUND_BASES[roundId()],S.history),ROUND_BASES[roundId()]))onWin(false);rounds.checkpoint();
+      await cube.animateMove(step,baseDur());if(gen!==S.gen)return;
+      hintPlan.idx++;hintPlan.nextSig=stateSig();audio.click(1.15);markMoved();
+      if(cube.isSolved()&&!S.won)onWin(false);
+    }finally{if(gen===S.gen){hinting=false;setPhase(S.phase);rounds.checkpoint();}}
   }
 
   async function autoSolve() {
-    if (cube.isBusy() || !S.history.length || S.phase === 'scrambling' || S.phase === 'solving') return;
-    const gen = S.gen;
-    invalidateHint();
-    setPhase('solving');
-    S.userStack = [];
-    setTip('tipSolving');
-    let sol = solvePyraminx(cube.getState());
-    if (!sol || !sol.length) {
-      sol = S.history.slice().reverse().map((mv) => ({ ...cube.invert(mv), stage: 'rewind' }));
+    if(cube.isBusy()||!S.history.length||S.phase==='solving'||hinting)return;
+    const gen=S.gen;displaySnapshot=captureRound();invalidateHint();setPhase('solving');setTip('tipSolving');
+    const sol=await currentSolution();if(gen!==S.gen)return;
+    const order=[...new Set(sol.map(s=>s.stage||'rewind'))];
+    for(const step of sol){
+      if(gen!==S.gen)return;
+      stageShow(step.stage||'rewind',order,true);showNotation(step);
+      pushHistory(step);await cube.animateMove(step,Math.max(.1,baseDur()*.6));
+      if(gen!==S.gen)return;audio.whoosh();
     }
-    const order = [...new Set(sol.map((s) => s.stage || 'rewind'))];
-    for (const step of sol) {
-      if (S.phase !== 'solving') break;
-      stageShow(step.stage || 'rewind', order, true);
-      showNotation(step);
-      await cube.animateMove(step, Math.max(0.14, baseDur() * 0.75));
-      if (S.gen !== gen) { stageHide(); return; }
-      audio.whoosh();
-      pushHistory(step);
-    }
-    stageHide();
-    if (S.phase === 'solving') onWin(true);
+    stageHide();if(cube.isSolved())onWin(true);
   }
 
   function reset() {
-    cube.build();
-    cube.setSkin(S.skin);
-    S.gen += 1;
-    stageHide();
-    invalidateHint();
-    S.history = []; S.userStack = [];
-    S.moves = 0; S.hints = 0; S.startAt = 0; S.elapsed = 0;
-    $('win').hidden = true;
-    setPhase('idle');
-    setTip('tipSolvedIdle');
+    S.gen++;hinting=false;clearTimeout(winTimer);clearTimeout(notationTimer);displaySnapshot=null;
+    cube.build();cube.setSkin(S.skin);cube.setIdleSpin(false);stageHide();invalidateHint();
+    const a=ROUNDS[roundId()];S.history=a.moves.map(m=>({...m}));S.userStack=[];
+    for(const m of S.history)cube.applyInstant(m);
+    S.moves=0;S.hints=0;S.startAt=0;S.elapsed=0;S.won=false;
+    $('win').hidden=true;setPhase(a.standard?'idle':'playing');setTip(a.standard?'tipSolvedIdle':'tipPlay');markMoved();
   }
 
   function onWin(isDemo) {
     S.elapsed = S.startAt ? (performance.now() - S.startAt) / 1000 : 0;
-    S.history = []; S.userStack = [];
+    S.userStack = [];S.won=!isDemo;S.startAt=0;
     stageHide();
     setPhase('idle');
     $('winEmoji').textContent = isDemo ? '🪄' : '🎉';
@@ -470,9 +441,11 @@ function boot() {
       $('winStats').textContent = '';
       $('winNote').textContent = t('winDemoNote');
     } else {
+      const completedKey='kidslab.pyramid-cube.completed.'+roundId();
+      if(!store.get(completedKey)&&!bests[bestKey()])window.cool?.complete?.();store.set(completedKey,'1');
       cube.celebrate();
       audio.win();
-      window.cool?.complete?.();
+
       window.cool?.track?.('solve');
       $('winStats').textContent = t('winStats')(fmtTime(S.elapsed), S.moves);
       let note = '';
@@ -488,8 +461,8 @@ function boot() {
       $('winNote').textContent = note;
     }
     setTip('tipSolvedIdle');
-    setTimeout(() => { $('win').hidden = false; }, isDemo ? 250 : 850);
-    render();
+    winTimer=setTimeout(() => { $('win').hidden = false; }, isDemo ? 250 : 850);
+    render();rounds.checkpoint();
   }
 
   /* 秘密课 */
@@ -561,7 +534,8 @@ function boot() {
   }
 
   async function startLesson() {
-    if (lessonOn) return;
+    if (lessonOn||cube.isBusy()||hinting||S.phase==='solving') return;
+    displaySnapshot=captureRound();
     guide.hidden = true;
     store.set(LS.guided, '1');
     audio.ensure();
@@ -591,7 +565,7 @@ function boot() {
     document.body.classList.remove('lesson-mode');
     cube.setLessonView(false);
     while (cube.isBusy()) await sleep(50);
-    reset();
+    const saved=displaySnapshot;reset();if(saved)restoreRound(saved);
     cube.setIdleSpin(false);
     setTip('tipIdle');
   }
@@ -613,7 +587,7 @@ function boot() {
       cb(b.dataset[attr]);
     });
   }
-  segWire('diffSeg', 'diff', (v) => { S.diff = +v; render(); });
+  segWire('diffSeg', 'diff', (v) => changeDifficulty(0,+v));
   segWire('skinSeg', 'skin', (v) => { S.skin = v; cube.setSkin(v); });
   $('speedRange').addEventListener('input', (e) => {
     S.speed = +e.target.value;
@@ -626,7 +600,7 @@ function boot() {
   btns.solve.addEventListener('click', autoSolve);
   btns.reset.addEventListener('click', reset);
   $('winAgainBtn').addEventListener('click', () => { $('win').hidden = true; scramble(); });
-  $('winCloseBtn').addEventListener('click', () => { $('win').hidden = true; });
+  $('winCloseBtn').addEventListener('click', () => {const saved=displaySnapshot;if(saved)restoreRound(saved);$('win').hidden=true;rounds.checkpoint();});
 
   const panelBody = $('panelBody'); const panelHandle = $('panelHandle'); const panelArrow = $('panelArrow');
   let panelOpen = matchMedia('(min-width: 761px)').matches;
@@ -670,6 +644,7 @@ function boot() {
   }, 250);
 
   render = () => {
+    document.querySelectorAll('[data-diff]').forEach(b=>b.classList.toggle('is-on',Number(b.dataset.diff)===S.diff));
     moveVal.textContent = String(S.moves);
     if (S.phase !== 'playing' || !S.startAt) timeVal.textContent = fmtTime(S.elapsed);
     const b = bests[bestKey()];
@@ -695,5 +670,7 @@ function boot() {
   applyLang();
   cube.setSkin(S.skin);
   setTip('tipIdle');
+  reset();
+  rounds.attach({active:roundId,capture:captureRound,restore:restoreRound,retry:reset,parent:'#panel',compact:true,dialog:'#win',beforeReload:()=>{S.gen++;lessonGen++;clearTimeout(winTimer);}});
   render();
 }

@@ -1,0 +1,11 @@
+import {test,expect} from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
+test('ice-bridges: impossible graph, current cycle and repairs survive reload and new rounds',async({page})=>{
+  const errors=[];page.on('pageerror',e=>errors.push(e.stack));await page.goto('/courseware/ice-bridges/?seed=987');const saved=()=>roundRecord(page,'ice-bridges');
+  await page.locator('#gogglesBtn').click();await page.reload();expect((await saved()).play.gogglesOn).toBe(true);await page.locator('[data-judge="possible"]').click();expect((await saved()).play.done).toBe(false);await page.locator('[data-judge="impossible"]').click();await page.locator('#nextBtn').click();
+  const a=(await saved()).instance;let at=a.nodes[0].id;const used=new Set();await page.locator(`[data-node="${at}"]`).click();
+  for(let i=0;i<a.edges.length;i++){const e=a.edges.find(e=>!used.has(e.id)&&(e.a===at||e.b===at));used.add(e.id);at=e.a===at?e.b:e.a;await page.locator(`[data-node="${at}"]`).click();if(i===0){await page.reload();expect((await saved()).play.usedEdges.length).toBe(1);}}
+  await page.locator('#nextBtn').click();await page.locator('[data-repair="double"]').click();await page.locator('#testRepairBtn').click();expect((await saved()).play.done).toBe(false);await page.locator('[data-repair="close-one"]').click();await page.reload();await page.locator('#testRepairBtn').click();await expect(page.locator('#completeModal')).toBeVisible();const old=await saved();
+  for(const action of ['retry','new','classic']){await page.locator('.random-round-menu summary').click();await Promise.all([page.waitForEvent('load'),page.locator(`[data-round-action="${action}"]`).click()]);const r=await saved();expect(r.play.done).toBe(false);if(action==='retry')expect(r.fingerprint).toBe(old.fingerprint);if(action==='new')expect(r.fingerprint).not.toBe(old.fingerprint);if(action==='classic')expect(r.instance.edges[0].id).toBe('nc1');}
+  await page.locator('#langBtn').click();await page.locator('#themeBtn').click();await page.locator('[data-repair="add-one"]').click();await page.locator('#testRepairBtn').click();await expect(page.locator('#completeModal')).toBeVisible();expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.ice-bridges')).completed)).toEqual([0,1,2]);expect(errors).toEqual([]);
+});

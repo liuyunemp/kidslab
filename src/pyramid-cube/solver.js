@@ -4,20 +4,7 @@
    输出：[{ vertex, layer, turns, stage }]
    ============================================================ */
 
-const EDGES = [[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]];
-
-function edgesAround(v) {
-  const others = [0, 1, 2, 3].filter((i) => i !== v);
-  // 固定组合顺序（与 3D 引擎右手序一致的近似：按编号排序后旋转对齐）
-  // 使用预计算表，避免 three 依赖
-  const TABLE = [
-    [0, 1, 2], // v0: edges to 1,2,3 → edge ids 0,1,2
-    [0, 3, 4], // v1: to 0,2,3 → 0,3,4
-    [1, 3, 5], // v2: to 0,1,3 → 1,3,5
-    [2, 4, 5], // v3: to 0,1,2 → 2,4,5
-  ];
-  return TABLE[v].slice();
-}
+import {applyTwist} from './random-model.js';
 
 function cloneState(s) {
   return {
@@ -28,24 +15,7 @@ function cloneState(s) {
   };
 }
 
-function apply(s, mv) {
-  const t = ((mv.turns % 3) + 3) % 3;
-  if (!t) return;
-  for (let k = 0; k < t; k++) {
-    s.tipOri[mv.vertex] = (s.tipOri[mv.vertex] + 1) % 3;
-    if (mv.layer >= 1) {
-      s.cenOri[mv.vertex] = (s.cenOri[mv.vertex] + 1) % 3;
-      const e = edgesAround(mv.vertex);
-      const p0 = s.edgePerm[e[0]]; const p1 = s.edgePerm[e[1]]; const p2 = s.edgePerm[e[2]];
-      s.edgePerm[e[0]] = p2;
-      s.edgePerm[e[1]] = p0;
-      s.edgePerm[e[2]] = p1;
-      const o0 = s.edgeOri[p0]; const o1 = s.edgeOri[p1]; const o2 = s.edgeOri[p2];
-      // 朝向跟着零件走（本模型 moves 不改 edgeOri 数值）
-      void o0; void o1; void o2;
-    }
-  }
-}
+function apply(s,mv){applyTwist(s,mv,{kind:'pyramid'});}
 
 function tipsSolved(s) { return s.tipOri.every((o) => o === 0); }
 function centersSolved(s) { return s.cenOri.every((o) => o === 0); }
@@ -159,7 +129,7 @@ export function isSolvedState(state) {
   return solved(state);
 }
 
-/** 与 3D 引擎 edgesAround 顺序可能略有差异时，倒带始终正确 */
+/** 当前局面的逆转动。 */
 export function invertMove(mv) {
   return { vertex: mv.vertex, layer: mv.layer, turns: (3 - (mv.turns % 3)) % 3 };
 }

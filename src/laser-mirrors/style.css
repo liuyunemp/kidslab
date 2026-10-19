@@ -484,7 +484,15 @@ a:focus-visible {
   .stage__hud { gap: 5px; }
   .status { min-height: 42px; padding: 6px 9px; font-size: 16px; line-height: 1.1; }
   .mirror-count { min-width: 76px; padding: 6px; font-size: 16px; }
-  .board-shell { width: min(100%, calc((100dvh - 391px) * 1.333)); min-width: 286px; max-height: 100%; }
+  /* An 8x6 grid needs at least 352x264 for 44px cells, so the board keeps that size and the
+     stage scrolls instead of shrinking touch targets below the accessible minimum. */
+  .board-shell {
+    width: min(100%, calc((100dvh - 391px) * 1.333));
+    min-width: 352px;
+    min-height: 264px;
+    max-height: none;
+  }
+  .stage { overflow: auto; }
 
   .console {
     padding: 8px;

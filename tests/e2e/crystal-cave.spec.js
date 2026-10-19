@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -29,103 +30,53 @@ async function expectFitsViewport(page) {
   expect(layout.canvasHeight).toBeGreaterThanOrEqual(165);
 }
 
-async function finishTwelve(page) {
-  await page.locator('[data-a="3"][data-b="4"]').click();
-  await page.locator('[data-a="2"][data-b="2"]').click();
-  await expect(page.locator('#status')).toContainText('12 已全部变成质数原石');
-  await page.locator('#nextBtn').click();
-}
-
-async function finishEighteen(page) {
-  await page.locator('[data-a="3"][data-b="6"]').click();
-  await page.locator('[data-a="2"][data-b="3"]').click();
-  await expect(page.locator('#status')).toContainText('独一无二的宇宙配方');
-  await page.locator('#nextBtn').click();
-}
-
-async function selectMultiplesOfThree(page) {
-  for (const value of [12, 15, 18, 21, 24, 27, 30]) {
-    await page.locator(`[data-number="${value}"]`).click();
+async function splitAll(page){
+  while(await page.locator('[data-factor]').count()){
+    const n=Number(await page.locator('#selectedValue').textContent());
+    const choices=await page.locator('[data-factor]').evaluateAll(items=>items.map(b=>({a:Number(b.dataset.a),b:Number(b.dataset.b)})));
+    const pair=choices.find(p=>p.a>1&&p.b>1&&p.a*p.b===n);expect(pair).toBeTruthy();
+    await page.locator(`[data-a="${pair.a}"][data-b="${pair.b}"]`).click();
   }
 }
-
-test.describe('factor crystal cave', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-    await page.evaluate(() => {
-      localStorage.setItem('kidslab.lang', 'zh');
-      localStorage.setItem('kidslab.theme', 'light');
-      localStorage.removeItem('kidslab.crystal-cave');
-      localStorage.removeItem('kidslab.progress.crystal-cave');
-      localStorage.removeItem('kidslab.sound.muted');
-    });
-    await page.goto('/courseware/crystal-cave/');
+async function finish(page){
+  for(let i=0;i<2;i++){await splitAll(page);await page.locator('#nextBtn').click();}
+  const a=(await roundRecord(page,'crystal-cave')).instance;
+  for(const n of a.numbers.filter(n=>n%3===0))await page.locator(`[data-number="${n}"]`).click();
+  await page.locator('#checkWallBtn').click();await page.locator('#nextBtn').click();
+}
+test.describe('factor crystal cave',()=>{
+  test.beforeEach(async({page})=>{
+    await page.goto('/');await page.evaluate(()=>{localStorage.clear();localStorage.setItem('kidslab.lang','zh');localStorage.setItem('kidslab.theme','light');});
+    await page.goto('/courseware/crystal-cave/?seed=987');
   });
-
-  test('recovers from wrong factors and completes all three chambers', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: '把 12 敲成质数原石' })).toBeVisible();
-    await page.locator('[data-a="2"][data-b="5"]').click();
-    await expect(page.locator('#status')).toContainText('2 × 5 不等于 12');
-    await expect(page.locator('#selectedValue')).toHaveText('12');
-
-    await finishTwelve(page);
-    await expect(page.getByRole('heading', { name: '追踪 18 的秘密配方' })).toBeVisible();
-    await finishEighteen(page);
-
-    await expect(page.getByRole('heading', { name: '让 3 的倍数一起发光' })).toBeVisible();
-    await page.locator('#forkBtn').click();
-    await expect(page.locator('#status')).toContainText('3 × 某个正整数');
-    await page.locator('[data-number="10"]').click();
-    await selectMultiplesOfThree(page);
-    await page.locator('#checkWallBtn').click();
-    await expect(page.locator('#status')).toContainText('错误选择已标红');
-    await expect(page.locator('[data-number="10"]')).toHaveClass(/is-wrong/);
-
-    await page.locator('[data-number="10"]').click();
-    await page.locator('#checkWallBtn').click();
-    await expect(page.locator('#status')).toContainText('整面矿墙共振成功');
-    await page.locator('#nextBtn').click();
-
-    await expect(page.getByRole('heading', { name: '宇宙配方证书' })).toBeVisible();
-    await expect(page.locator('.recipes')).toContainText('12 = 2 × 2 × 3');
-    await expect(page.locator('#playAgainBtn')).toBeFocused();
-    await expect(page.locator('#course')).toHaveJSProperty('inert', true);
-    await expect.poll(() => page.evaluate(() =>
-      JSON.parse(localStorage.getItem('kidslab.progress.crystal-cave') || 'null')?.status)).toBe('completed');
+  test('recovers from wrong factors and a wrong resonance stone, then completes every chamber',async({page})=>{
+    const n=Number(await page.locator('#selectedValue').textContent());
+    const choices=await page.locator('[data-factor]').evaluateAll(items=>items.map(b=>({a:Number(b.dataset.a),b:Number(b.dataset.b)})));
+    const bad=choices.find(p=>p.a*p.b!==n);await page.locator(`[data-a="${bad.a}"][data-b="${bad.b}"]`).click();
+    expect((await roundRecord(page,'crystal-cave')).play.factors[0].leaves).toEqual([n]);
+    for(let i=0;i<2;i++){await splitAll(page);await page.locator('#nextBtn').click();}
+    const a=(await roundRecord(page,'crystal-cave')).instance,badStone=a.numbers.find(n=>n%3);
+    await page.locator('#forkBtn').click();await page.locator(`[data-number="${badStone}"]`).click();
+    for(const n of a.numbers.filter(n=>n%3===0))await page.locator(`[data-number="${n}"]`).click();
+    await page.locator('#checkWallBtn').click();await expect(page.locator(`[data-number="${badStone}"]`)).toHaveClass(/is-wrong/);
+    await page.locator(`[data-number="${badStone}"]`).click();await page.locator('#checkWallBtn').click();await page.locator('#nextBtn').click();
+    await expect(page.locator('#certificate')).toBeVisible();await expect(page.locator('#course')).toHaveJSProperty('inert',true);
+    expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.progress.crystal-cave')).status)).toBe('completed');
   });
-
-  test('persists progress and supports preferences and target viewports', async ({ page }) => {
-    await expect(page.locator('#soundBtn')).toHaveAttribute('aria-pressed', 'false');
-    await page.locator('#soundBtn').click();
-    await expect(page.locator('#soundBtn')).toHaveAttribute('aria-pressed', 'true');
-    await page.locator('#themeBtn').click();
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-
-    await page.locator('[data-a="3"][data-b="4"]').click();
-    await page.locator('#langBtn').click();
-    await expect(page.getByRole('heading', { name: 'Crack 12 into prime stones' })).toBeVisible();
-    await expect(page.locator('#historyList')).toContainText('12 cracked into 3 × 4');
-    await expectFitsViewport(page);
-
-    await page.reload();
-    await expect(page.locator('#selectedValue')).toHaveText('4');
-    await expect(page.locator('#historyList')).toContainText('12 cracked into 3 × 4');
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await expect(page.locator('#soundBtn')).toHaveAttribute('aria-pressed', 'true');
-    await expectFitsViewport(page);
+  test('partial factor tree survives preferences and refresh at target viewport',async({page})=>{
+    const n=Number(await page.locator('#selectedValue').textContent());
+    const pair=await page.locator('[data-factor]').evaluateAll((items,n)=>items.map(b=>({a:Number(b.dataset.a),b:Number(b.dataset.b)})).find(p=>p.a*p.b===n),n);
+    await page.locator(`[data-a="${pair.a}"][data-b="${pair.b}"]`).click();
+    await page.locator('#soundBtn').click();await page.locator('#themeBtn').click();await page.locator('#langBtn').click();
+    const before=await roundRecord(page,'crystal-cave');await expectFitsViewport(page);await page.reload();
+    expect((await roundRecord(page,'crystal-cave')).play).toEqual(before.play);
+    await expect(page.locator('html')).toHaveAttribute('data-theme','dark');await expectFitsViewport(page);
   });
-
-  test('restores completion and starts a fresh expedition', async ({ page }) => {
-    await finishTwelve(page);
-    await finishEighteen(page);
-    await selectMultiplesOfThree(page);
-    await page.locator('#checkWallBtn').click();
-    await page.locator('#nextBtn').click();
-    await page.reload();
-
-    await expect(page.getByRole('heading', { name: '宇宙配方证书' })).toBeVisible();
-    await page.locator('#playAgainBtn').click();
-    await expect(page.getByRole('heading', { name: '把 12 敲成质数原石' })).toBeVisible();
-    await expect(page.locator('#selectedValue')).toHaveText('12');
+  test('completion resumes, replay preserves progress, and classic entrance restores textbook numbers',async({page})=>{
+    await finish(page);await page.reload();await expect(page.locator('#certificate')).toBeVisible();
+    await page.locator('#playAgainBtn').click();await expect(page.locator('#certificate')).toBeHidden();
+    expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.progress.crystal-cave')).status)).toBe('completed');
+    await page.locator('.random-round-menu summary').click();await page.locator('[data-round-action="classic"]').click();await page.waitForLoadState();
+    expect((await roundRecord(page,'crystal-cave')).instance.target).toBe(12);
   });
 });

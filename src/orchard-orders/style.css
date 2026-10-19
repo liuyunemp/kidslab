@@ -3,6 +3,7 @@
    规则：颜色只用 var(--token)；新颜色先同时加进两套主题
    ============================================================ */
 * { box-sizing: border-box; }
+.field-book summary { font-size:16px;min-height:44px;display:flex;align-items:center;cursor:pointer; }
 
 /* ---------- 主题 token（对齐主站 assets/css/app.css） ---------- */
 :root {
@@ -93,6 +94,8 @@ body {
 .pill:hover { transform: translate(-1px, -2px); box-shadow: 5px 5px 0 var(--line-strong); }
 .pill:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line-strong); }
 .pill--icon { padding: 8px 12px; }
+.bar__title {flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pill {min-height:44px;min-width:44px;font-size:16px;}
 
 /* ---------- 内容区 ---------- */
 .wrap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 30px) 30px; }
@@ -186,3 +189,39 @@ h2 { margin: 0; font-size: clamp(24px, 4vw, 42px); line-height: 1.05; }
 
 /* hidden 属性硬保证：任何 display 规则都不得覆盖 */
 [hidden] { display: none !important; }
+
+@media (max-width: 560px) {
+  html,body{height:100%;overflow:hidden}
+  body{display:flex;flex-direction:column;min-height:0}
+  .bar{padding:5px 8px;gap:6px;flex:0 0 54px}
+  .bar>a span{display:none}
+  .bar .pill{padding:6px 8px}
+  .wrap{width:100%;flex:1;min-height:0;padding:0 8px 8px;display:flex;flex-direction:column;gap:8px}
+  .card{padding:8px}
+  .hero{gap:5px;margin:0}
+  .customer{gap:8px}
+  .customer__emoji{width:42px;height:48px;min-width:42px;font-size:28px}
+  .eyebrow{display:none}
+  h2{font-size:18px;line-height:1.2}
+  .tip{line-height:1.25;margin:3px 0;min-height:40px}
+  .patience{height:8px}
+  .stats{display:flex;gap:6px}
+  .stats div{flex:1;display:flex;align-items:center;justify-content:space-between;min-width:0;padding:4px 6px;box-shadow:none;gap:3px}
+  .stats b{font-size:16px}
+  .play{flex:1;min-height:0;display:flex;flex-direction:column;align-items:stretch;gap:8px}
+  .field{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px}
+  .field__top{display:flex;gap:5px;margin:0}
+  .badge{padding:4px 8px;min-height:32px;font-size:16px;box-shadow:none}
+  .actions{width:100%;display:flex;flex-wrap:nowrap;gap:6px}
+  .actions .btn{flex:1;min-width:0;padding:4px;font-size:16px;box-shadow:none;line-height:1.15}
+  .grid{width:100%;flex:1;min-height:0;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));padding:6px;gap:2px;border-radius:14px}
+  .cell{aspect-ratio:auto;min-height:0;font-size:17px;border-radius:5px}
+  .book{display:flex;align-items:center;gap:8px;position:relative;flex:0 0 58px;padding:5px 8px}
+  .book #nextBtn{flex:1;width:auto;margin:0;padding:6px}
+  .book #restartBtn{display:none}
+  .field-book__contents{position:fixed;left:12px;right:12px;bottom:78px;max-height:65dvh;overflow:auto;padding:12px;border:2px solid var(--ink);border-radius:16px;background:var(--card);z-index:15}
+  .odd-guide{padding:5px;margin:0;gap:4px;grid-template-columns:1fr auto;font-size:16px}
+  .odd-guide>span{display:none}
+  .odd-guide .btn{padding:4px;font-size:16px}
+  .toast{pointer-events:none}
+}

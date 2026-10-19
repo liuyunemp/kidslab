@@ -406,6 +406,7 @@ body[data-level="1"] .gate,
 body[data-level="1"] .path,
 body[data-level="2"] .path { display: grid; }
 .island-scene.is-solved .treasure { display: block; }
+.gate.is-open { background: #d8eee6; box-shadow: inset 10px 0 #384d59, inset -10px 0 #384d59; }
 .status {
   position: absolute;
   z-index: 9;

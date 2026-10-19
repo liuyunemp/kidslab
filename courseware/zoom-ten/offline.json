@@ -1,6 +1,6 @@
 {
   "id": "zoom-ten",
-  "version": "cba185373b38f3aea8a5eb1d8ff87895fc23f7c19529f1a357ad0700c0620881",
+  "version": "e6c4f5d40f7363795ffd1bc8ffa37320da74a24be1cca5a1d7a5924ff0ee9758",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "a201261cf0a7c1e5752a7657d29b5aba2c6dee72640737957d24ccd312105cfa"
+      "sha256": "1c02f392c6ba954a1ea23cd5b6b1b64ef295d6b9eef20b272d6496888143baf1"
     },
     {
       "path": "main.js",
-      "sha256": "2791900ef6d1374daaeddf4471093181ff5554f211006ce683d2ea4a969b3c48",
-      "fingerprint": "09930a21"
+      "sha256": "154ad9217a2486a59ee15f97f10d9c62817dfab74380e77517a4c6b4cc2c8282",
+      "fingerprint": "224eefbb"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "005af8f654b7ac36d9bb0b7ea3279bebf1224393dd6c5ed2b7b784e7f5a26f82",
+      "fingerprint": "154226f9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "acce31745671f70372ff07977bff4b4aa343d958e26ed0d3e2e0cd2a2b6c05e1",
+      "fingerprint": "72b94470"
     },
     {
       "path": "style.css",
-      "sha256": "a4791b1c8e5d6ae93f56ac1d574af7c1b7f53616bd43df7c4f3dac3570be5e08",
-      "fingerprint": "dbacc1d1"
+      "sha256": "01d40846d47605a65be9539f402c5c365db5b9468dbe093e28160806d5276d10",
+      "fingerprint": "be02ba73"
     },
     {
       "path": "vendor/three.module.min.js",

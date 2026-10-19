@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {pigeonTask,pigeonFamily,validPigeon,pigeonCopy} from './random-model.js';
 (() => {
   'use strict';
 
@@ -178,7 +180,7 @@
     },
   };
 
-  const MISSIONS = [
+  const CLASSIC_MISSIONS = [
     {
       id: 'months',
       mode: 'construct',
@@ -219,6 +221,11 @@
     },
   ];
 
+  const rounds=createRounds('bet-party');
+  const MISSIONS=CLASSIC_MISSIONS.map((base,index)=>rounds.define(index,{...base,categories:Array.from({length:base.drawers},(_,i)=>i)},pigeonTask,validPigeon,a=>({drawers:a.drawers,need:a.need}),pigeonFamily));
+  let demoEpoch=0,statusTimer=0;
+  function stopDemo(){demoEpoch++;clearTimeout(statusTimer);}
+  function markCompleted(){if(state.cleared[state.mission])return;state.cleared[state.mission]=true;persist();window.cool?.stage?.(`mission${state.mission+1}`);if(state.cleared.every(Boolean))window.cool?.complete?.();}
   function sureNumber(drawers, need) {
     return drawers * (need - 1) + 1;
   }
@@ -277,7 +284,8 @@
   }
 
   const sound = new SoundEngine();
-  let t = (key) => key;
+  let t = (key) => key,language='zh';
+  const copy=(key,...args)=>pigeonCopy(mission(),key,language)??t(key,...args);
 
   const el = {
     sound: document.getElementById('soundBtn'),
@@ -367,9 +375,9 @@
 
   function drawerLabels() {
     const m = mission();
-    if (m.kind === 'month') return t('monthNames');
-    if (m.kind === 'sock') return t('sockNames');
-    if (m.kind === 'letter') return LETTERS;
+    if (m.kind === 'month') return m.categories.map(i=>t('monthNames')[i]);
+    if (m.kind === 'sock') return m.categories.map(i=>t('sockNames')[i]);
+    if (m.kind === 'letter') return m.categories.map(i=>LETTERS[i]);
     return Array.from({ length: m.drawers }, (_, i) => String(i + 1));
   }
 
@@ -380,7 +388,7 @@
 
   function statusText() {
     if (!state.statusKey) return '';
-    return t(state.statusKey, ...state.statusArgs);
+    return copy(state.statusKey, ...state.statusArgs);
   }
 
   function maxInBins() {
@@ -388,6 +396,7 @@
   }
 
   function resetRound(keepMission = true) {
+    stopDemo();el.completeModal.hidden=true;
     const m = mission();
     state.counts = Array(m.drawers).fill(0);
     state.total = 0;
@@ -448,21 +457,17 @@
       state.showLesson = true;
       state.showFormula = true;
       setStatus('collide', label, n);
-      state.cleared[state.mission] = true;
-      persist();
+      markCompleted();
       sound.magic();
-      window.cool?.stage?.(`mission${state.mission + 1}`);
       if (state.mission === 0) {
-        setTimeout(() => {
+        statusTimer=setTimeout(() => {
           if (state.phase === 'won' && state.mission === 0) {
             setStatus('m0Win');
-            render();
+            render();rounds.checkpoint();
           }
         }, 700);
       }
-      if (state.cleared.every(Boolean)) {
-        window.cool?.complete?.();
-      }
+
     } else if (n >= m.need) {
       // early collision before filling worst case — still ok educationally
       state.collideIndex = index;
@@ -548,20 +553,20 @@
     setStatus('rightBet', m.drawers, m.need, right);
     sound.ok();
     window.cool?.track?.('open_bet');
-    window.cool?.stage?.(`bet${state.mission + 1}`);
+    if(!state.cleared[state.mission])window.cool?.stage?.(`bet${state.mission + 1}`);
     render();
 
     // Auto demo worst-case after correct bet
     runWorstCaseDemo();
   }
 
-  async function runWorstCaseDemo() {
+  async function runWorstCaseDemo(resume=false) {
     const m = mission();
-    if (state.busy) return;
+    if (state.busy&&!resume) return;
+    const epoch=++demoEpoch;
     state.busy = true;
     state.phase = 'demo';
-    state.counts = Array(m.drawers).fill(0);
-    state.total = 0;
+    if(!resume){state.counts = Array(m.drawers).fill(0);state.total = 0;}
     state.pending = false;
     state.collideIndex = -1;
     setStatus('demoStart');
@@ -573,34 +578,33 @@
     // Fill worst case: each drawer gets (need-1)
     for (let layer = 0; layer < per; layer += 1) {
       for (let i = 0; i < m.drawers; i += 1) {
-        if (state.mission !== MISSIONS.indexOf(m)) { state.busy = false; return; }
+        if(epoch!==demoEpoch)return;
+        if(state.counts[i]>layer)continue;
         state.counts[i] += 1;
         state.total += 1;
         sound.place();
-        render();
+        render();rounds.checkpoint();
         await wait(m.drawers > 12 ? 28 : 55);
       }
     }
 
     // One more into drawer 0 forces need
     await wait(200);
+    if(epoch!==demoEpoch)return;
     state.counts[0] += 1;
     state.total += 1;
     state.collideIndex = 0;
     state.phase = 'won';
     state.wizardMood = 'wow';
-    state.cleared[state.mission] = true;
-    persist();
+    markCompleted();
     setStatus('demoDone');
     sound.magic();
-    window.cool?.stage?.(`mission${state.mission + 1}`);
     if (state.cleared.every(Boolean)) {
-      window.cool?.complete?.();
       sound.finale();
       el.completeModal.hidden = false;
     }
     state.busy = false;
-    render();
+    render();rounds.checkpoint();
   }
 
   function nextMission() {
@@ -609,18 +613,14 @@
     if (next >= MISSIONS.length) {
       el.completeModal.hidden = false;
       sound.finale();
-      window.cool?.complete?.();
       render();
       return;
     }
-    state.mission = next;
-    persist();
-    resetRound();
+    goMission(next,true);
     sound.tap();
   }
 
-  function goMission(index) {
-    if (state.busy) return;
+  function goMission(index,fresh=false) {
     if (index < 0 || index >= MISSIONS.length) return;
     if (index > 0 && !state.cleared[index - 1] && !state.cleared[index]) {
       setStatus('lockedMission');
@@ -628,9 +628,9 @@
       render();
       return;
     }
-    state.mission = index;
-    persist();
-    resetRound();
+    rounds.checkpoint();stopDemo();
+    if(fresh&&rounds.record(index).play)MISSIONS[index]=rounds.next(index);
+    state.mission=index;persist();resetRound();const play=rounds.record(index).play;if(play){try{restorePlay(play);}catch{resetRound();}}rounds.checkpoint();
   }
 
   function renderDrawers() {
@@ -675,15 +675,15 @@
     const sure = sureNumber(m.drawers, m.need);
 
     el.missionNumber.textContent = String(idx + 1).padStart(2, '0');
-    el.missionKicker.textContent = t(`m${idx}Kicker`);
-    el.missionTitle.textContent = t(`m${idx}Title`);
-    el.missionText.textContent = t(`m${idx}Text`);
-    el.ruleText.textContent = t(`m${idx}Rule`);
-    el.lessonText.textContent = t(`m${idx}Lesson`);
+    el.missionKicker.textContent = copy(`m${idx}Kicker`);
+    el.missionTitle.textContent = copy(`m${idx}Title`);
+    el.missionText.textContent = copy(`m${idx}Text`);
+    el.ruleText.textContent = copy(`m${idx}Rule`);
+    el.lessonText.textContent = copy(`m${idx}Lesson`);
     el.lessonIcon.textContent = m.icon;
     el.formulaText.textContent = state.betOpened || m.mode === 'construct'
       ? `${t('meterDrawers')} ${m.drawers} · ≥${m.need} · ${t('meterSure')} ${sure}`
-      : t(`m${idx}Formula`);
+      : copy(`m${idx}Formula`);
     if (el.formulaBox) el.formulaBox.hidden = !state.showFormula;
     if (el.ruleCard) el.ruleCard.hidden = !state.showRule;
     if (el.insightCard) el.insightCard.hidden = !state.showLesson;
@@ -715,7 +715,7 @@
     el.inviteBtn.disabled = state.busy || state.phase === 'won' || (m.mode === 'bet' && !state.betOpened);
     el.openBetBtn.disabled = state.busy;
     el.hintBtn.disabled = state.busy;
-    el.resetBtn.disabled = state.busy;
+    el.resetBtn.disabled = false;
 
     const muted = sound.muted;
     el.sound.textContent = muted ? '🔇' : '🔊';
@@ -760,10 +760,7 @@
   el.nextBtn.addEventListener('click', nextMission);
   el.playAgainBtn.addEventListener('click', () => {
     el.completeModal.hidden = true;
-    state.mission = 0;
-    state.cleared = MISSIONS.map(() => false);
-    persist();
-    resetRound();
+    goMission(0,true);
     sound.tap();
   });
 
@@ -778,7 +775,7 @@
   /* i18n / theme via platform SDK */
   window.cool.bindI18n(I18N, {
     onChange({ t: translate, lang, theme }) {
-      t = translate;
+      t = translate;language=lang;
       document.title = t('doc');
       if (el.lang) el.lang.textContent = lang === 'zh' ? 'EN' : '中';
       if (el.theme) {
@@ -792,8 +789,17 @@
   el.lang?.addEventListener('click', () => window.cool.preferences.toggleLang());
   el.theme?.addEventListener('click', () => window.cool.preferences.toggleTheme());
 
+  function restorePlay(s){
+    const m=mission(),p=s.play;
+    if(!p||!Array.isArray(p.counts)||p.counts.length!==m.drawers||p.counts.some(n=>!Number.isInteger(n)||n<0||n>sureNumber(m.drawers,m.need))||p.counts.reduce((a,b)=>a+b,0)!==p.total||p.total>sureNumber(m.drawers,m.need)||!['bet','play','won','demo'].includes(p.phase)||!Array.isArray(s.inputs))throw new Error('Invalid pigeon snapshot');
+    if(p.phase==='won'&&p.total!==sureNumber(m.drawers,m.need))throw new Error('Invalid win');
+    const cleared=state.cleared,missionIndex=state.mission;Object.assign(state,p,{cleared,mission:missionIndex});
+    [el.inputDrawers,el.inputNeed,el.inputPigeons].forEach((e,i)=>{e.value=s.inputs[i];});render();if(state.phase==='demo')runWorstCaseDemo(true);
+  }
   // boot
+  if(!Number.isInteger(debug?.mission)&&rounds.active!==null)state.mission=Number(rounds.active);
   resetRound();
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#completeModal',active:()=>state.mission,capture:()=>({play:{...state,cleared:undefined},inputs:[el.inputDrawers.value,el.inputNeed.value,el.inputPigeons.value]}),restore:restorePlay,retry:resetRound,beforeReload:stopDemo});
 
   window.__BET_PARTY__ = {
     getState: () => ({

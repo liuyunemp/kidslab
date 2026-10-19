@@ -1,6 +1,6 @@
 {
   "id": "hamster-fence",
-  "version": "74dc14411f70506de54861c3293b30ea71eaac550729996382f4303f17c0324a",
+  "version": "283346990931dbe1de271bceba8ca452a1497d5f0edaa7d9fb3a70843640d597",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "62969613e54909d769e05200ce329b3b8fa954c7b5aee713a12676ecbd09f46d"
+      "sha256": "6c6164e12372fd00fb9be825b6f88a5221aa77a7e2291eb61d3826fc766fdf36"
     },
     {
       "path": "main.js",
-      "sha256": "0e35cdaafa8dada2c704d92f732245ad9fa533c60b2262835201bdf6eac4c71d",
-      "fingerprint": "2768530b"
+      "sha256": "a86c5d6ed725c59ae92a87f6df530b6f8e9862d1a06a57a8c7279d4fc4b93205",
+      "fingerprint": "8476c1ae"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "1f5c49ba73e91d5bd32f3fe35d7ed2b38ba20fcfcad84a970f291ab4e33b4781",
+      "fingerprint": "bc64b56e"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "b5f667174878b14ab3be6f279ac8ca116131156d7dea3db8b108ab736d38da85",
+      "fingerprint": "34964bc2"
     },
     {
       "path": "style.css",

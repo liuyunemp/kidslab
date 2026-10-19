@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {levelInstance} from './random-task-helpers.js';
 
 async function place(page, token, cell) {
   await page.locator(`[data-token="${token}"]`).click();
@@ -48,10 +49,13 @@ test.describe('pancake boss', () => {
       localStorage.removeItem('kidslab.progress.pancake-boss');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/pancake-boss/');
+    await page.goto('/courseware/pancake-boss/?seed=987');
   });
 
   test('recovers from scheduling mistakes and completes the breakfast rush', async ({ page }) => {
+    // Each round's duration is generated, so the best finishing time comes from the instance.
+    const firstRound = await levelInstance(page, 'pancake-boss', 0);
+    const bestMinutes = firstRound.rounds * firstRound.minutes;
     await expect(page.getByRole('heading', { name: '两张饼，铁板别空着' })).toBeVisible();
     await place(page, 'A1', 0);
     await page.locator('#checkBtn').click();
@@ -60,7 +64,7 @@ test.describe('pancake boss', () => {
     await place(page, 'A2', 2);
     await place(page, 'B2', 3);
     await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('6 分钟完成');
+    await expect(page.locator('#status')).toContainText(`${bestMinutes} 分钟完成`);
     await page.locator('#nextBtn').click();
 
     await place(page, 'A1', 0);
@@ -75,17 +79,23 @@ test.describe('pancake boss', () => {
     await page.locator('#clearBtn').click();
     await fillOptimalThreePancakes(page);
     await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('最快 9 分钟');
+    const second = await levelInstance(page, 'pancake-boss', 1);
+    await expect(page.locator('#status')).toContainText(`最快 ${second.rounds * second.minutes} 分钟`);
     await page.locator('#nextBtn').click();
 
     await fillOptimalThreePancakes(page);
     await page.locator('#checkBtn').click();
     await expect(page.locator('#status')).toContainText('启动豆浆机');
     await page.locator('#soyBtn').click();
-    await page.getByLabel('8:04').check();
+    // The serving time and its choices are generated from the same task parameters.
+    const clock = (minute) => `${Math.floor(minute / 60)}:${String(minute % 60).padStart(2, '0')}`;
+    const third = await levelInstance(page, 'pancake-boss', 2);
+    const end = third.start + Math.max(third.rounds * third.minutes, third.soy);
+    await page.getByLabel(clock(end + 3)).check();
     await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('到 8:00 是 8 分钟');
-    await page.getByLabel('8:01').check();
+    // A wrong clock reading is answered with the "minutes restart at 00" hint.
+    await expect(page.locator('#status')).toContainText(/分钟要从 00|重新计数/);
+    await page.getByLabel(clock(end)).check();
     await page.locator('#checkBtn').click();
 
     await expect(page.getByRole('heading', { name: '早高峰统筹大师！' })).toBeVisible();

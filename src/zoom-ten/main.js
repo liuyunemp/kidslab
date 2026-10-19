@@ -1,4 +1,6 @@
 import * as THREE from './vendor/three.module.min.js';
+import {createRounds} from './random-rounds.js';
+import {zoomTask,zoomFamily,zoomIdentity,validZoom,zoomQuestion} from './random-model.js';
 
 /* ============================================================
    数字宇宙 · KidsLab 双语/主题模板
@@ -198,19 +200,25 @@ import * as THREE from './vendor/three.module.min.js';
   const SAVE_KEY = 'kidslab.zoomten.stamps';
   const SOUND_KEY = 'kidslab.zoomten.sound';
   const STATION_EXP = [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 16, 21];
+  const rounds=createRounds('zoom-ten');
+  const setup=rounds.define('explore',{kind:'explore',exp:0},zoomTask,validZoom,zoomIdentity,zoomFamily);
+  const units=[{kind:'integer',from:'km',to:'m',scale:1000,hundredths:300},{kind:'integer',from:'m',to:'cm',scale:100,hundredths:300},{kind:'integer',from:'m',to:'mm',scale:1000,hundredths:300},{kind:'decimal',from:'m',to:'cm',scale:100,hundredths:1}].map((base,i)=>rounds.define(`unit-${i}`,base,zoomTask,validZoom,zoomIdentity,zoomFamily));
+  let challengeSolved=false,challengeChoice=null;
+  let initialChallenge=Number(String(rounds.active).replace('unit-',''));
+  if(!Number.isInteger(initialChallenge)||initialChallenge<0||initialChallenge>3)initialChallenge=0;
   const STATION_ICONS = ['👁️', '🐞', '🌸', '🧒', '🌳', '🏟️', '🏘️', '🏙️', '⛰️', '🗺️', '🌍', '🌙', '☀️', '🪐', '✨', '🌌'];
   const placeNamesZh = ['个', '十', '百', '千', '万', '十万', '百万', '千万', '亿', '十亿', '百亿', '千亿'];
   const placeNamesEn = ['ones', 'tens', 'hundreds', 'thousands', 'ten-thousands', 'hundred-thousands', 'millions', 'ten-millions', 'hundred-millions', 'billions', 'ten-billions', 'hundred-billions'];
   const tmpV = new THREE.Vector3();
   const state = {
-    targetExp: 0,
-    exp: 0,
-    activeExp: 0,
+    targetExp: setup.exp,
+    exp: setup.exp,
+    activeExp: setup.exp,
     labels: new Map(),
     groups: new Map(),
     quizOpen: false,
     quizExp: null,
-    currentChallenge: 0,
+    currentChallenge: initialChallenge,
     homeRun: null,
     pointer: null,
     panX: 0,
@@ -650,6 +658,7 @@ import * as THREE from './vendor/three.module.min.js';
     updateElevator();
     renderStampBook();
     $('soundBtn').textContent = state.sound ? t('soundOn') : t('soundOff');
+    if(!$('challengeCard').hidden)renderChallenge();
   }
 
   function openQuiz(exp) {
@@ -705,25 +714,45 @@ import * as THREE from './vendor/three.module.min.js';
   function closeQuiz() { state.quizOpen = false; state.quizExp = null; $('quizCard').hidden = true; }
 
   function showChallenge() {
+    rounds.checkpoint();
+    if(challengeSolved){
+      state.currentChallenge=(state.currentChallenge+1)%units.length;
+      const id=`unit-${state.currentChallenge}`;
+      if(rounds.record(id).play?.challengeSolved)units[state.currentChallenge]=rounds.next(id);
+      challengeSolved=false;challengeChoice=null;
+    }
     $('challengeCard').hidden = false;
-    const list = t('challenges');
-    const ch = list[state.currentChallenge % list.length];
+    renderChallenge();
+  }
+  function renderChallenge(){
+    const ch=zoomQuestion(units[state.currentChallenge]);
     $('challengePrompt').textContent = ch[0];
     $('challengeReveal').textContent = '';
     $('challengeDigits').innerHTML = ch[1].split('').map((d, i) => `<span class="${i === ch[1].length - 1 ? 'on' : ''}">${d}</span>`).join('');
     $('challengeChoices').innerHTML = ch[2].map((c) => `<button class="choice" data-v="${c}" type="button">${c}</button>`).join('');
     $('challengeChoices').querySelectorAll('.choice').forEach((btn) => btn.addEventListener('click', () => answerChallenge(btn.dataset.v)));
+    if(challengeChoice!==null){
+      $('challengeChoices').querySelectorAll('.choice').forEach(btn=>{btn.disabled=challengeSolved;btn.classList.toggle('correct',challengeSolved&&btn.dataset.v===ch[1]);btn.classList.toggle('wrong',btn.dataset.v===challengeChoice&&challengeChoice!==ch[1]);});
+      $('challengeReveal').textContent=`${t(challengeSolved?'challengeOk':'challengeNo')} ${ch[3]}`;
+    }
   }
   function answerChallenge(v) {
-    const ch = t('challenges')[state.currentChallenge % t('challenges').length];
+    if(challengeSolved)return;
+    const ch = zoomQuestion(units[state.currentChallenge]);
+    challengeChoice=v;
     $('challengeChoices').querySelectorAll('.choice').forEach((btn) => {
-      btn.disabled = true;
+      btn.disabled = v===ch[1];
       btn.classList.toggle('correct', btn.dataset.v === ch[1]);
       btn.classList.toggle('wrong', btn.dataset.v === v && v !== ch[1]);
     });
     if (v === ch[1]) {
       $('challengeReveal').textContent = `${t('challengeOk')} ${ch[3]}`;
-      state.currentChallenge += 1;
+      challengeSolved=true;
+      const done=readJSON('kidslab.zoomten.units',[]);
+      if(!done.includes(state.currentChallenge)){
+        done.push(state.currentChallenge);store.set('kidslab.zoomten.units',JSON.stringify(done));
+        if(done.length===units.length)window.cool?.complete?.();
+      }
       sfx('ok');
     } else {
       $('challengeReveal').textContent = `${t('challengeNo')} ${ch[3]}`;
@@ -896,6 +925,17 @@ import * as THREE from './vendor/three.module.min.js';
   resize();
   applyTheme();
   applyLang();
-  setTargetExp(0);
+  setTargetExp(setup.exp);
+  if(String(rounds.active).startsWith('unit-'))showChallenge();
+  rounds.attach({parent:'.bar__actions',compact:true,active:()=>$('challengeCard').hidden?'explore':`unit-${state.currentChallenge}`,
+    capture:()=>({targetExp:state.targetExp,panX:state.panX,panY:state.panY,currentChallenge:state.currentChallenge,challengeSolved,challengeChoice}),
+    restore:s=>{
+      if(!Number.isFinite(s.targetExp)||s.targetExp< -3||s.targetExp>21||!Number.isInteger(s.currentChallenge)||s.currentChallenge<0||s.currentChallenge>3||![s.panX,s.panY].every(Number.isFinite))throw new Error('Invalid journey');
+      state.panX=s.panX;state.panY=s.panY;state.currentChallenge=s.currentChallenge;
+      const q=zoomQuestion(units[state.currentChallenge]);
+      if(s.challengeChoice!==null&&!q[2].includes(s.challengeChoice))throw new Error('Invalid conversion');
+      if(s.challengeSolved&&s.challengeChoice!==q[1])throw new Error('Invalid solved conversion');
+      challengeSolved=s.challengeSolved;challengeChoice=s.challengeChoice;state.exp=s.targetExp;setTargetExp(s.targetExp);render();
+    },retry:()=>{state.homeRun=null;state.panX=0;state.panY=0;challengeSolved=false;challengeChoice=null;setTargetExp(setup.exp);render();}});
   requestAnimationFrame(animate);
 })();

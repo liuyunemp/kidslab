@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {shadowTask,shadowFamily,validShadow,shadowScore,shadowSpeech} from './random-model.js';
 import * as THREE from './vendor/three.module.min.js';
 
 /* ============================================================
@@ -13,7 +15,7 @@ import * as THREE from './vendor/three.module.min.js';
       doc: '立体影子剧场 · KidsLab',
       back: '返回平台',
       title: '立体影子剧场',
-      tip0: '固定光源会把积木影子投到幕布上；拖动旋转积木，观察影子形状。',
+      tip0: '拖动积木，让影子变成目标形状。',
       target: '目标', blocks: '积木架', check: '演出！', reset: '重置本幕', next: '下一幕',
       nogl: '你的浏览器暂不支持 WebGL，影子剧场改用图卡练习 ✨',
       level: (a, b) => `第 ${a}/${b} 幕`, stars: (n) => '⭐'.repeat(n),
@@ -29,7 +31,7 @@ import * as THREE from './vendor/three.module.min.js';
       doc: 'Shadow Shape Theater · KidsLab',
       back: 'Back to platform',
       title: 'Shadow Shape Theater',
-      tip0: 'A fixed light casts the block onto the curtain; drag to rotate the block and watch its shadow.',
+      tip0: 'Turn a block to match the target shadow.',
       target: 'Target', blocks: 'Blocks', check: 'Show!', reset: 'Reset scene', next: 'Next scene',
       nogl: 'Your browser does not support WebGL, so the theater switches to card practice ✨',
       level: (a, b) => `Scene ${a}/${b}`, stars: (n) => '⭐'.repeat(n),
@@ -100,7 +102,7 @@ import * as THREE from './vendor/three.module.min.js';
     { id: 'prism', icon: '🔺', color: 0xffd166 },
   ];
 
-  const LEVELS = [
+  const CLASSIC_LEVELS = [
     { kind: 'make', block: 'sphere', target: 'circle', pose: 'any' },
     { kind: 'make', block: 'cube', target: 'square', pose: 'front' },
     { kind: 'make', block: 'box', target: 'rect', pose: 'front' },
@@ -113,6 +115,8 @@ import * as THREE from './vendor/three.module.min.js';
     { kind: 'combo', target: 'house', blocks: ['cube', 'cone'] },
   ];
 
+  const rounds=createRounds('shadow-theater');
+  const LEVELS=CLASSIC_LEVELS.map((base,i)=>rounds.define(i,{...base,scale:1,initial:[.08,.05,0]},shadowTask,validShadow,a=>a,base.kind==='reverse'?shadowFamily:undefined));
   const canvas = document.getElementById('scene');
   const targetCard = document.getElementById('targetCard');
   const reverseCards = document.getElementById('reverseCards');
@@ -154,6 +158,7 @@ import * as THREE from './vendor/three.module.min.js';
     if (Array.isArray(saved.won)) won = new Set(saved.won.filter((n) => Number.isInteger(n) && n >= 0 && n < LEVELS.length));
     if (Number.isInteger(saved.current) && saved.current >= 0 && saved.current < LEVELS.length) current = saved.current;
   } catch { /* Storage is optional. */ }
+  if(rounds.active!==null)current=Number(rounds.active);
   selected = defaultSelection();
   let activeMeshes = [];
   let dragging = false;
@@ -164,7 +169,7 @@ import * as THREE from './vendor/three.module.min.js';
   const SCREEN_CENTER = { x: 0, y: 1.15, z: -2.05 };
   let showUntil = 0;
   let coneSeen = new Set();
-  let magicShown = false;
+  let magicShown = false,currentDone=false,puppetTimer=0;
   let actx = null;
   let soundOn = true;
   /** 答对后自动进下一幕；手动点「下一幕」会取消它，避免连跳两幕 */
@@ -172,7 +177,7 @@ import * as THREE from './vendor/three.module.min.js';
   function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
   function scheduleAutoNext(fn, ms = 1400) {
     cancelAutoNext();
-    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn();rounds.checkpoint(); }, ms);
   }
 
   function tone(freq, dur = 0.12, type = 'sine', gain = 0.08, delay = 0) {
@@ -281,13 +286,13 @@ import * as THREE from './vendor/three.module.min.js';
     if (!objectGroup) return;
     objectGroup.clear();
     activeMeshes = [];
-    objectGroup.rotation.set(0.08, 0.05, 0);
     const lvl = LEVELS[current];
+    objectGroup.rotation.set(...lvl.initial);objectGroup.scale.setScalar(lvl.scale);
     if (lvl.kind === 'combo') {
       const base = meshFor('cube', 0.85);
       base.position.set(0, -0.55, 0);
       const roof = meshFor('cone', 0.9);
-      roof.position.set(0, 0.62, 0);
+      roof.position.set(0,-.55+1.55*.85/2+1.95*.9/2,0);
       objectGroup.add(base, roof);
       activeMeshes.push(base, roof);
     } else {
@@ -297,9 +302,11 @@ import * as THREE from './vendor/three.module.min.js';
     }
   }
 
+  let lastWidth=0,lastHeight=0;
   function resize() {
     if (!renderer) return;
     const box = canvas.getBoundingClientRect();
+    if(lastWidth===box.width&&lastHeight===box.height)return;lastWidth=box.width;lastHeight=box.height;
     renderer.setSize(Math.max(1, box.width), Math.max(1, box.height), false);
     camera.aspect = Math.max(1, box.width) / Math.max(1, box.height);
     camera.updateProjectionMatrix();
@@ -321,27 +328,9 @@ import * as THREE from './vendor/three.module.min.js';
     return Math.abs(d) < tol;
   }
 
-  function poseScore(lvl) {
-    if (lvl.kind === 'combo') return lvl.blocks?.includes(selected) ? 1 : 0;
-    if (selected !== lvl.block) return 0;
-    if (!renderer || !objectGroup) return 1;
-    if (lvl.pose === 'any') return 1;
-    const rx = objectGroup.rotation.x;
-    const ry = objectGroup.rotation.y;
-    const rz = objectGroup.rotation.z;
-    if (lvl.pose === 'front') {
-      const ok = near(rx, 0, 0.42) && near(ry, 0, 0.42) && near(rz, 0, 0.42);
-      return ok ? 1 : Math.max(0, 1 - (Math.abs(rx) + Math.abs(ry) + Math.abs(rz)) / 1.8);
-    }
-    if (lvl.pose === 'axis') {
-      const ok = near(rx, Math.PI / 2, 0.42) || near(rx, -Math.PI / 2, 0.42);
-      return ok ? 1 : Math.max(0, Math.abs(Math.sin(rx)));
-    }
-    if (lvl.pose === 'side') {
-      const ok = near(rx, 0, 0.42);
-      return ok ? 1 : Math.max(0, Math.abs(Math.cos(rx)));
-    }
-    return 0;
+  function poseScore(lvl){
+    if(!renderer||!objectGroup)return Math.max(...[[0,0,0],[Math.PI/2,0,0],[0,Math.PI/2,0]].map(r=>shadowScore(lvl,r,selected)));
+    return shadowScore(lvl,[objectGroup.rotation.x,objectGroup.rotation.y,objectGroup.rotation.z],selected);
   }
 
   function currentShadowName() {
@@ -365,8 +354,7 @@ import * as THREE from './vendor/three.module.min.js';
       magicShown = true;
       drawShape(document.getElementById('magicA'), 'circle');
       drawShape(document.getElementById('magicB'), 'tri');
-      magic.hidden = false;
-      sfx.win();
+      magicButton.hidden=false;
     }
   }
 
@@ -430,7 +418,7 @@ import * as THREE from './vendor/three.module.min.js';
       });
       tipEl.textContent = renderer ? t('comboTip') : t('comboCardTip');
     } else {
-      drawShape(targetCard, lvl.target, won.has(current));
+      drawShape(targetCard, lvl.target, currentDone);
       tipEl.textContent = renderer ? t('tip0') : t('cardTip');
     }
   }
@@ -444,6 +432,7 @@ import * as THREE from './vendor/three.module.min.js';
       const b = document.createElement('button');
       b.type = 'button';
       b.className = `shape-btn${selected === id ? ' is-active' : ''}`;
+      b.dataset.shape=id;
       b.innerHTML = `${spec.icon}<small>${t(id)}</small>`;
       b.addEventListener('click', () => {
         selected = id;
@@ -478,7 +467,7 @@ import * as THREE from './vendor/three.module.min.js';
   }
 
   function resetLevel() {
-    cancelAutoNext();
+    cancelAutoNext();clearTimeout(puppetTimer);currentDone=false;
     clearFeedback();
     magic.hidden = true;
     dragging = false;
@@ -498,61 +487,48 @@ import * as THREE from './vendor/three.module.min.js';
       return;
     }
     const score = poseScore(lvl);
-    if (score > 0.82) {
-      if (lvl.kind === 'make' && objectGroup) {
-        if (lvl.pose === 'front') objectGroup.rotation.set(0, 0, 0);
-        if (lvl.pose === 'axis') objectGroup.rotation.x = Math.sign(Math.sin(objectGroup.rotation.x) || 1) * Math.PI / 2;
-        if (lvl.pose === 'side') { objectGroup.rotation.x = 0; objectGroup.rotation.y = 0; }
-      }
+    if (score > Math.cos(.42)) {
+      velocity.x=0;velocity.y=0;
       winLevel();
     } else if (score > 0.55) { showToast(t('close'), ''); sfx.close(); }
     else { showToast(selected ? t('wrong') : t('pick'), 'bad'); sfx.bad(); }
   }
 
   function winLevel() {
-    if (won.has(current)) return;
+    if(currentDone)return;currentDone=true;const first=!won.has(current);
     won.add(current);
-    try { localStorage.setItem(PROGRESS_KEY, JSON.stringify({ current: (current + 1) % LEVELS.length, won: [...won] })); } catch { /* Storage is optional. */ }
-    window.cool?.stage?.(`scene-${won.size}-of-${LEVELS.length}`);
-    if (won.size === LEVELS.length) window.cool?.complete?.();
+    try { localStorage.setItem(PROGRESS_KEY, JSON.stringify({ current, won: [...won] })); } catch { /* Storage is optional. */ }
+    if(first)window.cool?.stage?.(`scene-${won.size}-of-${LEVELS.length}`);
+    if (first&&won.size === LEVELS.length) window.cool?.complete?.();
     puppet.hidden = false;
     showToast(t('good'), 'good');
     sfx.win();
-    setTimeout(() => { puppet.hidden = true; }, 2200);
+    puppetTimer=setTimeout(() => { puppet.hidden = true; }, 2200);
     render();
-    if (won.size < LEVELS.length) scheduleAutoNext(nextLevel);
+    // Keep the completed scene until the child explicitly moves on.
   }
 
-  function nextLevel() {
-    cancelAutoNext();
-    clearFeedback();
-    if (current === LEVELS.length - 1 && won.size === LEVELS.length) {
-      won.clear();
-      try { localStorage.setItem(PROGRESS_KEY, JSON.stringify({ current: 0, won: [] })); } catch { /* Storage is optional. */ }
-    }
-    current = (current + 1) % LEVELS.length;
-    dragging = false;
-    velocity.x = 0;
-    velocity.y = 0;
-    magic.hidden = true;
-    selected = defaultSelection();
-    makeObject(selected);
-    render();
+  function nextLevel(){
+    rounds.checkpoint();const next=(current+1)%LEVELS.length;if(rounds.record(next).play)LEVELS[next]=rounds.next(next);current=next;
+    store.set(PROGRESS_KEY,JSON.stringify({current,won:[...won]}));resetLevel();rounds.checkpoint();
   }
 
   function animate() {
     if (!renderer) return;
     requestAnimationFrame(animate);
-    objectGroup.rotation.y += velocity.x;
-    objectGroup.rotation.x += velocity.y;
-    velocity.x *= 0.93;
-    velocity.y *= 0.93;
+    if(!dragging){
+      objectGroup.rotation.y += velocity.x;
+      objectGroup.rotation.x += velocity.y;
+      velocity.x *= 0.93;
+      velocity.y *= 0.93;
+    }
     objectGroup.rotation.x = THREE.MathUtils.clamp(objectGroup.rotation.x, -Math.PI * 0.65, Math.PI * 0.65);
     const score = poseScore(LEVELS[current]);
     activeMeshes.forEach((m) => {
       m.material.emissive = m.material.emissive || new THREE.Color(0x000000);
       m.material.emissive.setHex(score > 0.58 ? 0x332000 : 0x000000);
     });
+    if(!dragging&&Math.abs(velocity.x)+Math.abs(velocity.y)<.0001&&(velocity.x||velocity.y)){velocity.x=0;velocity.y=0;rounds.checkpoint();}
     maybeMagic();
     if (showUntil && performance.now() > showUntil) { toast.hidden = true; showUntil = 0; }
     renderer.render(scene, camera);
@@ -566,7 +542,7 @@ import * as THREE from './vendor/three.module.min.js';
 
   canvas.addEventListener('pointerdown', (e) => {
     if (!renderer || !objectGroup) return;
-    actx?.resume?.();
+    actx?.resume?.().catch(()=>{});
     finger.hidden = true;
     dragging = true;
     last.x = e.clientX; last.y = e.clientY;
@@ -602,14 +578,24 @@ import * as THREE from './vendor/three.module.min.js';
   function render() {
     const lvl = LEVELS[current];
     if (levelBadge) levelBadge.textContent = t('level')(current + 1, LEVELS.length);
-    if (starsEl) starsEl.textContent = t('stars')(won.size);
+    if (starsEl) starsEl.textContent = `⭐ ${won.size}`;
+    magicButton.setAttribute('aria-label',lang==='zh'?'看看圆锥的影子':'Explore cone shadows');
+    readButton.setAttribute('aria-label',lang==='zh'?'朗读引导':'Read instructions');
+    document.getElementById('closeMagic').setAttribute('aria-label',lang==='zh'?'关闭':'Close');
     renderCards();
     renderShelf();
     if (lvl.kind !== 'reverse' && activeMeshes.length && activeMeshes[0].userData.block !== selected) makeObject(selected);
   }
 
   /* ============================ 启动 ============================ */
+  const magicButton=document.createElement('button');magicButton.type='button';magicButton.className='btn btn--ghost';magicButton.textContent='✨';magicButton.addEventListener('click',()=>{cancelAutoNext();drawShape(document.getElementById('magicA'),'circle');drawShape(document.getElementById('magicB'),'tri');magic.hidden=false;});document.querySelector('.bar__actions').append(magicButton);
+  const readButton=document.createElement('button');readButton.type='button';readButton.className='btn btn--ghost';readButton.textContent='🔈';readButton.addEventListener('click',()=>window.cool?.speech?.speak?.(shadowSpeech(LEVELS[current],lang),{lang}));document.querySelector('.top-card').append(readButton);
   initThree();
-  applyTheme();
-  applyLang();
+  function restorePlay(s){
+    if(!SHAPES.some(a=>a.id===s.selected)&&s.selected!==''||!Array.isArray(s.rotation)||s.rotation.length!==3||!s.rotation.every(Number.isFinite))throw new Error('Invalid shadow pose');
+    selected=s.selected;currentDone=Boolean(s.done);coneSeen=new Set(s.coneSeen??[]);magicShown=Boolean(s.magicShown);makeObject(selected);if(objectGroup)objectGroup.rotation.set(...s.rotation);render();
+  }
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#magic',active:()=>current,capture:()=>({selected,done:currentDone,rotation:objectGroup?[objectGroup.rotation.x,objectGroup.rotation.y,objectGroup.rotation.z]:LEVELS[current].initial,coneSeen:[...coneSeen],magicShown}),restore:restorePlay,retry:resetLevel,beforeReload:()=>{cancelAutoNext();clearTimeout(puppetTimer);velocity.x=velocity.y=0;}});
+  new ResizeObserver(resize).observe(canvas.parentElement);
+  applyTheme();applyLang();
 })();

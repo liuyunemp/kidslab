@@ -1,6 +1,6 @@
 {
   "id": "carnival-truth",
-  "version": "ae58f8481063c9aef4b8ce97741c7fa97257bd0ad9d0ae5d77e08e6e4c284ef3",
+  "version": "d1092b197fe5dab036adc8bc5ced5990c0ceb5e532efe0424a45d5aef2a56df9",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "9c02517a9389f19797e30699d3f2f65f9bb48bcdb8d01ff12a4a6c98c5f3c612"
+      "sha256": "d3becb1ed23ebefb5d639762f55fbb4deac31a0e82da33e3f5967e7edd6bcdda"
     },
     {
       "path": "main.js",
-      "sha256": "8a68ea53c5d303aa800247bf5d9a5236440fc27013e2be45c1c639dc999752f9",
-      "fingerprint": "e3703401"
+      "sha256": "f1911b99b2db5a7eace7c652e3d2dc257a651dace97c0fa27595b124b157e2d5",
+      "fingerprint": "4608ff60"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "12f2de42f64e6d40e87fe810a13e21327691659fbff1a8636cedc11130d309ad",
+      "fingerprint": "d0acc310"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "7ef61d2ea758a1bbb43cb844de1b4a9f8c44dadb48330b965175b480cd8e0cb8",
+      "fingerprint": "af3fbd48"
     },
     {
       "path": "style.css",

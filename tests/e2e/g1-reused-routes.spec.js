@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
 
 const clock = [[380, 420], [445, 480], [700, 750], [875, 915], [1090, 1125], [1215, 1260], [340, 390], [545, 600]];
 
@@ -11,8 +12,9 @@ test('时钟小镇：八张订单、错时恢复、重载续玩后结课', async
   await page.addInitScript(() => {
     localStorage.setItem('kidslab.lang', 'zh');
   });
-  await page.goto('/courseware/clock-town/');
-  for (const [index, [start, target]] of clock.entries()) {
+  await page.goto('/courseware/clock-town/?seed=987');
+  for (let index=0;index<8;index++) {
+    const {start,target}=(await roundRecord(page,'clock-town')).instance;
     await expect(page.locator('#levelText')).toHaveText(`${index + 1}/8`);
     if (index === 0) {
       await page.locator('#checkBtn').click();

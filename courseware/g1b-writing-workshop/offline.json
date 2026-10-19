@@ -1,6 +1,6 @@
 {
   "id": "g1b-writing-workshop",
-  "version": "fd8aa0c1fd9e03622fc258f9501882aa68b3fa729408cdd6db1908fa8ad5fd58",
+  "version": "4a3cf93f77f938a369ea1223bf21116202b9afedb102aade53b98d3e2a0ee800",
   "assets": [
     {
       "path": "audio.js",
@@ -26,22 +26,47 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "9fa07d62da025e4a6d0adca2c8d5cbbfc9bcfbb22bdecf3eb58e49703076889d",
-      "fingerprint": "dade1ba1"
+      "sha256": "fe0c8e78cb843ed0c25a7d3f60314a762669c1eaf8151613437af597d0aef65e",
+      "fingerprint": "ebfc094c"
     },
     {
       "path": "index.html",
-      "sha256": "10ea36eeafe2e47d75e5a5dd51e37a359740e75047d3bc2f00f9ed88e029626e"
+      "sha256": "ea8468faebabb824d9a5cb2f1d6a1207af8aa6dc4b543a760922bcd6d4f659d3"
     },
     {
       "path": "main.js",
-      "sha256": "5346acfa41c9568e1334a227eaa713c56d382cd75494efe71e23f7e96b0612d6",
-      "fingerprint": "0b51990b"
+      "sha256": "d4bb9742e48fe02a1a633266b81610ca3830c9929835d1c9cb5401ccbb71874f",
+      "fingerprint": "eb6c822a"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "69dd05e52cd53824a67eb43d0e1d90640139152bec10233db920aa8329bac89e",
+      "fingerprint": "83365ba1"
     },
     {
       "path": "scene.js",
-      "sha256": "38d6c8a91a1e4a8b6e9ef43ee014eae3646f06bcb5460cc18cffc86a5d04d636",
-      "fingerprint": "d24e6a69"
+      "sha256": "dd02b9ba807981ced45add84f16e584b2caf1b400cd98066fed26867b5ca4d82",
+      "fingerprint": "268adbe2"
     },
     {
       "path": "style.css",

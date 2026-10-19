@@ -1,14 +1,16 @@
 import { createAudio } from './audio.js';
+import {createRounds} from './random-rounds.js';
+import {runRoundWorker} from './random-worker-client.js';
+import {CLASSIC_ROUNDS} from './classic-rounds.js';
+import {huarongTask,validHuarong,huarongIdentity,huarongPath} from './random-model.js';
 import { createBoard3D } from './game3d.js';
 import {
   PIECES,
   applyMove,
-  createClassicState,
   invertMove,
   isSolved,
   legalMoves,
   moveLabel,
-  solvePuzzle,
 } from './puzzle.js';
 
 const I18N = {
@@ -59,7 +61,7 @@ const I18N = {
     bestMoves: (moves) => `${moves}步`,
     coachIdleTitle: '先找空位',
     coachIdleText: '拖动空位旁边的棋块，给曹操慢慢让出一条路。',
-    coachPracticeTitle: '最后十二步',
+    coachPracticeTitle: '离出口不远了',
     coachPracticeText: '这局离出口很近，先练会“传递空位”。',
     coachSelectedTitle: (name) => `已选中：${name}`,
     coachSelectedText: (count) => count ? '绿色箭头就是能走的方向。' : '它现在被卡住了，换一块试试。',
@@ -168,7 +170,7 @@ const I18N = {
     bestMoves: (moves) => `${moves} steps`,
     coachIdleTitle: 'Find the empty cells',
     coachIdleText: 'Slide a neighboring piece and slowly build a lane for Cao Cao.',
-    coachPracticeTitle: 'The final twelve steps',
+    coachPracticeTitle: 'Close to the exit',
     coachPracticeText: 'The gate is close. Practice passing the empty cells around.',
     coachSelectedTitle: (name) => `Selected: ${name}`,
     coachSelectedText: (count) => count ? 'The green arrows show every legal direction.' : 'It is blocked right now. Try another piece.',
@@ -203,7 +205,7 @@ const I18N = {
     panelExpand: 'Open puzzle desk',
     panelCollapse: 'Collapse puzzle desk',
     moveAria: { up: 'Move up', left: 'Move left', right: 'Move right', down: 'Move down' },
-    lessonDone: 'Try the final twelve',
+    lessonDone: 'Try an opening puzzle',
     lessonSteps: [
       {
         focus: 'empty',
@@ -254,8 +256,7 @@ let lang = window.cool?.preferences?.lang
 if (!I18N[lang]) lang = 'zh';
 const t = () => I18N[lang];
 
-const classicStart = createClassicState();
-const classicSolution = solvePuzzle(classicStart, { maxNodes: 120000 }) || [];
+const rounds=createRounds('huarong-dao');
 
 function stateAt(start, path, count = path.length) {
   let current = start.slice();
@@ -267,22 +268,13 @@ function stateAt(start, path, count = path.length) {
   return current;
 }
 
-const practiceLength = Math.min(12, classicSolution.length);
-const practiceOffset = Math.max(0, classicSolution.length - practiceLength);
-const LEVELS = {
-  practice: {
-    start: stateAt(classicStart, classicSolution, practiceOffset),
-    solution: classicSolution.slice(practiceOffset),
-  },
-  classic: {
-    start: classicStart,
-    solution: classicSolution,
-  },
-};
+const LEVELS={};
+for(const [id,base] of Object.entries(CLASSIC_ROUNDS))LEVELS[id]=await rounds.defineAsync(id,base,huarongTask,validHuarong,huarongIdentity,
+  {generator:'huarongTask',validator:'validHuarong',identity:'huarongIdentity',...(id==='practice'?{enumerator:'huarongFamily'}:{})});
 
 const audio = createAudio();
 let game = null;
-let levelId = 'classic';
+let levelId = LEVELS[rounds.active]?rounds.active:'classic';
 let state = LEVELS[levelId].start.slice();
 let history = [];
 let moveCount = 0;
@@ -297,6 +289,30 @@ let demoPlaying = false;
 let demoToken = 0;
 let hintTimer = 0;
 let activeHint = null;
+let generation=0,winTimer=0,demoRound=null,demoSnapshot=null;
+function captureRound(){
+  if(demoSnapshot)return demoSnapshot;
+  return {state,history,moveCount,seconds:elapsedSeconds(),started:!!startedAt,won:isSolved(state)};
+}
+function restoreRound(p){
+  if(!p||!Array.isArray(p.history)||p.history.length>10000||p.moveCount!==p.history.length||!Number.isFinite(p.seconds)||p.seconds<0)throw new Error('Invalid saved game');
+  let replay=LEVELS[levelId].start.slice();
+  for(const h of p.history){if(JSON.stringify(h.state)!==JSON.stringify(replay))throw new Error('Invalid undo');replay=huarongPath(replay,[h.move]);if(!replay)throw new Error('Invalid move');}
+  if(JSON.stringify(replay)!==JSON.stringify(p.state))throw new Error('Invalid board');
+  state=replay;history=p.history;moveCount=p.moveCount;startedAt=p.started?Date.now()-p.seconds*1000:0;finishedAt=isSolved(state)?Date.now():0;
+  mode=isSolved(state)?'win':'play';busy=false;game?.setState(state);game?.setInteractive(mode==='play');updateSelected(-1);refreshControls();
+  if(mode==='win'){$('#winStats').textContent=t().winStats(moveCount,formatTime(p.seconds));$('#win').hidden=false;}
+}
+async function currentSolution(){
+  const start=state.slice(),fallback=[...history].reverse().map(h=>invertMove(h.move)).concat(LEVELS[levelId].solution);
+  return runRoundWorker({payload:{state:start},fallback:()=>fallback,validate:path=>{const end=huarongPath(start,path);return !!end&&isSolved(end);},
+    workerFactory:()=>new Worker(new URL('./solver-worker.js',import.meta.url),{type:'module'})});
+}
+async function changeLevel(id){
+  if(busy)return;rounds.checkpoint();
+  if(id!==levelId){busy=true;LEVELS[id]=await rounds.nextAsync(id);}
+  resetLevel(id);rounds.checkpoint();
+}
 
 function formatTime(seconds) {
   const whole = Math.max(0, Math.floor(seconds));
@@ -351,7 +367,7 @@ function setCoach(title, text, icon = '◎') {
 
 function currentIdleCoach() {
   if (levelId === 'practice') {
-    setCoach(t().coachPracticeTitle, t().coachPracticeText, '十二');
+    setCoach(t().coachPracticeTitle, t().coachPracticeText, '◎');
   } else {
     setCoach(t().coachIdleTitle, t().coachIdleText, '◎');
   }
@@ -423,11 +439,13 @@ async function performUserMove(move) {
   refreshControls();
   track('slide_piece', { piece: PIECES[move.piece].id, dx: move.dx, dy: move.dy });
 
+  const token=generation;if(isSolved(state))finishGame();rounds.checkpoint();
   await game?.animateMove(move, state, motionSeconds(0.25));
+  if(token!==generation)return;
   busy = false;
   updateSelected(selectedPiece);
   refreshControls();
-  if (isSolved(state)) finishGame();
+  rounds.checkpoint();
 }
 
 async function undo() {
@@ -443,7 +461,9 @@ async function undo() {
   setCoach(t().coachUndoTitle, t().coachUndoText, '↩');
   refreshControls();
   track('undo_move');
+  const token=generation;rounds.checkpoint();
   await game?.animateMove(reverse, state, motionSeconds(0.22));
+  if(token!==generation)return;
   busy = false;
   activeHint = null;
   updateSelected(selectedPiece);
@@ -451,6 +471,7 @@ async function undo() {
 }
 
 function resetLevel(nextLevel = levelId, { announce = true } = {}) {
+  generation++;clearTimeout(hintTimer);clearTimeout(winTimer);demoSnapshot=null;demoRound=null;
   demoToken += 1;
   demoPlaying = false;
   levelId = nextLevel;
@@ -482,8 +503,9 @@ async function requestHint() {
   game?.setInteractive(false);
   setCoach(t().coachHintThinkingTitle, t().coachHintThinkingText, '…');
   refreshControls();
-  await sleep(40);
-  const path = solvePuzzle(state, { maxNodes: 120000 });
+  const token=generation;
+  const path = await currentSolution();
+  if(token!==generation)return;
   busy = false;
   game?.setInteractive(true);
   if (!path?.length) {
@@ -531,7 +553,10 @@ function finishGame() {
   finishedAt = Date.now();
   mode = 'win';
   const result = { moves: moveCount, seconds: elapsedSeconds() };
-  const isBest = writeBest(result);
+  const completionKey=`kidslab.huarong-dao.completed.${levelId}`;
+  const fresh=!store.get(completionKey)&&!readBest();
+  const isBest = rounds.record(levelId).mode==='classic' ? writeBest(result) : false;
+  store.set(completionKey,'1');
   game?.setInteractive(false);
   game?.celebrate();
   audio.win();
@@ -539,18 +564,18 @@ function finishGame() {
   setCoach(t().coachWinTitle, t().coachWinText, '通');
   $('#winStats').textContent = t().winStats(result.moves, formatTime(result.seconds));
   $('#winNote').textContent = isBest ? t().winNewBest : t().winNote;
-  setTimeout(() => { $('#win').hidden = false; }, motionMs(520));
-  window.cool?.complete?.();
+  winTimer=setTimeout(() => { $('#win').hidden = false; }, motionMs(520));
+  if(fresh)window.cool?.complete?.();
   track('solve_puzzle', { level: levelId, moves: result.moves, seconds: result.seconds });
   updateHud();
 }
 
 function demoStateAt(index) {
-  return stateAt(LEVELS[levelId].start, LEVELS[levelId].solution, index);
+  return stateAt(demoRound.start, demoRound.solution, index);
 }
 
 function updateDemoUi() {
-  const total = LEVELS[levelId].solution.length;
+  const total = demoRound?.solution.length??0;
   $('#demoCount').textContent = `${demoIndex} / ${total}`;
   $('#demoRange').max = String(Math.max(1, total));
   $('#demoRange').value = String(demoIndex);
@@ -570,7 +595,7 @@ function pauseDemo() {
 
 async function playDemo() {
   if (mode !== 'demo') return;
-  const path = LEVELS[levelId].solution;
+  const path = demoRound.solution;
   if (demoIndex >= path.length) {
     jumpDemo(0);
   }
@@ -609,17 +634,17 @@ async function playDemo() {
 function jumpDemo(index) {
   if (mode !== 'demo') return;
   pauseDemo();
-  const total = LEVELS[levelId].solution.length;
+  const total = demoRound.solution.length;
   demoIndex = Math.max(0, Math.min(total, Number(index) || 0));
   state = demoStateAt(demoIndex);
   moveCount = demoIndex;
-  selectedPiece = demoIndex ? LEVELS[levelId].solution[demoIndex - 1].piece : -1;
+  selectedPiece = demoIndex ? demoRound.solution[demoIndex - 1].piece : -1;
   game?.setState(state);
   game?.setInteractive(false);
   if (demoIndex === 0) {
     setCoach(t().coachDemoStartTitle, t().coachDemoStartText, '演');
   } else if (demoIndex < total) {
-    const move = LEVELS[levelId].solution[demoIndex - 1];
+    const move = demoRound.solution[demoIndex - 1];
     setCoach(
       t().coachDemoMoveTitle(demoIndex, total),
       t().coachDemoMoveText(moveLabel(move, lang)),
@@ -631,8 +656,12 @@ function jumpDemo(index) {
   updateDemoUi();
 }
 
-function startDemo(nextLevel = levelId) {
-  resetLevel(nextLevel, { announce: false });
+async function startDemo(nextLevel = levelId) {
+  if(busy)return;
+  if(nextLevel!==levelId)await changeLevel(nextLevel);
+  const saved=captureRound(),token=generation;busy=true;game?.setInteractive(false);
+  const solution=await currentSolution();if(token!==generation)return;
+  demoSnapshot=saved;demoRound={start:state.slice(),solution};busy=false;
   mode = 'demo';
   history = [];
   demoIndex = 0;
@@ -649,10 +678,12 @@ function startDemo(nextLevel = levelId) {
 }
 
 function exitDemo() {
+  const saved=demoSnapshot;
   pauseDemo();
   document.body.classList.remove('is-demo');
   $('#demoBar').hidden = true;
   resetLevel(levelId);
+  if(saved)restoreRound(saved);
 }
 
 function renderLesson() {
@@ -771,7 +802,7 @@ function bindUi() {
   $$('#levelSeg button').forEach((button) => {
     button.addEventListener('click', () => {
       audio.unlock();
-      resetLevel(button.dataset.level);
+      changeLevel(button.dataset.level);
       track('choose_layout', { level: levelId });
     });
   });
@@ -821,7 +852,7 @@ function bindUi() {
     $('#guide').hidden = true;
     currentIdleCoach();
   });
-  $('#winAgainBtn').addEventListener('click', () => resetLevel(levelId));
+  $('#winAgainBtn').addEventListener('click', async () => {if(busy)return;busy=true;LEVELS[levelId]=await rounds.nextAsync(levelId);resetLevel(levelId);rounds.checkpoint();});
   $('#winDemoBtn').addEventListener('click', () => startDemo(levelId));
 
   $('#musicBtn').addEventListener('click', async () => {
@@ -902,6 +933,7 @@ function init() {
   updateAudioButtons();
   refreshControls();
 
+  rounds.attach({active:()=>levelId,capture:captureRound,restore:restoreRound,retry:()=>resetLevel(levelId),parent:'#panel',compact:true,dialog:'#win',beforeReload:()=>{generation++;demoToken++;clearTimeout(hintTimer);clearTimeout(winTimer);}});
   if (!store.get('kidslab.huarong-dao.guided')) {
     setTimeout(() => { $('#guide').hidden = false; }, 520);
   } else {

@@ -1,6 +1,6 @@
 {
   "id": "potion-ratio",
-  "version": "e9e119becaccb0102f86870afbb48ea6fc5ed1ae1251946e8b9fd092d625f55f",
+  "version": "486e1090c897886ff5b2f20cc6cd05455be6f4fd4d5cd3a1d8adcc7e1d8565b9",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "0db57ef59377ebfe971c8f4a380f188044ddeecc142f759ca825f02e86ba6c8b"
+      "sha256": "3d878b29785452de23eab4e4d71edc0cccf2c1f0d12571b1d8a939d40bcf5eef"
     },
     {
       "path": "main.js",
-      "sha256": "df2d6b52209d793fe72c8f014811016a6cfe5cc8ce2ef2a337f7f4ea8178d981",
-      "fingerprint": "08d23d14"
+      "sha256": "421dce276ad0ceb07b2defd7fb980a240f2400d1e514c14eb170f7570c9281d5",
+      "fingerprint": "b30dd8d5"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "005af8f654b7ac36d9bb0b7ea3279bebf1224393dd6c5ed2b7b784e7f5a26f82",
+      "fingerprint": "154226f9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "acce31745671f70372ff07977bff4b4aa343d958e26ed0d3e2e0cd2a2b6c05e1",
+      "fingerprint": "72b94470"
     },
     {
       "path": "style.css",

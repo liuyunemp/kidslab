@@ -4,6 +4,7 @@
    move = { vertex:0..3, layer:0|1, turns:1|2 }  // 120° 单位，layer0=尖角 layer1=深层
    ============================================================ */
 import * as THREE from 'three';
+import {PYRAMID_AROUND,applyTwist} from './random-model.js';
 import { RoomEnvironment } from './vendor/RoomEnvironment.js';
 
 const TAU3 = (Math.PI * 2) / 3;
@@ -44,12 +45,7 @@ const SKINS = {
 
 
 /** 顶点 v 周围三条棱（与 solver.js 同序，绕 +轴右手循环） */
-const AROUND = [
-  [0, 1, 2], // v0 → edges to 1,2,3
-  [0, 3, 4], // v1 → edges to 0,2,3
-  [1, 3, 5], // v2 → edges to 0,1,3
-  [2, 4, 5], // v3 → edges to 0,1,2
-];
+const AROUND=PYRAMID_AROUND;
 
 function makeTriGeo(a, b, c) {
   const geo = new THREE.BufferGeometry();
@@ -449,21 +445,7 @@ export function createPyraminxApp({ canvas, cssVar, onUserTwist, onFirstInteract
     edgeOri = [0, 0, 0, 0, 0, 0];
   }
 
-  function applyMoveData(vertex, layer, turns) {
-    const t = ((turns % 3) + 3) % 3;
-    if (!t) return;
-    for (let k = 0; k < t; k++) {
-      tipOri[vertex] = (tipOri[vertex] + 1) % 3;
-      if (layer >= 1) {
-        cenOri[vertex] = (cenOri[vertex] + 1) % 3;
-        const e = AROUND[vertex];
-        const p0 = edgePerm[e[0]]; const p1 = edgePerm[e[1]]; const p2 = edgePerm[e[2]];
-        edgePerm[e[0]] = p2;
-        edgePerm[e[1]] = p0;
-        edgePerm[e[2]] = p1;
-      }
-    }
-  }
+  function applyMoveData(vertex,layer,turns){applyTwist({tipOri,cenOri,edgePerm,edgeOri},{vertex,layer,turns},{kind:'pyramid'});}
 
   function quatAround(v, turns) {
     return new THREE.Quaternion().setFromAxisAngle(VDIR[v], turns * TAU3);
@@ -996,6 +978,7 @@ export function createPyraminxApp({ canvas, cssVar, onUserTwist, onFirstInteract
     build,
     setSkin,
     animateMove,
+    applyInstant: commit,
     isSolved,
     randomScramble,
     invert,

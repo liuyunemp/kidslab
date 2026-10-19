@@ -1,4 +1,7 @@
-(() => {
+import {createRounds} from './random-rounds.js';
+import {coloringClassic,coloringTask,validColoring,coloringIdentity} from './random-model.js';
+import {CLASSIC_MAPS} from './classic-maps.js';
+(async () => {
   'use strict';
 
   const SAVE_KEY = 'kidslab.four-color-kingdom';
@@ -240,185 +243,12 @@
   /* ---------- Maps ----------
      adjacency is undirected; paths in viewBox 0..100
   */
-  const MAPS = [
-    {
-      // K4: crown + three outer wedges (east/west/south) that all pairwise share a border
-      id: 'welcome',
-      budget: 4,
-      showExtra: false,
-      startCoins: 4,
-      fixed: {},
-      regions: [
-        {
-          id: 'crown',
-          d: 'M50 44 L60 54 L50 62 L40 54 Z',
-          label: [50, 53],
-          neighbors: ['east', 'west', 'south'],
-        },
-        {
-          // top-right wedge: outer N→SE plus crown top/right edges
-          id: 'east',
-          d: 'M50 8 L90 88 L60 54 L50 44 Z',
-          label: [68, 42],
-          neighbors: ['crown', 'west', 'south'],
-        },
-        {
-          // top-left wedge: outer N→SW plus crown top/left edges
-          id: 'west',
-          d: 'M50 8 L50 44 L40 54 L10 88 Z',
-          label: [32, 42],
-          neighbors: ['crown', 'east', 'south'],
-        },
-        {
-          // bottom wedge: outer SE→SW plus crown right/bottom/left edges
-          id: 'south',
-          d: 'M90 88 L10 88 L40 54 L50 62 L60 54 Z',
-          label: [50, 80],
-          neighbors: ['crown', 'east', 'west'],
-        },
-      ],
-    },
-    {
-      // Wheel with 4 outer lands (even cycle) + center => χ = 3
-      id: 'budget3',
-      budget: 3,
-      showExtra: false,
-      startCoins: 3,
-      fixed: {},
-      regions: [
-        {
-          id: 'lake',
-          d: 'M40 40 H60 V60 H40 Z',
-          label: [50, 50],
-          neighbors: ['harbor', 'orchard', 'mine', 'peak'],
-        },
-        {
-          id: 'harbor',
-          d: 'M18 10 H82 L60 40 H40 Z',
-          label: [50, 24],
-          neighbors: ['lake', 'orchard', 'peak'],
-        },
-        {
-          id: 'orchard',
-          d: 'M82 10 L92 50 L60 60 V40 Z',
-          label: [76, 38],
-          neighbors: ['lake', 'harbor', 'mine'],
-        },
-        {
-          id: 'mine',
-          d: 'M92 50 L82 90 H18 L40 60 H60 Z',
-          label: [50, 76],
-          neighbors: ['lake', 'orchard', 'peak'],
-        },
-        {
-          id: 'peak',
-          d: 'M18 10 L40 40 V60 L18 90 L8 50 Z',
-          label: [22, 50],
-          neighbors: ['lake', 'harbor', 'mine'],
-        },
-      ],
-    },
-    {
-      // Lord keep fixed sky-blue at top-center; core touches every land
-      id: 'lord',
-      budget: 4,
-      showExtra: false,
-      startCoins: 4,
-      fixed: { lord: 'sky' },
-      regions: [
-        {
-          id: 'lord',
-          d: 'M36 12 H64 V36 H36 Z',
-          label: [50, 24],
-          neighbors: ['plain', 'coast', 'core'],
-          badge: '👑',
-        },
-        {
-          id: 'plain',
-          d: 'M10 12 H36 V36 L28 48 H10 Z',
-          label: [22, 28],
-          neighbors: ['lord', 'core', 'isle'],
-        },
-        {
-          id: 'coast',
-          d: 'M64 12 H90 V48 H72 L64 36 Z',
-          label: [78, 28],
-          neighbors: ['lord', 'core', 'ridge'],
-        },
-        {
-          id: 'isle',
-          d: 'M10 48 H28 L36 60 V88 H10 Z',
-          label: [22, 68],
-          neighbors: ['plain', 'core', 'ridge'],
-        },
-        {
-          id: 'ridge',
-          d: 'M72 48 H90 V88 H64 V60 L72 48 Z',
-          label: [78, 68],
-          neighbors: ['coast', 'core', 'isle'],
-        },
-        {
-          // Plus-shaped heartland touching lord + four outer lands
-          id: 'core',
-          d: 'M36 36 H64 V48 H72 V60 H64 V88 H36 V60 H28 V48 H36 Z',
-          label: [50, 58],
-          neighbors: ['lord', 'plain', 'coast', 'isle', 'ridge'],
-        },
-      ],
-    },
-    {
-      // Busy 7-region planar map, χ = 4. Grape bucket is bait.
-      id: 'devil',
-      budget: 4,
-      showExtra: true,
-      startCoins: 4,
-      fixed: {},
-      regions: [
-        {
-          id: 'a',
-          d: 'M10 10 H42 L36 38 H14 Z',
-          label: [26, 22],
-          neighbors: ['b', 'd', 'g'],
-        },
-        {
-          id: 'b',
-          d: 'M42 10 H72 L66 32 L50 38 L36 38 Z',
-          label: [54, 22],
-          neighbors: ['a', 'c', 'd', 'e'],
-        },
-        {
-          id: 'c',
-          d: 'M72 10 H90 V42 L74 50 L66 32 Z',
-          label: [80, 28],
-          neighbors: ['b', 'e', 'f'],
-        },
-        {
-          id: 'd',
-          d: 'M14 38 H50 L46 60 H18 L14 50 Z',
-          label: [32, 48],
-          neighbors: ['a', 'b', 'e', 'g'],
-        },
-        {
-          id: 'e',
-          d: 'M50 38 L66 32 L74 50 L60 70 L46 60 Z',
-          label: [60, 50],
-          neighbors: ['b', 'c', 'd', 'f', 'g'],
-        },
-        {
-          id: 'f',
-          d: 'M74 50 L90 42 V88 H60 L60 70 Z',
-          label: [78, 66],
-          neighbors: ['c', 'e', 'g'],
-        },
-        {
-          id: 'g',
-          d: 'M10 50 L18 50 L18 60 L46 60 L60 70 L60 88 H10 Z',
-          label: [30, 74],
-          neighbors: ['a', 'd', 'e', 'f'],
-        },
-      ],
-    },
-  ];
+  const rounds=createRounds('four-color-kingdom');
+  const MAPS=[];
+  for(const [i,raw] of CLASSIC_MAPS.entries()){
+    const base=coloringClassic(raw);MAPS.push(await rounds.defineAsync(i,base,coloringTask,validColoring,coloringIdentity,{generator:'coloringTask',validator:'validColoring',identity:'coloringIdentity'}));
+  }
+
 
   const MISSIONS = [
     {
@@ -507,6 +337,8 @@
   let missionIndex = 0;
   let unlocked = 0;
   let completed = new Set();
+  // A save written before random rounds listed completed maps but never recorded the finale.
+  let finaleShown = false;
   let colors = {}; // regionId -> colorId
   let selectedRegion = null;
   let selectedColor = 'rose';
@@ -521,15 +353,14 @@
     completed = new Set(Array.isArray(saved.completed)
       ? saved.completed.filter((value) => Number.isInteger(value) && value >= 0 && value <= 3)
       : []);
+    finaleShown = saved.finaleShown === true;
   } catch {
     unlocked = 0;
     completed = new Set();
+    finaleShown = false;
   }
 
-  let restoreCompletion = completed.has(3);
-  if (restoreCompletion) {
-    missionIndex = 3;
-  }
+  let currentDone=false,completeTimer=0,changing=false;
 
   class SoundEngine {
     constructor() {
@@ -610,7 +441,7 @@
 
   function save() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify({ unlocked, completed: [...completed] }));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ unlocked, completed: [...completed], finaleShown }));
     } catch { /* ignore */ }
   }
 
@@ -675,6 +506,7 @@
   }
 
   function resetMissionState(keepStatus = false) {
+    clearTimeout(completeTimer);currentDone=false;el.modal.hidden=true;el.course.inert=false;
     applyFixedColors();
     selectedRegion = null;
     const available = availableColors();
@@ -693,7 +525,7 @@
   }
 
   function selectRegion(regionId) {
-    if (completed.has(missionIndex)) return;
+    if (currentDone) return;
     const map = currentMap();
     if (map.fixed[regionId]) {
       sound.error();
@@ -710,7 +542,7 @@
   }
 
   function selectColor(colorId) {
-    if (completed.has(missionIndex)) return;
+    if (currentDone) return;
     const allowed = availableColors().some((color) => color.id === colorId);
     if (!allowed) return;
     selectedColor = colorId;
@@ -723,7 +555,7 @@
   }
 
   function paintSelected() {
-    if (!selectedRegion || !selectedColor || completed.has(missionIndex)) return;
+    if (!selectedRegion || !selectedColor || currentDone) return;
     const map = currentMap();
     if (map.fixed[selectedRegion]) {
       sound.error();
@@ -767,7 +599,7 @@
   }
 
   function clearMap() {
-    if (completed.has(missionIndex)) return;
+    if (currentDone) return;
     resetMissionState(true);
     sound.pick();
     setStatus('cleared');
@@ -813,7 +645,7 @@
   }
 
   function completeMission() {
-    completed.add(missionIndex);
+    const first=!completed.has(missionIndex);currentDone=true;completed.add(missionIndex);
     unlocked = Math.max(unlocked, Math.min(3, missionIndex + 1));
     save();
     const map = currentMap();
@@ -826,35 +658,34 @@
 
     if (missionIndex === 3) {
       sound.finale();
-      window.cool?.complete?.();
+      if(first)window.cool?.complete?.();
       window.cool?.track?.('complete-four-color-kingdom', { used });
-      setTimeout(showCompletion, 280);
+      completeTimer=setTimeout(showCompletion, 280);
     } else {
       sound.correct();
-      window.cool?.stage?.(`four-color-${missionIndex + 1}`);
+      if(first)window.cool?.stage?.(`four-color-${missionIndex + 1}`);
       window.cool?.track?.('complete-map', { mission: missionIndex, used });
     }
     render();
   }
 
   function checkMap() {
-    if (completed.has(missionIndex)) return;
+    if (currentDone) return;
     if (!validateMap()) return;
     completeMission();
   }
 
   function showCompletion() {
+    finaleShown = true;
+    save();
     el.course.inert = true;
     el.modal.hidden = false;
     el.playAgain.focus();
   }
 
-  function switchMission(index) {
-    if (index > unlocked && !completed.has(index)) return;
-    missionIndex = index;
-    resetMissionState();
-    window.cool?.stage?.(`four-color-${missionIndex + 1}`);
-    render();
+  async function switchMission(index,fresh=false){
+    if(changing||index>unlocked&&!completed.has(index))return;changing=true;rounds.checkpoint();
+    try{if(fresh)MAPS[index]=await rounds.nextAsync(index);missionIndex=index;resetMissionState();const play=rounds.record(index).play;if(play){try{restorePlay(play);}catch{resetMissionState();}}render();rounds.checkpoint();}finally{changing=false;}
   }
 
   function fillMap() {
@@ -888,7 +719,7 @@
         path.setAttribute('fill', 'var(--map-land)');
       }
 
-      path.setAttribute('tabindex', completed.has(missionIndex) ? '-1' : '0');
+      path.setAttribute('tabindex', currentDone ? '-1' : '0');
       path.setAttribute('role', 'button');
       path.setAttribute('aria-label', regionName(region.id));
       path.addEventListener('click', () => selectRegion(region.id));
@@ -947,7 +778,7 @@
         </span>
       `;
       button.addEventListener('click', () => selectColor(color.id));
-      if (completed.has(missionIndex)) button.disabled = true;
+      if (currentDone) button.disabled = true;
       if (lockedNew && color.id === 'grape') {
         // grape remains clickable so kids can hear the budget block feedback
       }
@@ -998,7 +829,7 @@
     const map = currentMap();
     const used = usedColorSet().size;
     const painted = map.regions.filter((region) => colors[region.id]).length;
-    const done = completed.has(missionIndex);
+    const done = currentDone;
 
     el.missionNumber.textContent = mission.code;
     el.missionKicker.textContent = t(mission.kicker);
@@ -1041,7 +872,7 @@
   });
   el.clear.addEventListener('click', clearMap);
   el.check.addEventListener('click', checkMap);
-  el.next.addEventListener('click', () => switchMission(Math.min(3, missionIndex + 1)));
+  el.next.addEventListener('click', () => switchMission(Math.min(3, missionIndex + 1),true));
   el.sound.addEventListener('click', () => {
     sound.setMuted(!sound.muted);
     renderControls();
@@ -1049,51 +880,32 @@
   });
   el.lang.addEventListener('click', () => window.cool.preferences.toggleLang());
   el.theme.addEventListener('click', () => window.cool.preferences.toggleTheme());
-  el.playAgain.addEventListener('click', () => {
-    el.modal.hidden = true;
-    el.course.inert = false;
-    missionIndex = 0;
-    unlocked = 0;
-    completed.clear();
-    save();
-    resetMissionState();
-    window.cool?.stage?.('four-color-1');
-    render();
-    el.check.focus();
-  });
-
+  el.playAgain.addEventListener('click',()=>{finaleShown=false;completed=new Set();save();switchMission(0,true);});
   resetMissionState();
-  if (!restoreCompletion) {
-    window.cool?.stage?.('four-color-1');
-  }
 
   window.cool.bindI18n(I18N, {
     onChange({ t: translate, lang }) {
-      t = translate;
+      t = (key,...args)=>{
+        if(key==='m1Hint')return lang==='en'?'Every land has three neighbors. Give each a different color.':'每块领地都有三个邻居。让它们各用一色。';
+        if(key==='m2Hint')return lang==='en'?'Start with a land that has many neighbors. Reuse a color only across lands that share no border.':'从邻居多的领地开始；没有共享边界的领地可以复用颜色。';
+        return translate(key,...args);
+      };
       language = lang;
       // Re-bind function-style nested dictionaries after language switch
       render();
-      if (restoreCompletion) {
-        restoreCompletion = false;
-        // restore a valid finished map coloring so the board looks complete
-        autoSolve(currentMap());
-        setStatus('success', 'good', usedColorSet().size, currentMap().budget, coinsLeft());
-        showCompletion();
-      }
+
     },
   });
 
-  /** Greedy solve for restore / sanity; not exposed to player */
-  function autoSolve(map) {
-    const order = [...map.regions].sort((a, b) => b.neighbors.length - a.neighbors.length);
-    const palette = availableColors().map((color) => color.id).filter((id) => id !== 'grape' || map.showExtra);
-    const limited = palette.slice(0, map.budget);
-    colors = { ...map.fixed };
-    for (const region of order) {
-      if (colors[region.id]) continue;
-      const forbidden = new Set(region.neighbors.map((id) => colors[id]).filter(Boolean));
-      const choice = limited.find((id) => !forbidden.has(id));
-      colors[region.id] = choice || limited[0];
-    }
+  function restorePlay(s){
+    const a=currentMap();if(!s||!s.colors||Array.isArray(s.colors)||Object.entries(s.colors).some(([k,v])=>!a.regions.some(r=>r.id===k)||!availableColors().some(c=>c.id===v))||Object.entries(a.fixed).some(([k,v])=>s.colors[k]!==v)||new Set(Object.values(s.colors)).size>a.budget||s.selectedRegion!==null&&!a.regions.some(r=>r.id===s.selectedRegion)||!availableColors().some(c=>c.id===s.selectedColor)||!s.statusMessage||!Array.isArray(s.statusMessage.args))throw new Error('Invalid coloring snapshot');
+    colors=s.colors;selectedRegion=s.selectedRegion;selectedColor=s.selectedColor;statusMessage=s.statusMessage;showRule=Boolean(s.showRule);showLesson=Boolean(s.showLesson);currentDone=Boolean(s.done);
+    if(currentDone&&(a.regions.some(r=>!colors[r.id])||conflicts().length))throw new Error('Invalid completed coloring');render();if(currentDone&&missionIndex===3)showCompletion();
   }
+  const initial=Number(rounds.active??0);missionIndex=Number.isInteger(initial)&&initial>=0&&initial<=unlocked?initial:0;resetMissionState();render();
+  // A save written before random rounds only listed completed maps: honour it once and reopen the finale.
+  // This runs before attach(), so record(...).play is still the stored value.
+  const untouched = index => { const play = rounds.record(index)?.play; return !play || (play.done !== true && !Object.keys(play.colors ?? {}).length); };
+  if(!finaleShown&&[0,1,2,3].every(index=>completed.has(index))&&[0,1,2,3].every(untouched)){missionIndex=3;currentDone=true;finaleShown=true;save();render();showCompletion();}
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#completeModal',active:()=>missionIndex,capture:()=>({colors,selectedRegion,selectedColor,statusMessage,showRule,showLesson,done:currentDone}),restore:restorePlay,retry:()=>{resetMissionState();render();},beforeReload:()=>clearTimeout(completeTimer)});
 })();

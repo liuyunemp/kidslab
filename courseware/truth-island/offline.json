@@ -1,6 +1,6 @@
 {
   "id": "truth-island",
-  "version": "075b75d2511eb6b14fd2b78947ae0744e07f384d5fc5cb9fdd879dfff1332438",
+  "version": "1c269db23d9424c9580b3e238fee79ac6c6c9272aa02e718c12ea00be178128e",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "42b6fdaa020e3be9ecaab646076cf6e59cdbcd37b34eb65c18a6d636416a87b1"
+      "sha256": "6e4dfd0c0fe07c46cf15ab34edd0c8a4ebd9436f707f932befc47848e4f3c09a"
     },
     {
       "path": "main.js",
-      "sha256": "a45cbc1c00c770f0d95c4bc3cd9926622cf212ae4b765285cf084e43498d481d",
-      "fingerprint": "8d325971"
+      "sha256": "e2d0595b6f793699d22d6bfc5d6ca7b353534eebcc2bb1722ffc398e4d163381",
+      "fingerprint": "2e108bdd"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "6bed36f8c9a30227921862ac3a7def1ede244bd6d3339375b8a0fe4f2e37be80",
+      "fingerprint": "01bbe924"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "47f34c0611692a0c2390e4062c44d84dc3fefb2f798637fa7158ba96e49316af",
+      "fingerprint": "ef7ba8ab"
     },
     {
       "path": "style.css",
-      "sha256": "ebd98d59c0fe4094200785a336d671a6e72838f8b7b0bd72b0e40abc1908fbaf",
-      "fingerprint": "30f024ec"
+      "sha256": "2f27e0d2d837a8e7c9a3100521ced36bf148203fb121f9a4b344f21e64b4e614",
+      "fingerprint": "b626ebc2"
     }
   ]
 }

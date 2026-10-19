@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {inkTask,validInk,inkIdentity,inkVerdict} from './random-model.js';
 (() => {
   'use strict';
 
@@ -77,9 +79,9 @@
       progressCase: '审查',
       caseOpen: '待抓捕',
       caseClosed: '已抓捕',
-      candidate: (letter, steps) => `候选点 ${letter}，离对称轴 ${steps} 格`,
-      mirrorA11y: (steps) => `左边墨点离对称轴 ${steps} 格。请选择右边距离相同的候选点，也可以直接在画布右半边点出位置。`,
-      mirrorCanvas: (steps) => `镜像点绘制区。左边墨点离对称轴 ${steps} 格，可在右半边点出对应位置。`,
+      candidate: (letter, steps) => `候选点 ${letter}，到对称轴的纸面距离 ${steps}`,
+      mirrorA11y: (steps) => `左边墨点到对称轴的纸面距离为 ${steps}。选右边距离相同的点。`,
+      mirrorCanvas: (steps) => `镜像点绘制区。左边墨点到对称轴的纸面距离为 ${steps}，请在右边点出对应位置。`,
       suspectA11y: '1 号两边细节成对；2 号右边多一个斑点；3 号两边细节成对。',
       suspect: (n, detail) => `${n} 号怪物，${detail}`,
       symmetricDetail: '眼睛、牙齿和斑点都左右成对',
@@ -167,9 +169,9 @@
       progressCase: 'Case',
       caseOpen: 'Open',
       caseClosed: 'Closed',
-      candidate: (letter, steps) => `Candidate ${letter}, ${steps} grid step${steps === 1 ? '' : 's'} from the symmetry axis`,
-      mirrorA11y: (steps) => `The left spot is ${steps} grid step${steps === 1 ? '' : 's'} from the symmetry axis. Choose a point at the same distance on the right, or place it directly on the canvas.`,
-      mirrorCanvas: (steps) => `Mirror-point drawing area. The left spot is ${steps} grid step${steps === 1 ? '' : 's'} from the axis; place its match on the right.`,
+      candidate: (letter, steps) => `Candidate ${letter}, ${steps} drawing units from the symmetry axis`,
+      mirrorA11y: (steps) => `The left spot is ${steps} drawing units from the symmetry axis. Choose the same distance on the right.`,
+      mirrorCanvas: (steps) => `Mirror-point drawing area. The left spot is ${steps} drawing units from the axis; place its match on the right.`,
       suspectA11y: 'Monster 1 has paired details; Monster 2 has one extra spot on the right; Monster 3 has paired details.',
       suspect: (n, detail) => `Monster ${n}: ${detail}`,
       symmetricDetail: 'eyes, teeth, and spots are paired left to right',
@@ -190,16 +192,20 @@
     { kicker: 'mission3Kicker', title: 'mission3Title', text: 'mission3Text' },
   ];
   const COLORS = { berry: '--berry', ocean: '--ocean', lime: '--lime' };
-  const SPLASH_POSITIONS = [
+  const CLASSIC_POSITIONS = [
     { x: 295, y: 190 }, { x: 345, y: 300 }, { x: 235, y: 325 },
     { x: 340, y: 125 }, { x: 190, y: 240 }, { x: 275, y: 365 },
   ];
-  const MIRROR_ROUNDS = [
+  const CLASSIC_MIRRORS = [
     { y: 150, distance: 155, correct: 1, color: 'berry' },
     { y: 245, distance: 80, correct: 0, color: 'ocean' },
     { y: 335, distance: 230, correct: 2, color: 'lime' },
   ];
-  const OPTION_DISTANCES = [80, 155, 230];
+  const rounds=createRounds('inkblot-monsters');
+  let hatch=rounds.define(0,{kind:'hatch',positions:CLASSIC_POSITIONS},inkTask,validInk,inkIdentity);
+  let mirror=rounds.define(1,{kind:'mirror',options:[80,155,230],rounds:CLASSIC_MIRRORS},inkTask,validInk,inkIdentity);
+  let detective=rounds.define(2,{kind:'detective',impostor:1,spot:{x:44,y:58}},inkTask,validInk,inkIdentity);
+  let SPLASH_POSITIONS=hatch.positions,MIRROR_ROUNDS=mirror.rounds,OPTION_DISTANCES=mirror.options;
   const SAVE_KEY = 'kidslab.inkblot-monsters';
   const SOUND_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
@@ -321,7 +327,7 @@
   const sound = new SoundEngine();
   const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const setStatus = (key, ...args) => { statusMessage = { key, args }; };
-  const statusText = () => t(statusMessage.key, ...statusMessage.args);
+  const statusText = () => statusMessage.key==='detectiveCorrect'?inkVerdict(detective,language):t(statusMessage.key, ...statusMessage.args);
 
   function persist() {
     try {
@@ -348,10 +354,11 @@
   }
 
   function completeMission(index) {
+    if(completed.has(index))return;
     completed.add(index);
     unlocked = Math.max(unlocked, Math.min(2, index + 1));
     persist();
-    window.cool?.stage(`inkblot-mission-${index + 1}`);
+    window.cool?.stage(`inkblot-mission-${index + 1}`);if(index===2)window.cool?.complete?.();
   }
 
   function resetMission(index, message) {
@@ -377,13 +384,16 @@
     render();
   }
 
-  function goToMission(index) {
-    if (index > unlocked) return;
-    resetMission(index);
+  function goToMission(index,fresh=false){
+    if(index>unlocked)return;
+    rounds.checkpoint();
+    if(fresh&&rounds.record(index).play){const a=rounds.next(index);if(index===0){hatch=a;SPLASH_POSITIONS=a.positions;}else if(index===1){mirror=a;MIRROR_ROUNDS=a.rounds;OPTION_DISTANCES=a.options;}else detective=a;}
+    resetMission(index);const play=rounds.record(index).play;if(play){try{restorePlay(play);}catch{resetMission(index);}}
+    rounds.checkpoint();
   }
 
   function addSplat(x, y) {
-    if (missionIndex !== 0 || folded) return;
+    if (missionIndex !== 0 || folded || splats.length>=200) return;
     if (x >= 445 || x <= 80 || y <= 55 || y >= 415) {
       setStatus('leftOnly');
       resultKey = null;
@@ -414,7 +424,7 @@
 
   function foldPaper() {
     if (folded) {
-      resetMission(1);
+      goToMission(1,true);
       el.mirrorChoices.querySelector('button')?.focus();
       return;
     }
@@ -454,6 +464,7 @@
     }
     button.classList.remove('wrong');
     button.classList.add('correct');
+    clearTimeout(transitionTimer);transitionTimer=0;
     solvedMirrors.push(round);
     mirrorIndex += 1;
     sound.play('correct');
@@ -464,14 +475,14 @@
       resultKey = 'equalDistance';
       transitionTimer = setTimeout(() => {
         transitionTimer = 0;
-        resetMission(2);
+        goToMission(2,true);
       }, 850);
     } else {
       setStatus('mirrorCorrect', MIRROR_ROUNDS.length - mirrorIndex);
       transitionTimer = setTimeout(() => {
         transitionTimer = 0;
         el.mirrorChoices.querySelectorAll('button').forEach((candidate) => candidate.classList.remove('correct', 'wrong'));
-        render();
+        render();rounds.checkpoint();
       }, 380);
     }
     resetHintTimer();
@@ -481,7 +492,7 @@
   function chooseSuspect(index) {
     if (missionIndex !== 2 || detectiveSolved) return;
     const button = el.suspects.querySelector(`[data-suspect="${index}"]`);
-    if (index !== 1) {
+    if (index !== detective.impostor) {
       button.classList.remove('wrong');
       void button.offsetWidth;
       button.classList.add('wrong');
@@ -498,12 +509,11 @@
     setStatus('detectiveCorrect');
     resultKey = 'fakeMark';
     sound.play('complete');
-    window.cool?.track('catch-inkblot-impostor', { suspect: 2 });
-    window.cool?.complete?.();
+    window.cool?.track('catch-inkblot-impostor', { suspect: detective.impostor+1 });
     render();
     transitionTimer = setTimeout(() => {
       transitionTimer = 0;
-      setModalOpen(true);
+      setModalOpen(true);rounds.checkpoint();
     }, 500);
   }
 
@@ -685,8 +695,8 @@
     OPTION_DISTANCES.forEach((distance, index) => {
       const x = 450 + distance;
       ctx.fillStyle = '#fff9e9';
-      ctx.strokeStyle = index === round.correct ? cssVar(COLORS[round.color]) : '#25312d';
-      ctx.lineWidth = index === round.correct ? 5 : 3;
+      ctx.strokeStyle = '#25312d';
+      ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.arc(x, round.y, 24, 0, Math.PI * 2);
       ctx.fill();
@@ -721,7 +731,7 @@
       ctx.stroke();
       ctx.fillStyle = '#25312d';
       ctx.beginPath();
-      ctx.arc(x + (mood ? 2 : -2), -31, 7, 0, Math.PI * 2);
+      ctx.arc(x-Math.sign(x)*2, -31, 7, 0, Math.PI * 2);
       ctx.fill();
     });
     ctx.strokeStyle = '#25312d';
@@ -748,7 +758,7 @@
     if (fake) {
       ctx.fillStyle = '#25312d';
       ctx.beginPath();
-      ctx.arc(44, 58, 7, 0, Math.PI * 2);
+      ctx.arc(detective.spot.x,detective.spot.y,7,0,Math.PI*2);
       ctx.fill();
     }
     ctx.restore();
@@ -758,9 +768,9 @@
     ctx.fillStyle = cssVar('--stage');
     ctx.fillRect(0, 0, 900, 460);
     const cards = [
-      { x: 35, color: cssVar(COLORS[splats[0]?.color] || '--ocean'), fake: false, tilt: -0.02 },
-      { x: 315, color: cssVar('--berry'), fake: true, tilt: 0.025 },
-      { x: 595, color: cssVar('--lime'), fake: false, tilt: -0.015 },
+      { x: 35, color: cssVar(COLORS[splats[0]?.color] || '--ocean'), fake: detective.impostor===0, tilt: -0.02 },
+      { x: 315, color: cssVar('--berry'), fake: detective.impostor===1, tilt: 0.025 },
+      { x: 595, color: cssVar('--lime'), fake: detective.impostor===2, tilt: -0.015 },
     ];
     cards.forEach((card, index) => {
       ctx.save();
@@ -919,7 +929,7 @@
       el.progressLabel.textContent = t('progressCase');
       el.progressValue.textContent = bonusMode ? '×6' : t(detectiveSolved ? 'caseClosed' : 'caseOpen');
     }
-    const mirrorSteps = mirrorIndex < MIRROR_ROUNDS.length ? MIRROR_ROUNDS[mirrorIndex].correct + 1 : 0;
+    const mirrorSteps = mirrorIndex < MIRROR_ROUNDS.length ? MIRROR_ROUNDS[mirrorIndex].distance : 0;
     el.canvas.setAttribute('aria-label', missionIndex === 1 ? t('mirrorCanvas', mirrorSteps) : t('canvasLabel'));
     el.canvas.setAttribute('role', missionIndex === 0 && !bonusMode ? 'button' : 'img');
     el.canvas.tabIndex = missionIndex === 0 && !bonusMode ? 0 : -1;
@@ -934,10 +944,11 @@
     el.palette.querySelector('[data-color="lime"]').setAttribute('aria-label', t('lime'));
     el.mirrorA11y.textContent = t('mirrorA11y', mirrorSteps);
     el.mirrorChoices.querySelectorAll('button').forEach((button, index) => {
-      button.setAttribute('aria-label', t('candidate', ['A', 'B', 'C'][index], index + 1));
+      button.setAttribute('aria-label', t('candidate', ['A', 'B', 'C'][index], OPTION_DISTANCES[index]));
     });
     el.suspects.querySelectorAll('button').forEach((button, index) => {
-      button.setAttribute('aria-label', t('suspect', index + 1, t(index === 1 ? 'asymmetricDetail' : 'symmetricDetail')));
+      const detail=index===detective.impostor?(language==='zh'?`一侧有额外斑点，位置 ${detective.spot.x}, ${detective.spot.y}`:`One unpaired spot at ${detective.spot.x}, ${detective.spot.y}`):t('symmetricDetail');
+      button.setAttribute('aria-label', t('suspect',index+1,detail));
     });
     sound.updateButton();
     renderNav();
@@ -986,6 +997,7 @@
       const nearest = OPTION_DISTANCES
         .map((option, index) => ({ index, delta: Math.abs(option - distance) }))
         .sort((a, b) => a.delta - b.delta)[0];
+      if(nearest.delta>36){setStatus('mirrorWrong');render();return;}
       chooseMirror(nearest.index);
     }
   });
@@ -1012,10 +1024,7 @@
     render();
   });
   el.playAgain.addEventListener('click', () => {
-    completed = new Set();
-    unlocked = 0;
-    persist();
-    resetMission(0);
+    goToMission(0,true);
     el.splash.focus();
   });
   el.sound.addEventListener('click', () => sound.toggle());
@@ -1036,6 +1045,13 @@
     },
   });
 
-  setStatus('createReady');
-  resetHintTimer();
+  function restorePlay(s){
+    if(!Array.isArray(s.splats)||s.splats.length>200||s.splats.some(p=>!Number.isFinite(p.x)||p.x<=80||p.x>=445||!Number.isFinite(p.y)||p.y<=55||p.y>=415||!COLORS[p.color]||!['blob','splat','drip'].includes(p.tool)||!Number.isFinite(p.size)||!Number.isInteger(p.seed))||!Number.isInteger(s.mirrorIndex)||s.mirrorIndex<0||s.mirrorIndex>3||!s.statusMessage||!COLORS[s.selectedColor]||!['blob','splat','drip'].includes(s.selectedTool))throw new Error('Invalid ink snapshot');
+    ({splats,folded,mirrorIndex,detectiveSolved,selectedColor,selectedTool,statusMessage,resultKey,bonusMode}=s);solvedMirrors=MIRROR_ROUNDS.slice(0,mirrorIndex);render();
+    if(s.modal||missionIndex===2&&detectiveSolved&&!bonusMode)setModalOpen(true);
+    if(missionIndex===1&&mirrorIndex===3)transitionTimer=setTimeout(()=>goToMission(2,true),850);
+  }
+  const initial=Number(rounds.active??0);missionIndex=Number.isInteger(initial)&&initial>=0&&initial<=2?initial:0;
+  resetMission(missionIndex);
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#completeModal',active:()=>missionIndex,capture:()=>({splats,folded,mirrorIndex,detectiveSolved,selectedColor,selectedTool,statusMessage,resultKey,bonusMode,modal:!el.modal.hidden}),restore:restorePlay,retry:()=>resetMission(missionIndex),beforeReload:()=>{clearTimeout(transitionTimer);clearTimeout(hintTimer);}});
 })();

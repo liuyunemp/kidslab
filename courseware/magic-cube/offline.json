@@ -1,6 +1,6 @@
 {
   "id": "magic-cube",
-  "version": "a9bc99907a6aa3efe777907e296f9dcaddb9a49806b615747b62b14b92cadee7",
+  "version": "c88cfe9cb98cc6457419af1f7a68991a361efd660108bfd6f78b320d91f64634",
   "assets": [
     {
       "path": "audio.js",
@@ -13,17 +13,52 @@
     },
     {
       "path": "cube3d.js",
-      "sha256": "4121eeaa17b520d63496d613084776bc038d2d5d43ea628120425bcad981868c",
-      "fingerprint": "e5879ea7"
+      "sha256": "a9ed274c3569d1a0b09fc3bc3d036ceff341f2f7a454ffe1ec2f4285743c88a1",
+      "fingerprint": "8ef29598"
     },
     {
       "path": "index.html",
-      "sha256": "599516b2127237e9f5b4f1951537c0f9d3e5631daee45becb59e38db5d8b111d"
+      "sha256": "a185adb4927a7e1e24148c93c2e198f0dd0485f2405e7a4d9f680f968d98a98c"
     },
     {
       "path": "main.js",
-      "sha256": "a4188dd249f6693b8b9c273ed68c5eee932bbb4fd9e5b759975ac5d5ab51eec3",
-      "fingerprint": "64792122"
+      "sha256": "736c0e9f4f8a98d13a93d8fe650ec721fa0d6336a078119192ed8182761366cb",
+      "fingerprint": "00fb4c88"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "e5ea559ed1f5b4e8bc6349b424fbade1c3df3763712980c711d8a3325f14fdc3",
+      "fingerprint": "f2a31b46"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "fce4d437c41c495e4236774456f06642106b0047f09b65dc1aca962d762ba8fe",
+      "fingerprint": "fb1fe53b"
+    },
+    {
+      "path": "solver-worker.js",
+      "sha256": "e7a9e8400fad0feb97f7ce3c6fbe5bf38b69a932044de46a76bc469da54a4cb3",
+      "fingerprint": "0c03658a"
     },
     {
       "path": "solver.js",

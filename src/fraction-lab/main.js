@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { fraction, validFraction } from './random-model.js';
 /* Fraction Pizzeria */
 (() => {
   'use strict';
@@ -103,8 +105,10 @@
 
   let lang = readStore(LS.lang) || 'zh';
   if (!I18N[lang]) lang = 'zh';
-  let num = 3;
-  let den = 8;
+  const rounds=createRounds('fraction-lab');
+  const initial=rounds.define('pizza',{num:3,den:8},fraction,validFraction);
+  let num = initial.num;
+  let den = initial.den;
 
   function svgEl(name, attrs = {}) {
     const el = document.createElementNS('http://www.w3.org/2000/svg', name);
@@ -318,8 +322,7 @@
   });
 
   $('#diceBtn').addEventListener('click', () => {
-    den = 2 + Math.floor(Math.random() * 11);
-    num = 1 + Math.floor(Math.random() * den);
+    const next=rounds.next('pizza');num=next.num;den=next.den;
     update({ animate: true });
   });
 
@@ -338,4 +341,7 @@
 
   applyLang();
   update();
+  rounds.attach({parent:'.order-ticket',active:()=> 'pizza',capture:()=>({num,den}),
+    restore:value=>{if(!validFraction(value))throw new Error('Invalid pizza');num=value.num;den=value.den;update();},
+    retry:()=>{num=initial.num;den=initial.den;update();}});
 })();

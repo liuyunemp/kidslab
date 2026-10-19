@@ -1,6 +1,6 @@
 {
   "id": "grid-tower",
-  "version": "478f70738d6ea619bfc16b70a7d89ffb380057b4f6a93e82130839b971be3870",
+  "version": "cf26434cd635b09b7ce6dc5868171ba14f09effa090105d2e6d5e5a092328bd8",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "9d9fe697cbd7f97ab6d6a9043ea4ae47a145e461d615941f8de4868c13bd31c1"
+      "sha256": "178006c75ec4e87fa09653db4c8a3ac26772d2ac9d61964d2ce07c83be693a2d"
     },
     {
       "path": "main.js",
-      "sha256": "626307f74f07cc478c043e573277d56355ef27cc3706021090734827207d8708",
-      "fingerprint": "bcd040f5"
+      "sha256": "a74803d3bf3bc1446a9050a98c3baad1a0992c2a7841f37a979088cb3ca278c9",
+      "fingerprint": "0312394b"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "42e76e93d1ece6c19d07f67959c6bcc1c672ca04c407f8c1e9d41a787683db85",
+      "fingerprint": "d635b9bb"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "c7f63e22b6fa3781a831904e0ddd01fa658a8a118fdf901485d1512cbc25d3ef",
+      "fingerprint": "e2f87d5b"
     },
     {
       "path": "style.css",

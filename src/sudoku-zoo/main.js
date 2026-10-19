@@ -1,5 +1,8 @@
+import {createRounds} from './random-rounds.js';
+import {sudokuTask,validSudoku,sudokuIdentity,validSudokuPlay,boxDims,candidates} from './random-model.js';
+import {CLASSIC_PUZZLES} from './classic-puzzles.js';
 /* 数独动物园 Sudoku Zoo — 给孩子的阶梯式数独 */
-(() => {
+(async () => {
   'use strict';
 
   /* ================= 关卡配置 ================= */
@@ -101,7 +104,7 @@
   const SAVE_KEY = 'kidslab.sudokuzoo';
   const save = (() => { try { return JSON.parse(localStorage.getItem(SAVE_KEY)) || {}; } catch { return {}; } })();
   save.stars = save.stars || {};
-  const persist = () => localStorage.setItem(SAVE_KEY, JSON.stringify(save));
+  const persist=()=>{try{localStorage.setItem(SAVE_KEY,JSON.stringify(save));}catch{}};
 
   /* ================= 音效 ================= */
   let actx = null;
@@ -129,76 +132,15 @@
     win: () => [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, 0.18, 'triangle', 0.16, i * 0.11)),
   };
 
-  /* ================= 数独引擎 ================= */
-  const boxDims = (n) => (n === 4 ? [2, 2] : n === 6 ? [2, 3] : [3, 3]);
-  const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
-
-  function candidates(g, n, i) {
-    const [br, bc] = boxDims(n);
-    const r = (i / n) | 0, c = i % n;
-    const used = new Set();
-    for (let k = 0; k < n; k++) { used.add(g[r * n + k]); used.add(g[k * n + c]); }
-    const r0 = r - (r % br), c0 = c - (c % bc);
-    for (let rr = 0; rr < br; rr++) for (let cc = 0; cc < bc; cc++) used.add(g[(r0 + rr) * n + c0 + cc]);
-    const out = [];
-    for (let v = 1; v <= n; v++) if (!used.has(v)) out.push(v);
-    return out;
-  }
-
-  function makeSolution(n) {
-    const g = new Array(n * n).fill(0);
-    function fill(i) {
-      if (i === n * n) return true;
-      for (const v of shuffle(candidates(g, n, i))) {
-        g[i] = v;
-        if (fill(i + 1)) return true;
-        g[i] = 0;
-      }
-      return false;
-    }
-    fill(0);
-    return g;
-  }
-
-  function countSolutions(p, n, limit = 2) {
-    const g = [...p];
-    function bt() {
-      let best = -1, bestC = null;
-      for (let i = 0; i < n * n; i++) {
-        if (g[i]) continue;
-        const cs = candidates(g, n, i);
-        if (!cs.length) return 0;
-        if (!bestC || cs.length < bestC.length) { best = i; bestC = cs; if (cs.length === 1) break; }
-      }
-      if (best === -1) return 1;
-      let total = 0;
-      for (const v of bestC) {
-        g[best] = v;
-        total += bt();
-        g[best] = 0;
-        if (total >= limit) return total;
-      }
-      return total;
-    }
-    return bt();
-  }
-
-  function makePuzzle(n, holes) {
-    const sol = makeSolution(n);
-    const p = [...sol];
-    let removed = 0;
-    for (const i of shuffle([...Array(n * n).keys()])) {
-      if (removed >= holes) break;
-      const j = n * n - 1 - i;                    // 中心对称成对挖洞，盘面更好看
-      const cells = i === j ? [i] : [i, j];
-      if (cells.some((c) => p[c] === 0)) continue;
-      const bak = cells.map((c) => p[c]);
-      cells.forEach((c) => { p[c] = 0; });
-      if (countSolutions(p, n) === 1) removed += cells.length;
-      else cells.forEach((c, k) => { p[c] = bak[k]; });
-    }
-    return { puzzle: p, solution: sol };
-  }
+  const rounds=createRounds('sudoku-zoo'),puzzles=[];
+  // The toolbar is wired before the puzzles are solved: generating the grids awaits a worker,
+  // and a child who taps the language or theme button first must not be ignored.
+  $('#langBtn').addEventListener('click', () => window.cool.preferences.toggleLang());
+  $('#themeBtn').addEventListener('click', () => window.cool.preferences.toggleTheme());
+  for(let i=0;i<LEVELS.length;i++)puzzles[i]=await rounds.defineAsync(LEVELS[i].id,CLASSIC_PUZZLES[i],sudokuTask,validSudoku,sudokuIdentity,{generator:'sudokuTask',validator:'validSudoku',identity:'sudokuIdentity'});
+  const timers=new Set();let generating=false;
+  function later(fn,ms){const id=setTimeout(()=>{timers.delete(id);fn();},ms);timers.add(id);return id;}
+  function cancelTransient(){timers.forEach(clearTimeout);timers.clear();clearInterval(state.timerId);document.querySelectorAll('.spark,.confetti').forEach(n=>n.remove());state.busy=false;}
 
   /* ================= 状态 ================= */
   const state = {
@@ -232,7 +174,7 @@
     if (state.level && !$('#game').hidden) {
       $('#levelBadge').textContent = `${state.level.icon} ${state.level.name[lang]}`;
       renderTray();
-      setCoach(t().rule(state.n));
+      setCoach(t().rule(state.n));if(state.done)checkWin(true);
     }
   }
 
@@ -256,7 +198,7 @@
         <span class="lv__stars">${open ? '★'.repeat(stars) + '<i>' + '★'.repeat(3 - stars) + '</i>' : ''}</span>
         <span class="lv__pets">${lv.theme.slice(0, 4).join('')}</span>`;
       card.addEventListener('click', () => {
-        if (!open) { setMenuBubble(t().lockTip); sfx.err(); card.classList.add('shake'); setTimeout(() => card.classList.remove('shake'), 450); return; }
+        if (!open) { setMenuBubble(t().lockTip); sfx.err(); card.classList.add('shake'); later(() => card.classList.remove('shake'), 450); return; }
         sfx.pickup();
         startLevel(idx);
       });
@@ -271,11 +213,19 @@
   }
 
   /* ================= 开局 ================= */
-  function startLevel(idx, fresh = true) {
+  async function startLevel(idx,fresh=false){
+    if(generating)return;generating=true;
+    try{
+      rounds.checkpoint();if(fresh)puzzles[idx]=await rounds.nextAsync(LEVELS[idx].id);
+      loadLevel(idx);const saved=rounds.record(LEVELS[idx].id).play;if(saved)restorePlay(saved);rounds.checkpoint();
+    }finally{generating=false;}
+  }
+  function loadLevel(idx) {
+    cancelTransient();
     const lv = LEVELS[idx];
     state.level = lv;
     state.n = lv.size;
-    const { puzzle, solution } = makePuzzle(lv.size, lv.holes);
+    const { puzzle, solution } = puzzles[idx];
     state.puzzle = puzzle;
     state.solution = solution;
     state.grid = [...puzzle];
@@ -297,7 +247,7 @@
     buildBoard();
     renderTray();
     renderBoard();
-    setCoach(fresh ? pick(t().start) : t().newPuzzle);
+    setCoach(pick(t().start));
   }
 
   /* ================= 棋盘 ================= */
@@ -366,7 +316,7 @@
 
   /* ================= 交互 ================= */
   function onTray(v) {
-    if (state.done) return;
+    if (state.done||state.busy||generating) return;
     if (state.sel >= 0 && !state.given[state.sel] && state.grid[state.sel] === 0) {
       state.brush = v;
       tryPlace(state.sel, v);
@@ -392,6 +342,7 @@
   }
 
   function tryPlace(i, v) {
+    if(state.done||state.busy||generating||!Number.isInteger(i)||i<0||i>=state.grid.length||state.given[i]||state.grid[i]||!Number.isInteger(v)||v<1||v>state.n)return;
     const cell = $('#board').children[i];
     if (v === state.solution[i]) {
       state.grid[i] = v;
@@ -403,7 +354,7 @@
       sfx.place();
       renderBoard();
       renderTray();
-      cell.classList.add('drop'); setTimeout(() => cell.classList.remove('drop'), 400);
+      cell.classList.add('drop'); later(() => cell.classList.remove('drop'), 400);
       if (state.grid.filter((x) => x === v).length === state.n && state.brush === v) state.brush = 0;
       const praise = t().good[state.streak];
       const unitMsg = checkUnits(i);
@@ -419,7 +370,7 @@
       cell.classList.add('bad');
       sfx.err();
       setCoach(pick(t().err), '🙈');
-      setTimeout(() => {
+      later(() => {
         cell.classList.remove('bad');
         state.busy = false;
         renderBoard();
@@ -437,7 +388,7 @@
     let msg = '';
     const glow = (idxs) => idxs.forEach((k, j) => {
       const el = cells[k];
-      setTimeout(() => { el.classList.add('glow'); setTimeout(() => el.classList.remove('glow'), 700); }, j * 45);
+      later(() => { el.classList.add('glow'); later(() => el.classList.remove('glow'), 700); }, j * 45);
     });
     const rowIdx = [...Array(n)].map((_, k) => r * n + k);
     const colIdx = [...Array(n)].map((_, k) => k * n + c);
@@ -453,7 +404,7 @@
 
   /* ================= 工具按钮 ================= */
   function doErase() {
-    if (state.done) return;
+    if (state.done||state.busy||generating) return;
     if (state.sel >= 0 && !state.given[state.sel] && state.grid[state.sel]) {
       state.grid[state.sel] = 0;
       sfx.pickup();
@@ -467,7 +418,7 @@
   }
 
   function doHint() {
-    if (state.done) return;
+    if (state.done||state.busy||generating) return;
     if (state.hints <= 0) { setCoach(t().noHints, '🙈'); sfx.err(); return; }
     let i = state.sel;
     if (i < 0 || state.given[i] || state.grid[i]) {
@@ -482,25 +433,25 @@
     }
     if (i < 0) return;
     state.hints--;
-    state.hintsUsed++;
+    state.hintsUsed++;state.grid[i]=state.solution[i];state.sel=-1;rounds.checkpoint();
     $('#hintCount').textContent = state.hints;
     sfx.hint();
     const cell = $('#board').children[i];
     cell.classList.add('magic');
     sparkle(cell);
-    setTimeout(() => {
+    later(() => {
       cell.classList.remove('magic');
-      state.grid[i] = state.solution[i];
-      state.sel = -1;
+
       renderBoard(); renderTray();
-      cell.classList.add('drop'); setTimeout(() => cell.classList.remove('drop'), 400);
+      cell.classList.add('drop'); later(() => cell.classList.remove('drop'), 400);
       const unitMsg = checkUnits(i);
       if (!checkWin()) setCoach(unitMsg || t().hintMsg, '🪄');
     }, 650);
+    checkWin();
   }
 
   function doDetective() {
-    if (state.done) return;
+    if (state.done||state.busy||generating) return;
     let bestI = -1, bestLen = 99;
     for (let i = 0; i < state.n * state.n; i++) {
       if (state.grid[i]) continue;
@@ -512,7 +463,7 @@
     state.sel = bestI; state.brush = 0;
     renderBoard(); renderTray();
     cell.classList.add('spot');
-    setTimeout(() => cell.classList.remove('spot'), 1800);
+    later(() => cell.classList.remove('spot'), 1800);
     sfx.hint();
     setCoach(bestLen === 1 ? t().detectiveOne : t().detectiveFew(bestLen), '🧐');
   }
@@ -527,30 +478,31 @@
       s.style.top = rect.top + rect.height / 2 + (Math.random() - 0.5) * rect.height + 'px';
       s.style.animationDelay = `${k * 60}ms`;
       document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1200);
+      later(() => s.remove(), 1200);
     }
   }
 
   /* ================= 胜利 ================= */
-  function checkWin() {
+  function checkWin(restoring=false) {
+    if(state.done&&!restoring)return true;
     if (state.grid.some((v, i) => v !== state.solution[i])) return false;
-    state.done = true;
+    state.done = true;state.finishedElapsed=Date.now()-state.startAt;
     clearInterval(state.timerId);
     const time = fmtTime(Date.now() - state.startAt);
     const stars = state.errors === 0 && state.hintsUsed === 0 ? 3
       : state.errors <= 3 && state.hintsUsed <= 2 ? 2 : 1;
     const lv = state.level;
-    if (stars > (save.stars[lv.id] || 0)) save.stars[lv.id] = stars;
-    persist();
-    sfx.win();
-    confetti();
+    if(!restoring){
+      const first=!save.stars[lv.id];if(stars>(save.stars[lv.id]||0))save.stars[lv.id]=stars;persist();
+      if(first){window.cool?.stage?.(lv.id);window.cool?.complete?.();}sfx.win();confetti();
+    }
     const idx = LEVELS.indexOf(lv);
     const hasNext = idx < LEVELS.length - 1;
     $('#winStars').innerHTML = '★'.repeat(stars) + '<i>' + '★'.repeat(3 - stars) + '</i>';
     $('#winTitle').textContent = pick(t().winTitle);
     $('#winDesc').textContent = t().winDesc(time, state.errors, state.hintsUsed);
     $('#winNextBtn').textContent = hasNext ? t().nextLevel : t().replay;
-    $('#winNextBtn').onclick = () => { startLevel(hasNext ? idx + 1 : idx); };
+    $('#winNextBtn').onclick = () => { startLevel(hasNext ? idx + 1 : idx,true); };
     const parade = $('#parade');
     parade.innerHTML = '';
     lv.theme.forEach((a, k) => {
@@ -559,7 +511,7 @@
       s.style.animationDelay = `${k * 0.35}s`;
       parade.appendChild(s);
     });
-    setTimeout(() => { $('#winBox').hidden = false; }, 750);
+    if(restoring)$('#winBox').hidden=false;else later(()=>{$('#winBox').hidden=false;rounds.checkpoint();},750);
     return true;
   }
 
@@ -574,7 +526,7 @@
       c.style.animationDelay = Math.random() * 0.8 + 's';
       c.style.transform = `rotate(${Math.random() * 360}deg)`;
       document.body.appendChild(c);
-      setTimeout(() => c.remove(), 5000);
+      later(() => c.remove(), 5000);
     }
   }
 
@@ -604,8 +556,6 @@
   });
 
   /* ================= 事件绑定 ================= */
-  $('#langBtn').addEventListener('click', () => window.cool.preferences.toggleLang());
-  $('#themeBtn').addEventListener('click', () => window.cool.preferences.toggleTheme());
   window.cool.preferences.subscribe(({ kind }) => {
     $('#themeBtn').textContent = window.cool.preferences.theme === 'light' ? '🌙' : '☀️';
     if (kind !== 'lang') return;
@@ -625,7 +575,7 @@
     persist();
   });
   $('#backBtn').addEventListener('click', () => {
-    clearInterval(state.timerId);
+    rounds.checkpoint();cancelTransient();
     $('#game').hidden = true;
     $('#winBox').hidden = true;
     $('#menu').hidden = false;
@@ -633,6 +583,7 @@
     setMenuBubble(t().menuHi);
   });
   $('#winMenuBtn').addEventListener('click', () => {
+    rounds.checkpoint();cancelTransient();
     $('#winBox').hidden = true;
     $('#game').hidden = true;
     $('#menu').hidden = false;
@@ -642,14 +593,23 @@
   $('#eraseBtn').addEventListener('click', doErase);
   $('#hintBtn').addEventListener('click', doHint);
   $('#checkBtn').addEventListener('click', doDetective);
-  $('#newBtn').addEventListener('click', () => startLevel(LEVELS.indexOf(state.level), false));
+  $('#newBtn').addEventListener('click', () => startLevel(LEVELS.indexOf(state.level), true));
 
   /* ================= 启动 ================= */
   $('#soundBtn').textContent = soundOn ? '🔊' : '🔇';
   $('#themeBtn').textContent = window.cool.preferences.theme === 'light' ? '🌙' : '☀️';
+  // The language may have changed while the grids were being generated, so re-read it here.
+  lang = window.cool.preferences.lang;
   applyLang();
   setMenuBubble(t().menuHi);
   // 深链接: #l1 ~ #l5 直接打开已解锁的关卡
   const deep = LEVELS.findIndex((lv) => '#' + lv.id === location.hash);
-  if (deep >= 0 && unlocked(deep)) startLevel(deep);
+  const active=LEVELS.findIndex(l=>l.id===rounds.active);
+  loadLevel(deep>=0&&unlocked(deep)?deep:active>=0?active:0);
+  function restorePlay(s){
+    if(!validSudokuPlay(s,puzzles[LEVELS.indexOf(state.level)]))throw new Error('Invalid Sudoku snapshot');
+    Object.assign(state,{grid:s.grid,sel:s.sel,brush:s.brush,hints:s.hints,hintsUsed:s.hintsUsed,errors:s.errors,streak:s.streak,startAt:Date.now()-s.elapsed,busy:false,done:false});
+    $('#streak').textContent=state.streak;$('#hintCount').textContent=state.hints;$('#timer').textContent=fmtTime(s.elapsed);renderBoard();renderTray();checkWin(true);
+  }
+  rounds.attach({parent:'.bar__right',compact:true,dialog:'#winBox',active:()=>state.level.id,capture:()=>({grid:state.grid,sel:state.sel,brush:state.brush,hints:state.hints,hintsUsed:state.hintsUsed,errors:state.errors,streak:state.streak,elapsed:state.done?state.finishedElapsed:Date.now()-state.startAt}),restore:restorePlay,retry:()=>loadLevel(LEVELS.indexOf(state.level)),beforeReload:cancelTransient});
 })();

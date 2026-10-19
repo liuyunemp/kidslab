@@ -1,6 +1,6 @@
 {
   "id": "inkblot-monsters",
-  "version": "052a9d5e054902fa8f0b953c4f221da60997dca3bdaaf9dc7af5bda496c2f94e",
+  "version": "c88e43f57c8bbea1367625adc4cbb4d030d2e3eece60a4cb45687d99228a519d",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "240c43fe57fbd53722ab29532e4a474cdc817db4ea6b06d1e999abc68492f30e"
+      "sha256": "b2e7dbbbc8e7e541170c0e5123140a1114a53b3b3597994b26c905e5c8ef0fa9"
     },
     {
       "path": "main.js",
-      "sha256": "00a50b7a710b19fafdfe6499b58b2be13d4f1523ab16893d8bfc207bf7fe0947",
-      "fingerprint": "bf8579eb"
+      "sha256": "7c3be32ee82143bd73012b6e036645c264a3607ec2c6451fea414740953f66f2",
+      "fingerprint": "e60b608b"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "c6e7b49ca445c6de51a1ed7283793a35c52fd8563bf2d3dfa293b83b3086c24e",
+      "fingerprint": "742fadc9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "89810ddacbf1d88597ccb0c7ec7b5162ff705b55adf3a8148d3230ef7487f7e4",
+      "fingerprint": "489818d6"
     },
     {
       "path": "style.css",

@@ -1,3 +1,6 @@
+import {createRounds} from './random-rounds.js';
+import {ferryClassic,ferryTask,validFerry,ferryIdentity,ferryFamily,ferrySafe,ferrySolution} from './random-model.js';
+import {CLASSIC_LEVELS} from './classic-levels.js';
 (() => {
   'use strict';
 
@@ -144,51 +147,8 @@
     },
   };
 
-  const LEVELS = [
-    {
-      title: 'level1Title',
-      mission: 'level1Mission',
-      ruleTitle: 'level1RuleTitle',
-      items: [
-        { id: 'wolf', emoji: '🐺' },
-        { id: 'goat', emoji: '🐐' },
-        { id: 'cabbage', emoji: '🥬' },
-      ],
-      dangers: [
-        ['wolf', 'goat', 'eat'],
-        ['goat', 'cabbage', 'eat'],
-      ],
-      guard: null,
-    },
-    {
-      title: 'level2Title',
-      mission: 'level2Mission',
-      ruleTitle: 'level2RuleTitle',
-      items: [
-        { id: 'redParrot', emoji: '🦜' },
-        { id: 'blueParrot', emoji: '🦜' },
-        { id: 'dog', emoji: '🐕' },
-      ],
-      dangers: [['redParrot', 'blueParrot', 'argue']],
-      guard: 'dog',
-    },
-    {
-      title: 'level3Title',
-      mission: 'level3Mission',
-      ruleTitle: 'level3RuleTitle',
-      items: [
-        { id: 'cat', emoji: '🐈' },
-        { id: 'bird', emoji: '🐦' },
-        { id: 'seeds', emoji: '🌻' },
-        { id: 'dog', emoji: '🐕' },
-      ],
-      dangers: [
-        ['cat', 'bird', 'eat'],
-        ['bird', 'seeds', 'eat'],
-      ],
-      guard: 'dog',
-    },
-  ];
+  const rounds=createRounds('ferry-tales');
+  const LEVELS=CLASSIC_LEVELS.map((base,i)=>rounds.define(i,ferryClassic(base),ferryTask,validFerry,ferryIdentity,ferryFamily));
 
   const $ = (selector) => document.querySelector(selector);
   const el = {
@@ -352,76 +312,31 @@
     render();
   }
 
+  let pendingRewind=null;
   function sail() {
-    if (busy || won) return;
-    const token = ++actionToken;
-    const before = snapshot();
-    const destination = 1 - boatSide;
-    const passenger = selected;
-    busy = true;
-    reactionText = '';
-    hintId = null;
-    setStatus('sailing', bankName(destination));
-    el.boat.classList.add('sailing');
-    sound.play('sail');
-    window.cool?.stage(`ferry-chapter-${levelIndex + 1}`);
-    window.cool?.track('sail-ferry', {
-      chapter: levelIndex + 1,
-      passenger: passenger || 'empty',
-      direction: destination === 1 ? 'outward' : 'return',
-    });
-
-    boatSide = destination;
-    if (passenger) {
-      const index = level().items.findIndex((item) => item.id === passenger);
-      positions[index] = destination;
+    if(busy||won)return;
+    const token=++actionToken,before=snapshot(),destination=1-boatSide,passenger=selected;
+    boatSide=destination;if(passenger)positions[level().items.findIndex(a=>a.id===passenger)]=destination;
+    const violation=findViolation(positions,boatSide);
+    selected=null;busy=true;reactionText='';hintId=null;setStatus('sailing',bankName(destination));
+    if(violation){pendingRewind=before;}
+    else {
+      history.push(before);trips++;won=positions.every(p=>p===1);
+      if(won){const first=!completed.has(levelIndex);completed.add(levelIndex);unlocked=Math.max(unlocked,Math.min(LEVELS.length-1,levelIndex+1));persist();if(first&&levelIndex===LEVELS.length-1)window.cool?.complete?.();}
     }
-    selected = null;
-    render();
-
-    setTimeout(() => {
-      if (token !== actionToken) return;
-      const violation = findViolation(positions, boatSide);
-      if (violation) {
-        const [a, b, kind] = violation;
-        reactionText = t(kind === 'argue' ? 'reactionArgue' : 'reactionEat', itemName(a), itemName(b));
-        setStatus('violation', itemName(a), itemName(b));
-        el.boat.classList.add('rewinding');
-        sound.play('error');
-        render();
-        window.cool?.track('rewind-unsafe-bank', { chapter: levelIndex + 1, pair: `${a}-${b}` });
-        setTimeout(() => {
-          if (token !== actionToken) return;
-          restore(before);
-          busy = false;
-          reactionText = '';
-          setStatus('rewind');
-          el.boat.classList.remove('rewinding', 'sailing');
-          render();
-        }, 820);
-        return;
+    rounds.checkpoint();sound.play('sail');window.cool?.stage(`ferry-chapter-${levelIndex+1}`);
+    window.cool?.track('sail-ferry',{chapter:levelIndex+1,passenger:passenger||'empty',direction:destination===1?'outward':'return'});render();
+    setTimeout(()=>{
+      if(token!==actionToken)return;
+      if(violation){
+        const [a,b,kind]=violation;reactionText=t(kind==='argue'?'reactionArgue':'reactionEat',itemName(a),itemName(b));setStatus('violation',itemName(a),itemName(b));sound.play('error');el.boat.classList.add('rewinding');render();
+        setTimeout(()=>{if(token!==actionToken)return;restore(before);pendingRewind=null;busy=false;reactionText='';setStatus('rewind');el.boat.classList.remove('rewinding','sailing');render();rounds.checkpoint();},820);return;
       }
-
-      history.push(before);
-      trips += 1;
-      busy = false;
-      el.boat.classList.remove('sailing');
-      if (positions.every((side) => side === 1)) {
-        won = true;
-        completed.add(levelIndex);
-        if (levelIndex < LEVELS.length - 1) unlocked = Math.max(unlocked, levelIndex + 1);
-        persist();
-        setStatus('alreadySolved');
-        sound.play(levelIndex === LEVELS.length - 1 ? 'complete' : 'success');
-        render();
-        setTimeout(() => {
-          if (token === actionToken) showComplete();
-        }, 420);
-      } else {
-        setStatus(passenger ? 'arrived' : 'emptyReturn', bankName(destination));
-        render();
-      }
-    }, 520);
+      busy=false;el.boat.classList.remove('sailing');
+      if(won){setStatus('alreadySolved');sound.play(levelIndex===LEVELS.length-1?'complete':'success');render();showComplete();}
+      else{setStatus(passenger?'arrived':'emptyReturn',bankName(destination));render();}
+      rounds.checkpoint();
+    },520);
   }
 
   function undo() {
@@ -446,36 +361,7 @@
     window.cool?.track('restart-ferry-chapter', { chapter: levelIndex + 1 });
   }
 
-  function stateKey(side, statePositions) {
-    return `${side}:${statePositions.join('')}`;
-  }
-
-  function nextHintMove() {
-    const queue = [{ side: boatSide, pos: [...positions], first: undefined }];
-    const visited = new Set([stateKey(boatSide, positions)]);
-    while (queue.length) {
-      const current = queue.shift();
-      if (current.pos.every((side) => side === 1)) return current.first ?? null;
-      const choices = [null, ...level().items
-        .filter((_, index) => current.pos[index] === current.side)
-        .map((item) => item.id)];
-      for (const passenger of choices) {
-        const nextSide = 1 - current.side;
-        const nextPos = [...current.pos];
-        if (passenger) nextPos[level().items.findIndex((item) => item.id === passenger)] = nextSide;
-        if (findViolation(nextPos, nextSide)) continue;
-        const key = stateKey(nextSide, nextPos);
-        if (visited.has(key)) continue;
-        visited.add(key);
-        queue.push({
-          side: nextSide,
-          pos: nextPos,
-          first: current.first === undefined ? passenger : current.first,
-        });
-      }
-    }
-    return undefined;
-  }
+  function nextHintMove(){return ferrySolution(level(),snapshot())?.[0];}
 
   function showHint() {
     if (busy || won) return;
@@ -492,8 +378,9 @@
   function startLevel(index, message = 'pickFirst') {
     actionToken += 1;
     levelIndex = index;
-    boatSide = 0;
-    positions = level().items.map(() => 0);
+    pendingRewind=null;
+    boatSide = level().initial.boatSide;
+    positions = [...level().initial.positions];
     selected = null;
     trips = 0;
     history = [];
@@ -514,12 +401,11 @@
     el.completeText.textContent = t(final ? 'finalText' : 'completeText');
     el.next.textContent = t(final ? 'playAgain' : 'nextChapter');
     el.modal.hidden = false;
-    if (final) window.cool?.complete?.();
+
   }
 
   function advance() {
-    if (levelIndex < LEVELS.length - 1) startLevel(levelIndex + 1);
-    else startLevel(0);
+    rounds.checkpoint();const next=(levelIndex+1)%LEVELS.length;LEVELS[next]=rounds.next(next);startLevel(next);rounds.checkpoint();
   }
 
   function renderChapterNav() {
@@ -532,7 +418,7 @@
       button.disabled = index > unlocked || busy;
       button.title = button.disabled ? t('lockedChapter') : t('chapterNav', index + 1, t(entry.title));
       button.setAttribute('aria-label', button.title);
-      button.addEventListener('click', () => startLevel(index));
+      button.addEventListener('click',()=>{rounds.checkpoint();startLevel(index);const play=rounds.record(index).play;if(play){try{restorePlay(play);}catch{startLevel(index);}}rounds.checkpoint();});
       el.chapterNav.appendChild(button);
     });
   }
@@ -634,5 +520,12 @@
     },
   });
 
-  startLevel(0);
+  function capturePlay(){return {...(pendingRewind??snapshot()),history,selected:pendingRewind?null:selected};}
+  function restorePlay(s){
+    const valid=state=>ferrySafe(level(),state)&&Number.isSafeInteger(state.trips)&&state.trips>=0;
+    if(!valid(s)||!Array.isArray(s.history)||s.history.length!==s.trips||s.history.length>10000||s.history.some((a,i)=>!valid(a)||a.trips!==i)||s.selected!==null&&!level().items.some((a,i)=>a.id===s.selected&&s.positions[i]===s.boatSide))throw new Error('Invalid ferry snapshot');
+    restore(s);history=s.history;selected=s.selected;won=positions.every(p=>p===1);busy=false;pendingRewind=null;render();if(won)showComplete();
+  }
+  const initial=Number(rounds.active??0);startLevel(Number.isInteger(initial)&&initial>=0&&initial<=unlocked?initial:0);
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#completeModal',active:()=>levelIndex,capture:capturePlay,restore:restorePlay,retry:restart,beforeReload:()=>{actionToken++;}});
 })();

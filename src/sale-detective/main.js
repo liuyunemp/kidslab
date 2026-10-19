@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {saleTask,saleFamily,saleIdentity,validSale,saleCopy} from './random-model.js';
 (() => {
   'use strict';
 
@@ -204,11 +206,13 @@
     },
   };
 
-  const CASES = [
-    { evidence: 0, verdict: 0 },
-    { evidence: 0, verdict: 1 },
-    { evidence: 0, verdict: 2 },
+  const CLASSIC = [
+    {kind:'raise',price:10000,evidence:0,verdict:0},
+    {kind:'pair',price:8000,evidence:0,verdict:1},
+    {kind:'compare',price:36000,threshold:30000,reduction:8000,evidence:0,verdict:2},
   ];
+  const rounds=createRounds('sale-detective'),hadRounds=rounds.hasSnapshot;
+  const CASES=CLASSIC.map((base,i)=>rounds.define(i,base,saleTask,validSale,saleIdentity,saleFamily));
   const SAVE_KEY = 'kidslab.sale-detective';
   const SOUND_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
@@ -255,9 +259,15 @@
   function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
   function scheduleAutoNext(fn, ms = 1400) {
     cancelAutoNext();
-    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); rounds.checkpoint(); }, ms);
   }
   let state = loadState();
+  let everComplete=state.completed,mastered=new Set();
+  try{const old=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}');mastered=new Set(old.mastered??Array.from({length:state.completed?3:state.caseIndex},(_,i)=>i));}catch{}
+  if(!hadRounds&&rounds.explicitSeed===null&&(state.selectedEvidence!==null||state.selectedVerdict!==null)){
+    CASES[state.caseIndex]=CLASSIC[state.caseIndex];rounds.adopt(state.caseIndex,CASES[state.caseIndex],state);
+  }
+  state={...freshState(),caseIndex:Number(rounds.active??state.caseIndex)};
 
   function freshState() {
     return {
@@ -289,14 +299,14 @@
 
   function saveState() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({...state,completed:everComplete,mastered:[...mastered]}));
     } catch {
       // Progress remains available for this session if storage is unavailable.
     }
   }
 
   function copy() {
-    return t('cases')[state.caseIndex];
+    return saleCopy(t('cases')[state.caseIndex],CASES[state.caseIndex],lang);
   }
 
   function select(kind, index) {
@@ -337,6 +347,7 @@
     }
 
     state.solved = true;
+    mastered.add(state.caseIndex);
     state.feedback = 'correct';
     saveState();
     playSound('success');
@@ -352,13 +363,16 @@
     if (!state.solved) return;
     if (state.caseIndex === CASES.length - 1) {
       state.completed = true;
+      if(!everComplete)window.cool?.complete?.();
+      everComplete=true;
       saveState();
-      window.cool?.complete?.();
       window.cool?.track?.('complete_discount_patrol', { cases: CASES.length });
       playSound('complete');
       render();
       return;
     }
+    rounds.checkpoint();
+    if(rounds.record(state.caseIndex+1).play)CASES[state.caseIndex+1]=rounds.next(state.caseIndex+1);
     state = {
       ...freshState(),
       caseIndex: state.caseIndex + 1,
@@ -372,6 +386,7 @@
 
   function resetCase() {
     cancelAutoNext();
+    state.completed=false;
     state.selectedEvidence = null;
     state.selectedVerdict = null;
     state.solved = false;
@@ -383,6 +398,8 @@
   }
 
   function playAgain() {
+    cancelAutoNext();clearTimeout(idleTimer);
+    for(let i=0;i<3;i++)CASES[i]=rounds.next(i);
     state = freshState();
     saveState();
     elements.finale.hidden = true;
@@ -408,6 +425,7 @@
     idleTimer = setTimeout(() => {
       state.feedback = 'hint';
       render();
+      rounds.checkpoint();
     }, 30000);
   }
 
@@ -488,8 +506,8 @@
     elements.caseNav.replaceChildren();
     CASES.forEach((_, index) => {
       const marker = document.createElement('span');
-      marker.textContent = index < state.caseIndex || (index === state.caseIndex && state.solved) ? '✓' : String(index + 1);
-      if (index < state.caseIndex || (index === state.caseIndex && state.solved)) marker.className = 'is-done';
+      marker.textContent = mastered.has(index) ? '✓' : String(index + 1);
+      if (mastered.has(index)) marker.className = 'is-done';
       else if (index === state.caseIndex) marker.className = 'is-current';
       elements.caseNav.append(marker);
     });
@@ -600,5 +618,10 @@
     },
   });
   window.cool?.stage?.(`case-${state.caseIndex + 1}`);
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#finale',active:()=>state.caseIndex,capture:()=>state,
+    restore:s=>{
+      if(s.caseIndex!==state.caseIndex||![null,0,1,2].includes(s.selectedEvidence)||![null,0,1,2].includes(s.selectedVerdict)||typeof s.feedback!=='string'||((s.solved||s.completed)&&(s.selectedEvidence!==CASES[s.caseIndex].evidence||s.selectedVerdict!==CASES[s.caseIndex].verdict)))throw new Error('Invalid report');
+      state=s;render();
+    },retry:resetCase,beforeReload:()=>{cancelAutoNext();clearTimeout(idleTimer);}});
   scheduleIdleHint();
 })();

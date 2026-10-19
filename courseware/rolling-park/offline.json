@@ -1,6 +1,6 @@
 {
   "id": "rolling-park",
-  "version": "119f22e0496039012567d93e673aeb7517b8559012c7eb80273057daccb0fa37",
+  "version": "dc5c5e78cefb82436703d7d6cfd0f199cbd417f7bfc67cd170ca18654388e215",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "495217753385d49308c639bc7eca1f8ba62da75a044bdbdfcb3a6dced869f9ba"
+      "sha256": "1eb2b045ad756ddc90910cea0f33f9216689820ca5612fe4d19a7957353aa516"
     },
     {
       "path": "main.js",
-      "sha256": "a633ac303bddbd99a4d75068eebaa84f93f36c259bf8105322773bf436e3ee2f",
-      "fingerprint": "896e2b59"
+      "sha256": "2ef6554742f77a4a5d00808fc0e27d28f9e55b61015ea9f66f1d921a32a8337a",
+      "fingerprint": "7c6518a1"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "42e76e93d1ece6c19d07f67959c6bcc1c672ca04c407f8c1e9d41a787683db85",
+      "fingerprint": "d635b9bb"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "c7f63e22b6fa3781a831904e0ddd01fa658a8a118fdf901485d1512cbc25d3ef",
+      "fingerprint": "e2f87d5b"
     },
     {
       "path": "style.css",

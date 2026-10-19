@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { balance, validBalance, validBalanceState } from './random-model.js';
 (() => {
   'use strict';
 
@@ -120,7 +122,7 @@
     },
   };
 
-  const LEVELS = [
+  const BASE_LEVELS = [
     {
       left: { x: 1, c: 20 },
       right: { x: 0, c: 38 },
@@ -141,6 +143,9 @@
     },
   ];
 
+  const rounds=createRounds('balance-circus');
+  const migrateLegacy=!rounds.hasSnapshot&&rounds.explicitSeed===null;
+  const LEVELS=rounds.prepare(BASE_LEVELS,balance,validBalance,a=>({left:a.left,right:a.right}));
   const STORAGE_KEY = 'kidslab.balance-circus';
   const SOUND_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
@@ -180,7 +185,16 @@
   let tilt = 0;
   let tumble = 0;
   let celebration = 0;
-  let state = loadState();
+  let state = migrateLegacy ? loadState() : freshLevel(Number(rounds.active)||0);
+  if(migrateLegacy){
+    try{
+      const old=JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if(old&&validBalanceState(old,BASE_LEVELS[old.level])){
+        LEVELS[old.level]=BASE_LEVELS[old.level];state=old;
+        rounds.adopt(old.level,BASE_LEVELS[old.level],old);
+      }else state=freshLevel(0);
+    }catch{state=freshLevel(0);}
+  }
 
   function freshLevel(index) {
     const level = LEVELS[index];
@@ -381,6 +395,7 @@
 
   function playAgain() {
     hideFinale();
+    LEVELS[0]=rounds.next(0);
     state = freshLevel(0);
     saveState();
     render();
@@ -686,4 +701,8 @@
       if (state.completed) showFinale();
     },
   });
+  rounds.attach({parent:'.operation-panel',dialog:'#finale',active:()=>state.level,
+    capture:()=>state,
+    restore:value=>{if(value.level!==state.level||!validBalanceState(value,LEVELS[state.level]))throw new Error('Invalid equation');state=value;saveState();render();if(state.completed)showFinale();},
+    retry:resetLevel});
 })();

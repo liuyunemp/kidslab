@@ -95,7 +95,13 @@ for (const course of courses) {
       localStorage.setItem('kidslab.theme', 'light');
       localStorage.setItem('kidslab.g1.music', '0');
     });
-    await page.goto(`/courseware/${course.id}/`);
+    await page.goto(`/courseware/${course.id}/?seed=987`);
+    const actualTask=async index=>{
+      if(!['weight','sort'].includes(course.kind))return course.tasks[index];
+      const task=await page.evaluate(({id,key})=>JSON.parse(localStorage.getItem(`kidslab.random.v1.${id}.seed-987`)).levels[key].instance.task,{id:course.id,key:course.tasks[index].id});
+      const expected=course.kind==='weight'?(task.leftMass===task.rightMass?'equal':task.leftMass>task.rightMass?'left':'right'):course.tasks.find(a=>a.item===task.item&&a.criterion.zh===task.criterion.zh).answer;
+      expect(task.answer).toBe(expected);return {...task,answer:expected};
+    };
     await expect(page.locator('#count')).toHaveText('1/8');
 
     const readButton = page.locator('button.prompt[data-speak="1"]');
@@ -105,9 +111,9 @@ for (const course of courses) {
     expect(readBox.height, '题面朗读按钮命中区高度').toBeGreaterThanOrEqual(44);
     await readButton.click();
 
-    await makeMistake(page, course, course.tasks[0]);
+    await makeMistake(page, course, await actualTask(0));
     for (let i = 0; i < 8; i++) {
-      await solve(page, course, course.tasks[i]);
+      await solve(page, course, await actualTask(i));
       if (i < 7) {
         await expect(page.locator('#count')).toHaveText(`${i + 2}/8`);
         await expect(page.locator('#stage')).toHaveAttribute('aria-label', `任务 ${i + 2}/8`);
@@ -127,9 +133,9 @@ for (const course of courses) {
     }
     const progress = await page.evaluate((id) => JSON.parse(localStorage.getItem(`kidslab.progress.${id}`) || 'null'), course.id);
     expect(progress?.status).toBe('completed');
-    await page.locator('#replay').click();
+    const earned=await page.locator('#stars').textContent();await page.locator('#replay').click();
     await expect(page.locator('#count')).toHaveText('1/8');
-    await expect(page.locator('#stars')).toHaveText('⭐ 0');
+    await expect(page.locator('#stars')).toHaveText(['weight','sort'].includes(course.kind)?earned:'⭐ 0');
   });
 }
 

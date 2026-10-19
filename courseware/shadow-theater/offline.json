@@ -1,6 +1,6 @@
 {
   "id": "shadow-theater",
-  "version": "278812a3a0b46856b5bb810b35b6e3ad00dda392ecc858ce2b58f1d8a341f3ff",
+  "version": "667ede93eef7fcca9f7bdc8dc4dc5b54a64c949f3c7d84701d76b2f43cbc38f2",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "cec97cfe6cfff7b763aa1832839c722072e0a0855329c5f6bec770ae8f45216c"
+      "sha256": "9b3b5c792ace9d49b6fb86e4ad0e6e2a60ad212c46ef1a6a6563df90eb6741d8"
     },
     {
       "path": "main.js",
-      "sha256": "fa315da0afbec4fe623eb6c0536f9ff37f330beb8ff426939173d328a00d6831",
-      "fingerprint": "14a20af3"
+      "sha256": "3c555d15cd27e1e232fea8088ab5e109f349396e81d62870083cea159a3cf7fc",
+      "fingerprint": "6d1e8145"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "afdcaf1134fb0ad8ff57a6036b26f6b4793f94e8ea9437094063d204b770b953",
+      "fingerprint": "aaa22727"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "4cedf9931f712017f1eda7ed27358b3e848292306ca62a4358c6903f8f173a8e",
+      "fingerprint": "0001361a"
     },
     {
       "path": "style.css",
-      "sha256": "68a4b41444004eecd8a08d3767cb598a233b20c87317f251c3536cf251ad6c00",
-      "fingerprint": "d41723ee"
+      "sha256": "f122867fa7c8ff41a6431bd002bc5d0c8f18b4532a03e117da846f7890cf2b0b",
+      "fingerprint": "728f3128"
     },
     {
       "path": "vendor/three.module.min.js",

@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {aquariumTask,validAquarium,aquariumQuestion,aquariumFormula} from './random-model.js';
 import * as THREE from './vendor/three.module.min.js';
 
 (() => {
@@ -35,13 +37,13 @@ import * as THREE from './vendor/three.module.min.js';
       hintOrbit: '🖐️ 拖动空白处旋转 · 滚轮缩放',
       hintDrag: '✋ 按住宝贝，拖到发光的水缸上松手',
       nogl: '你的浏览器暂不支持 WebGL，可以继续玩右侧的文字挑战。',
-      need: (n) => `我的新家要装下 ${n} 块小方块（${n} cm³）`,
+      need: (n) => `新家至少要有 ${n} cm³`,
       prefFlat: '悄悄话：我喜欢矮矮宽宽的缸', prefTall: '悄悄话：我喜欢高高的缸，能往上冲！', prefExact: '悄悄话：不大不小刚刚好，我最开心',
       volume: (l, w, h, v) => `${l} × ${w} × ${h} = ${v} cm³`,
       happy: (name, plus) => plus ? `${name}：哇！大小够住，形状还是我的最爱！奖励 2 颗星 ⭐⭐` : `${name}：谢谢馆长，水够多，我搬进来啦！⭐`,
       sad: (name, need, v) => `${name}：呜……这里只有 ${v} 块小方块，我要 ${need} 块才住得下，再调大一点嘛～`,
       selected: (n) => `选中了${n}！先猜猜它的体积，再拖进水缸。`,
-      guessRight: '猜对啦！奖励 1 枚贝壳 🐚，快放进水里验证！', guessWrong: '记住你的猜想——放进水里就见分晓！',
+      guessRight: '记下这个猜想，放进水里验证吧！', guessWrong: '记住你的猜想——放进水里就见分晓！',
       splash: '扑通！', measured: (name, v) => `溢出的水正好 ${v} cm³ —— ${name} 的体积就是 ${v} cm³！`,
       backHome: '要放进水缸里哦，我先把它送回原位～',
       pumpGood: '答对啦！看，水泵把水抽过去了 💧', pumpBad: '再想想：1 L = 1000 cm³，升变厘米立方要 ×1000。',
@@ -78,13 +80,13 @@ import * as THREE from './vendor/three.module.min.js';
       hintOrbit: '🖐️ Drag empty space to orbit · scroll to zoom',
       hintDrag: '✋ Hold a treasure and drop it on the glowing tank',
       nogl: 'WebGL is unavailable, but the text challenges on the right still work.',
-      need: (n) => `My new home must hold ${n} little cubes (${n} cm³)`,
+      need: (n) => `My home needs at least ${n} cm³`,
       prefFlat: 'Psst: I like low, wide tanks', prefTall: 'Psst: I like tall tanks — I love to dive!', prefExact: 'Psst: a perfect fit makes me happiest',
       volume: (l, w, h, v) => `${l} × ${w} × ${h} = ${v} cm³`,
       happy: (name, plus) => plus ? `${name}: Wow! Big enough AND my favorite shape! +2 stars ⭐⭐` : `${name}: Thanks, keeper! Plenty of water — moving in! ⭐`,
       sad: (name, need, v) => `${name}: Aww… only ${v} cubes here. I need ${need} to fit. Make it bigger!`,
       selected: (n) => `${n} selected! Guess its volume, then drag it into the tank.`,
-      guessRight: 'Correct! +1 shell 🐚 — now drop it in to check!', guessWrong: 'Keep that guess — the water will tell the truth!',
+      guessRight: 'Keep this guess and check it in the water!', guessWrong: 'Keep that guess — the water will tell the truth!',
       splash: 'Splash!', measured: (name, v) => `The spilled water is exactly ${v} cm³ — so ${name} is ${v} cm³!`,
       backHome: 'Drop it inside the tank — sending it back home for now.',
       pumpGood: 'Correct! Watch the pump move the water 💧', pumpBad: 'Think again: 1 L = 1000 cm³, so multiply liters by 1000.',
@@ -112,7 +114,7 @@ import * as THREE from './vendor/three.module.min.js';
     selectedObject: 0, guessed: null, measuring: false, beaker: 0,
     pumpLevel: 0, pumpQ: 0, pumpRun: false, lSolved: false,
   };
-  const customers = [
+  const CLASSIC_CUSTOMERS = [
     { emoji: '🐠', name: { zh: '泡泡鱼', en: 'Bubbles' }, need: 24, pref: 'flat' },
     { emoji: '🐡', name: { zh: '鼓鼓河豚', en: 'Puffy' }, need: 30, pref: 'exact' },
     { emoji: '🦐', name: { zh: '虾米队长', en: 'Captain Shrimp' }, need: 18, pref: 'flat' },
@@ -120,18 +122,27 @@ import * as THREE from './vendor/three.module.min.js';
     { emoji: '🦀', name: { zh: '钳钳蟹', en: 'Claw Crab' }, need: 32, pref: 'exact' },
     { emoji: '🦑', name: { zh: '墨墨鱿鱼', en: 'Inky Squid' }, need: 48, pref: 'tall' },
   ];
-  const objects = [
+  const CLASSIC_OBJECTS = [
     { key: 'rock', name: { zh: '皱皱岩石', en: 'the lumpy rock' }, icon: '🪨', volume: 240, color: 0x8d7b74 },
     { key: 'dino', name: { zh: '玩具恐龙', en: 'the toy dino' }, icon: '🦖', volume: 180, color: 0x70c174 },
     { key: 'castle', name: { zh: '迷你城堡', en: 'the mini castle' }, icon: '🏰', volume: 320, color: 0xc9a46a },
     { key: 'shell', name: { zh: '大海螺', en: 'the big conch' }, icon: '🐚', volume: 120, color: 0xf4a7b9 },
     { key: 'sub', name: { zh: '小潜艇', en: 'the tiny sub' }, icon: '🚢', volume: 400, color: 0xf6c453 },
   ];
-  const pumpQs = [
-    { q: { zh: '水箱装了 2.4 L，等于多少 cm³？', en: 'The tank holds 2.4 L. How many cm³?' }, answer: '2400', opts: ['240', '2400', '24000'] },
-    { q: { zh: '量杯里有 750 cm³，等于多少 L？', en: 'The beaker shows 750 cm³. How many L?' }, answer: '0.75', opts: ['0.075', '0.75', '7.5'] },
-    { q: { zh: '3 L 加 500 cm³，一共多少 cm³？', en: '3 L plus 500 cm³ makes how many cm³?' }, answer: '3500', opts: ['3050', '3500', '300500'] },
-  ];
+  const rounds=createRounds('volume-aquarium');
+  const customers=CLASSIC_CUSTOMERS.map((c,i)=>({...c,...rounds.define(`b${i}`,{kind:'build',pref:c.pref,need:c.need,initial:[4,3,2]},aquariumTask,validAquarium)}));
+  const objects=CLASSIC_OBJECTS.map((o,i)=>({...o,...rounds.define(`d${i}`,{kind:'displace',volume:o.volume},aquariumTask,validAquarium)}));
+  const pumpInstances=[{kind:'pump',unit:'toCm',ml:2400,liters:0},{kind:'pump',unit:'toL',ml:750,liters:0},{kind:'pump',unit:'sum',ml:500,liters:3}].map((a,i)=>rounds.define(`p${i}`,a,aquariumTask,validAquarium));
+  const pumpQs=pumpInstances.map(aquariumQuestion);
+  let bonus=rounds.define('bonus',{kind:'bonus',left:4,right:2,width:2,low:2,high:3},aquariumTask,validAquarium);
+  const active=()=>state.mode==='build'?`b${state.customer}`:state.mode==='displace'?`d${state.selectedObject}`:state.mode==='pump'?`p${state.pumpQ}`:'bonus';
+  let progress={};try{progress=JSON.parse(store.get('kidslab.volume-aquarium')||'{}');}catch{}
+  const awards=progress.awards&&typeof progress.awards==='object'?progress.awards:{};
+  let currentSolved=false,transitionEpoch=0;const actionTimers=new Set();
+  function saveProgress(){store.set('kidslab.volume-aquarium',JSON.stringify({awards,completed:Object.keys(awards).length>0}));}
+  function award(id,value=1){if(awards[id])return;const first=Object.keys(awards).length===0;awards[id]=value;saveProgress();window.cool?.stage?.(id);if(first)window.cool?.complete?.();}
+  function stopMotion(){transitionEpoch++;for(const t of actionTimers)clearTimeout(t);actionTimers.clear();clearTimeout(toast.timer);$('#toast').hidden=true;dragObject=null;flyBacks=[];hoverTank=false;orbit.down=false;canvas.classList.remove('is-grabbing');}
+  function later(fn,ms){const epoch=transitionEpoch,timer=setTimeout(()=>{actionTimers.delete(timer);if(epoch!==transitionEpoch)return;fn();rounds.checkpoint();},ms);actionTimers.add(timer);}
   const OBJ_HOME = (i) => new THREE.Vector3(-4.2 + i * 2.1, 0.62, 3.0);
 
   /* ============================== three setup ============================== */
@@ -315,6 +326,7 @@ import * as THREE from './vendor/three.module.min.js';
       if (o.key === 'shell') { const shell = new THREE.Mesh(new THREE.TorusKnotGeometry(.28, .12, 50, 8), m); shell.rotation.x = 1.1; shell.position.y = .1; g.add(shell); }
       if (o.key === 'sub') { const sub = new THREE.Mesh(new THREE.CapsuleGeometry(.24, .75, 8, 16), m); sub.rotation.z = Math.PI / 2; const cap = new THREE.Mesh(new THREE.SphereGeometry(.15, 16, 8), new THREE.MeshToonMaterial({ color: 0x9be7ff })); cap.position.y = .28; const peri = new THREE.Mesh(new THREE.CylinderGeometry(.035, .035, .3, 8), m); peri.position.set(.22, .34, 0); g.add(sub, cap, peri); }
       const shadow = makeShadowDisc(0.55); shadow.position.y = -0.48; g.add(shadow); g.userData.shadow = shadow;
+      g.userData.baseScale=Math.cbrt(o.volume/CLASSIC_OBJECTS[i].volume);g.scale.setScalar(g.userData.baseScale);
       objectGroup.add(g); pickables.push(g);
     });
     makeBeaker();
@@ -364,7 +376,6 @@ import * as THREE from './vendor/three.module.min.js';
       const d = new THREE.Mesh(new THREE.SphereGeometry(0.075, 10, 8), new THREE.MeshBasicMaterial({ color: 0x4cc9f0 }));
       d.userData.tt = i / 4; objectGroup.add(d); pumpDrops.push(d);
     }
-    state.pumpLevel = 0; state.pumpRun = true;
   }
 
   /* -------- 组合缸 -------- */
@@ -382,8 +393,8 @@ import * as THREE from './vendor/three.module.min.js';
       e.position.set(x, y, 0); grp.add(e);
       return grp;
     };
-    objectGroup.add(mkBox(4, 2, 2, -0.5 - gap, 1, split ? 0x06d6a0 : 0x2fb7e8));
-    objectGroup.add(mkBox(2, 3, 2, 1.5 + gap, 1.5, split ? 0xffd166 : 0x2fb7e8));
+    objectGroup.add(mkBox(bonus.left,bonus.low,bonus.width,-bonus.right/2-gap,bonus.low/2,split?0x06d6a0:0x2fb7e8));
+    objectGroup.add(mkBox(bonus.right,bonus.high,bonus.width,bonus.left/2+gap,bonus.high/2,split?0xffd166:0x2fb7e8));
   }
 
   /* ============================== camera / resize / theme ============================== */
@@ -393,9 +404,11 @@ import * as THREE from './vendor/three.module.min.js';
     camera.lookAt(0, 1.4, 0); camera.updateProjectionMatrix();
   }
 
+  let canvasWidth=0,canvasHeight=0;
   function resize() {
     if (!renderer) return;
     const box = canvas.getBoundingClientRect();
+    if(canvasWidth===box.width&&canvasHeight===box.height)return;canvasWidth=box.width;canvasHeight=box.height;
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setSize(box.width, box.height, false);
     camera.aspect = box.width / Math.max(1, box.height); updateCamera();
   }
@@ -428,6 +441,7 @@ import * as THREE from './vendor/three.module.min.js';
 
   function renderDisplacePanel() {
     $('#objectButtons').innerHTML = objects.map((o, i) => `<button class="btn btn--ghost ${i === state.selectedObject ? 'is-active' : ''}" data-object="${i}" type="button">${o.icon} ${loc(o.name)}</button>`).join('');
+    $('#objectSelect').innerHTML=objects.map((o,i)=>`<option value="${i}">${o.icon} ${loc(o.name)}</option>`).join('');$('#objectSelect').value=state.selectedObject;$('#objectSelect').setAttribute('aria-label',t('displaceStep1'));
     const o = objects[state.selectedObject];
     const opts = [o.volume, Math.round(o.volume * 0.75 / 10) * 10, Math.round(o.volume * 1.25 / 10) * 10].sort((a, b) => a - b);
     $('#guessButtons').innerHTML = opts.map(v => `<button class="btn btn--ghost ${state.guessed === v ? 'is-active' : ''}" data-guess="${v}" type="button">${v} cm³</button>`).join('');
@@ -436,10 +450,11 @@ import * as THREE from './vendor/three.module.min.js';
 
   function renderPumpPanel() {
     const q = pumpQs[state.pumpQ % pumpQs.length]; $('#pumpQuestion').textContent = q.q[lang] ?? q.q.zh;
-    $('#pumpChoices').innerHTML = q.opts.map(o => `<button class="btn btn--ghost" data-pump="${o}" type="button">${o}</button>`).join('');
+    $('#pumpChoices').innerHTML = q.opts.map(o => `<button class="btn btn--ghost" data-pump="${o}" type="button" ${currentSolved?'disabled':''}>${o}</button>`).join('');
+    $('#nextPump').textContent=lang==='zh'?'下一项换算':'Next conversion';
   }
 
-  function renderScore() { $('#stars').textContent = `⭐ ${state.stars}`; $('#shells').textContent = `🐚 ${state.shells}`; $('#pumps').textContent = `💧 ${state.pumpDone}/3`; }
+  function renderScore() { state.stars=Object.entries(awards).filter(([k])=>k.startsWith('b')).reduce((n,[,v])=>n+v,0);state.shells=Object.keys(awards).filter(k=>k.startsWith('d')).length;state.pumpDone=Object.keys(awards).filter(k=>k.startsWith('p')).length; $('#stars').textContent = `⭐ ${state.stars}`; $('#shells').textContent = `🐚 ${state.shells}`; $('#pumps').textContent = `💧 ${state.pumpDone}/3`; }
   function toast(msg) { const el = $('#toast'); el.textContent = msg; el.hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => { el.hidden = true; }, 3000); }
 
   function render() {
@@ -452,44 +467,53 @@ import * as THREE from './vendor/three.module.min.js';
     if (state.mode === 'build') renderBuildPanel({ rebuild: false });
     if (state.mode === 'displace') renderDisplacePanel();
     if (state.mode === 'pump') renderPumpPanel();
+    $('#bonusFormula').textContent=state.lSolved?aquariumFormula(bonus):`${bonus.left} × ${bonus.width} × ${bonus.low} ; ${bonus.right} × ${bonus.width} × ${bonus.high} cm`; 
   }
 
-  function setMode(m) {
-    state.mode = m; state.beaker = 0; state.water = 0; state.fishIn = false; state.measuring = false;
-    dragObject = null; flyBacks = [];
-    // 每个模式给一个舒服的默认视角
-    orbit.tyaw = -0.6; orbit.tpitch = m === 'displace' ? 0.5 : 0.42;
-    orbit.tdist = { build: 13, displace: 15, pump: 13.5, bonus: 12 }[m] ?? 13;
-    if (tankGroup) { root.remove(tankGroup); tankGroup = null; }
-    if (objectGroup) { root.remove(objectGroup); objectGroup = null; }
-    beakerWater = pumpWater = cubeWater = null; pumpDrops = [];
-    if (m === 'build') makeTank(...dims());
-    if (m === 'displace') { makeTank(4, 3, 3, { decor: false }); state.water = 1; buildIrregularObjects(); }
-    if (m === 'pump') makePumpScene();
-    if (m === 'bonus') makeLShape(state.lSolved);
-    render();
+  function buildScene(){
+    const m=state.mode;
+    if(tankGroup){root.remove(tankGroup);tankGroup=null;}
+    if(objectGroup){root.remove(objectGroup);objectGroup=null;}
+    waterMesh=waterTop=fishGroup=dropRing=null;beakerWater=pumpWater=cubeWater=null;pumpDrops=[];pickables.length=0;bubbles=[];splashes=[];
+    if(m==='build')makeTank(...dims());
+    if(m==='displace'){makeTank(4,3,3,{decor:false});buildIrregularObjects();if(state.beaker){const g=pickables[state.selectedObject];g.position.set(0,.55,0);g.userData.shadow.visible=false;}}
+    if(m==='pump')makePumpScene();
+    if(m==='bonus')makeLShape(state.lSolved);
+    render();resize();
   }
-
+  function resetCurrent(){
+    stopMotion();Object.assign(state,{water:state.mode==='displace'?1:0,fishHappy:false,fishIn:false,guessed:null,measuring:false,beaker:0,pumpLevel:0,pumpRun:state.mode==='pump',lSolved:false});currentSolved=false;
+    const a=rounds.record(active()).instance;
+    if(a.initial)['len','wid','hei'].forEach((id,i)=>{$(`#${id}`).value=a.initial[i];});
+    orbit.tyaw=orbit.yaw=-.6;orbit.tpitch=orbit.pitch=state.mode==='displace'?.5:.42;orbit.tdist=orbit.dist=state.mode==='displace'?15:13;
+    buildScene();
+  }
+  function setMode(m,index){
+    rounds.checkpoint();stopMotion();state.mode=m;
+    if(index!==undefined){if(m==='build')state.customer=index;if(m==='displace')state.selectedObject=index;if(m==='pump')state.pumpQ=index;}
+    resetCurrent();const play=rounds.record(active()).play;if(play){try{restorePlay(play);}catch{resetCurrent();}}
+    rounds.checkpoint();
+  }
+  function newAt(m,index){
+    rounds.checkpoint();const id=m==='build'?`b${index}`:`p${index}`;
+    if(rounds.record(id).play){const a=rounds.next(id);if(m==='build')Object.assign(customers[index],a);else{pumpInstances[index]=a;pumpQs[index]=aquariumQuestion(a);}}
+    setMode(m,index);
+  }
   /* ============================== game actions ============================== */
   function confirmTank() {
     const [l, w, h] = dims(); const v = l * w * h; const c = customer();
     state.water = 1; state.fishHappy = v >= c.need; state.fishIn = true;
     if (fishGroup) fishGroup.visible = true;
     if (state.fishHappy) {
-      const plus = likes(c, l, w, h, v); state.stars += plus ? 2 : 1;
-      toast(t('happy')(loc(c.name), plus)); state.customer++;
-      setTimeout(() => { if (state.mode === 'build') renderBuildPanel({ rebuild: false }); }, 50);
+      const plus = likes(c, l, w, h, v);award(active(),plus?2:1);currentSolved=true;
+      toast(t('happy')(loc(c.name), plus));
     } else {
       toast(t('sad')(loc(c.name), c.need, v));
     }
     renderScore();
   }
 
-  function nextCustomer() {
-    state.customer++; state.water = 0; state.fishHappy = false; state.fishIn = false;
-    if (fishGroup) fishGroup.visible = false;
-    renderBuildPanel({ rebuild: false }); renderScore();
-  }
+  function nextCustomer(){newAt('build',(state.customer+1)%customers.length);}
 
   function splashAt(x, z, big = false) {
     const n = big ? 26 : 14;
@@ -504,7 +528,8 @@ import * as THREE from './vendor/three.module.min.js';
   function measureObject(fromDrag = false, obj = null) {
     const g = obj || pickables[state.selectedObject];
     const o = objects[state.selectedObject];
-    state.measuring = true; state.beaker = 0;
+    if(state.mode!=='displace'||state.measuring)return;
+    state.measuring = true; state.beaker = 1;currentSolved=true;award(active());
     if (g) {
       // 沉入动画：目标点 = 缸内沙面附近
       g.userData.sink = { target: new THREE.Vector3((Math.random() - .5) * 1.2, 0.55, (Math.random() - .5) * 0.8), tt: 0 };
@@ -512,7 +537,7 @@ import * as THREE from './vendor/three.module.min.js';
     }
     splashAt(g ? g.position.x : 0, g ? g.position.z : 0, true);
     toast(`${t('splash')} ${t('measured')(loc(o.name), o.volume)}`);
-    setTimeout(() => { state.measuring = false; state.beaker = 1; renderDisplacePanel(); }, 1000);
+    later(() => { state.measuring = false; renderDisplacePanel(); }, 1000);
   }
 
   function returnObject(g) {
@@ -555,7 +580,7 @@ import * as THREE from './vendor/three.module.min.js';
       if (g && !g.userData.sink) {
         dragObject = g;
         flyBacks = flyBacks.filter(f => f.g !== g);
-        state.selectedObject = g.userData.index;
+        if(state.selectedObject!==g.userData.index){setMode('displace',g.userData.index);return;}
         state.beaker = 0;
         // 拖拽平面：过物体中心、面向相机（只取水平面外的朝向，保证能上下左右移动）
         dragPlane.setFromNormalAndCoplanarPoint(camera.getWorldDirection(new THREE.Vector3()).negate(), g.position);
@@ -605,7 +630,7 @@ import * as THREE from './vendor/three.module.min.js';
 
   function runPump(correct = false) {
     state.pumpLevel = 0; state.pumpRun = true;
-    if (correct) { state.pumpDone = Math.min(3, state.pumpDone + 1); state.pumpQ++; }
+    if(correct){currentSolved=true;award(active());}
     render();
   }
 
@@ -613,7 +638,7 @@ import * as THREE from './vendor/three.module.min.js';
   let last = performance.now();
   function loop(now) {
     requestAnimationFrame(loop);
-    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    const dt = Math.max(0,Math.min(.05, (now - last) / 1000)); last = now;
     const tm = now / 1000;
 
     // 相机阻尼
@@ -703,18 +728,18 @@ import * as THREE from './vendor/three.module.min.js';
     }
 
     // 抽水演示
-    if (pumpWater && cubeWater && state.pumpRun) {
-      state.pumpLevel = Math.min(1, state.pumpLevel + dt * .3);
+    if (pumpWater && cubeWater) {
+      if(state.pumpRun)state.pumpLevel = Math.min(1, state.pumpLevel + dt * .3);
       const k = state.pumpLevel;
       pumpWater.scale.y += (k * 2.7 - pumpWater.scale.y) * .08; pumpWater.position.y = 0.02 + pumpWater.scale.y / 2;
       cubeWater.scale.y += ((1 - k) * 2.3 + 0.02 - cubeWater.scale.y) * .08; cubeWater.position.y = 0.02 + cubeWater.scale.y / 2;
-      $('#pumpFormula').textContent = `${(k).toFixed(2)} L = ${Math.round(k * 1000)} cm³`;
+      const ml=Math.round(k*1000);$('#pumpFormula').textContent = `${ml/1000} L = ${ml} cm³`;
       pumpDrops.forEach(d => {
         d.userData.tt = (d.userData.tt + dt * 0.55) % 1;
         const p = new THREE.CatmullRomCurve3([new THREE.Vector3(-2.4, 3.15, 0), new THREE.Vector3(0, 3.9, 0), new THREE.Vector3(2.6, 3.3, 0)]).getPoint(d.userData.tt);
         d.position.copy(p); d.visible = k < 1;
       });
-      if (k >= 1) state.pumpRun = false;
+      if (k >= 1&&state.pumpRun) {state.pumpRun = false;rounds.checkpoint();}
     }
 
     renderer?.render(scene, camera);
@@ -743,19 +768,11 @@ import * as THREE from './vendor/three.module.min.js';
   $('#toggleGrid').addEventListener('click', () => { state.grid = !state.grid; if (gridGroup) gridGroup.visible = state.grid; $('#toggleGrid').textContent = state.grid ? t('hideGrid') : t('showGrid'); });
   $('#nextCustomer').addEventListener('click', nextCustomer);
   document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
-  $('#objectButtons').addEventListener('click', e => {
-    const b = e.target.closest('[data-object]'); if (!b) return;
-    const i = +b.dataset.object;
-    const g = pickables[i];
-    if (g?.userData.sink) delete g.userData.sink;
-    if (state.selectedObject !== i && g) { returnObject(pickables[state.selectedObject]); }
-    state.selectedObject = i; state.beaker = 0; state.guessed = null;
-    toast(t('selected')(loc(objects[i].name))); renderDisplacePanel();
-  });
+  $('#objectButtons').addEventListener('click',e=>{const b=e.target.closest('[data-object]');if(b)setMode('displace',Number(b.dataset.object));});
   $('#guessButtons').addEventListener('click', e => {
     const b = e.target.closest('[data-guess]'); if (!b) return;
     state.guessed = +b.dataset.guess;
-    if (state.guessed === objects[state.selectedObject].volume) { state.shells++; toast(t('guessRight')); }
+    if (state.guessed === objects[state.selectedObject].volume) { toast(t('guessRight')); }
     else toast(t('guessWrong'));
     renderScore(); renderDisplacePanel();
   });
@@ -765,15 +782,26 @@ import * as THREE from './vendor/three.module.min.js';
     const ok = b.dataset.pump === pumpQs[state.pumpQ % pumpQs.length].answer;
     b.classList.add(ok ? 'choice-good' : 'choice-bad');
     toast(ok ? t('pumpGood') : t('pumpBad'));
-    if (ok) setTimeout(() => runPump(true), 600);
+    if (ok&&!currentSolved)runPump(true);
   });
   $('#pumpAgain').addEventListener('click', () => runPump(false));
-  $('#solveL').addEventListener('click', () => { if (!state.lSolved) { state.lSolved = true; state.stars++; } makeLShape(true); toast(t('lshape')); renderScore(); });
+  $('#solveL').addEventListener('click', () => { state.lSolved=true;currentSolved=true;makeLShape(true);toast(aquariumFormula(bonus));render(); });
   $('#whale').addEventListener('click', () => toast(t('whaleMsg')));
 
   /* ============================== boot ============================== */
+  function restorePlay(s){
+    if(!Array.isArray(s.dims)||s.dims.length!==3||!s.dims.every(n=>Number.isInteger(n)&&n>=1&&n<=6)||!s.state||!s.orbit||!Object.values(s.orbit).every(Number.isFinite))throw new Error('Invalid aquarium snapshot');
+    const fields=['water','fishHappy','fishIn','guessed','beaker','pumpLevel','pumpRun','lSolved','grid'];
+    if(![0,1].includes(s.state.beaker)||!Number.isFinite(s.state.pumpLevel)||s.state.pumpLevel<0||s.state.pumpLevel>1)throw new Error('Invalid instrument reading');
+    for(const key of fields)state[key]=s.state[key];state.measuring=false;currentSolved=Boolean(s.solved);
+    ['len','wid','hei'].forEach((id,i)=>{$(`#${id}`).value=s.dims[i];});Object.assign(orbit,s.orbit);orbit.down=false;buildScene();
+  }
+  const nextPump=document.createElement('button');nextPump.id='nextPump';nextPump.type='button';nextPump.className='btn';nextPump.addEventListener('click',()=>newAt('pump',(state.pumpQ+1)%3));$('#pumpPanel').append(nextPump);
+  const objectSelect=document.createElement('select');objectSelect.id='objectSelect';objectSelect.addEventListener('change',()=>setMode('displace',Number(objectSelect.value)));$('#objectButtons').after(objectSelect);
   root.add(makeGround());
-  applyTheme(); applyLang(); setMode('build'); resize(); requestAnimationFrame(loop);
+  const initial=rounds.active??'b0';state.mode=initial==='bonus'?'bonus':initial[0]==='d'?'displace':initial[0]==='p'?'pump':'build';if(state.mode==='build')state.customer=Number(initial.slice(1));if(state.mode==='displace')state.selectedObject=Number(initial.slice(1));if(state.mode==='pump')state.pumpQ=Number(initial.slice(1));
+  applyTheme();applyLang();resetCurrent();resize();new ResizeObserver(resize).observe($('.scene-wrap'));requestAnimationFrame(loop);
+  rounds.attach({parent:'.bar__actions',compact:true,active,capture:()=>({dims:dims(),solved:currentSolved,state:{water:state.water,fishHappy:state.fishHappy,fishIn:state.fishIn,guessed:state.guessed,beaker:state.beaker,pumpLevel:state.pumpLevel,pumpRun:state.pumpRun,lSolved:state.lSolved,grid:state.grid},orbit:{yaw:orbit.yaw,pitch:orbit.pitch,dist:orbit.dist,tyaw:orbit.tyaw,tpitch:orbit.tpitch,tdist:orbit.tdist}}),restore:restorePlay,retry:resetCurrent,beforeReload:stopMotion});
   // 供自动化测试读取（不参与功能逻辑）
   window.__aqua = { camera, state, getPickables: () => pickables };
 })();

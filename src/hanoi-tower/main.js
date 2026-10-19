@@ -1,12 +1,14 @@
+import {createRounds} from './random-rounds.js';
+import {hanoiClassic,hanoiTask,validHanoi,hanoiIdentity,hanoiSolution,validHanoiState,hanoiMove} from './random-model.js';
 /* 汉诺塔挑战 Tower of Hanoi */
-(() => {
+(async () => {
   'use strict';
 
   const I18N = {
     zh: {
       back: '返回平台', title: '汉诺塔挑战', langBtn: 'EN', doc: '汉诺塔挑战 · KidsLab',
       discs: '盘子数', moves: '步数', minLabel: '最少', solve: '看看电脑怎么解', reset: '重新开始', again: '再来一局',
-      tip0: '点一根柱子拿起最上面的盘子，再点另一根放下 🙌',
+      tip0: '把盘子搬到 B 或 C：点柱子拿起、放下。',
       tipHold: (n) => `拿起了 ${n} 号盘，放到哪根柱子？`,
       tipBad: '⚠️ 大盘子不能放在小盘子上面哦！',
       tipSolving: '🤖 电脑正在演示最优解法……',
@@ -18,7 +20,7 @@
     en: {
       back: 'Back to platform', title: 'Tower of Hanoi', langBtn: '中', doc: 'Tower of Hanoi · KidsLab',
       discs: 'Discs', moves: 'Moves', minLabel: 'min', solve: 'Watch the robot solve', reset: 'Restart', again: 'Play again',
-      tip0: 'Tap a peg to pick up its top disc, tap another to drop 🙌',
+      tip0: 'Move all discs to B or C. Tap pegs to pick up and drop.',
       tipHold: (n) => `Holding disc ${n} — where to?`,
       tipBad: '⚠️ A big disc cannot sit on a smaller one!',
       tipSolving: '🤖 The robot is showing the optimal solution…',
@@ -32,19 +34,30 @@
 
   const COLORS = ['#ef476f', '#ff9f1c', '#ffd166', '#06d6a0', '#4cc9f0', '#118ab2', '#9b5de5', '#f15bb5'];
 
+  const rounds=createRounds('hanoi-tower'),games={};
+  // The toolbar is wired before the puzzles are solved: generating the boards awaits a worker,
+  // and a child who taps the language or theme button first must not be ignored.
+  const bindChrome = () => {
+    document.querySelector('#langBtn')?.addEventListener('click', () => window.cool.preferences.toggleLang());
+    document.querySelector('#themeBtn')?.addEventListener('click', () => window.cool.preferences.toggleTheme());
+  };
+  bindChrome();
+  for(let n=3;n<=8;n++)games[n]=await rounds.defineAsync(n,hanoiClassic(n),hanoiTask,validHanoi,hanoiIdentity,{generator:'hanoiTask',validator:'validHanoi',identity:'hanoiIdentity',...(n<=4?{enumerator:'hanoiFamily'}:{})});
+  const PROGRESS='kidslab.hanoi-tower';let earned=[];try{const a=JSON.parse(localStorage.getItem(PROGRESS));if(Array.isArray(a?.completed))earned=a.completed.filter(n=>Number.isInteger(n)&&n>=3&&n<=8);}catch{}
   const state = {
-    n: 4,
+    n: Number(rounds.active??4),
     pegs: [[], [], []],
     src: null,
     moves: 0,
     solving: false,
     solveTimer: 0,
     botWin: false,
+    demoMin:0,
   };
 
   const $ = (s) => document.querySelector(s);
   const t = () => I18N[lang];
-  const minMoves = () => Math.pow(2, state.n) - 1;
+  const minMoves = () => games[state.n].solution.length;
 
   /* ---------- 渲染 ---------- */
   function render() {
@@ -79,11 +92,12 @@
   function reset(n = state.n) {
     clearTimeout(state.solveTimer);
     state.n = n;
-    state.pegs = [Array.from({ length: n }, (_, i) => n - i), [], []];
+    state.pegs = games[n].pegs.map(p=>[...p]);
     state.src = null;
     state.moves = 0;
     state.solving = false;
     state.botWin = false;
+    state.celebrated=false;
     $('#solveBtn').disabled = false;
     $('#winBox').hidden = true;
     setTip(t().tip0);
@@ -92,6 +106,7 @@
   }
 
   function tryMove(from, to) {
+    if(from===to||![from,to].every(i=>Number.isInteger(i)&&i>=0&&i<3))return false;
     const src = state.pegs[from], dst = state.pegs[to];
     if (!src.length) return false;
     const disc = src[src.length - 1];
@@ -103,7 +118,7 @@
       setTip(t().tipBad);
       return false;
     }
-    dst.push(src.pop());
+    hanoiMove(state.pegs,from,to);
     state.moves++;
     return true;
   }
@@ -111,13 +126,14 @@
   function checkWin() {
     const done = state.pegs[1].length === state.n || state.pegs[2].length === state.n;
     if (!done) return;
+    if(!state.botWin&&!earned.includes(state.n)){earned.push(state.n);try{localStorage.setItem(PROGRESS,JSON.stringify({completed:earned}));}catch{}window.cool?.stage?.(`discs-${state.n}`);window.cool?.complete?.();}
     const tt = t();
     $('#winTitle').textContent = tt.winTitle;
     $('#winDesc').textContent = state.botWin
-      ? tt.winBot(state.moves)
+      ? tt.winBot(state.demoMin)
       : state.moves === minMoves() ? tt.winPerfect(state.moves) : tt.winOk(state.moves, minMoves());
     $('#winBox').hidden = false;
-    confetti();
+    if(!state.celebrated){state.celebrated=true;confetti();}
   }
 
   function onPegClick(i) {
@@ -145,18 +161,9 @@
 
   /* ---------- 自动求解 ---------- */
   function solve() {
-    reset();
-    state.solving = true;
-    state.botWin = true;
-    $('#solveBtn').disabled = true;
-    setTip(t().tipSolving);
-    const seq = [];
-    (function hanoi(k, a, c, b) {
-      if (!k) return;
-      hanoi(k - 1, a, b, c);
-      seq.push([a, c]);
-      hanoi(k - 1, b, c, a);
-    })(state.n, 0, 2, 1);
+    clearTimeout(state.solveTimer);state.src=null;$('#winBox').hidden=true;
+    const seq=hanoiSolution(state.pegs,state.n);state.demoMin=seq.length;
+    state.solving=true;state.botWin=true;$('#solveBtn').disabled=true;setTip(t().tipSolving);
     const stepMs = Math.max(140, 3600 / seq.length);
     let i = 0;
     (function playNext() {
@@ -164,12 +171,12 @@
         state.solving = false;
         $('#solveBtn').disabled = false;
         render();
-        checkWin();
+        checkWin();rounds.checkpoint();
         return;
       }
       const [a, c] = seq[i++];
       tryMove(a, c);
-      render();
+      render();rounds.checkpoint();
       state.solveTimer = setTimeout(playNext, stepMs);
     })();
   }
@@ -198,16 +205,18 @@
       b.type = 'button';
       b.textContent = n;
       b.classList.toggle('on', n === state.n);
-      b.addEventListener('click', () => reset(n));
+      b.addEventListener('click',()=>{rounds.checkpoint();reset(n);const play=rounds.record(n).play;if(play){try{restorePlay(play);}catch{reset(n);}}rounds.checkpoint();});
       box.appendChild(b);
     }
   }
 
   document.querySelectorAll('.peg').forEach((pegEl) => {
+    const name=['A','B','C'][Number(pegEl.dataset.peg)];pegEl.dataset.name=name;pegEl.setAttribute('aria-label',name);pegEl.tabIndex=0;pegEl.setAttribute('role','button');
     pegEl.addEventListener('click', () => onPegClick(+pegEl.dataset.peg));
+    pegEl.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();onPegClick(+pegEl.dataset.peg);}});
   });
   $('#resetBtn').addEventListener('click', () => reset());
-  $('#againBtn').addEventListener('click', () => reset());
+  $('#againBtn').addEventListener('click',async()=>{if(state.generating)return;state.generating=true;try{games[state.n]=await rounds.nextAsync(state.n);reset();rounds.checkpoint();}finally{state.generating=false;}});
   $('#solveBtn').addEventListener('click', solve);
 
   function applyLang() {
@@ -216,9 +225,8 @@
     $('#langBtn').textContent = tt.langBtn;
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
     document.title = tt.doc;
+    if(!$('#winBox').hidden)checkWin();
   }
-  $('#langBtn').addEventListener('click', () => window.cool.preferences.toggleLang());
-  $('#themeBtn').addEventListener('click', () => window.cool.preferences.toggleTheme());
   window.cool.preferences.subscribe(({ kind }) => {
     $('#themeBtn').textContent = window.cool.preferences.theme === 'light' ? '🌙' : '☀️';
     if (kind !== 'lang') return;
@@ -227,7 +235,15 @@
     if (!state.solving) setTip(t().tip0);
   });
 
+  // The language may have changed while the boards were being generated, so re-read it here.
+  lang = window.cool.preferences.lang;
   applyLang();
   $('#themeBtn').textContent = window.cool.preferences.theme === 'light' ? '🌙' : '☀️';
-  reset(4);
+  function restorePlay(s){
+    if(!validHanoiState(s.pegs,state.n)||!Number.isInteger(s.moves)||s.moves<0||s.src!==null&&![0,1,2].includes(s.src))throw new Error('Invalid Hanoi snapshot');
+    clearTimeout(state.solveTimer);state.pegs=s.pegs;state.moves=s.moves;state.src=s.src;state.solving=false;state.botWin=Boolean(s.botWin);state.demoMin=Number.isInteger(s.demoMin)?s.demoMin:0;
+    render();checkWin();
+  }
+  reset(state.n);
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#winBox',active:()=>state.n,capture:()=>({pegs:state.pegs,src:state.src,moves:state.moves,botWin:state.botWin,demoMin:state.demoMin}),restore:restorePlay,retry:()=>reset(),beforeReload:()=>clearTimeout(state.solveTimer)});
 })();

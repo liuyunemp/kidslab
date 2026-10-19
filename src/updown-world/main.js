@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {signedTask,signedIdentity,validSigned} from './random-model.js';
 (() => {
   'use strict';
 
@@ -182,11 +184,38 @@
     },
   };
 
-  const MISSIONS = [
+  const BASE_MISSIONS = [
     { mode: 'move', skin: 'world', start: -3, target: 5, min: -10, max: 10 },
     { mode: 'answer', skin: 'temperature', start: -7, target: -2, options: [-2, -7], correct: 0, min: -10, max: 10 },
     { mode: 'answer', skin: 'ledger', start: 7, target: -5, options: [-5, 5, 19], correct: 0, min: -10, max: 10 },
   ];
+
+  const rounds=createRounds('updown-world');
+  const migrateLegacy=!rounds.hasSnapshot&&rounds.explicitSeed===null;
+  const MISSIONS=rounds.prepare(BASE_MISSIONS,signedTask,validSigned,signedIdentity);
+  if(migrateLegacy){try{const old=JSON.parse(localStorage.getItem('kidslab.updown-world'));if(Number.isInteger(old?.mission)&&Number.isInteger(old?.value)){for(let i=0;i<3;i++){MISSIONS[i]=BASE_MISSIONS[i];rounds.adopt(i,MISSIONS[i],null);}}}catch{}}
+  function updateCopies(){
+    const [a,b,c]=MISSIONS,pay=c.start-c.target,f=n=>n>0?`+${n}`:String(n).replace('-','−');
+    for(const language of ['zh','en']){
+      const zh=language==='zh',t=I18N[language];
+      t.lessons[0].prompt=zh?`章鱼住在 ${f(a.start)}，鸟巢在 ${f(a.target)}。驾驶升降艇准确停靠。`:`The octopus is at ${f(a.start)}, the nest at ${f(a.target)}. Dock exactly.`;
+      t.lessons[0].start=zh?`越过 0 海平面，停在 ${f(a.target)}。`:`Cross sea level and stop at ${f(a.target)}.`;
+      t.lessons[1].title=zh?`${f(b.start)}°C 和 ${f(b.target)}°C，哪里更暖？`:`Which is warmer: ${f(b.start)}°C or ${f(b.target)}°C?`;
+      Object.assign(t.lessons[2],{title:zh?`有 ${c.start} 元，支出 ${pay} 元`:`You have ${c.start} coins and spend ${pay}`,prompt:zh?`从 ${f(c.start)} 向下走 ${pay} 格，最后余额是多少？`:`Move ${pay} steps down from ${f(c.start)}. What is the balance?`,start:zh?`从 ${f(c.start)} 出发，支出让余额减少。`:`Start at ${f(c.start)}. Spending reduces the balance.`});
+      t.targetValues=[f(a.target),zh?'较暖':'WARMER',`${c.start} + (−${pay})`];
+      t.rules[2]=zh?`支出 ${pay} 元，就是加上 −${pay}。`:`Spending ${pay} means adding −${pay}.`;
+      t.answerLabels=[b.options.map(n=>`${f(n)}°C`),c.options.map(n=>`${f(n)} ${zh?'元':'coins'}`)];
+      t.answerSubs=[b.options.map(n=>n===b.target?(zh?'离 0 更近':'Closer to 0'):(zh?'离 0 更远':'Farther from 0')),c.options.map(n=>n<0?(zh?`欠 ${-n} 元`:`Owe ${-n}`):(zh?`还剩 ${n} 元`:`Keep ${n}`))];
+      t.selected[0]=v=>zh?`现在停在 ${v}，目标是 ${f(a.target)}。`:`You are at ${v}. The target is ${f(a.target)}.`;
+      t.selected[2]=v=>zh?`显示 ${v}。从 ${f(c.start)} 向下 ${pay} 格会到这里吗？`:`The display reads ${v}. Is that ${pay} steps below ${f(c.start)}?`;
+      t.wrong[0]=v=>zh?`现在是 ${v}，鸟巢在 ${f(a.target)}，可以继续调整。`:`You are at ${v}, the nest is at ${f(a.target)}. Keep adjusting.`;
+      t.wrong[1]=zh?`${f(b.start)} 在 ${f(b.target)} 的下面，所以更冷。`:`${f(b.start)} is below ${f(b.target)}, so it is colder.`;
+      t.correct=[zh?`精准停靠！${f(a.target)} − (${f(a.start)}) = ${a.target-a.start}，共上升 ${a.target-a.start} 格。`:`Docked! ${f(a.target)} − (${f(a.start)}) = ${a.target-a.start} steps.`,zh?`${f(b.target)} > ${f(b.start)}，位置越高越暖。`:`${f(b.target)} > ${f(b.start)}. Higher is warmer.`,zh?`${c.start} − ${pay} = ${f(c.target)}，还欠 ${-c.target} 元。`:`${c.start} − ${pay} = ${f(c.target)}. You owe ${-c.target}.`];
+      t.hints[0]=zh?`先到 0，再从 0 到 ${f(a.target)}。`:`Reach 0 first, then move to ${f(a.target)}.`;
+      t.hints[2]=zh?`先用现有的 ${c.start} 元付掉一部分，还差多少？`:`Pay with your ${c.start} coins first. How much is still owed?`;
+    }
+  }
+  updateCopies();
 
   const STORAGE_KEY = 'kidslab.updown-world';
   const SOUND_KEY = 'kidslab.sound.muted';
@@ -235,6 +264,8 @@
   let visualValue = -3;
   let deepTimer = null;
   let state = loadState();
+  let achieved=state.completed;
+  if(!migrateLegacy){const index=Math.min(2,Math.max(0,Number(rounds.active)||0));state={...freshState(),mission:index,value:MISSIONS[index].start};}
   /** 答对后自动进入下一层世界；手动点按钮会取消它，避免连跳 */
   let autoNextTimer = 0;
   function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
@@ -277,7 +308,7 @@
 
   function saveState() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({...state,completed:state.completed||achieved}));
     } catch {
       // Storage may be unavailable without blocking play.
     }
@@ -355,6 +386,7 @@
       window.cool?.track?.('miss_number_stop', { mission: state.mission + 1, value: state.value });
       saveState();
       render();
+      rounds.checkpoint();
       return;
     }
     state.solved = true;
@@ -386,6 +418,7 @@
       window.cool?.track?.('open_next_world', { mission: nextIndex + 1 });
       saveState();
       render();
+      rounds.checkpoint();
       return;
     }
     completeCourse();
@@ -396,7 +429,8 @@
     saveState();
     elements.deepFlash.hidden = false;
     playSound('deep');
-    window.cool?.complete?.();
+    if(!achieved)window.cool?.complete?.();
+    achieved=true;
     window.cool?.track?.('earn_zero_navigator');
     clearTimeout(deepTimer);
     deepTimer = setTimeout(() => {
@@ -407,10 +441,12 @@
   }
 
   function resetMission() {
+    cancelAutoNext();clearTimeout(deepTimer);elements.deepFlash.hidden=true;
     ensureAudio();
     state.value = mission().start;
     state.selected = null;
     state.solved = false;
+    state.completed=false;
     state.feedback = 'start';
     visualValue = state.value;
     playSound('page');
@@ -429,7 +465,10 @@
   }
 
   function playAgain() {
+    cancelAutoNext();
     clearTimeout(deepTimer);
+    for(let i=0;i<3;i++)MISSIONS[i]=rounds.next(i);
+    updateCopies();
     state = freshState();
     visualValue = state.value;
     elements.deepFlash.hidden = true;
@@ -523,6 +562,7 @@
     drawWorld();
 
     const showFinale = state.completed && elements.deepFlash.hidden;
+    document.querySelector('.finale__facts').innerHTML=`<span>${MISSIONS[1].target} &gt; ${MISSIONS[1].start}</span><span>${MISSIONS[2].start} − ${MISSIONS[2].start-MISSIONS[2].target} = ${MISSIONS[2].target}</span>`;
     elements.course.inert = showFinale;
     elements.finale.hidden = !showFinale;
     if (showFinale) requestAnimationFrame(() => elements.playAgainBtn.focus());
@@ -559,7 +599,7 @@
     const axisX = width * 0.42;
     const top = 34;
     const bottom = height - 26;
-    const yFor = (value) => bottom - ((value + 10) / 20) * (bottom - top);
+    const yFor = (value) => bottom - ((Math.max(-10,Math.min(10,value)) + 10) / 20) * (bottom - top);
 
     function paint(value) {
       context.clearRect(0, 0, width, height);
@@ -777,4 +817,10 @@
       render();
     },
   });
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#finale',active:()=>state.mission,capture:()=>state,
+    restore:s=>{
+      const a=mission(),selected=s.selected===null||(Number.isInteger(s.selected)&&a.options?.[s.selected]!==undefined);
+      if(s.mission!==state.mission||!selected||!Number.isInteger(s.value)||s.value< -10||s.value>24||(s.solved&&(a.mode==='move'?s.value!==a.target:s.selected!==a.correct))||(s.completed&&!s.solved))throw new Error('Invalid voyage');
+      state=s;visualValue=s.value;render();
+    },retry:resetMission,beforeReload:cancelAutoNext});
 })();

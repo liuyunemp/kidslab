@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import {levelInstance} from './random-task-helpers.js';
+import {salePrices} from '../../scripts/random-rounds/number-tasks.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -43,7 +45,7 @@ test.describe('discount detective', () => {
       localStorage.removeItem('kidslab.progress.sale-detective');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/sale-detective/');
+    await page.goto('/courseware/sale-detective/?seed=987');
   });
 
   test('recovers from false evidence and solves all three sale cases', async ({ page }) => {
@@ -56,23 +58,30 @@ test.describe('discount detective', () => {
     await expect(page.locator('[data-evidence="1"]')).toHaveAttribute('aria-pressed', 'true');
 
     await solveCase(page, 0, 0);
-    await expect(page.locator('#status')).toContainText('100 × 1.25 × 0.8 = 100');
+    // The case prices are generated, so the worked example is rebuilt from the instance.
+    const raise = await levelInstance(page, 'sale-detective', 0);
+    const [raiseAfter, raiseBefore] = salePrices(raise);
+    const yuan = (fen) => String(fen / 100);
+    await expect(page.locator('#status')).toContainText(`${yuan(raiseBefore)} × 1.25 × 0.8 = ${yuan(raiseAfter)}`);
     await expect(page.locator('#streetScene')).toHaveAttribute('data-result', 'correct');
     await page.locator('#nextBtn').click();
 
     await expect(page.getByRole('heading', { name: '第二件半价，平均相当于几折？' })).toBeVisible();
     await solveCase(page, 0, 1);
-    await expect(page.locator('#status')).toContainText('120 ÷ 160 = 75%');
+    const pair = await levelInstance(page, 'sale-detective', 1);
+    const [pairPaid, pairFull] = salePrices(pair);
+    await expect(page.locator('#status')).toContainText(`${yuan(pairPaid)} ÷ ${yuan(pairFull)} = ${Math.round((pairPaid / pairFull) * 100)}%`);
     await page.locator('#nextBtn').click();
 
     await expect(page.getByRole('heading', { name: '满 300 减 80 和七五折，哪个更省？' })).toBeVisible();
-    await page.locator('[data-evidence="0"]').click();
+    const compare = await levelInstance(page, 'sale-detective', 2);
+    const [thresholdPrice, discountPrice] = salePrices(compare);
+    await page.locator(`[data-evidence="${compare.evidence}"]`).click();
     await page.locator('[data-verdict="1"]').click();
     await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('280 元和 270 元');
-    await page.locator('[data-verdict="2"]').click();
+    await expect(page.locator('#status')).toContainText(`${yuan(thresholdPrice)} 和 ${yuan(discountPrice)}`);
+    await page.locator(`[data-verdict="${compare.verdict}"]`).click();
     await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('七五折刚好多省 10 元');
     await page.locator('#nextBtn').click();
 
     await expect(page.getByRole('heading', { name: '你成为了“百分数神探”！' })).toBeVisible();

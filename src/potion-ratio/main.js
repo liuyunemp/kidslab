@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {ratioTask,ratioFamily,ratioIdentity,validRatio} from './random-model.js';
 (() => {
   'use strict';
 
@@ -166,9 +168,10 @@
     },
   };
 
-  const LEVELS = [
+  const BASE_LEVELS = [
     {
       ratio: '3 : 2',
+      kind:'mix',shares:[3,2],total:15,
       options: [[8, 7], [9, 6], [10, 5]],
       labels: ['8 : 7', '9 : 6', '10 : 5'],
       correct: 1,
@@ -176,6 +179,7 @@
     },
     {
       ratio: '3 : 2',
+      kind:'scale',shares:[3,2],total:500,
       options: [[30, 20], [150, 100], [300, 200]],
       labels: ['× 10', '× 50', '× 100'],
       correct: 2,
@@ -183,12 +187,34 @@
     },
     {
       ratio: '2 : 3 : 5',
+      kind:'coins',shares:[2,3,5],total:100,
       options: [[25, 25, 50], [20, 30, 50], [20, 40, 40]],
       labels: ['25 · 25 · 50', '20 · 30 · 50', '20 · 40 · 40'],
       correct: 1,
       unit: 'coins',
     },
   ];
+
+  const rounds=createRounds('potion-ratio');
+  const migrateLegacy=!rounds.hasSnapshot&&rounds.explicitSeed===null;
+  const LEVELS=BASE_LEVELS.map((base,i)=>rounds.define(i,base,ratioTask,validRatio,ratioIdentity,ratioFamily));
+  if(migrateLegacy){try{const old=JSON.parse(localStorage.getItem('kidslab.potion-ratio'));if(old?.selected!==null&&Number.isInteger(old?.level)){for(let i=0;i<3;i++){LEVELS[i]=BASE_LEVELS[i];rounds.adopt(i,LEVELS[i],null);}}}catch{}}
+  function updateCopies(){
+    for(const language of ['zh','en']){
+      const zh=language==='zh',t=I18N[language];
+      LEVELS.forEach((a,i)=>{
+        const shares=a.shares.reduce((x,y)=>x+y,0),unit=a.total/shares,ratio=a.shares.join(' : '),values=a.options[a.correct];
+        const title=zh?`按 ${ratio} 分配 ${a.total} ${i===2?'枚金币':'勺药水'}`:`Split ${a.total} ${i===2?'coins':'spoons'} in the ratio ${ratio}`;
+        Object.assign(t.lessons[i],{title,prompt:zh?'检查总量和每份的大小。':'Check the total and the size of each share.',start:title});
+        t.choiceTitles[i]=zh?`哪张称量单正好是 ${a.total}？`:`Which slip totals exactly ${a.total}?`;
+        t.hints[i]=zh?`共有 ${shares} 份。${a.total} 平均分成 ${shares} 份，每份多少？`:`There are ${shares} shares. Divide ${a.total} into ${shares} equal shares.`;
+        t.correct[i]=zh?`配好了！${a.total} ÷ ${shares} = ${unit}，各份得到 ${values.join('、')}。`:`Matched! ${a.total} ÷ ${shares} = ${unit}. The amounts are ${values.join(', ')}.`;
+        t.optionSub[i]=a.options.map(v=>`${v.join(' + ')} = ${v.reduce((x,y)=>x+y,0)}`);
+      });
+      t.wrong[1]=zh?'再检查目标总量。比例不变时，两种材料要一起放大相同倍数。':'Check the target total. Both ingredients must use the same scale factor.';
+    }
+  }
+  updateCopies();
 
   const STORAGE_KEY = 'kidslab.potion-ratio';
   const SOUND_KEY = 'kidslab.sound.muted';
@@ -231,6 +257,8 @@
   let muted = false;
   let audioContext = null;
   let state = loadState();
+  let achieved=state.completed;
+  if(!migrateLegacy)state={...freshState(),level:Math.min(2,Math.max(0,Number(rounds.active)||0))};
 
   function freshState() {
     return { level: 0, selected: null, solved: false, completed: false, feedback: 'start' };
@@ -262,7 +290,7 @@
 
   function saveState() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({...state,completed:state.completed||achieved}));
     } catch {
       // Storage may be unavailable without blocking play.
     }
@@ -274,7 +302,7 @@
 
   function selectedValues() {
     if (state.selected !== null) return currentLevel().options[state.selected];
-    return state.level === 2 ? [2, 3, 5] : [3, 2];
+    return currentLevel().shares;
   }
 
   function formulaFor(values) {
@@ -348,7 +376,8 @@
     state.completed = true;
     saveState();
     playSound('complete');
-    window.cool?.complete?.();
+    if(!achieved)window.cool?.complete?.();
+    achieved=true;
     window.cool?.track?.('earn_golden_cup');
     render();
   }
@@ -357,6 +386,7 @@
     ensureAudio();
     state.selected = null;
     state.solved = false;
+    state.completed=false;
     state.feedback = 'start';
     playSound('page');
     window.cool?.track?.('reset_recipe', { recipe: state.level + 1 });
@@ -374,6 +404,8 @@
   }
 
   function playAgain() {
+    for(let i=0;i<3;i++)LEVELS[i]=rounds.next(i);
+    updateCopies();
     state = freshState();
     saveState();
     playSound('page');
@@ -443,7 +475,10 @@
       elements.mushroomAmount.textContent = String(values[1]);
     }
 
-    elements.ratioEquation.textContent = `${currentLevel().ratio} = ${formulaFor(values)}`;
+    const matches=values.every((n,i)=>n*currentLevel().shares[0]===values[0]*currentLevel().shares[i]);
+    elements.ratioEquation.textContent = `${currentLevel().ratio} ${matches?'=':'≠'} ${formulaFor(values)}`;
+    document.querySelector('.coin-total strong').textContent=LEVELS[2].total;
+    document.querySelector('.finale__formulas').innerHTML=LEVELS.map(a=>`<span>${a.ratio} = ${a.options[a.correct].join(' : ')}</span>`).join('');
     elements.totalBadge.textContent = t('total', total, currentLevel().unit === 'coins' ? (lang === 'zh' ? '枚' : 'coins') : (lang === 'zh' ? '勺' : 'spoons'));
     elements.checkBtn.disabled = state.selected === null;
     elements.checkBtn.hidden = state.solved;
@@ -538,4 +573,9 @@
       render();
     },
   });
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#finale',active:()=>state.level,capture:()=>state,
+    restore:s=>{
+      if(s.level!==state.level||(s.selected!==null&&(!Number.isInteger(s.selected)||s.selected<0||s.selected>2))||(s.solved&&s.selected!==currentLevel().correct)||(s.completed&&!s.solved))throw new Error('Invalid recipe');
+      state=s;render();
+    },retry:resetRecipe});
 })();

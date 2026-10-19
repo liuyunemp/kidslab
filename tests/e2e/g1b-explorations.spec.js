@@ -20,7 +20,8 @@ for(const c of courses){
   await expect(page.locator('#progress')).toHaveText('0/8');
   for(let i=0;i<8;i++){
    await page.locator('#activitySelect').selectOption(String(i));
-   for(const action of journey(c,c.activities[i]))await perform(page,action);
+   const instance=await page.evaluate(({id,index})=>JSON.parse(localStorage.getItem(`kidslab.exploration-v2.${id}`)||'null')?.instances?.[index]??null,{id:c.id,index:i});
+   for(const action of journey(c,instance??c.activities[i]))await perform(page,action);
    await expect(page.locator('#progress')).toHaveText(`${i+1}/8`);
    if(i===3){await page.reload();await expect(page.locator('#progress')).toHaveText('4/8');}
   }
@@ -57,12 +58,13 @@ test('writing pointer cancellation leaves no stroke; invalid trace can be rewrit
 });
 test('shape pointer capture: cancel, out-of-table drop, valid drag and undo',async({page},info)=>{
  await page.goto('/courseware/g1-flat-shapes/');await expect(page.locator('#title')).not.toBeEmpty();
+ const first=await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.exploration-v2.g1-flat-shapes')).instances[0].initialPositions[0]);
  const {width:w,height:h}=info.project.use.viewport,vw=w<=760?12:18;
  const camera=new THREE.OrthographicCamera(-vw/2,vw/2,vw*h/w/2,-vw*h/w/2,.1,100);camera.position.set(0,10,13);camera.lookAt(0,0,0);camera.updateMatrixWorld();
- const point=new THREE.Vector3(-3.6+(w<=760?0:-2.1),.35,1.8+(w<=760?-.5:0)).project(camera),x=(point.x+1)*w/2,y=(1-point.y)*h/2;
+ const point=new THREE.Vector3(first.x+(w<=760?0:-2.1),.35,first.z+(w<=760?-.5:0)).project(camera),x=(point.x+1)*w/2,y=(1-point.y)*h/2;
  const saved=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.exploration-v2.g1-flat-shapes')||'null'));
- await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+25,y-20);await page.locator('#scene').dispatchEvent('pointercancel',{pointerId:1});await page.mouse.up();expect(await saved()).toBeNull();await expect(page.locator("#scene")).toHaveAttribute("data-settled","true");
- await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(2,200);await page.mouse.up();expect(await saved()).toBeNull();await expect(page.locator("#scene")).toHaveAttribute("data-settled","true");
+ await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+25,y-20);await page.locator('#scene').dispatchEvent('pointercancel',{pointerId:1});await page.mouse.up();expect((await saved()).log).toEqual([]);await expect(page.locator("#scene")).toHaveAttribute("data-settled","true");
+ await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(2,200);await page.mouse.up();expect((await saved()).log).toEqual([]);await expect(page.locator("#scene")).toHaveAttribute("data-settled","true");
  await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+55,y-30,{steps:8});await page.mouse.up();await expect.poll(async()=>(await saved())?.log.at(-1)?.type).toBe('position');
  await page.locator('#undoBtn').click();await expect(page.locator('#progress')).toHaveText('0/8');
 });

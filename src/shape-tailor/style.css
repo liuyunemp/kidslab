@@ -97,6 +97,11 @@ button, a { color: inherit; font: inherit; }
   padding: 8px clamp(12px, 2.5vw, 28px);
 }
 .topbar h1 {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   margin: 0;
   font: 900 clamp(19px, 2.4vw, 26px)/1 var(--display);
   letter-spacing: 0.02em;
@@ -269,6 +274,7 @@ button, a { color: inherit; font: inherit; }
 
 #sceneCanvas {
   flex: 1;
+  height: 0;
   width: 100%;
   min-height: 180px;
   border-radius: 18px;
@@ -340,6 +346,8 @@ button, a { color: inherit; font: inherit; }
   padding: 10px 12px;
   overflow: auto;
 }
+.console > * { flex-shrink: 0; }
+.steps { display: none !important; }
 .console__head {
   display: flex;
   align-items: flex-start;
@@ -559,8 +567,8 @@ button, a { color: inherit; font: inherit; }
   background: var(--panel);
   box-shadow: 3px 3px 0 var(--line);
 }
-.primary-btn:hover, .secondary-btn:hover { transform: translateY(-1px); }
-.primary-btn:active, .secondary-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+.primary-btn:hover, .secondary-btn:hover { filter: brightness(1.04); }
+.primary-btn:active, .secondary-btn:active { box-shadow: 1px 1px 0 var(--line); }
 .primary-btn:focus-visible, .secondary-btn:focus-visible, .reset-btn:focus-visible, .pill:focus-visible, .stepper button:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--rose) 70%, white);
   outline-offset: 2px;
@@ -702,4 +710,36 @@ button, a { color: inherit; font: inherit; }
   .actions { grid-template-columns: 1fr; }
   .mission-card__copy h2 { font-size: 18px; }
   .mission-card__copy p { font-size: 15px; }
+}
+
+@media (max-width: 900px) {
+  html, body { height: 100%; overflow: hidden; }
+  .topbar { gap: 6px; padding: 6px 12px; }
+  .topbar__actions { gap: 4px; flex-shrink: 0; }
+  .pill { padding: 6px; min-width: 44px; }
+  .shop { height: calc(100dvh - 66px); min-height: 0; max-height: none; }
+  .mission-card { min-height: 46px; padding: 6px 10px; grid-template-columns: 1fr auto; gap: 6px; }
+  .mission-card__number, .mission-card__copy p, .console__head, .stage__head, .reset-btn, .formula-card, .hint-card { display: none !important; }
+  .mission-card__copy h2 { font-size: 18px; margin: 0; }
+  .mission-nav { grid-column: auto; gap: 4px; }
+  .workspace { grid-template-rows: minmax(155px,1fr) auto; gap: 8px; }
+  .stage { min-height: 0; padding: 6px; }
+  #sceneCanvas { height: 0; min-height: 105px; flex: 1; }
+  .readouts { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 3px; margin-top: 4px; }
+  .readouts span { padding: 4px; }
+  .readouts strong { font-size: 16px; }
+  .readouts small { font-size: 14px; }
+  .readouts span:first-child { display: none; }
+  .readouts { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .console { padding: 6px; gap: 5px; overflow: hidden; }
+  .status { min-height: 0; padding: 6px; font-size: 16px; line-height: 1.45; }
+  .stepper-card { padding: 5px; }
+  .stepper-card > span, .stepper-card > small { display: none; }
+  .stepper { margin: 0; }
+  .actions { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .actions .secondary-btn, .actions .primary-btn { grid-column: auto !important; }
+  .actions button { padding: 6px; }
+  .finale__card { padding: 12px; }
+  .finale__grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .finale__grid article strong, .finale__grid article strong span { font-size: 14px; }
 }

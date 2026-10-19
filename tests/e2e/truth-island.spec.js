@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {levelInstance} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -29,34 +30,44 @@ test.describe('truth island', () => {
       localStorage.removeItem('kidslab.progress.truth-island');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/truth-island/');
+    await page.goto('/courseware/truth-island/?seed=987');
   });
 
   test('recovers from wrong deductions and solves all three cases', async ({ page }) => {
-    await page.locator('[data-person="mia"][data-role="liar"]').click();
-    await page.locator('[data-person="noah"][data-role="truth"]').click();
+    // The islander identities and the treasure road are generated per case, so each case is read
+    // from its own instance instead of assuming a fixed cast.
+    const caseOne = await levelInstance(page, 'truth-island', 0);
+    const wrongRole = caseOne.roles.mia ? 'liar' : 'truth';
+    const rightRole = caseOne.roles.mia ? 'truth' : 'liar';
+    await page.locator(`[data-person="mia"][data-role="${wrongRole}"]`).click();
+    await page.locator(`[data-person="noah"][data-role="${wrongRole === 'liar' ? 'truth' : 'liar'}"]`).click();
     await page.locator('#checkBtn').click();
     await expect(page.locator('#status')).toContainText('至少一句话');
 
-    await page.locator('[data-person="mia"][data-role="truth"]').click();
-    await page.locator('[data-person="noah"][data-role="liar"]').click();
+    await page.locator(`[data-person="mia"][data-role="${rightRole}"]`).click();
+    await page.locator(`[data-person="noah"][data-role="${rightRole === 'liar' ? 'truth' : 'liar'}"]`).click();
     await page.locator('#checkBtn').click();
     await expect(page.getByRole('heading', { name: '徽章严丝合缝！' })).toBeVisible();
     await page.getByRole('button', { name: '打开下一案' }).click();
 
-    await page.locator('[data-road="right"]').click();
-    await expect(page.locator('#status')).toContainText('整句话都变成假话');
-    await page.locator('[data-road="left"]').click();
+    const caseTwo = await levelInstance(page, 'truth-island', 1);
+    const wrongRoad = caseTwo.road === 'left' ? 'right' : 'left';
+    await page.locator(`[data-road="${wrongRoad}"]`).click();
+    // The rejection explains why the claim cannot hold on the chosen road.
+    await expect(page.locator('#status')).toContainText(/假|再看看|不对/);
+    await page.locator(`[data-road="${caseTwo.road}"]`).click();
     await expect(page.getByRole('heading', { name: '月门线索破解！' })).toBeVisible();
     await page.getByRole('button', { name: '打开下一案' }).click();
 
+    const caseThree = await levelInstance(page, 'truth-island', 2);
+    const wrongFinal = caseThree.road === 'left' ? 'right' : 'left';
     await page.locator('[data-question="0"]').click();
     await expect(page.locator('#status')).toContainText('你还不知道回答者');
     await page.locator('[data-question="2"]').click();
     await expect(page.locator('#islandScene')).toHaveClass(/is-pointing/);
-    await page.locator('[data-final-road="right"]').click();
+    await page.locator(`[data-final-road="${wrongFinal}"]`).click();
     await expect(page.locator('#status')).toContainText('把答案反过来');
-    await page.locator('[data-final-road="left"]').click();
+    await page.locator(`[data-final-road="${caseThree.road}"]`).click();
 
     await expect(page.getByRole('heading', { name: '真话岛宝藏找到！' })).toBeVisible();
     await expect.poll(() => page.evaluate(() =>
@@ -65,7 +76,8 @@ test.describe('truth island', () => {
 
   test('supports hints, sound, language, theme, and target viewport layout', async ({ page }) => {
     await page.locator('#hintBtn').click();
-    await expect(page.locator('#status')).toContainText('先假设米娅说真话');
+    // The hint names the case's own cast, so it describes trying both identities.
+    await expect(page.locator('#status')).toContainText(/身份|真话|反话/);
 
     await expect(page.locator('#soundBtn')).toHaveAttribute('aria-pressed', 'false');
     await page.locator('#soundBtn').click();

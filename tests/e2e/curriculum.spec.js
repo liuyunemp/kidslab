@@ -124,6 +124,10 @@ test('同课件多关聚合成一张卡：关卡按钮直达、显示算式与�
   await page.goto('/?lang=zh&grade=g1&term=a&cat=math');
   const card = page.locator('.card--group[data-course-id="grouped"]');
   await expect(card.locator('.card__title')).toHaveText('grouped');
+  // 关卡默认收进 details，先展开再断言关卡按钮。
+  await expect(card.locator('.card__stages')).toBeHidden();
+  await card.locator('.card__stages-summary').click();
+  await expect(card.locator('.card__stages')).toBeVisible();
   await expect(card.locator('.card__group-meta')).toHaveText('3 关 · 已玩 1 关');
   const stages = card.locator('.stage');
   await expect(stages).toHaveCount(3);
@@ -135,7 +139,57 @@ test('同课件多关聚合成一张卡：关卡按钮直达、显示算式与�
   await expect(page.locator('#countText')).toHaveText('共 1 个课件 · 3 个探索入口');
   await page.locator('#langBtn').click();
   await expect(card.locator('.card__group-meta')).toHaveText('3 levels · 1 played');
+  // 语言切换会重建网格，details 回到收起态；重新展开后再断言关卡文案。
+  await card.locator('.card__stages-summary').click();
   await expect(stages.nth(2).locator('.stage__label')).toHaveText('Read read-3');
+});
+
+test('聚合卡默认只显示课件介绍，关卡收进可展开的 details', async ({ page }) => {
+  const entry = (id, detail) => ({
+    bookId: 'math-g1a', bookTitle: { zh: '数学 一年级上册', en: 'Math · Grade 1 · Fall' }, grade: 'g1a',
+    unitId: '2', unitNumber: 2, unitKind: 'unit', unitOrder: 2, page: 2, lessonOrder: 1,
+    topic: { zh: '认读五', en: 'Reading five' },
+    activity: id, activityTitle: { zh: `读一读 ${id}`, en: `Read ${id}` }, invite: { zh: '试一试', en: 'Try it' },
+    ...(detail ? { detail } : {}),
+  });
+  const courses = [makeCourse('grouped', [entry('read-1', '2 + 3'), entry('read-2', '1 + 4'), entry('read-3')])];
+  await page.route('**/courseware/index.json', route => route.fulfill({ json: { courses } }));
+  await page.goto('/?lang=zh&grade=g1&term=a&cat=math');
+  const card = page.locator('.card--group[data-course-id="grouped"]');
+
+  // 卡片首屏是 emoji 封面 + 标题 + 一句介绍 + 分类，关卡按钮不占位。
+  await expect(card.locator('.card__emoji')).toBeVisible();
+  await expect(card.locator('.card__title')).toHaveText('grouped');
+  await expect(card.locator('.card__desc')).toHaveText('动手试一试');
+  await expect(card.locator('.chip--cat')).toHaveText('数学');
+  await expect(card.locator('.stage')).toHaveCount(3);
+  await expect(card.locator('.stage').first()).toBeHidden();
+
+  // summary 是可点开的展开控件，承载关卡统计与提示文案。
+  const summary = card.locator('.card__stages-summary');
+  await expect(summary).toBeVisible();
+  await expect(summary.locator('.card__group-meta')).toHaveText('3 关 · 已玩 0 关');
+  await expect(summary.locator('.card__stages-hint')).toHaveText('查看 3 个关卡 ▾');
+  const box = await summary.boundingBox();
+  expect(box.height).toBeGreaterThanOrEqual(44);
+
+  await summary.click();
+  await expect(card.locator('.stage').first()).toBeVisible();
+  await expect(summary.locator('.card__stages-hint')).toHaveText('收起 3 个关卡 ▴');
+  await expect(card.locator('.stage').nth(0)).toHaveAttribute('href', 'courseware/grouped/index.html?activity=read-1');
+
+  // 再点一次收起，回到介绍态。
+  await summary.click();
+  await expect(card.locator('.stage').first()).toBeHidden();
+
+  // 切换语言后展开提示同步为英文。
+  await page.locator('#langBtn').click();
+  await expect(card.locator('.card__desc')).toHaveText('Try it');
+  await expect(card.locator('.card__stages-summary .card__stages-hint')).toHaveText('Show 3 levels ▾');
+
+  // 单关课件（如数字萤火虫）走普通卡分支，不受影响。
+  await page.goto('/?lang=zh&grade=all&cat=all');
+  await expect(page.locator('.card--group')).toHaveCount(0);
 });
 
 test('构建清单包含与源码相同的教材映射', async ({ request }) => {

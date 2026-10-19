@@ -1,6 +1,6 @@
 {
   "id": "drone-post",
-  "version": "843a61a88a2971b73cc3d777144bb6c4f9aca2ec9beb00fcb1862ffca2eaa5bb",
+  "version": "61a413c7f0ddeae7f1065a392328eb0c9529e8d7fb55bf3caab4aad304860658",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "8058ee90a79a3ad0ebdb9fa8733b739d372b707df35005d552c719deb5613ecb"
+      "sha256": "0999698545cb3a1adeb14fc459a2e69c94c432275ed571b2ff9345e81b4e52ac"
     },
     {
       "path": "main.js",
-      "sha256": "91ee23b0a5da3563f0a7c6f65b046eef18b4b0d23434063ed98256a3ea64a945",
-      "fingerprint": "0aeb7ecc"
+      "sha256": "962e6c25b7629690e5fd0ce253998fc1df0d630b73e2775ff2947b5c1ad7f147",
+      "fingerprint": "b9ea94d6"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "005af8f654b7ac36d9bb0b7ea3279bebf1224393dd6c5ed2b7b784e7f5a26f82",
+      "fingerprint": "154226f9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "acce31745671f70372ff07977bff4b4aa343d958e26ed0d3e2e0cd2a2b6c05e1",
+      "fingerprint": "72b94470"
     },
     {
       "path": "style.css",

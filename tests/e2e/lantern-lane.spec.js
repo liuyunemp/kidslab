@@ -1,4 +1,23 @@
 import { test, expect } from '@playwright/test';
+import {levelInstance} from './random-task-helpers.js';
+
+// The five interval stages are generated, so titles and equations are derived from the instances.
+const level = (page, index) => levelInstance(page, 'lantern-lane', index);
+
+const titles = ([a, b, c, d, e]) => [
+  `${a.length} 米长街，每 ${a.gap} 米一盏`,
+  `${b.length} 米石桥，每 ${b.gap} 米一根柱`,
+  `周长 ${c.length} 米的湖，每 ${c.gap} 米一盏`,
+  `把圆木锯成 ${d.length} 段`,
+  `从 ${e.startFloor} 楼爬到 ${e.endFloor} 楼`,
+];
+const equations = ([a, b, c, d, e]) => [
+  `${a.length} ÷ ${a.gap} + 1 = ${a.answer}`,
+  `${b.length} ÷ ${b.gap} − 1 = ${b.answer}`,
+  `${c.length} ÷ ${c.gap} = ${c.answer}`,
+  `${d.length} − 1 = ${d.answer}`,
+  `${e.endFloor} − ${e.startFloor} = ${e.answer}`,
+];
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -37,36 +56,24 @@ async function setGuess(page, value) {
   const delta = value - current;
   const button = delta > 0 ? page.locator('#plusBtn') : page.locator('#minusBtn');
   for (let i = 0; i < Math.abs(delta); i += 1) {
-    await button.click();
+    // The scene repaints every frame while its sparkle animation runs, so the control is
+    // never "stable" for Playwright; the click itself is still a real user gesture.
+    await button.click({ force: true });
   }
   await expect(page.locator('#guessValue')).toHaveText(String(value));
 }
 
-async function clearStage(page) {
-  await setGuess(page, 11);
+// Every stage is solved from its own instance instead of a fixed count.
+async function solveStage(page, index, {wrong} = {}) {
+  const instance = await level(page, index);
+  await setGuess(page, wrong ? instance.defaultGuess : instance.answer);
   await page.locator('#placeBtn').click();
-  await expect(page.locator('#status')).toContainText('10 + 1 = 11');
-  await page.locator('#nextBtn').click();
+  return instance;
 }
 
-async function clearBridge(page) {
-  await setGuess(page, 4);
-  await page.locator('#placeBtn').click();
-  await expect(page.locator('#status')).toContainText('5 − 1 = 4');
-  await page.locator('#nextBtn').click();
-}
-
-async function clearRing(page) {
-  await setGuess(page, 6);
-  await page.locator('#placeBtn').click();
-  await expect(page.locator('#status')).toContainText('60 ÷ 10 = 6');
-  await page.locator('#nextBtn').click();
-}
-
-async function clearSaw(page) {
-  await setGuess(page, 4);
-  await page.locator('#placeBtn').click();
-  await expect(page.locator('#status')).toContainText('段数 − 1');
+async function clearStage(page, index) {
+  await solveStage(page, index);
+  await expect(page.locator('#status')).toContainText(/=/);
   await page.locator('#nextBtn').click();
 }
 
@@ -80,49 +87,46 @@ test.describe('lantern lane', () => {
       localStorage.removeItem('kidslab.progress.lantern-lane');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/lantern-lane/');
+    await page.goto('/courseware/lantern-lane/?seed=987');
   });
 
   test('recovers from wrong counts and completes all five interval stages', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: '100 米长街，每 10 米一盏' })).toBeVisible();
+    const stages = await Promise.all([0, 1, 2, 3, 4].map((index) => level(page, index)));
+    const stageTitles = titles(stages);
+    const stageEquations = equations(stages);
+    await expect(page.getByRole('heading', { name: stageTitles[0] })).toBeVisible();
 
-    await setGuess(page, 10);
+    // One too few, then one too many, then the correct count — all from the current instance.
+    const first = stages[0];
+    const tooFew = first.answer - 1;
+    const tooMany = first.answer + 1;
+    await setGuess(page, tooFew);
     await page.locator('#placeBtn').click();
     await expect(page.locator('#status')).toContainText('少了');
     await expect(page.locator('#stage')).toHaveAttribute('data-result', 'short');
 
-    await setGuess(page, 12);
+    await setGuess(page, tooMany);
     await page.locator('#placeBtn').click();
     await expect(page.locator('#status')).toContainText('多了');
     await expect(page.locator('#stage')).toHaveAttribute('data-result', 'extra');
 
-    await setGuess(page, 11);
+    await setGuess(page, first.answer);
     await page.locator('#placeBtn').click();
-    await expect(page.locator('#status')).toContainText('10 + 1 = 11');
+    await expect(page.locator('#status')).toContainText(stageEquations[0]);
     await page.locator('#nextBtn').click();
 
-    await expect(page.getByRole('heading', { name: '50 米石桥，每 10 米一根柱' })).toBeVisible();
-    await setGuess(page, 5);
-    await page.locator('#placeBtn').click();
-    await expect(page.locator('#status')).toContainText('柱子');
-    await setGuess(page, 4);
-    await page.locator('#placeBtn').click();
-    await page.locator('#nextBtn').click();
+    await expect(page.getByRole('heading', { name: stageTitles[1] })).toBeVisible();
+    await clearStage(page, 1);
 
-    await expect(page.getByRole('heading', { name: '周长 60 米的湖，每 10 米一盏' })).toBeVisible();
-    await setGuess(page, 6);
-    await page.locator('#placeBtn').click();
-    await page.locator('#nextBtn').click();
+    await expect(page.getByRole('heading', { name: stageTitles[2] })).toBeVisible();
+    await clearStage(page, 2);
 
-    await expect(page.getByRole('heading', { name: '把圆木锯成 5 段' })).toBeVisible();
-    await setGuess(page, 4);
-    await page.locator('#placeBtn').click();
-    await page.locator('#nextBtn').click();
+    await expect(page.getByRole('heading', { name: stageTitles[3] })).toBeVisible();
+    await clearStage(page, 3);
 
-    await expect(page.getByRole('heading', { name: '从 3 楼爬到 8 楼' })).toBeVisible();
-    await setGuess(page, 5);
-    await page.locator('#placeBtn').click();
-    await expect(page.locator('#status')).toContainText('8 − 3 = 5');
+    await expect(page.getByRole('heading', { name: stageTitles[4] })).toBeVisible();
+    await solveStage(page, 4);
+    await expect(page.locator('#status')).toContainText(stageEquations[4]);
     await page.locator('#nextBtn').click();
 
     await expect(page.getByRole('heading', { name: '你点亮了整条灯笼街！' })).toBeVisible();
@@ -140,30 +144,30 @@ test.describe('lantern lane', () => {
     await page.locator('#themeBtn').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
-    await clearStage(page);
-    await setGuess(page, 4);
+    const stages = await Promise.all([0, 1, 2, 3, 4].map((index) => level(page, index)));
+    await clearStage(page, 0);
+    const second = stages[1];
+    await setGuess(page, second.answer);
     await page.locator('#placeBtn').click();
     await page.locator('#langBtn').click();
-    await expect(page.getByRole('heading', { name: '50 m bridge, one post every 10 m' })).toBeVisible();
-    await expect(page.locator('#status')).toContainText('no ends');
+    await expect(page.getByRole('heading', { name: `${second.length} m bridge, posts every ${second.gap} m` })).toBeVisible();
+    await expect(page.locator('#status')).toContainText('No ends');
     await expectFitsViewport(page);
 
     await page.reload();
     await expect(page.locator('#nextBtn')).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await expect(page.locator('#soundBtn')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('#guessValue')).toHaveText('4');
+    await expect(page.locator('#guessValue')).toHaveText(String(second.answer));
     await expectFitsViewport(page);
   });
 
   test('restores completion and can start a fresh festival', async ({ page }) => {
-    await clearStage(page);
-    await clearBridge(page);
-    await clearRing(page);
-    await clearSaw(page);
-    await setGuess(page, 5);
-    await page.locator('#placeBtn').click();
-    await page.locator('#nextBtn').click();
+    const stages = await Promise.all([0, 1, 2, 3, 4].map((index) => level(page, index)));
+    for (const index of [0, 1, 2, 3, 4]) {
+      await solveStage(page, index);
+      await page.locator('#nextBtn').click();
+    }
     await expect(page.locator('#finale')).toBeVisible();
 
     await page.reload();
@@ -172,8 +176,10 @@ test.describe('lantern lane', () => {
 
     await page.locator('#playAgainBtn').click();
     await expect(page.locator('#finale')).toBeHidden();
-    await expect(page.getByRole('heading', { name: '100 米长街，每 10 米一盏' })).toBeVisible();
-    await expect(page.locator('#guessValue')).toHaveText('10');
+    // Replaying starts a fresh set of stages, so read the new first stage instead of the old title.
+    const replay = await level(page, 0);
+    await expect(page.getByRole('heading', { name: `${replay.length} 米长街，每 ${replay.gap} 米一盏` })).toBeVisible();
+    await expect(page.locator('#guessValue')).toHaveText(String(replay.defaultGuess));
     await expect.poll(() => page.evaluate(() =>
       localStorage.getItem('kidslab.progress.lantern-lane'))).toBeNull();
   });

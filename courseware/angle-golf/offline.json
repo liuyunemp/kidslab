@@ -1,6 +1,6 @@
 {
   "id": "angle-golf",
-  "version": "2f2af736df9fd8dd44c72ad9463b7a2abba20657215773c8702e06cea1db71c3",
+  "version": "90290c801125e9732947ed6a442b39a0ec9c25c25d956021b28fa209369ae600",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "756e740935f9d32f4dd6cc49d45c44d44dcbdd2a6d7e50f2b80bc05a2e782c34"
+      "sha256": "fc81e64b6de339c59ed90e1bdac01dbb58bc4efc92ba7bff1524b5db8edd661c"
     },
     {
       "path": "main.js",
-      "sha256": "dd8566ff546b339ca3182a89a335770be11fce1ecd558b114e7f3ea69b0a93bf",
-      "fingerprint": "b45e1d4c"
+      "sha256": "71cd4fac8b7ee733a955e0d2b51a7df874ad0aee5dda22c2ac4d94d2025adee2",
+      "fingerprint": "d60d1a58"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "373ca37533f7892b8d683f8b0962914e86f38df286bcbe80287e89a8f9603bf0",
+      "fingerprint": "bfecceb8"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "2e810b2b67a3dde52be52791c7fa2a73eb5868a2740003b97ee28f953daadd47",
+      "fingerprint": "8df65c49"
     },
     {
       "path": "style.css",

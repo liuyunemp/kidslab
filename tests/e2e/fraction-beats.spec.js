@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -38,45 +39,24 @@ test.describe('fraction beat house', () => {
       localStorage.removeItem('kidslab.progress.fraction-beats');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/fraction-beats/');
+    await page.goto('/courseware/fraction-beats/?seed=987');
   });
 
   test('recovers from an overfull bar and completes all three rhythm missions', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: '把一小节拼满' })).toBeVisible();
-
-    await page.getByRole('button', { name: '加入二分之一拍' }).click({ clickCount: 2 });
-    await page.getByRole('button', { name: '加入四分之一拍' }).click();
-    await expect(page.locator('#status')).toContainText('放不下');
-    await expect(page.locator('#fractionTotal')).toHaveText('1');
-
-    await page.locator('#undoBtn').click();
-    await page.getByRole('button', { name: '加入四分之一拍' }).click({ clickCount: 2 });
-    await expect(page.locator('#fractionTotal')).toHaveText('1');
-    await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('一整小节');
-    await page.locator('#nextBtn').click();
-
-    await expect(page.getByRole('heading', { name: '让两条节奏一样长' })).toBeVisible();
-    await page.getByRole('button', { name: '加入八分之一拍' }).click();
-    await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('还不一样长');
-    await page.getByRole('button', { name: '加入八分之一拍' }).click();
-    await page.locator('#checkBtn').click();
-    await expect(page.locator('#equation')).toHaveText('1/4 = 2/8');
-    await page.locator('#nextBtn').click();
-
-    await expect(page.getByRole('heading', { name: '点亮蹦迪房' })).toBeVisible();
-    await page.getByRole('button', { name: '加入四分之一拍' }).click();
-    await page.getByRole('button', { name: '加入八分之一拍' }).click({ clickCount: 2 });
-    await page.getByRole('button', { name: '加入二分之一拍' }).click();
-    await page.locator('#playBtn').click();
-    await expect(page.locator('#status')).toContainText('节奏开演');
-    await page.locator('#checkBtn').click();
-
-    await expect(page.getByRole('heading', { name: '全场节拍制作人！' })).toBeVisible();
-    await expect(page.locator('#playAgainBtn')).toBeFocused();
-    await expect.poll(() => page.evaluate(() =>
-      JSON.parse(localStorage.getItem('kidslab.progress.fraction-beats') || 'null')?.status)).toBe('completed');
+    const saved=()=>roundRecord(page,'fraction-beats');
+    for(let i=0;i<3;i++){
+      const a=(await saved()).instance;
+      if(i===0){
+        for(let j=a.initial.reduce((s,n)=>s+n,0);j<8;j++)await page.locator('[data-units="1"]').click();
+        await page.locator('[data-units="1"]').click();await expect(page.locator('#status')).toContainText('放不下');await expect(page.locator('#fractionTotal')).toHaveText('1');
+        await page.locator('#undoBtn').click();await page.locator('[data-units="1"]').click();
+      }else if(i===1){
+        await page.locator('#checkBtn').click();expect((await saved()).play.done).toBe(false);
+        for(let j=0;j<a.target/a.unit;j++)await page.locator('[data-units="'+a.unit+'"]').click();
+      }else{for(const n of a.sequence)await page.locator('[data-units="'+n+'"]').click();await page.locator('#playBtn').click();}
+      await page.locator('#checkBtn').click();expect((await saved()).play.done).toBe(true);if(i<2)await page.locator('#nextBtn').click();
+    }
+    await expect(page.locator('#completeModal')).toBeVisible();expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.progress.fraction-beats')).status)).toBe('completed');
   });
 
   test('supports clearing, sound, language, theme, and target viewports', async ({ page }) => {

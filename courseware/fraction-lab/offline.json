@@ -1,6 +1,6 @@
 {
   "id": "fraction-lab",
-  "version": "079d431e0e75458d3d9cc46318e8d4a9ac0fb8dd18cdbfd1e6ce39258eb0c7fd",
+  "version": "6a2cd85057341d034de650ea0d8a93ca1ed3a8414631ab14429d742f67f88532",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "081c12a8600d1e00f2cb615dd56b7b22e265401edd1a90b8b005711aa6356c7b"
+      "sha256": "f4f7f2beae757b082aa2eb696aa6a51de6cc46db0d5bf0313ccb4282e52c12be"
     },
     {
       "path": "main.js",
-      "sha256": "1701ea13c56cea01b58fe3716d04dac671e9ad66fb7f4aae7681525a16df8cc6",
-      "fingerprint": "75213e70"
+      "sha256": "241073b0e28ea20395d66fc27875762d7040248ce1a54ef3c43bf2420e2d55f5",
+      "fingerprint": "c8a195cb"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "42e76e93d1ece6c19d07f67959c6bcc1c672ca04c407f8c1e9d41a787683db85",
+      "fingerprint": "d635b9bb"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "c7f63e22b6fa3781a831904e0ddd01fa658a8a118fdf901485d1512cbc25d3ef",
+      "fingerprint": "e2f87d5b"
     },
     {
       "path": "style.css",

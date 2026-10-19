@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {solveNumberTask} from './random-task-helpers.js';
 
 test.describe('square root builder', () => {
   test.beforeEach(async ({ page }) => {
@@ -11,7 +12,7 @@ test.describe('square root builder', () => {
         localStorage.setItem('kidslab.square-root-lab.sound', 'off');
       }
     });
-    await page.goto('/courseware/square-root-lab/');
+    await page.goto('/courseware/square-root-lab/?seed=987');
   });
 
   test('calculates, simplifies, bounds, and recovers from invalid input', async ({ page }) => {
@@ -34,17 +35,12 @@ test.describe('square root builder', () => {
   test('allows a wrong answer retry and completes all five plans', async ({ page }) => {
     await page.getByRole('tab', { name: '闯关' }).click();
 
-    await page.getByRole('button', { name: '6 cm', exact: true }).click();
+    await solveNumberTask(page,'square-root-lab',{wrong:true});
     await expect(page.locator('#challengeFeedback')).toContainText('尺寸对不上');
-    await expect(page.getByRole('button', { name: '7 cm', exact: true })).toBeEnabled();
-    await page.getByRole('button', { name: '7 cm', exact: true }).click();
-    await page.getByRole('button', { name: '下一题' }).click();
-
-    for (const answer of ['4 和 5', '6√2', '3.16']) {
-      await page.getByRole('button', { name: answer, exact: true }).click();
-      await page.getByRole('button', { name: '下一题' }).click();
+    for(let i=0;i<5;i++){
+      await solveNumberTask(page,'square-root-lab');
+      if(i<4)await page.locator('#nextChallenge').click();
     }
-    await page.getByRole('button', { name: '144', exact: true }).click();
     await expect(page.locator('#challengeFeedback')).toContainText('五张蓝图全部通过');
     await expect(page.getByRole('button', { name: '再闯一轮' })).toBeVisible();
     await expect.poll(() => page.evaluate(() =>

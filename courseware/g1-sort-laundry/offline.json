@@ -1,6 +1,6 @@
 {
   "id": "g1-sort-laundry",
-  "version": "3c8058d25d05210191f61c87ed534031a8f56623d16afbab97828f728067d5f3",
+  "version": "738760276466eb3b0005c4d5ee3def8c4f0df09b204e47569a0144fa4a0cc123",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -17,22 +17,52 @@
     },
     {
       "path": "engine.js",
-      "sha256": "047e1b10601fd12ee10207eb6476aeb58c9cab765acccfad810cefe02ad16a56",
-      "fingerprint": "fb0d9d15"
+      "sha256": "bcfc6d6273f183d3044c384c4695f492d1f790cf368ad2a656ac8c92c6035712",
+      "fingerprint": "a4961038"
     },
     {
       "path": "index.html",
-      "sha256": "143285922ac2cc89f63f80227fd518abe7596b0777b4bfdcd96acf8f1bbf76f0"
+      "sha256": "01501e1b29caadbd73e01e891fcd269ada8a3070de18d2ee4579dba9372798ef"
     },
     {
       "path": "main.js",
-      "sha256": "fbfc3c0627ebb53c94268e94c4a671c5ca6a906d6f3d4b12594e47861c18602b",
-      "fingerprint": "cbb278c5"
+      "sha256": "abd6477f7414385f30a339e7687c6007404d3839f32005ec6bb864995602da91",
+      "fingerprint": "0e9cd0af"
     },
     {
       "path": "model.js",
       "sha256": "55d5cbf4067be07e3b767a0cbd540a2794151f18618aeeb216a87c2a6d81aa61",
       "fingerprint": "8777b077"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "9dc4ad11cae196d8407a9d02131fb86c1df19c9caa8a88a1f4a695c4c767403d",
+      "fingerprint": "b9d46108"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "238c9c1ca464e13b150d73a757eb2a77021e96bc892433ceda4c50ad032a7231",
+      "fingerprint": "f0727989"
     },
     {
       "path": "style.css",

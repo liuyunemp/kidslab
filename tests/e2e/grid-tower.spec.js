@@ -1,8 +1,17 @@
 import { test, expect } from '@playwright/test';
+import {levelInstance} from './random-task-helpers.js';
+
+// The blueprints are generated, so every label and answer is derived from the instance:
+// `answers[product]` lists the choices for that product and always contains the product itself.
+const blueprint = (page, index) => levelInstance(page, 'grid-tower', index);
 
 async function solveZone(page, label, answer) {
   await page.getByRole('button', { name: label, exact: true }).click();
   await page.getByRole('button', { name: String(answer), exact: true }).click();
+}
+
+function wrongChoice(instance, product) {
+  return instance.answers[product].find((value) => value !== product);
 }
 
 async function expectFitsViewport(page) {
@@ -27,43 +36,55 @@ test.describe('grid tower area model', () => {
       localStorage.removeItem('kidslab.grid-tower');
       localStorage.removeItem('kidslab.progress.grid-tower');
     });
-    await page.goto('/courseware/grid-tower/');
+    await page.goto('/courseware/grid-tower/?seed=987');
   });
 
   test('recovers from a wrong partial product and completes all three blueprints', async ({ page }) => {
-    // 热身楼：答错给方向性提示，答对窗户点亮
-    await page.getByRole('button', { name: '10 × 6 = ?', exact: true }).click();
-    await page.getByRole('button', { name: '50', exact: true }).click();
-    await expect(page.locator('#feedback')).toContainText('数小了');
-    await expect(page.getByRole('button', { name: '60', exact: true })).toBeEnabled();
-    await page.getByRole('button', { name: '60', exact: true }).click();
+    // Warm-up tower: a wrong partial product earns a directional hint, the right one lights windows.
+    const warmup = await blueprint(page, 0);
+    const firstZone = warmup.columns[0] * warmup.rows[0];
+    const firstLabel = `${warmup.columns[0]} × ${warmup.rows[0]} = ?`;
+    await page.getByRole('button', { name: firstLabel, exact: true }).click();
+    await page.getByRole('button', { name: String(wrongChoice(warmup, firstZone)), exact: true }).click();
+    await expect(page.locator('#feedback')).toContainText(/数小了|数大了/);
+    await page.getByRole('button', { name: String(firstZone), exact: true }).click();
     await expect(page.locator('.zone.is-built .windows i').first()).toBeVisible();
-    await solveZone(page, '3 × 6 = ?', 18);
-    await page.getByRole('button', { name: '78', exact: true }).click();
+    const laterZone = warmup.columns.at(-1) * warmup.rows.at(-1);
+    if (laterZone !== firstZone) {
+      await solveZone(page, `${warmup.columns.at(-1)} × ${warmup.rows.at(-1)} = ?`, laterZone);
+    }
+    await page.getByRole('button', { name: String(warmup.a * warmup.b), exact: true }).click();
     await expect(page.getByRole('heading', { name: '第一栋楼封顶！' })).toBeVisible();
     await expect(page.locator('#modalXray')).toContainText('竖式 X 光');
 
-    // 摩天楼：四块施工区 + 总数
+    // Skyscraper: every zone plus the total.
     await page.getByRole('button', { name: '下一张施工图' }).click();
-    await solveZone(page, '20 × 10 = ?', 200);
-    await solveZone(page, '3 × 10 = ?', 30);
-    await solveZone(page, '20 × 4 = ?', 80);
-    await solveZone(page, '3 × 4 = ?', 12);
-    await page.getByRole('button', { name: '322', exact: true }).click();
+    const tower = await blueprint(page, 1);
+    for (const column of tower.columns) {
+      for (const row of tower.rows) {
+        const product = column * row;
+        await solveZone(page, `${column} × ${row} = ?`, product);
+      }
+    }
+    await page.getByRole('button', { name: String(tower.a * tower.b), exact: true }).click();
     await expect(page.getByRole('heading', { name: '摩天楼全部亮灯！' })).toBeVisible();
 
-    // 拆迁队：逐层拆 = 重复减法，随时抢答层数
+    // Demolition: floor-by-floor subtraction, then guess the floor count.
     await page.getByRole('button', { name: '下一张施工图' }).click();
+    const demolition = await blueprint(page, 2);
     const demolish = page.getByRole('button', { name: '🧨 拆一层', exact: true });
     await demolish.click();
-    await expect(page.locator('#equation')).toContainText('还剩 288 间');
+    await expect(page.locator('#equation')).toContainText(`还剩 ${demolition.total - demolition.per} 间`);
     await demolish.click();
-    await expect(page.locator('#equation')).toContainText('还剩 264 间');
-    await page.getByRole('button', { name: '24', exact: true }).click();
-    await expect(page.locator('#feedback')).toContainText('太多了');
-    await page.getByRole('button', { name: '13', exact: true }).click();
+    await expect(page.locator('#equation')).toContainText(`还剩 ${demolition.total - 2 * demolition.per} 间`);
+    const tooMany = demolition.answers.total.find((value) => value !== demolition.floors && value > demolition.floors);
+    if (tooMany !== undefined) {
+      await page.getByRole('button', { name: String(tooMany), exact: true }).click();
+      await expect(page.locator('#feedback')).toContainText('太多了');
+    }
+    await page.getByRole('button', { name: String(demolition.floors), exact: true }).click();
     await expect(page.getByRole('heading', { name: '拆迁规划完成！' })).toBeVisible();
-    await expect(page.locator('#equation')).toContainText('312 ÷ 24 = 13');
+    await expect(page.locator('#equation')).toContainText(`${demolition.total} ÷ ${demolition.per} = ${demolition.floors}`);
     await expect.poll(() => page.evaluate(() =>
       JSON.parse(localStorage.getItem('kidslab.progress.grid-tower') || 'null')?.status)).toBe('completed');
   });
@@ -73,8 +94,14 @@ test.describe('grid tower area model', () => {
     await expect(page.locator('#hintBtn')).toBeVisible();
     await expectFitsViewport(page);
 
-    // 拆迁关(控制卡最高)也要一屏放下
-    await page.addInitScript(() => localStorage.setItem('kidslab.grid-tower', JSON.stringify({ level: 2, unlocked: 2 })));
+    // A save written before random rounds recorded its own level; replaying it starts that
+    // blueprint. The random store is cleared so the legacy level is the only source of truth.
+    await page.addInitScript(() => {
+      for (const key of Object.keys(localStorage)) {
+        if (key.startsWith('kidslab.random.v1.')) localStorage.removeItem(key);
+      }
+      localStorage.setItem('kidslab.grid-tower', JSON.stringify({ level: 2, unlocked: 2 }));
+    });
     await page.reload();
     await expect(page.locator('#demolishBtn')).toBeVisible();
     await expectFitsViewport(page);

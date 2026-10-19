@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { grid, validGrid } from './random-model.js';
 (() => {
   'use strict';
 
@@ -98,7 +100,7 @@
     },
   };
 
-  const LEVELS = [
+  const BASE_LEVELS = [
     {
       a: 13,
       b: 6,
@@ -134,6 +136,8 @@
     },
   ];
 
+  const rounds=createRounds('grid-tower');
+  const LEVELS=rounds.prepare(BASE_LEVELS,grid,validGrid,a=>a.division?{total:a.total,per:a.per}:{a:a.a,b:a.b});
   const ZONE_COLORS = ['#4f8df9', '#ff9f3f', '#3fd08f', '#ff7bac'];
   const $ = (selector) => document.querySelector(selector);
   const SAVE_KEY = 'kidslab.grid-tower';
@@ -180,7 +184,7 @@
   let t = (key) => key;
   let lang = window.cool.preferences.lang;
   let theme = window.cool.preferences.theme;
-  let levelIndex = Math.min(2, Math.max(0, Number(saved.level) || 0));
+  let levelIndex = Math.min(2, Math.max(0, Number(rounds.active ?? saved.level) || 0));
   let unlocked = Math.min(2, Math.max(levelIndex, Number(saved.unlocked) || 0));
   let built = new Set();
   const animatedZones = new Set();
@@ -336,6 +340,7 @@
     button.classList.add('is-right');
     if (current.division) {
       completed = true;
+      commitCompletion();
       setFeedback(t('totalCorrect'), '🎉', true);
       tone('stamp');
       window.cool.track('solve_division_plan');
@@ -345,6 +350,7 @@
     }
     if (askingTotal) {
       completed = true;
+      commitCompletion();
       setFeedback(t('totalCorrect'), '🎉', true);
       tone('stamp');
       window.cool.track('finish_tower');
@@ -427,7 +433,7 @@
   function xrayMarkup() {
     const current = level();
     if (current.division) {
-      return `<p class="xray__check">312 − 24 × 13 = 0　✓</p>`;
+      return `<p class="xray__check">${current.total} − ${current.per} × ${current.floors} = 0　✓</p>`;
     }
     const parts = zonesFor(current).slice().reverse();
     const rows = parts.map((zone) =>
@@ -444,14 +450,17 @@
       </div>`;
   }
 
-  function showCompletion() {
-    const current = level();
+  function commitCompletion() {
     if (levelIndex < LEVELS.length - 1) {
       unlocked = Math.max(unlocked, levelIndex + 1);
       persist();
     } else {
       window.cool.complete?.();
     }
+    rounds.checkpoint();
+  }
+  function showCompletion(restoring=false) {
+    const current = level();
     el.celebration.textContent = current.division ? '🏚️➡️🏢' : levelIndex === 1 ? '🌃' : '🏙️';
     el.modalTitle.textContent = t('completeTitles')[levelIndex];
     el.modalText.textContent = t('completeTexts')[levelIndex];
@@ -459,7 +468,7 @@
     el.modalConfetti.innerHTML = Array.from({ length: 14 }, (_, index) => `<i class="confetti-piece confetti-piece--${index % 7}"></i>`).join('');
     el.next.textContent = levelIndex === LEVELS.length - 1 ? t('replay') : t('next');
     el.modal.hidden = false;
-    tone('fanfare');
+    if(!restoring)tone('fanfare');
     renderLevels();
   }
 
@@ -636,7 +645,15 @@
 
   window.cool.bindI18n(I18N, {
     onChange(context) {
-      t = context.t;
+      t = (key,...args) => {
+        const d=LEVELS[2],zh=context.lang==='zh';
+        if(key==='missions')return LEVELS.map(a=>a.division?(zh?`拆掉 ${a.total} 间房的旧楼`:`Demolish a ${a.total}-room tower`):(zh?`盖一座 ${a.a} × ${a.b} 的楼`:`Build a ${a.a} × ${a.b} tower`));
+        if(['demolishStart','demolishLogStart'].includes(key))return zh?`旧楼共 ${d.total} 间，每层 ${d.per} 间。`:`${d.total} rooms, ${d.per} per floor.`;
+        if(key==='hintDivision')return zh?`每层 ${d.per} 间。想想 ${d.per} 乘几等于 ${d.total}？`:`Each floor has ${d.per} rooms. ${d.per} times what is ${d.total}?`;
+        if(key==='demolishFinal')return `${d.total} ÷ ${d.per} = ${d.floors}`;
+        if(key==='completeTexts')return LEVELS.map(a=>a.division?`${a.total} ÷ ${a.per} = ${a.floors}`:`${zonesFor(a).map(z=>z.value).join(' + ')} = ${a.a*a.b}`);
+        return context.t(key,...args);
+      };
       lang = context.lang;
       theme = context.theme;
       document.title = t('doc');
@@ -648,4 +665,7 @@
   });
 
   resetLevel();
+  rounds.attach({parent:'.control',dialog:'#modal',active:()=>levelIndex,
+    capture:()=>{if(crashing)throw new Error('Busy');return {built:[...built],selected,askingTotal,completed,demolished,unlocked};},
+    restore:value=>{const keys=zonesFor(level()).map(z=>z.id);if(!Array.isArray(value.built)||!value.built.every(k=>keys.includes(k))||!Number.isInteger(value.demolished)||value.demolished<0||value.demolished>(level().floors??0))throw new Error('Invalid tower');built=new Set(value.built);({selected,askingTotal,completed,demolished}=value);unlocked=Math.max(unlocked,Math.min(2,Number(value.unlocked)||0));render();if(completed)showCompletion(true);},retry:resetLevel});
 })();

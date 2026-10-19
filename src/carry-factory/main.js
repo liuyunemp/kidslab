@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { arithmetic, validArithmetic } from './random-model.js';
 (() => {
   'use strict';
 
@@ -197,7 +199,7 @@
     },
   };
 
-  const ROUNDS = [
+  const BASE_ROUNDS = [
     { a: 47, b: 38, op: 'add', face: '👩‍🏭' },
     { a: 68, b: 57, op: 'add', face: '🧑‍🔧' },
     { a: 286, b: 175, op: 'add', face: '👨‍🏭' },
@@ -206,9 +208,11 @@
     { a: 302, b: 178, op: 'subtract', face: '🧑‍🏭' },
   ];
 
+  const rounds=createRounds('carry-factory');
+  const ROUNDS=rounds.prepare(BASE_ROUNDS,arithmetic,validArithmetic,a=>({a:a.a,b:a.b,op:a.op}));
   let t = (key) => key;
   const state = {
-    round: 0,
+    round: rounds.active!==null&&Number(rounds.active)<ROUNDS.length?Number(rounds.active):0,
     phase: 'intro',
     counts: [0, 0, 0, 0],
     demand: [0, 0, 0, 0],
@@ -502,6 +506,14 @@
     render();
     successSound();
     makeSparks(0, 15);
+    showResult();
+    window.cool?.track('complete-order');
+    if (state.round === ROUNDS.length - 1) {
+      window.cool?.stage('carry-factory-complete');
+      window.cool?.complete?.();
+    }
+  }
+  function showResult(){
     const final = state.round === ROUNDS.length - 1;
     els.resultStamp.textContent = answer();
     els.resultTitle.textContent = final ? t('finalTitle') : t('resultTitle');
@@ -511,11 +523,6 @@
     els.nextText.textContent = final ? t('replay') : t('next');
     els.result.hidden = false;
     els.next.focus();
-    window.cool?.track('complete-order');
-    if (final) {
-      window.cool?.stage('carry-factory-complete');
-      window.cool?.complete?.();
-    }
   }
 
   function handleAction() {
@@ -585,4 +592,7 @@
     },
   });
   resetRound();
+  rounds.attach({parent:'.control',dialog:'#result',active:()=>state.round,
+    capture:()=>({phase:state.phase,counts:state.counts,demand:state.demand,bolts:state.bolts}),
+    restore:value=>{if(!['intro','work','done'].includes(value.phase)||!Array.isArray(value.demand)||value.demand.length!==4||!Array.isArray(value.counts)||value.counts.length!==4||![...value.counts,...value.demand].every(n=>Number.isInteger(n)&&n>=0&&n<=19))throw new Error('Invalid factory');Object.assign(state,value);render();if(state.phase==='done')showResult();},retry:resetRound});
 })();

@@ -1,3 +1,6 @@
+import {createRounds} from './random-rounds.js';
+import {bridgeTask,validBridges,bridgeIdentity,bridgeFamily,bridgeRepair} from './random-model.js';
+import {BRIDGE_BASES} from './classic-maps.js';
 (() => {
   'use strict';
 
@@ -170,35 +173,8 @@
     { kicker: 'act3Kicker', title: 'act3Title', text: 'act3Text', desk: 'act3Desk', lesson: 'act3Lesson', icon: '±1' },
   ];
 
-  const OLD_TOWN_NODES = [
-    { id: 'north', x: 31, y: 18, tilt: '-4deg' },
-    { id: 'south', x: 30, y: 82, tilt: '3deg' },
-    { id: 'castle', x: 48, y: 50, tilt: '-2deg' },
-    { id: 'east', x: 79, y: 50, tilt: '4deg' },
-  ];
-  const OLD_TOWN_EDGES = [
-    { id: 'nc1', a: 'north', b: 'castle', curve: -13 },
-    { id: 'nc2', a: 'north', b: 'castle', curve: 13 },
-    { id: 'sc1', a: 'south', b: 'castle', curve: -13 },
-    { id: 'sc2', a: 'south', b: 'castle', curve: 13 },
-    { id: 'ne', a: 'north', b: 'east', curve: -9 },
-    { id: 'se', a: 'south', b: 'east', curve: 9 },
-    { id: 'ce', a: 'castle', b: 'east', curve: 0 },
-  ];
-  const RING_NODES = [
-    { id: 'aurora', x: 50, y: 14, tilt: '-2deg' },
-    { id: 'pine', x: 82, y: 38, tilt: '4deg' },
-    { id: 'harbor', x: 70, y: 80, tilt: '-4deg' },
-    { id: 'market', x: 30, y: 80, tilt: '3deg' },
-    { id: 'mill', x: 18, y: 38, tilt: '-4deg' },
-  ];
-  const RING_EDGES = [
-    { id: 'ap', a: 'aurora', b: 'pine', curve: 6 },
-    { id: 'ph', a: 'pine', b: 'harbor', curve: 5 },
-    { id: 'hm', a: 'harbor', b: 'market', curve: 5 },
-    { id: 'mw', a: 'market', b: 'mill', curve: 5 },
-    { id: 'wa', a: 'mill', b: 'aurora', curve: 6 },
-  ];
+  const rounds=createRounds('ice-bridges');
+  const MAPS=BRIDGE_BASES.map((a,i)=>rounds.define(i,a,bridgeTask,validBridges,bridgeIdentity,i===1?bridgeFamily:undefined));
 
   const $ = (selector) => document.querySelector(selector);
   const el = {
@@ -241,6 +217,8 @@
   let missionIndex = 0;
   let unlocked = 0;
   let completed = new Set();
+  // A save written before random rounds listed completed missions but no finale flag.
+  let finaleShown = false;
   let gogglesOn = false;
   let routeNodes = [];
   let usedEdges = [];
@@ -253,16 +231,13 @@
     completed = new Set(Array.isArray(saved.completed)
       ? saved.completed.filter((value) => Number.isInteger(value) && value >= 0 && value <= 2)
       : []);
+    finaleShown = saved.finaleShown === true;
   } catch {
     unlocked = 0;
     completed = new Set();
+    finaleShown = false;
   }
-  let restoreCompletion = completed.has(2);
-  if (restoreCompletion) {
-    missionIndex = 2;
-    repairChoice = 'close-one';
-    statusMessage = { key: 'act3DoneClose', tone: 'good', args: [] };
-  }
+  let currentDone=false,completeTimer=0;
 
   class SoundEngine {
     constructor() {
@@ -344,11 +319,18 @@
 
   function save() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify({ unlocked, completed: [...completed] }));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ unlocked, completed: [...completed], finaleShown }));
     } catch {}
   }
 
   function text(key, ...args) {
+    const a=MAPS[missionIndex],en=language==='en';
+    if(key==='act1Glasses')return en?`Degrees: ${Object.values(degrees()).join(', ')}. All four are odd.`:`度数：${Object.values(degrees()).join('、')}，四块陆地都是奇点。`;
+    if(key==='act2Hint')return en?'Follow an unbroken bridge from your current land. Crossings between bridges are not stops.':'从脚下陆地沿未走过的桥前进；两座桥的交叉处不是陆地。';
+    if(['repairDouble','repairClose','repairAdd'].includes(key)&&a.repairs){
+      const e=key==='repairAdd'?a.repairs.add:a.edges.find(e=>e.id===(key==='repairClose'?a.repairs.close:a.repairs.double[0])),pair=`${t(e.a)} ↔ ${t(e.b)}`;
+      return key==='repairDouble'?(en?`Close two: ${pair}`:`封两座：${pair}`):key==='repairClose'?(en?`Close one: ${pair}`:`封一座：${pair}`):(en?`Add one: ${pair}`:`加一座：${pair}`);
+    }
     const value = t(key);
     return typeof value === 'function' ? value(...args) : value;
   }
@@ -359,20 +341,7 @@
     el.status.className = tone || '';
   }
 
-  function currentGraph() {
-    if (missionIndex === 1) return { nodes: RING_NODES, edges: RING_EDGES };
-    let edges = OLD_TOWN_EDGES.map((edge) => ({ ...edge }));
-    if (missionIndex === 2) {
-      if (repairChoice === 'close-one') {
-        edges = edges.map((edge) => edge.id === 'ce' ? { ...edge, closed: true } : edge);
-      } else if (repairChoice === 'double') {
-        edges = edges.map((edge) => ['nc1', 'nc2'].includes(edge.id) ? { ...edge, closed: true } : edge);
-      } else if (repairChoice === 'add-one') {
-        edges.push({ id: 'ns-new', a: 'north', b: 'south', curve: 30, added: true });
-      }
-    }
-    return { nodes: OLD_TOWN_NODES, edges };
-  }
+  function currentGraph(){return missionIndex===2?bridgeRepair(MAPS[2],repairChoice):MAPS[missionIndex];}
 
   function activeEdges(graph = currentGraph()) {
     return graph.edges.filter((edge) => !edge.closed);
@@ -425,7 +394,7 @@
 
     el.nodes.replaceChildren();
     graph.nodes.forEach((node) => {
-      const interactive = missionIndex === 1 && !completed.has(1);
+      const interactive = missionIndex === 1 && !currentDone;
       const element = document.createElement(interactive ? 'button' : 'div');
       if (interactive) element.type = 'button';
       element.className = 'node';
@@ -474,7 +443,7 @@
       button.className = `mission-btn${index === missionIndex ? ' current' : ''}${completed.has(index) ? ' done' : ''}`;
       button.textContent = String(index + 1).padStart(2, '0');
       button.disabled = index > unlocked;
-      button.title = button.disabled ? text('lockedMission') : text('missionLabel', index + 1, text(mission.title));
+      button.title = button.disabled ? text('lockedMission') : t('missionLabel', index + 1, text(mission.title));
       button.setAttribute('aria-label', button.title);
       button.addEventListener('click', () => switchMission(index));
       el.missionNav.append(button);
@@ -503,7 +472,7 @@
       button.classList.toggle('selected', button.dataset.repair === repairChoice);
       button.setAttribute('aria-pressed', String(button.dataset.repair === repairChoice));
     });
-    el.testRepair.disabled = !repairChoice || completed.has(2);
+    el.testRepair.disabled = !repairChoice || currentDone;
   }
 
   function render() {
@@ -523,7 +492,7 @@
     el.judgePanel.hidden = missionIndex !== 0;
     el.routePanel.hidden = missionIndex !== 1;
     el.repairPanel.hidden = missionIndex !== 2;
-    el.next.hidden = !completed.has(missionIndex) || missionIndex === 2;
+    el.next.hidden = !currentDone || missionIndex === 2;
     setStatus(statusMessage.key, statusMessage.tone, ...statusMessage.args);
     renderNav();
     renderGraph();
@@ -532,30 +501,27 @@
   }
 
   function resetMissionState() {
+    clearTimeout(completeTimer);currentDone=false;el.modal.hidden=true;el.course.inert=false;
     gogglesOn = false;
     routeNodes = [];
     usedEdges = [];
     repairChoice = '';
   }
 
-  function switchMission(index) {
-    if (index > unlocked) return;
-    missionIndex = index;
-    resetMissionState();
-    statusMessage = { key: `act${index + 1}Ready`, tone: '', args: [] };
-    window.cool?.stage?.(`ice-bridges-${index + 1}`);
-    sound.skate();
-    render();
+  function switchMission(index,fresh=false){
+    if(index>unlocked)return;rounds.checkpoint();if(fresh)MAPS[index]=rounds.next(index);missionIndex=index;resetMissionState();
+    statusMessage={key:`act${index+1}Ready`,tone:'',args:[]};const play=rounds.record(index).play;if(play){try{restorePlay(play);}catch{resetMissionState();}}
+    window.cool?.stage?.(`ice-bridges-${index+1}`);sound.skate();render();rounds.checkpoint();
   }
 
   function completeMission() {
-    completed.add(missionIndex);
+    const first=!completed.has(missionIndex);currentDone=true;completed.add(missionIndex);
     unlocked = Math.max(unlocked, Math.min(2, missionIndex + 1));
     save();
     if (missionIndex === 2) {
       sound.finale();
-      window.cool?.complete?.();
-      setTimeout(showCompletion, 300);
+      if(first)window.cool?.complete?.();
+      completeTimer=setTimeout(showCompletion,300);
     } else {
       sound.correct();
     }
@@ -563,13 +529,15 @@
   }
 
   function showCompletion() {
+    finaleShown = true;
+    save();
     el.course.inert = true;
     el.modal.hidden = false;
     el.playAgain.focus();
   }
 
   function revealDegrees() {
-    if (missionIndex !== 0 || completed.has(0)) return;
+    if (missionIndex !== 0 || currentDone) return;
     gogglesOn = true;
     sound.reveal();
     setStatus('act1Glasses', 'good');
@@ -578,7 +546,7 @@
   }
 
   function judgeMap(answer) {
-    if (missionIndex !== 0 || completed.has(0)) return;
+    if (missionIndex !== 0 || currentDone) return;
     if (!gogglesOn) {
       sound.error();
       setStatus('act1NeedGoggles', 'bad');
@@ -596,7 +564,7 @@
   }
 
   function visitNode(nodeId) {
-    if (missionIndex !== 1 || completed.has(1)) return;
+    if (missionIndex !== 1 || currentDone) return;
     if (routeNodes.length === 0) {
       routeNodes.push(nodeId);
       sound.skate();
@@ -606,7 +574,7 @@
       return;
     }
     const current = routeNodes.at(-1);
-    const connected = RING_EDGES.filter((edge) =>
+    const connected = MAPS[1].edges.filter((edge) =>
       (edge.a === current && edge.b === nodeId) || (edge.b === current && edge.a === nodeId));
     const available = connected.find((edge) => !usedEdges.includes(edge.id));
     if (!available) {
@@ -617,27 +585,27 @@
     usedEdges.push(available.id);
     routeNodes.push(nodeId);
     sound.skate();
-    if (usedEdges.length === RING_EDGES.length) {
+    if (usedEdges.length === MAPS[1].edges.length) {
       setStatus('act2Done', 'good');
       window.cool?.track?.('complete-euler-circuit', { bridges: usedEdges.length });
       completeMission();
       return;
     }
-    setStatus('act2Progress', '', usedEdges.length, RING_EDGES.length);
+    setStatus('act2Progress', '', usedEdges.length, MAPS[1].edges.length);
     render();
   }
 
   function undoRoute() {
-    if (missionIndex !== 1 || usedEdges.length === 0 || completed.has(1)) return;
+    if (missionIndex !== 1 || usedEdges.length === 0 || currentDone) return;
     usedEdges.pop();
     routeNodes.pop();
     sound.skate();
-    setStatus(routeNodes.length > 1 ? 'act2Progress' : 'act2Start', '', usedEdges.length, RING_EDGES.length);
+    setStatus(routeNodes.length > 1 ? 'act2Progress' : 'act2Start', '', usedEdges.length, MAPS[1].edges.length);
     render();
   }
 
   function resetRoute() {
-    if (missionIndex !== 1 || routeNodes.length === 0 || completed.has(1)) return;
+    if (missionIndex !== 1 || routeNodes.length === 0 || currentDone) return;
     routeNodes = [];
     usedEdges = [];
     sound.reveal();
@@ -647,7 +615,7 @@
   }
 
   function chooseRepair(choice) {
-    if (missionIndex !== 2 || completed.has(2)) return;
+    if (missionIndex !== 2 || currentDone) return;
     repairChoice = choice;
     sound.reveal();
     setStatus('act3Selected');
@@ -656,7 +624,7 @@
   }
 
   function testRepair() {
-    if (missionIndex !== 2 || !repairChoice || completed.has(2)) return;
+    if (missionIndex !== 2 || !repairChoice || currentDone) return;
     const oddCount = Object.values(degrees()).filter((degree) => degree % 2).length;
     if (oddCount > 2) {
       sound.error();
@@ -679,9 +647,9 @@
   el.testRepair.addEventListener('click', testRepair);
   el.hint.addEventListener('click', () => {
     sound.reveal();
-    setStatus(MISSIONS[missionIndex].hint);
+    setStatus(`act${missionIndex+1}Hint`);
   });
-  el.next.addEventListener('click', () => switchMission(Math.min(2, missionIndex + 1)));
+  el.next.addEventListener('click', () => switchMission(Math.min(2, missionIndex + 1),true));
   el.sound.addEventListener('click', () => {
     sound.setMuted(!sound.muted);
     renderControls();
@@ -689,29 +657,26 @@
   });
   el.lang.addEventListener('click', () => window.cool.preferences.toggleLang());
   el.theme.addEventListener('click', () => window.cool.preferences.toggleTheme());
-  el.playAgain.addEventListener('click', () => {
-    el.modal.hidden = true;
-    el.course.inert = false;
-    missionIndex = 0;
-    unlocked = 0;
-    completed.clear();
-    resetMissionState();
-    save();
-    statusMessage = { key: 'act1Ready', tone: '', args: [] };
-    window.cool?.stage?.('ice-bridges-1');
-    render();
-    el.goggles.focus();
-  });
+  el.playAgain.addEventListener('click',()=>{finaleShown=false;completed=new Set();save();switchMission(0,true);});
 
   window.cool.bindI18n(I18N, {
     onChange({ t: translate, lang }) {
       t = translate;
       language = lang;
       render();
-      if (restoreCompletion) {
-        restoreCompletion = false;
-        showCompletion();
-      }
+
     },
   });
+  function restorePlay(s){
+    const a=MAPS[missionIndex];if(!s||!Array.isArray(s.routeNodes)||!Array.isArray(s.usedEdges)||s.usedEdges.length>a.edges.length||s.routeNodes.length!==(s.usedEdges.length?s.usedEdges.length+1:s.routeNodes.length?1:0)||s.routeNodes.some(n=>!a.nodes.some(a=>a.id===n))||new Set(s.usedEdges).size!==s.usedEdges.length||!['','double','close-one','add-one'].includes(s.repairChoice)||!s.statusMessage||!Array.isArray(s.statusMessage.args))throw new Error('Invalid ice snapshot');
+    for(let i=0;i<s.usedEdges.length;i++){const e=a.edges.find(e=>e.id===s.usedEdges[i]);if(!e||!((e.a===s.routeNodes[i]&&e.b===s.routeNodes[i+1])||(e.b===s.routeNodes[i]&&e.a===s.routeNodes[i+1])))throw new Error('Invalid ice route');}
+    if(s.done&&(missionIndex===0&&!s.gogglesOn||missionIndex===1&&s.usedEdges.length!==a.edges.length||missionIndex===2&&!['close-one','add-one'].includes(s.repairChoice)))throw new Error('Invalid completion');
+    gogglesOn=Boolean(s.gogglesOn);routeNodes=s.routeNodes;usedEdges=s.usedEdges;repairChoice=s.repairChoice;currentDone=Boolean(s.done);statusMessage=s.statusMessage;render();if(currentDone&&missionIndex===2)showCompletion();
+  }
+  const initial=Number(rounds.active??0);missionIndex=Number.isInteger(initial)&&initial>=0&&initial<=unlocked?initial:0;resetMissionState();statusMessage={key:`act${missionIndex+1}Ready`,tone:'',args:[]};render();
+  // A save written before random rounds only listed completed missions: honour it once and reopen
+  // the finale. This runs before attach(), so record(...).play is still the stored value.
+  const untouched = index => { const play = rounds.record(index)?.play; return !play || (play.done !== true && !play.routeNodes?.length && !play.repairChoice); };
+  if(!finaleShown&&[0,1,2].every(index=>completed.has(index))&&[0,1,2].every(untouched)){missionIndex=2;currentDone=true;finaleShown=true;save();render();showCompletion();}
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#completeModal',active:()=>missionIndex,capture:()=>({gogglesOn,routeNodes,usedEdges,repairChoice,done:currentDone,statusMessage}),restore:restorePlay,retry:()=>{resetMissionState();render();},beforeReload:()=>clearTimeout(completeTimer)});
 })();

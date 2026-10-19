@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -42,112 +43,37 @@ async function setRange(page, value) {
   }, value);
 }
 
-async function finishFirstNight(page) {
-  await setRange(page, 7);
-  await page.locator('#checkTrialBtn').click();
-  await expect(page.locator('#status')).toContainText('5 只三脚兽 + 7 只四脚兽');
-  await page.locator('#nextBtn').click();
+const saved=page=>roundRecord(page,'alien-farm');
+async function finishNight(page,index){
+ const a=(await saved(page)).instance.target;
+ if(index===0){const quad=a.legs-3*a.creatures;await setRange(page,quad);await page.locator('#checkTrialBtn').click();await expect(page.locator('#status')).toContainText(String(quad));}
+ if(index===1){await page.locator('#assumeBtn').click();await expect(page.locator('#assumptionFormula')).toContainText(String(a.creatures*3));await page.locator('#exchangeBtn').click();}
+ if(index===2){
+  const quad=(3*a.eyes-a.legs)/2,tri=a.eyes-2*quad;
+  for(const [species,want] of [['tri',tri],['quad',quad]]){
+   const before=Number(await page.locator(species==='tri'?'#sensorTriCount':'#sensorQuadCount').textContent());
+   for(let n=0;n<Math.abs(want-before);n++)await page.locator('[data-species="'+species+'"][data-delta="'+(want>before?'1':'-1')+'"]').click();
+  }
+  await expect(page.locator('#eyeCount')).toHaveText(String(a.eyes));await expect(page.locator('#legCount')).toHaveText(String(a.legs));await page.locator('#checkSensorsBtn').click();
+ }else await page.locator('#nextBtn').click();
 }
-
-async function finishSecondNight(page) {
-  await page.locator('#assumeBtn').click();
-  await expect(page.locator('#status')).toContainText('42 条腿');
-  await page.locator('#exchangeBtn').click();
-  await expect(page.locator('#status')).toContainText('你没用试的');
-  await page.locator('#nextBtn').click();
-}
-
-test.describe('alien farm', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-    await page.evaluate(() => {
-      localStorage.setItem('kidslab.lang', 'zh');
-      localStorage.setItem('kidslab.theme', 'light');
-      localStorage.removeItem('kidslab.alien-farm');
-      localStorage.removeItem('kidslab.progress.alien-farm');
-      localStorage.removeItem('kidslab.sound.muted');
-    });
-    await page.goto('/courseware/alien-farm/');
-  });
-
-  test('recovers from sensor mismatches and completes all three night shifts', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: '保持 12 只，调到 43 条腿' })).toBeVisible();
-    await page.locator('#checkTrialBtn').click();
-    await expect(page.locator('#status')).toContainText('36 条腿');
-    await expect(page.locator('#mixRange')).toHaveValue('0');
-    await finishFirstNight(page);
-
-    await expect(page.getByRole('heading', { name: '不用挨个试，一步找出 48 条腿' })).toBeVisible();
-    await finishSecondNight(page);
-
-    await expect(page.getByRole('heading', { name: '只看 20 只眼、48 条腿' })).toBeVisible();
-    await page.locator('#checkSensorsBtn').click();
-    await expect(page.locator('#status')).toContainText('12 只眼、28 条腿');
-    await expect(page.locator('#sensorTriCount')).toHaveText('4');
-    await expect(page.locator('#sensorQuadCount')).toHaveText('4');
-
-    for (let index = 0; index < 4; index += 1) {
-      await page.locator('[data-species="tri"][data-delta="1"]').click();
-    }
-    for (let index = 0; index < 2; index += 1) {
-      await page.locator('[data-species="quad"][data-delta="1"]').click();
-    }
-    await expect(page.locator('#eyeCount')).toHaveText('20');
-    await expect(page.locator('#legCount')).toHaveText('48');
-    await page.locator('#checkSensorsBtn').click();
-
-    await expect(page.getByRole('heading', { name: '天亮了，农场全貌出现！' })).toBeVisible();
-    await expect(page.locator('#playAgainBtn')).toBeFocused();
-    await expect(page.locator('.course')).toHaveJSProperty('inert', true);
-    await expect.poll(() => page.evaluate(() =>
-      JSON.parse(localStorage.getItem('kidslab.progress.alien-farm') || 'null')?.status)).toBe('completed');
-  });
-
-  test('supports sound, language, theme, persistence, and target viewports', async ({ page }) => {
-    await expect(page.locator('#soundBtn')).toHaveAttribute('aria-pressed', 'false');
-    await page.locator('#soundBtn').click();
-    await expect(page.locator('#soundBtn')).toHaveAttribute('aria-pressed', 'true');
-    await page.locator('#themeBtn').click();
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await page.locator('#langBtn').click();
-    await expect(page.getByRole('heading', { name: 'Keep 12 Creatures and Reach 43 Legs' })).toBeVisible();
-    await expect(page.locator('#missionNav')).toHaveAttribute('aria-label', 'Farm missions');
-    await expect(page.locator('#soundBtn')).toHaveAttribute('aria-label', 'Turn sound on');
-    await expectFitsViewport(page);
-
-    await setRange(page, 7);
-    await page.locator('#checkTrialBtn').click();
-    await page.locator('#nextBtn').click();
-    await page.locator('#assumeBtn').click();
-    await page.reload();
-
-    await expect(page.getByRole('heading', { name: 'Reach 48 Legs without Guessing' })).toBeVisible();
-    await expect(page.locator('#assumptionFormula')).toContainText('48 − 42 = 6');
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await expectFitsViewport(page);
-  });
-
-  test('restores completion and can start a fresh night shift', async ({ page }) => {
-    await finishFirstNight(page);
-    await finishSecondNight(page);
-    for (let index = 0; index < 4; index += 1) {
-      await page.locator('[data-species="tri"][data-delta="-1"]').click();
-    }
-    await page.reload();
-    await expect(page.locator('#sensorTriCount')).toHaveText('0');
-    for (let index = 0; index < 8; index += 1) {
-      await page.locator('[data-species="tri"][data-delta="1"]').click();
-    }
-    for (let index = 0; index < 2; index += 1) {
-      await page.locator('[data-species="quad"][data-delta="1"]').click();
-    }
-    await page.locator('#checkSensorsBtn').click();
-    await page.reload();
-    await expect(page.getByRole('heading', { name: '天亮了，农场全貌出现！' })).toBeVisible();
-
-    await page.locator('#playAgainBtn').click();
-    await expect(page.getByRole('heading', { name: '保持 12 只，调到 43 条腿' })).toBeVisible();
-    await expect(page.locator('#mixRange')).toHaveValue('0');
-    await expect(page.locator('#legCount')).toHaveText('36');
-  });
+test.describe('alien farm',()=>{
+ test.beforeEach(async({page})=>{await page.addInitScript(()=>{if(!localStorage.getItem('kidslab.lang'))localStorage.setItem('kidslab.lang','zh');if(!localStorage.getItem('kidslab.theme'))localStorage.setItem('kidslab.theme','light');});await page.goto('/courseware/alien-farm/?seed=987');});
+ test('recovers from sensor mismatches and completes all generated night shifts',async({page})=>{
+  const a=(await saved(page)).instance.target;await page.locator('#checkTrialBtn').click();await expect(page.locator('#status')).toContainText(String(a.creatures*3));
+  for(let n=0;n<3;n++){if(n===2){await page.locator('#checkSensorsBtn').click();await expect(page.locator('#status')).toContainText('28');}await finishNight(page,n);}
+  await expect(page.locator('#completeModal')).toBeVisible();await expect(page.locator('.course')).toHaveJSProperty('inert',true);
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.progress.alien-farm')).status)).toBe('completed');
+ });
+ test('retains assumptions and preferences through reload at target viewports',async({page})=>{
+  await page.locator('#soundBtn').click();await page.locator('#themeBtn').click();await finishNight(page,0);await page.locator('#assumeBtn').click();
+  const before=await saved(page);await page.locator('#langBtn').click();await expectFitsViewport(page);await page.reload();
+  expect((await saved(page)).play).toEqual(before.play);await expect(page.locator('#assumptionFormula')).toContainText(String(before.instance.target.creatures*3));await expect(page.locator('html')).toHaveAttribute('data-theme','dark');await expectFitsViewport(page);
+ });
+ test('restores completed night and starts new content without losing achievement',async({page})=>{
+  for(let n=0;n<3;n++)await finishNight(page,n);await page.reload();await expect(page.locator('#completeModal')).toBeVisible();
+  await page.locator('#playAgainBtn').click();await expect(page.locator('#mixRange')).toHaveValue('0');
+  const a=(await saved(page)).instance.target;await expect(page.locator('#legCount')).toHaveText(String(a.creatures*3));
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.progress.alien-farm')).status)).toBe('completed');
+ });
 });

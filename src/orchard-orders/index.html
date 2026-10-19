@@ -67,9 +67,10 @@
       </div>
 
       <aside class="book card">
-        <h3 data-t="bookTitle">口诀图鉴</h3>
+        <details class="field-book"><summary data-t="bookTitle">口诀图鉴</summary><div class="field-book__contents"><h3 data-t="bookTitle">口诀图鉴</h3>
         <p class="book__hint" data-t="bookHint">每找到一种新种法，就贴一张苹果贴纸。</p>
         <div class="cards" id="cards"></div>
+        </div></details>
         <button class="btn btn--wide" id="nextBtn" type="button" data-t="next">下一张订单 →</button>
         <button class="btn btn--ghost btn--wide" id="restartBtn" type="button" data-t="restart">从头开园</button>
       </aside>
@@ -78,6 +79,6 @@
     <div class="toast" id="toast" hidden></div>
   </main>
 
-  <script src="main.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>

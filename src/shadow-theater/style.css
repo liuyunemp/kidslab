@@ -67,3 +67,35 @@ canvas { display:block; touch-action:none; }
 
 /* hidden 属性硬保证：任何 display 规则都不得覆盖 */
 [hidden] { display: none !important; }
+
+body{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.bar{flex:0 0 62px;padding:8px 14px;gap:8px}
+.bar__title{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar__actions{flex-shrink:0;gap:6px;align-items:center}
+.pill,.btn{font-size:16px;min-width:44px;min-height:44px;line-height:1.2}
+.bar .btn{padding:8px}
+.wrap{flex:1;min-height:0;width:100%;padding:0 14px 12px;display:flex;flex-direction:column;gap:10px}
+.top-card{flex-direction:row;align-items:center;padding:8px 12px;margin:0;gap:8px}
+.tip{font-size:16px;line-height:1.45;flex:1;margin:0}
+.progress{flex-shrink:0;gap:8px}
+.theater{flex:1;min-height:0;display:flex;flex-direction:column;padding:8px}
+.marquee{padding:2px;margin-bottom:6px}
+.stage-grid{flex:1;min-height:0;grid-template-columns:155px minmax(0,1fr) 220px;gap:8px}
+.scene-shell,#scene{min-height:0;height:100%}
+.target-panel,.shelf{padding:8px;gap:8px}
+.shape-btn small{font-size:16px;line-height:1.25}
+.shape-btn{min-height:64px;font-size:24px}
+.shape-shelf{gap:6px}
+.toast{width:max-content;max-width:calc(100% - 24px);font-size:16px;text-align:center}
+.compare canvas{max-width:44%;height:auto}
+@media(max-width:850px){
+  .bar{padding:6px;flex-basis:58px}.bar>a span{display:none}.bar__title{font-size:18px}.bar__actions{gap:4px}
+  .bar .pill{padding:6px}.bar .btn{padding:6px}
+  .wrap{padding:0 6px 6px;gap:6px}.top-card{padding:6px;flex-wrap:wrap}.top-card .tip{flex-basis:calc(100% - 62px);order:0}.top-card>.btn{order:1;padding:6px}.progress{order:2;width:100%;justify-content:center}
+  .marquee{display:none}.theater{padding:6px}.stage-grid{position:relative;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(120px,1fr) auto;gap:6px}
+  .target-panel{position:absolute;z-index:2;left:8px;top:8px;width:86px;padding:4px;gap:2px;pointer-events:none;border-radius:10px}
+  .target-panel .label{font-size:14px}#targetCard{max-height:64px;object-fit:contain}.combo-slots{display:none}.reverse-cards{gap:2px}
+  .shelf{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:6px}.shelf>.label{display:none}
+  .shape-shelf{grid-column:1/-1;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.shape-btn{min-height:50px;font-size:18px}.shape-btn small{margin:2px 0;font-size:16px}
+  .shelf .btn{padding:6px;font-size:16px}.scene-shell{border-radius:16px}
+}

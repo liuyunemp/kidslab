@@ -20,6 +20,9 @@ for (const [index, course] of courses.entries()) {
   for (const name of ['engine.js', 'model.js', 'style.css']) {
     await write(path.join(dir, name), await readFile(path.join(here, name)));
   }
+  for(const [source,target] of [['core.js','random-core.js'],['browser.js','random-rounds.js'],['g1.js','random-model.js'],['worker.js','random-worker.js'],['worker-client.js','random-worker-client.js']]){
+    await write(path.join(dir,target),await readFile(path.join(here,'..','random-rounds',source)));
+  }
   await retryFileOperation(() => cp(bgm, path.join(dir, 'audio', 'bgm.ogg')));
   const { id, kind, category, grades, tags, icon, title, description, accent, backdrop, mascot, tasks, source, fact, order } = course;
   const config = { id, kind, category, grades, tags, icon, title, description, accent, backdrop, mascot, tasks };

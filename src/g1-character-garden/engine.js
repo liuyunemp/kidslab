@@ -1,4 +1,6 @@
 import { MILESTONE_STREAK, ROUND_COUNT, currentTask, encourageText, distanceToPath, evaluateTrace, initialState, milestoneFor, praiseText, replay, restoreState, speakText, submit } from './model.js';
+import { createRounds } from './random-rounds.js';
+import { g1Task, validG1Task, g1Identity, taskFamily } from './random-model.js';
 
 /* 导出给单元测试用：朗读组句依赖这份文案表。 */
 export const WORDS = {
@@ -54,9 +56,24 @@ export function startGame(config) {
   const speech = cool.speech;
   /* 题面本身就是朗读按钮：孩子点一下题目就能听，命中区天然远大于 44px。 */
   const promptButton = (html) => `<button class="prompt" type="button" data-speak="1"><span class="speak-icon" aria-hidden="true">🔊</span><span class="prompt-text">${html}</span></button>`;
+  const randomEnabled=['weight','sort'].includes(config.kind);
+  const rounds=randomEnabled?createRounds(config.id):null;
+  const migrateLegacy=rounds&&!rounds.hasSnapshot&&rounds.explicitSeed===null;
+  if(rounds){
+    const pool=config.tasks;
+    config={...config,tasks:pool.map(task=>{
+      const base={kind:config.kind,task,pool};
+      const a=rounds.define(task.id,base,g1Task,validG1Task,g1Identity,taskFamily);
+      if(migrateLegacy&&storage.get(key,'null')!=='null'){rounds.adopt(task.id,base,null);return task;}
+      return a.task;
+    })};
+  }
   let state;
   try { state = restoreState(config, JSON.parse(storage.get(key, 'null'))); }
   catch { state = initialState(config); }
+  const mastered=new Set(state.done);
+  let courseCompleted=false;
+  if(rounds){try{const old=JSON.parse(storage.get(key,'{}'));for(const id of old.mastered??[])if(config.tasks.some(task=>task.id===id))mastered.add(id);courseCompleted=Boolean(old.completed)||JSON.parse(storage.get(`kidslab.progress.${config.id}`,'{}')).status==='completed';}catch{}}
   let draft = null;
   let phase = 0;
   let sentenceParts = [];
@@ -200,7 +217,10 @@ export function startGame(config) {
     audioContext?.close().catch(() => {});
   });
 
-  function save() { storage.set(key, JSON.stringify(state)); }
+  function save() {
+    if(rounds)state.done.forEach(id=>mastered.add(id));
+    storage.set(key, JSON.stringify(rounds?{...state,mastered:[...mastered],completed:courseCompleted}:state));
+  }
   function feedback(message, bad = false) {
     $('#feedback').textContent = message;
     $('#feedback').dataset.bad = String(bad);
@@ -213,7 +233,9 @@ export function startGame(config) {
   function progress() {
     const count = state.done.length;
     $('#count').textContent = `${Math.min(count + 1, ROUND_COUNT)}/${ROUND_COUNT}`;
-    $('#stars').textContent = `⭐ ${count}`;
+    // Stars show this run's progress, or the number of questions the child has ever answered
+    // correctly when that is higher (weight and sort keep their earned stars across runs).
+    $('#stars').textContent = `⭐ ${rounds?Math.max(count,Math.min(ROUND_COUNT,mastered.size)):count}`;
     $('#track').innerHTML = Array.from({ length: ROUND_COUNT }, (_, i) => `<span class="track-dot ${i < count ? 'done' : ''}" aria-hidden="true"></span>`).join('');
   }
   function controls() {
@@ -321,7 +343,14 @@ export function startGame(config) {
       const clearPraise = praiseText('clear', state.variant, cool.preferences.lang);
       $('#stage').innerHTML = `<div class="end-scene"><div>🎉</div><h2>${esc(words.finished)}</h2><p class="praise-line" data-praise="clear">${esc(clearPraise)}</p><button id="hearAgain" class="subtle hear-again" type="button">🔊 ${esc(words.hearAgain)}</button><button id="replay" class="submit" type="button">${esc(words.restart)}</button></div>`;
       $('#hearAgain').addEventListener('click', () => say(clearPraise, { interrupt: true }));
-      $('#replay').addEventListener('click', () => { state = replay(config, state); save(); resetDraft(); streak = 0; feedback(''); render(); cool.stage('round-1'); });
+      $('#replay').addEventListener('click', () => {
+        if(rounds){
+          config.tasks=config.tasks.map(task=>rounds.next(task.id).task);
+          // weight and sort keep their earned stars across runs; the other games restart at zero.
+          if(!['weight','sort'].includes(config.kind))mastered.clear();
+        }
+        state = replay(config, state); save(); resetDraft(); streak = 0; feedback(''); render(); cool.stage('round-1');
+      });
       return;
     }
     $('#stage').innerHTML = renderTask(task);
@@ -343,7 +372,7 @@ export function startGame(config) {
     progress();
     celebrate();
     cool.stage(`round-${state.done.length}`);
-    if (state.done.length === ROUND_COUNT) cool.complete?.();
+    if (state.done.length === ROUND_COUNT&&(!rounds||!courseCompleted)) {cool.complete?.();courseCompleted=true;save();}
     setTimeout(() => { busy = false; resetDraft(); feedback(''); render(); }, 650);
   }
   /* 顺序点击题型（诗句排序、笔顺装车）：逐位校验，点错当场弹回，不推进进度。 */
@@ -483,4 +512,10 @@ export function startGame(config) {
   cool.preferences.subscribe(({ kind }) => { if (kind === 'lang') speech?.stop(); render(); });
   if (state.done.length < ROUND_COUNT) cool.stage(`round-${state.done.length + 1}`);
   render();
+  if(rounds)rounds.attach({parent:'.game',active:()=>currentTask(config,state)?.id??state.active.at(-1),
+    capture:()=>({state,streak,missCount}),
+    restore:s=>{const restored=restoreState(config,s.state);if(JSON.stringify(restored)!==JSON.stringify(s.state))throw new Error('Invalid task progress');state=restored;streak=Number(s.streak)||0;missCount=Number(s.missCount)||0;save();render();},
+    retry:()=>{busy=false;resetDraft();render();},
+    beforeReload:()=>{speech?.stop();if(state.done.length===ROUND_COUNT){state={...state,done:state.done.slice(0,-1)};save();}}
+  });
 }

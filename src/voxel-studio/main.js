@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {voxelTask,voxelIdentity,validVoxel,validVoxels} from './random-model.js';
 import * as THREE from './vendor/three.module.min.js';
 
 /* ============================================================
@@ -86,7 +88,7 @@ import * as THREE from './vendor/three.module.min.js';
   const SIZE = 4;
   const CAMS = ['front', 'top', 'side'];
   const COLORS = [0xff5d8f, 0xffd166, 0x06d6a0, 0x4cc9f0, 0xb388ff, 0xff9f1c];
-  const PREDICT = [
+  const CLASSIC_PREDICT = [
     [[1,0,0],[1,0,1],[1,1,1],[2,0,1]],
     [[0,0,0],[1,0,0],[2,0,0],[1,1,0],[1,2,0]],
     [[0,0,1],[1,0,1],[2,0,1],[2,1,1],[2,0,2],[3,0,2]],
@@ -94,7 +96,7 @@ import * as THREE from './vendor/three.module.min.js';
     [[1,0,0],[1,1,0],[1,2,0],[1,0,1],[2,0,1],[2,0,2],[3,0,2]],
     [[0,0,2],[1,0,2],[2,0,2],[2,1,2],[2,2,2],[1,0,1],[1,1,1]],
   ];
-  const BUILD = [
+  const CLASSIC_BUILD = [
     [[0,0,0],[1,0,0],[1,1,0],[2,0,0]],
     [[0,0,1],[1,0,1],[2,0,1],[0,1,1],[2,1,1]],
     [[0,0,0],[0,0,1],[1,0,1],[1,1,1],[2,0,2]],
@@ -104,6 +106,12 @@ import * as THREE from './vendor/three.module.min.js';
   ];
   const MAGIC_A = [[0,0,0],[0,1,0],[1,0,0],[2,0,0],[2,1,0]];
   const MAGIC_B = [[0,0,1],[0,1,2],[1,0,2],[2,0,1],[2,1,3]];
+
+  const rounds=createRounds('voxel-studio');
+  const PREDICT=CLASSIC_PREDICT.map((cells,i)=>rounds.define(`p${i}`,{kind:'predict',cells},voxelTask,validVoxel,voxelIdentity).cells);
+  const BUILD=CLASSIC_BUILD.map((cells,i)=>rounds.define(`b${i}`,{kind:'build',cells},voxelTask,validVoxel,voxelIdentity).cells);
+  const FREE_BASE={kind:'free',cells:[]};
+  let freeInstance=rounds.define('free',FREE_BASE,voxelTask,validVoxel,voxelIdentity);
 
   const canvas = document.getElementById('scene');
   const photoStrip = document.getElementById('photoStrip');
@@ -151,7 +159,7 @@ import * as THREE from './vendor/three.module.min.js';
   function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
   function scheduleAutoNext(fn, ms = 1400) {
     cancelAutoNext();
-    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); rounds.checkpoint(); }, ms);
   }
   let last = { x: 0, y: 0 };
   let yaw = -0.65;
@@ -159,6 +167,12 @@ import * as THREE from './vendor/three.module.min.js';
   let showUntil = 0;
   let celebrate = 0;
   let magicSeen = false;
+  let demoVoxels=null,demoTimer=0,motionEpoch=0;
+  const mastered=new Set();try{JSON.parse(store.get('kidslab.voxel.mastered')||'[]').forEach(id=>mastered.add(id));}catch{}
+  const active=()=>mode==='free'?'free':`${mode==='predict'?'p':'b'}${mode==='predict'?pLevel:bLevel}`;
+  function markRound(){const id=active();if(mastered.has(id))return;const first=mastered.size===0;mastered.add(id);store.set('kidslab.voxel.mastered',JSON.stringify([...mastered]));window.cool?.stage?.(id);if(first)window.cool?.complete?.();}
+  function stopMotion(){cancelAutoNext();motionEpoch++;clearInterval(demoTimer);demoTimer=0;demoVoxels=null;magic.hidden=true;flash.hidden=true;toast.hidden=true;showUntil=0;dragging=false;celebrate=0;if(studio)studio.rotation.y=0;}
+
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   let actx = null;
@@ -298,9 +312,12 @@ import * as THREE from './vendor/three.module.min.js';
     if (hemi) { hemi.color = colorFromVar('--card'); hemi.groundColor = colorFromVar('--paper'); }
     if (keyLight) keyLight.color = colorFromVar('--lamp');
   }
+  let lastWidth=0,lastHeight=0;
   function resize() {
     if (!renderer) return;
     const r = canvas.getBoundingClientRect();
+    if(r.width===lastWidth&&r.height===lastHeight)return;
+    lastWidth=r.width;lastHeight=r.height;
     renderer.setSize(Math.max(1, r.width), Math.max(1, r.height), false);
     camera.aspect = Math.max(1, r.width) / Math.max(1, r.height);
     camera.updateProjectionMatrix();
@@ -316,7 +333,7 @@ import * as THREE from './vendor/three.module.min.js';
     if (!voxelGroup) return;
     voxelGroup.clear();
     const rounded = new THREE.BoxGeometry(0.86, 0.86, 0.86, 2, 2, 2);
-    for (const k of voxels) {
+    for (const k of (demoVoxels??voxels)) {
       const [x, y, z] = parse(k);
       const m = new THREE.Mesh(rounded, new THREE.MeshToonMaterial({ color: COLORS[(x + y * 2 + z * 3) % COLORS.length] }));
       m.position.set(x - 1.5, y + 0.53, z - 1.5);
@@ -328,19 +345,22 @@ import * as THREE from './vendor/three.module.min.js';
 
   function currentTarget() { return toSet(mode === 'predict' ? PREDICT[pLevel] : BUILD[bLevel]); }
   function startPredict() {
+    stopMotion();
     mode = 'predict'; selectedCam = null; answered = {};
     voxels = currentTarget(); rebuildVoxels(); render();
-    if (pLevel === 2 && !magicSeen) showMagicMoment();
+
   }
   function startBuild() {
+    stopMotion();
     mode = 'build'; selectedCam = null; answered = {}; hammer = false;
     voxels = new Set(); rebuildVoxels(); render();
   }
-  function nextPredictLevel() { cancelAutoNext(); pLevel = (pLevel + 1) % PREDICT.length; startPredict(); }
-  function nextBuildLevel() { cancelAutoNext(); bLevel = (bLevel + 1) % BUILD.length; startBuild(); }
+  function nextPredictLevel() { rounds.checkpoint();cancelAutoNext();pLevel=(pLevel+1)%PREDICT.length;if(rounds.record(`p${pLevel}`).play)PREDICT[pLevel]=rounds.next(`p${pLevel}`).cells;startPredict(); }
+  function nextBuildLevel() { rounds.checkpoint();cancelAutoNext();bLevel=(bLevel+1)%BUILD.length;if(rounds.record(`b${bLevel}`).play)BUILD[bLevel]=rounds.next(`b${bLevel}`).cells;startBuild(); }
   function startFree() {
-    mode = 'free'; selectedCam = null; answered = {}; hammer = false; freeTarget = null;
-    voxels = new Set(); rebuildVoxels(); render();
+    stopMotion();mode='free';selectedCam=null;answered={};hammer=false;
+    freeTarget=freeInstance.shared?toSet(freeInstance.cells):null;
+    voxels=freeTarget?new Set():toSet(freeInstance.cells);rebuildVoxels();render();
   }
 
   function canvasFor(cam, set = voxels, opts = {}) {
@@ -376,11 +396,13 @@ import * as THREE from './vendor/three.module.min.js';
     }
     tipEl.textContent = t('choosePhoto');
     const right = projection(voxels, selectedCam);
-    const opts = [right, mutateGrid(right, pLevel + selectedCam.length), mutateGrid(right, pLevel + 5), mutateGrid(right, pLevel + 9)];
+    const opts=[right];
+    for(let i=0;i<3;i++){const grid=right.map(row=>[...row]),n=(pLevel*3+selectedCam.length+i*5)%16;grid[Math.floor(n/4)][n%4]=!grid[Math.floor(n/4)][n%4];opts.push(grid);}
     opts.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)) * (pLevel % 2 ? -1 : 1));
     opts.forEach((grid) => {
       const wrap = document.createElement('button');
       wrap.className = 'option'; wrap.type = 'button';
+      wrap.dataset.grid=JSON.stringify(grid);wrap.setAttribute('aria-label',`${t('photos')} ${grid.map(row=>row.map(v=>v?'1':'0').join('')).join(' / ')}`);
       const c = document.createElement('canvas'); c.width = 126; c.height = 126;
       drawGrid(c, grid);
       wrap.append(c);
@@ -390,12 +412,14 @@ import * as THREE from './vendor/three.module.min.js';
   }
 
   function pickOption(grid, el) {
+    if(!selectedCam||answered[selectedCam])return;
     const right = projection(voxels, selectedCam);
     if (sameGrid(grid, right)) {
       answered[selectedCam] = true;
       el.classList.add('good'); sfx.ok(); flashCamera(); showToast(t('right'), 'good');
       selectedCam = null;
       if (CAMS.every((c) => answered[c])) {
+        markRound();
         showToast(t('allRight'), 'good'); sfx.win(); celebrate = performance.now() + 2200;
         if (pLevel < PREDICT.length - 1) scheduleAutoNext(nextPredictLevel);
       }
@@ -405,16 +429,18 @@ import * as THREE from './vendor/three.module.min.js';
 
   function checkBuildWin() {
     const target = mode === 'build' ? currentTarget() : (mode === 'free' ? freeTarget : null);
-    if (!target || !allViewsMatch(voxels, target)) return;
+    if (!target || !allViewsMatch(voxels, target)||CAMS.every(c=>answered[c])) return;
+    markRound();
     showToast(t('buildWin'), 'good'); sfx.win(); celebrate = performance.now() + 2600;
     answered = { front: true, top: true, side: true };
     render();
-    if (bLevel < BUILD.length - 1) scheduleAutoNext(nextBuildLevel);
+    if (mode==='build'&&bLevel < BUILD.length - 1) scheduleAutoNext(nextBuildLevel);
   }
 
   function flashCamera() {
+    const epoch=motionEpoch;
     flash.hidden = false;
-    setTimeout(() => { flash.hidden = true; }, 450);
+    setTimeout(() => { if(epoch===motionEpoch)flash.hidden = true; }, 450);
   }
   function showToast(msg, type = '') {
     toast.textContent = msg; toast.className = `toast ${type}`; toast.hidden = false; showUntil = performance.now() + 1800;
@@ -427,9 +453,10 @@ import * as THREE from './vendor/three.module.min.js';
     drawGrid(document.getElementById('magicB'), projection(b, 'front'), { label: t('front') });
     magic.hidden = false; sfx.win();
     let flip = false;
-    const timer = setInterval(() => {
-      if (magic.hidden) { clearInterval(timer); voxels = currentTarget(); rebuildVoxels(); return; }
-      voxels = toSet(flip ? MAGIC_A : MAGIC_B); flip = !flip; rebuildVoxels();
+    clearInterval(demoTimer);
+    demoTimer = setInterval(() => {
+      if (magic.hidden) { clearInterval(demoTimer);demoVoxels=null;rebuildVoxels();return; }
+      demoVoxels = toSet(flip ? MAGIC_A : MAGIC_B); flip = !flip; rebuildVoxels();
     }, 1100);
   }
 
@@ -470,6 +497,7 @@ import * as THREE from './vendor/three.module.min.js';
       ghost.position.set(x - 1.5, y + 0.53, z - 1.5);
       return;
     }
+    cancelAutoNext();answered={};
     if (hammer && y >= 0) voxels.delete(key(x, y, z));
     if (!hammer && y < SIZE) voxels.add(key(x, y, z));
     rebuildVoxels(); render(); checkBuildWin();
@@ -485,6 +513,7 @@ import * as THREE from './vendor/three.module.min.js';
     return bits.toString(36).toUpperCase();
   }
   function decode(code) {
+    if(!/^[0-9a-z]{1,13}$/i.test(code.trim()))throw new Error('Invalid code length');
     const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
     let n = 0n;
     for (const ch of code.trim().toLowerCase()) {
@@ -492,6 +521,7 @@ import * as THREE from './vendor/three.module.min.js';
       if (v < 0) throw new Error('bad code');
       n = n * 36n + BigInt(v);
     }
+    if(n>=1n<<64n)throw new Error('Code exceeds the studio');
     const set = new Set();
     for (let i = 0; i < 64; i++) if ((n >> BigInt(i)) & 1n) {
       const y = Math.floor(i / 16); const rest = i % 16; const z = Math.floor(rest / 4); const x = rest % 4;
@@ -511,7 +541,7 @@ import * as THREE from './vendor/three.module.min.js';
   }
 
   canvas.addEventListener('pointerdown', (e) => {
-    actx?.resume?.(); dragging = true; moved = false; last.x = e.clientX; last.y = e.clientY;
+    actx?.resume?.().catch(()=>{}); dragging = true; moved = false; last.x = e.clientX; last.y = e.clientY;
     try { canvas.setPointerCapture(e.pointerId); } catch { /* 指针已释放时忽略 */ }
   });
   canvas.addEventListener('pointermove', (e) => {
@@ -526,17 +556,17 @@ import * as THREE from './vendor/three.module.min.js';
     dragging = false;
     if (!moved) addOrRemoveAt(e, false);
   });
-  canvas.addEventListener('pointerleave', () => { dragging = false; ghost.visible = false; });
-  canvas.addEventListener('pointercancel', () => { dragging = false; ghost.visible = false; });
+  canvas.addEventListener('pointerleave', () => { dragging = false; if(ghost)ghost.visible = false; });
+  canvas.addEventListener('pointercancel', () => { dragging = false; if(ghost)ghost.visible = false; });
 
   document.querySelectorAll('.camera-tag').forEach((b) => b.addEventListener('click', () => {
-    if (mode !== 'predict') return;
+    if (mode !== 'predict'||answered[b.dataset.cam]) return;
     selectedCam = b.dataset.cam; sfx.tap(); flashCamera(); render();
   }));
-  modeBtn.addEventListener('click', () => { mode === 'predict' ? startBuild() : startPredict(); });
-  freeBtn.addEventListener('click', startFree);
+  modeBtn.addEventListener('click', () => { switchMode(mode==='predict'?'build':'predict'); });
+  freeBtn.addEventListener('click', ()=>switchMode('free'));
   hammerBtn.addEventListener('click', () => { hammer = !hammer; render(); });
-  document.getElementById('clearBtn').addEventListener('click', () => { voxels = new Set(); answered = {}; rebuildVoxels(); render(); });
+  document.getElementById('clearBtn').addEventListener('click', () => { cancelAutoNext();voxels = new Set(); answered = {}; rebuildVoxels(); render(); });
   document.getElementById('nextBtn').addEventListener('click', () => {
     if (mode === 'predict') nextPredictLevel();
     else if (mode === 'build') nextBuildLevel();
@@ -552,16 +582,20 @@ import * as THREE from './vendor/three.module.min.js';
     try {
       const set = decode(codeInput.value);
       if (!set.size) throw new Error('empty');
+      freeInstance={...FREE_BASE,cells:fromSet(set),shared:true};rounds.adopt('free',freeInstance,null);stopMotion();
       freeTarget = set; voxels = new Set(); answered = {}; hammer = false;
       rebuildVoxels(); render(); showToast(t('loaded'), 'good'); sfx.ok();
     } catch { showToast(t('codeBad'), 'bad'); sfx.bad(); }
   });
-  document.getElementById('closeMagic').addEventListener('click', () => { magic.hidden = true; });
+  document.getElementById('closeMagic').addEventListener('click', () => { stopMotion();rebuildVoxels(); });
+  const demoButton=document.createElement('button');demoButton.type='button';demoButton.className='btn btn--ghost';demoButton.addEventListener('click',showMagicMoment);document.querySelector('.tools').append(demoButton);
   addEventListener('resize', resize);
   addEventListener('themechange', () => { syncTheme(); render(); });
 
   /** 每帧/每次状态变化的统一渲染入口（语言、主题切换都会调用） */
   function render() {
+    demoButton.textContent=lang==='zh'?'同影演示':'View example';
+    document.querySelectorAll('.camera-tag').forEach(button=>{button.hidden=mode!=='predict';button.disabled=Boolean(answered[button.dataset.cam]);});
     if (mode === 'predict') {
       tipEl.textContent = selectedCam ? t('choosePhoto') : t('chooseCam');
       levelBadge.textContent = t('level')(t('predictName'), pLevel + 1, PREDICT.length);
@@ -585,8 +619,26 @@ import * as THREE from './vendor/three.module.min.js';
   }
 
   /* ============================ 启动 ============================ */
+  function restorePlay(s){
+    if(!validVoxels(s.cells,false)||!Number.isFinite(s.yaw)||!Number.isFinite(s.pitch)||![null,...CAMS].includes(s.selectedCam)||!s.answered||typeof s.answered!=='object')throw new Error('Invalid sculpture');
+    if(mode==='predict'&&JSON.stringify([...s.cells].sort())!==JSON.stringify(fromSet(currentTarget()).sort()))throw new Error('Changed prediction target');
+    const goal=mode==='build'?currentTarget():freeInstance.shared?toSet(freeInstance.cells):null;
+    if(mode!=='predict'&&CAMS.some(c=>s.answered[c])&&(!goal||!allViewsMatch(toSet(s.cells),goal)))throw new Error('Unfinished sculpture');
+    voxels=toSet(s.cells);({answered,selectedCam,hammer,yaw,pitch}=s);rebuildVoxels();render();
+  }
+  function switchMode(next){rounds.checkpoint();if(next==='predict')startPredict();else if(next==='build')startBuild();else startFree();const play=rounds.record(active()).play;if(play){try{restorePlay(play);}catch{}}rounds.checkpoint();}
   initThree();
-  startPredict();
+  new ResizeObserver(resize).observe(canvas.parentElement);
+  const initial=rounds.active??'p0';
+  if(/^p[0-5]$/.test(initial)){pLevel=Number(initial.slice(1));startPredict();}
+  else if(/^b[0-5]$/.test(initial)){bLevel=Number(initial.slice(1));startBuild();}
+  else startFree();
   applyTheme();
   applyLang();
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#magic',active,
+    capture:()=>({cells:fromSet(voxels),answered,selectedCam,hammer,yaw,pitch}),restore:restorePlay,
+    retry:()=>{if(mode==='predict')startPredict();else if(mode==='build')startBuild();else startFree();},beforeReload:stopMotion});
+  if(new URLSearchParams(location.search).has('e2e'))window.__voxelPoint=(x,y,z)=>{
+    const v=new THREE.Vector3(x-1.5,y===0?.1:y+.03,z-1.5);v.applyMatrix4(studio.matrixWorld).project(camera);const r=canvas.getBoundingClientRect();return{x:r.left+(v.x+1)*r.width/2,y:r.top+(1-v.y)*r.height/2};
+  };
 })();

@@ -2,11 +2,17 @@ import { course } from './content.js';
 import { initialState, current, reduce, restore, serialize, openActivity, text, valueOf, moneyValue, DENOMINATIONS, EXCHANGES, sentenceFor, speechText } from './exploration-model.js';
 import { createAudio } from './audio.js';
 import { createScene } from './scene.js';
+import { supportsRandom } from './random-explorations.js';
+import { freshSeed, urlSeed } from './random-rounds.js';
 
 const $=id=>document.getElementById(id), cool=window.cool;
 const key=`kidslab.exploration-v2.${course.id}`;
 let saved=null;try{saved=JSON.parse(localStorage.getItem(key)||'null');}catch{}
-let state=restore(course,saved),lang=cool.preferences.lang,lab=null,feedbackTimer=0,strokePoints=null,strokePointer=null,started=false;
+const randomEnabled=supportsRandom(course),requestedSeed=urlSeed();
+const restoreOptions=randomEnabled?{seed:requestedSeed??freshSeed()}:{};
+let state=restore(course,requestedSeed!==null&&saved?.version===3&&saved.seed!==requestedSeed?null:saved,restoreOptions),lang=cool.preferences.lang,lab=null,feedbackTimer=0,strokePoints=null,strokePointer=null,started=false;
+// Persist the question before the first gesture, so a refresh cannot silently change it.
+if(randomEnabled)try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}
 const entryActivity=new URLSearchParams(location.search).get('activity');
 const entryState=openActivity(course,state,entryActivity);
 if(entryState!==state){state=entryState;try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}}
@@ -24,6 +30,9 @@ function act(action){
   unlock();const result=reduce(course,state,action);
   if(!result.ok){audio.tone('error');notice(t(result.reason));if(action.type==='position')lab?.update(activity(),room(),lang);return false;}
   state=result.state;try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}
+  if(['newRound','classic','reset','select'].includes(action.type)){
+    clearTimeout(feedbackTimer);$('feedback').hidden=true;cool.speech.stop();lab?.cancelDrag?.();
+  }
   if(action.type==='select'&&new URLSearchParams(location.search).has('activity')){
     const url=new URL(location.href);url.searchParams.set('activity',activity().id);
     try{history.replaceState(null,'',url);}catch{}
@@ -49,6 +58,15 @@ function soundChrome(){
 function paint(){
   storyTimers.forEach(clearTimeout);storyTimers=[];
   const a=activity(),r=room(),kind=course.kind;document.body.dataset.kind=kind;
+  $('randomControls').hidden=!randomEnabled;
+  if(randomEnabled){
+    $('roundMenuLabel').textContent=lang==='zh'?'本局':'This round';
+    $('newRoundBtn').textContent=lang==='zh'?'新一局':'New round';
+    $('classicRoundBtn').textContent=lang==='zh'?'经典示例':'Classic';
+    $('resetBtn').textContent=lang==='zh'?'重试':'Retry';
+    $('stageReadout').dataset.roundFingerprint=state.random.records[state.active].fingerprint;
+    $('stageReadout').dataset.roundMode=state.random.records[state.active].mode;
+  }
   document.title=`${text(course.title,lang)} · KidsLab`;$('title').textContent=`${course.icon} ${text(course.title,lang)}`;
   $('progress').textContent=`${state.done.length}/8`;$('progress').setAttribute('aria-label',`${t('restored')} ${state.done.length}/8`);
   $('unitBadge').textContent=`${t('unit')} ${a.source.unit} · ${state.active+1}/8`;
@@ -140,6 +158,8 @@ $('controls').addEventListener('click',e=>{
   act(action);
 });
 $('activitySelect').addEventListener('change',e=>act({type:'select',index:Number(e.target.value)}));
+$('newRoundBtn').addEventListener('click',()=>act({type:'newRound'}));
+$('classicRoundBtn').addEventListener('click',()=>act({type:'classic'}));
 $('freeBtn').addEventListener('click',()=>act({type:'free',value:!state.free}));
 $('resetBtn').addEventListener('click',()=>act({type:'reset'}));$('undoBtn').addEventListener('click',()=>act({type:'undo'}));
 $('lessonBtn').addEventListener('click',()=>{$('lesson').hidden=!$('lesson').hidden;$('lessonBtn').setAttribute('aria-expanded',String(!$('lesson').hidden));});

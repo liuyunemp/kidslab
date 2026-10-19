@@ -201,7 +201,12 @@ test.describe('sampling statistics lab', () => {
     await page.locator('#resetBtn').click();
     await expect(page.locator('#trialRows tr')).toHaveCount(0);
     await expect(page.locator('#meanVal')).toHaveText('—');
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('kidslab.statistics-sampling-lab'))).toBeNull();
+    // Resetting clears the recorded trials. The generated sampling setup is kept so that a
+    // reload continues the same experiment instead of silently starting a new one.
+    const notebook = await page.evaluate(() =>
+      JSON.parse(localStorage.getItem('kidslab.statistics-sampling-lab') || 'null'));
+    expect(notebook?.trials ?? []).toEqual([]);
+    expect(notebook?.sample ?? null).toBeNull();
 
     const expanded = await page.locator('#panelHandle').getAttribute('aria-expanded');
     await page.locator('#panelHandle').click();

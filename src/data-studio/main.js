@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {studioTask,studioIdentity,validStudio} from './random-model.js';
 (() => {
   'use strict';
 
@@ -142,23 +144,41 @@
     { id: 'moon', icon: '🌙', color: '--yellow', target: 4 },
     { id: 'paws', icon: '🐾', color: '--blue', target: 2 },
   ];
-  const VOTES = [
+  const BASE_VOTES = [
     'rocket', 'bubble', 'moon', 'rocket', 'paws',
     'bubble', 'rocket', 'moon', 'bubble', 'rocket',
     'rocket', 'paws', 'bubble', 'moon', 'rocket',
     'bubble', 'rocket', 'moon', 'bubble', 'rocket',
   ];
+  const rounds=createRounds('data-studio');
+  const baseData={ids:SONGS.map(s=>s.id),counts:SONGS.map(s=>s.target),votes:BASE_VOTES,trend:[2,5,7,11,15,20]};
+  const datasets=[0,1,2].map(i=>rounds.define(i,baseData,studioTask,validStudio,studioIdentity));
+  let VOTES=BASE_VOTES,TREND=baseData.trend;
   const VIEWERS = ['🐰', '🦊', '🐼', '🐸', '🐨', '🐯', '🐧', '🐵'];
   const CHART_QUESTIONS = [
     { text: 'compareQuestion', answer: 'bar', preview: 'bar' },
     { text: 'trendQuestion', answer: 'line', preview: 'line' },
     { text: 'shareQuestion', answer: 'pie', preview: 'pie' },
   ];
-  const REPORT_QUESTIONS = [
+  let REPORT_QUESTIONS = [
     { text: 'reportHighest', answer: 'rocket', options: ['bubble', 'rocket', 'moon', 'paws'] },
     { text: 'reportTotal', answer: '20', options: ['18', '20', '22', '24'] },
     { text: 'reportMean', answer: '5', options: ['4', '5', '6', '8'] },
   ];
+  function useDataset(index){
+    const a=datasets[index],total=a.votes.length,mean=total/4;
+    SONGS.forEach((s,i)=>{s.target=a.counts[i];});VOTES=a.votes;TREND=a.trend;
+    const highest=a.ids[a.counts.indexOf(Math.max(...a.counts))];
+    REPORT_QUESTIONS=[{text:'reportHighest',answer:highest,options:a.ids},{text:'reportTotal',answer:String(total),options:[total-2,total,total+2,total+4].map(String)},{text:'reportMean',answer:String(mean),options:[mean-1,mean,mean+1,mean+2].map(String)}];
+    for(const language of ['zh','en']){
+      const zh=language==='zh',t=I18N[language];
+      t.act1Title=zh?`用“正”字接住 ${total} 张选票`:`Catch ${total} votes with tally marks`;
+      t.act1Done=zh?`${total} 张票一张不少！`:`All ${total} votes are safe!`;
+      t.act3Lesson=zh?`平均分总数：${total} ÷ 4 = ${mean}。`:`Mean = total shared equally: ${total} ÷ 4 = ${mean}.`;
+      t.shareQuestion=zh?`哪种图最适合看每首歌占 ${total} 张选票的比例？`:`Which chart best shows each song's share of ${total} votes?`;
+      t.finalText=zh?`你准确计票、为问题选对图表，并算出平均每首歌 ${mean} 票。`:`You tallied the votes, chose charts, and found the mean of ${mean} votes per song.`;
+    }
+  }
   const MISSIONS = [
     { kicker: 'act1Kicker', title: 'act1Title', text: 'act1Text', console: 'act1Console', lesson: 'act1Lesson', hint: 'act1Hint', icon: '正' },
     { kicker: 'act2Kicker', title: 'act2Title', text: 'act2Text', console: 'act2Console', lesson: 'act2Lesson', hint: 'act2Hint', icon: '▥' },
@@ -233,6 +253,10 @@
     unlocked = 0;
     completed = new Set();
   }
+  const achievements=new Set(completed);
+  completed=new Set();
+  if(rounds.active!==null&&Number(rounds.active)>=0&&Number(rounds.active)<3)missionIndex=Number(rounds.active);
+  useDataset(missionIndex);
 
   class SoundEngine {
     constructor() {
@@ -298,7 +322,7 @@
 
   function save() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify({ unlocked, completed: [...completed] }));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ unlocked, completed: [...achievements] }));
     } catch {}
   }
 
@@ -315,15 +339,21 @@
     reportQuestion = 0;
   }
 
-  function switchMission(index) {
+  function switchMission(index,fresh=false) {
     if (index > unlocked) return;
     cancelAutoNext();
+    clearTimeout(finaleTimer);rounds.checkpoint();
+    if(fresh&&rounds.record(index).play?.completed.includes(index))datasets[index]=rounds.next(index);
     missionIndex = index;
+    useDataset(index);
     resetMissionState();
+    completed.delete(index);
     statusMessage = { key: `act${index + 1}Ready`, tone: '', args: [] };
     window.cool?.stage?.(`show-${index + 1}`);
     sound.tap(index);
     render();
+    const play=rounds.record(index).play;if(play)restorePlay(play);
+    rounds.checkpoint();
   }
 
   function renderNav() {
@@ -331,7 +361,7 @@
     MISSIONS.forEach((mission, index) => {
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = `mission-btn${index === missionIndex ? ' current' : ''}${completed.has(index) ? ' done' : ''}`;
+      button.className = `mission-btn${index === missionIndex ? ' current' : ''}${achievements.has(index) ? ' done' : ''}`;
       button.textContent = String(index + 1).padStart(2, '0');
       button.disabled = index > unlocked;
       button.setAttribute('aria-label', index > unlocked
@@ -418,7 +448,7 @@
   function drawLine() {
     el.chart.replaceChildren();
     const { width, height } = chartSize();
-    const values = [2, 5, 7, 11, 15, 20];
+    const values = TREND;
     const left = Math.max(32, width * 0.08);
     const right = width - left;
     const baseline = height - 38;
@@ -559,23 +589,27 @@
     renderChart();
   }
 
+  let finaleTimer=0;
   function completeMission() {
+    const first=!achievements.has(missionIndex);
     completed.add(missionIndex);
+    achievements.add(missionIndex);
     unlocked = Math.max(unlocked, Math.min(2, missionIndex + 1));
     save();
     if (missionIndex === 2) {
       sound.finale();
-      window.cool?.complete?.();
-      setTimeout(() => {
+      if(first)window.cool?.complete?.();
+      finaleTimer=setTimeout(() => {
         el.course.inert = true;
         el.modal.hidden = false;
         el.playAgain.focus();
       }, 280);
     } else {
       sound.correct();
-      scheduleAutoNext(() => switchMission(Math.min(2, missionIndex + 1)));
+      scheduleAutoNext(() => switchMission(Math.min(2, missionIndex + 1),true));
     }
     render();
+    rounds.checkpoint();
   }
 
   function recordVote(songId, songIndex) {
@@ -646,7 +680,7 @@
     sound.tap();
     setStatus(MISSIONS[missionIndex].hint);
   });
-  el.next.addEventListener('click', () => switchMission(Math.min(2, missionIndex + 1)));
+  el.next.addEventListener('click', () => switchMission(Math.min(2, missionIndex + 1),true));
   el.sound.addEventListener('click', () => {
     sound.setMuted(!sound.muted);
     renderControls();
@@ -655,10 +689,11 @@
   el.lang.addEventListener('click', () => window.cool.preferences.toggleLang());
   el.theme.addEventListener('click', () => window.cool.preferences.toggleTheme());
   el.playAgain.addEventListener('click', () => {
+    cancelAutoNext();clearTimeout(finaleTimer);
+    datasets[0]=rounds.next(0);useDataset(0);
     el.modal.hidden = true;
     el.course.inert = false;
     missionIndex = 0;
-    unlocked = 0;
     completed.clear();
     resetMissionState();
     save();
@@ -677,4 +712,12 @@
       render();
     },
   });
+  function restorePlay(s){
+    if(!Number.isInteger(s.voteIndex)||s.voteIndex<0||s.voteIndex>VOTES.length||!Number.isInteger(s.chartQuestion)||s.chartQuestion<0||s.chartQuestion>3||!Number.isInteger(s.reportQuestion)||s.reportQuestion<0||s.reportQuestion>3||!Array.isArray(s.completed)||!SONGS.every(song=>s.counts?.[song.id]===VOTES.slice(0,s.voteIndex).filter(v=>v===song.id).length))throw new Error('Invalid tally');
+    ({voteIndex,counts,chartQuestion,reportQuestion,statusMessage}=s);completed=new Set(s.completed);render();
+    if(missionIndex===2&&completed.has(2)){el.course.inert=true;el.modal.hidden=false;}
+  }
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#completeModal',active:()=>missionIndex,
+    capture:()=>({voteIndex,counts,chartQuestion,reportQuestion,completed:[...completed],statusMessage}),restore:restorePlay,
+    retry:()=>{cancelAutoNext();clearTimeout(finaleTimer);resetMissionState();completed.delete(missionIndex);render();},beforeReload:()=>{cancelAutoNext();clearTimeout(finaleTimer);}});
 })();

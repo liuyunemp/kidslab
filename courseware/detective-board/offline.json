@@ -1,24 +1,59 @@
 {
   "id": "detective-board",
-  "version": "3626fcaa06e374457341612f3ab81809f12b86fe64c1c43ddacbd57a15d4476a",
+  "version": "389428d58839e52bfc117be5a6e73ae7391af69e92c1117f1f3cfba44f6671e0",
   "assets": [
+    {
+      "path": "classic-cases.js",
+      "sha256": "5e6f81c8b7d44c9279f77b1162461e6d3ab358fc973ac2844d1d055830a7e8b0",
+      "fingerprint": "7e925ded"
+    },
     {
       "path": "course.json",
       "sha256": "b0dc703831da662158e4a309fe193a4cc3fb38e4771fc70e26fff9aebfbc18d0"
     },
     {
       "path": "index.html",
-      "sha256": "0552eee9173f83f596e08123268f80873df77283148365525bf7a3cc60bb0b1f"
+      "sha256": "919de1f6dc7d0e4787b6a0895c489e7ae0e980d065d74a180a888d4f219bd407"
     },
     {
       "path": "main.js",
-      "sha256": "db5b4fcc24bc3e3f4215315e5949fe0ca4194a4e66a1c4ae3f36c08fa65ee3bd",
-      "fingerprint": "017f48ab"
+      "sha256": "69cc155a3d0924ee2f0f2856f2612e312785d3325e919604eef7609e9f6fd541",
+      "fingerprint": "4f95906a"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "c86dbb5c11935762eb921999f0350716fbb59c079be2554eec7d7a25c1aaf3c9",
+      "fingerprint": "bb1da9e1"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "e5d61ddc33880cee91b28a2ee639e7f47d3038766b18c7c62f97668b502dda2c",
+      "fingerprint": "8367ed21"
     },
     {
       "path": "style.css",
-      "sha256": "30d583613db495ad86fe1553292954bcfc426e27209fbe5c21af9a6db5d0bfef",
-      "fingerprint": "353ec83f"
+      "sha256": "4a1c62663be877c8052602e5df79b0ef2c47a73de4de7f9d682454c69283c0aa",
+      "fingerprint": "38520643"
     }
   ]
 }

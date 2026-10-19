@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {beatTask,beatFamily,beatIdentity,validBeat,beatSolved} from './random-model.js';
 (() => {
   'use strict';
 
@@ -164,6 +166,22 @@
     2: { fraction: '1/4', kind: 'clap', color: '--quarter', icon: '👏' },
     1: { fraction: '1/8', kind: 'shaker', color: '--eighth', icon: '🪇' },
   };
+  const rounds=createRounds('fraction-beats');
+  const tasks=[{kind:'fill',initial:[]},{kind:'equal',target:2,unit:1},{kind:'sequence',sequence:[2,1,1,4]}].map((base,i)=>rounds.define(i,base,beatTask,validBeat,beatIdentity,beatFamily));
+  function updateCopies(){
+    for(const lang of ['zh','en']){
+      const zh=lang==='zh',t=I18N[lang],a=tasks[1],target=BEATS[a.target].fraction,unit=BEATS[a.unit].fraction,n=a.target/a.unit,sequence=tasks[2].sequence.map(v=>BEATS[v].fraction).join(zh?'、':', ');
+      t.mission2Text=zh?`上面是 ${target}。用 ${unit} 拼出同样长度。`:`Top is ${target}. Match it with ${unit} beats.`;
+      t.ready2=t.mission2Text;
+      t.mission2Wrong=zh?`用 ${unit} 的小拍，对齐上面的 ${target}。`:`Use ${unit} beats to match ${target}.`;
+      t.mission2Done=zh?`听起来一样长：${target} = ${n}/${8/a.unit}！`:`They last the same: ${target} = ${n}/${8/a.unit}!`;
+      t.hint2=zh?`目标占 ${a.target} 格，每个小拍占 ${a.unit} 格。`:`The target takes ${a.target} steps. Each small beat takes ${a.unit}.`;
+      t.mission3Text=zh?`按 ${sequence} 排序，再试听。`:`Build ${sequence} in order, then Play.`;
+      t.mission3Wrong=t.mission3Text;t.hint3=t.mission3Text;
+      t.finalText=zh?`你把分数拼成了一小节，还听出了 ${target} 和 ${n}/${8/a.unit} 一样长。`:`You built one measure and heard that ${target} lasts as long as ${n}/${8/a.unit}.`;
+    }
+  }
+  updateCopies();
   const SAVE_KEY = 'kidslab.fraction-beats';
   const SOUND_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
@@ -201,7 +219,7 @@
   let missionIndex = 0;
   let unlocked = 0;
   let completed = new Set();
-  let beatsByMission = [[], [], []];
+  let beatsByMission = [tasks[0].initial.slice(), [], []];
   let statusMessage = { key: 'ready1', args: [], tone: '' };
   let playedFinal = false;
   let playTimer = 0;
@@ -215,6 +233,8 @@
     unlocked = 0;
     completed = new Set();
   }
+  const achievements=new Set(completed);completed=new Set();
+  if(rounds.active!==null&&Number(rounds.active)>=0&&Number(rounds.active)<3)missionIndex=Number(rounds.active);
 
   class SoundEngine {
     constructor() {
@@ -292,7 +312,7 @@
 
   function save() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify({ unlocked, completed: [...completed] }));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ unlocked, completed: [...achievements] }));
     } catch {}
   }
 
@@ -333,7 +353,7 @@
     MISSIONS.forEach((mission, index) => {
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = `mission-btn${index === missionIndex ? ' current' : ''}${completed.has(index) ? ' done' : ''}`;
+      button.className = `mission-btn${index === missionIndex ? ' current' : ''}${achievements.has(index) ? ' done' : ''}`;
       button.textContent = String(index + 1);
       button.disabled = index > unlocked;
       button.setAttribute('aria-label', t('missionLabel', index + 1, t(mission.title)));
@@ -362,14 +382,15 @@
     el.track.replaceChildren(...currentBeats().map((units) => makeBlock(units)));
     el.targetTrack.replaceChildren();
     el.targetRow.hidden = missionIndex !== 1;
-    if (missionIndex === 1) el.targetTrack.append(makeBlock(2, true));
+    if (missionIndex === 1) el.targetTrack.append(makeBlock(tasks[1].target, true));
     const total = totalUnits();
     el.fractionTotal.textContent = fractionForTotal(total);
     el.equation.classList.toggle('success', completed.has(missionIndex));
     if (missionIndex === 1 && completed.has(1)) {
-      el.equation.textContent = '1/4 = 2/8';
+      const a=tasks[1];
+      el.equation.textContent = `${BEATS[a.target].fraction} = ${a.target/a.unit}/${8/a.unit}`;
     } else if (missionIndex === 2 && total === 8) {
-      el.equation.textContent = '1/4 + 1/8 + 1/8 + 1/2 = 1';
+      el.equation.textContent = `${currentBeats().map(n=>BEATS[n].fraction).join(' + ')} = 1`;
     } else {
       el.equation.textContent = t('equationOpen', total);
     }
@@ -404,6 +425,7 @@
 
   function render() {
     const mission = MISSIONS[missionIndex];
+    el.next.hidden=missionIndex===2||!completed.has(missionIndex);
     el.missionNumber.textContent = String(missionIndex + 1).padStart(2, '0');
     el.missionKicker.textContent = t(mission.kicker);
     el.missionTitle.textContent = t(mission.title);
@@ -423,12 +445,14 @@
   }
 
   function addBeat(units) {
+    if(!BEATS[units])return;
     const beats = currentBeats();
     if (totalUnits() + units > 8) {
       sound.play('error');
       setStatus('overflow', [], 'bad');
       return;
     }
+    clearPlayback();completed.delete(missionIndex);el.next.hidden=true;
     beats.push(units);
     playedFinal = false;
     sound.play(BEATS[units].kind);
@@ -482,7 +506,9 @@
   }
 
   function markMissionDone(messageKey) {
+    const first=!achievements.has(missionIndex);
     completed.add(missionIndex);
+    achievements.add(missionIndex);
     unlocked = Math.max(unlocked, Math.min(2, missionIndex + 1));
     save();
     sound.play(missionIndex === 2 ? 'complete' : 'success');
@@ -492,7 +518,7 @@
       el.next.hidden = false;
       el.next.focus();
     } else {
-      window.cool?.complete?.();
+      if(first)window.cool?.complete?.();
       showComplete();
     }
   }
@@ -511,7 +537,7 @@
       return;
     }
     if (missionIndex === 1) {
-      if (beats.length !== 2 || beats.some((units) => units !== 1)) {
+      if (!beatSolved(tasks[1],beats)) {
         sound.play('error');
         setStatus('mission2Wrong', [], 'bad');
         return;
@@ -519,7 +545,7 @@
       markMissionDone('mission2Done');
       return;
     }
-    const correct = beats.length === 4 && beats.every((units, index) => units === [2, 1, 1, 4][index]);
+    const correct = beatSolved(tasks[2],beats);
     if (!correct) {
       sound.play('error');
       setStatus('mission3Wrong', [], 'bad');
@@ -536,11 +562,16 @@
   function switchMission(index) {
     if (index > unlocked) return;
     clearPlayback();
+    rounds.checkpoint();
     missionIndex = index;
+    beatsByMission[index]=tasks[index].initial?.slice()??[];
+    completed.delete(index);
     playedFinal = false;
     statusMessage = { key: MISSIONS[index].ready, args: [], tone: '' };
     el.next.hidden = true;
     render();
+    const play=rounds.record(index).play;if(play)restorePlay(play);
+    rounds.checkpoint();
     el.check.focus();
     window.cool?.stage?.(`level${index + 1}`);
   }
@@ -553,10 +584,12 @@
   }
 
   function restartAll() {
+    clearPlayback();
+    for(let i=0;i<3;i++)tasks[i]=rounds.next(i);
+    updateCopies();
     missionIndex = 0;
-    unlocked = 0;
     completed = new Set();
-    beatsByMission = [[], [], []];
+    beatsByMission = [tasks[0].initial.slice(), [], []];
     playedFinal = false;
     statusMessage = { key: 'ready1', args: [], tone: '' };
     save();
@@ -592,8 +625,14 @@
   });
   el.play.addEventListener('click', playSequence);
   el.check.addEventListener('click', checkMission);
-  el.next.addEventListener('click', () => switchMission(Math.min(2, missionIndex + 1)));
+  el.next.addEventListener('click', () => {
+    if(missionIndex>=2||!completed.has(missionIndex))return;
+    const next=missionIndex+1;
+    if(rounds.record(next).play){tasks[next]=rounds.next(next);updateCopies();}
+    switchMission(next);
+  });
   el.undo.addEventListener('click', () => {
+    clearPlayback();completed.delete(missionIndex);el.next.hidden=true;
     if (!currentBeats().length) {
       sound.play('error');
       setStatus('cannotUndo', [], 'bad');
@@ -607,6 +646,7 @@
     renderWheel();
   });
   el.clear.addEventListener('click', () => {
+    clearPlayback();completed.delete(missionIndex);el.next.hidden=true;
     currentBeats().length = 0;
     playedFinal = false;
     sound.play('shaker');
@@ -642,4 +682,14 @@
       render();
     },
   });
+  function restorePlay(s){
+    const beats=s.beats??s.beatsByMission?.[missionIndex],done=s.done??s.completed?.includes(missionIndex);
+    if(!Array.isArray(beats)||!beats.every(n=>[1,2,4].includes(n))||beats.reduce((x,y)=>x+y,0)>8||!s.statusMessage||!(s.statusMessage.key in I18N.zh)||!Array.isArray(s.statusMessage.args)||(done&&(!beatSolved(tasks[missionIndex],beats)||(missionIndex===2&&!s.playedFinal))))throw new Error('Invalid rhythm');
+    beatsByMission[missionIndex]=beats;playedFinal=Boolean(s.playedFinal);statusMessage=s.statusMessage;
+    if(done)completed.add(missionIndex);else completed.delete(missionIndex);
+    render();if(missionIndex===2&&completed.has(2))showComplete();
+  }
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#completeModal',active:()=>missionIndex,
+    capture:()=>({beats:currentBeats(),playedFinal,statusMessage,done:completed.has(missionIndex)}),restore:restorePlay,
+    retry:()=>{clearPlayback();beatsByMission[missionIndex]=tasks[missionIndex].initial?.slice()??[];playedFinal=false;completed.delete(missionIndex);render();},beforeReload:clearPlayback});
 })();

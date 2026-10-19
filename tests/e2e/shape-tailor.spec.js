@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {levelInstance} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -43,7 +44,11 @@ async function setGuess(page, value) {
   await expect(page.locator('#guessValue')).toHaveText(String(value));
 }
 
-async function clearOrder(page, answer) {
+// The three orders use generated sizes, so the quote is read from the current instance.
+const order = (page, index) => levelInstance(page, 'shape-tailor', index);
+
+async function clearOrder(page, index) {
+  const instance = await order(page, index);
   await expect(page.locator('#cutBtn')).toBeVisible();
   await page.locator('#cutBtn').click({ force: true });
   await expect(page.locator('#stage')).toHaveAttribute('data-phase', 'cut', { timeout: 10000 });
@@ -52,16 +57,17 @@ async function clearOrder(page, answer) {
   await expect(page.locator('#stage')).toHaveAttribute('data-phase', /snapped|quote/, { timeout: 10000 });
   await expect(page.locator('#quoteBtn')).toBeVisible({ timeout: 10000 });
   await expect(page.locator('#status')).toContainText(/长方形|rectangle|拼|join|平均|average/i);
-  await setGuess(page, answer);
+  await setGuess(page, instance.answer);
   await page.locator('#quoteBtn').click({ force: true });
   await expect(page.locator('#nextBtn')).toBeVisible({ timeout: 10000 });
-  await expect(page.locator('#status')).toContainText(String(answer));
+  await expect(page.locator('#status')).toContainText(String(instance.answer));
   await page.locator('#nextBtn').click({ force: true });
+  return instance;
 }
 
 test.describe('shape tailor', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/courseware/shape-tailor/');
+    await page.goto('/courseware/shape-tailor/?seed=987');
     await page.evaluate(() => {
       localStorage.setItem('kidslab.lang', 'zh');
       localStorage.setItem('kidslab.theme', 'light');
@@ -72,37 +78,41 @@ test.describe('shape tailor', () => {
   });
 
   test('desktop and touch complete three cut-and-quote orders with retry', async ({ page }, testInfo) => {
+    const orders = await Promise.all([0, 1, 2].map((index) => order(page, index)));
     await expect(page.getByRole('heading', { name: '只会给长方形报价' })).toBeVisible();
     await expectFitsViewport(page);
 
     // wrong quote then correct on parallelogram
+    const first = orders[0];
     await expect(page.locator('#cutBtn')).toBeVisible();
     await page.locator('#cutBtn').click({ force: true });
     await expect(page.locator('#stage')).toHaveAttribute('data-phase', 'cut');
     await page.locator('#slideBtn').click({ force: true });
     await expect(page.locator('#quoteBtn')).toBeVisible({ timeout: 10000 });
-    await expect(page.locator('#formulaText')).toContainText('8 × 5');
-    await setGuess(page, 30);
+    await expect(page.locator('#formulaText')).toContainText(`${first.base} × ${first.height}`);
+    const wrong = first.answer - 2;
+    await setGuess(page, wrong);
     await page.locator('#quoteBtn').click({ force: true });
-    await expect(page.locator('#status')).toContainText('30');
+    await expect(page.locator('#status')).toContainText(String(wrong));
     await expect(page.locator('#stage')).toHaveAttribute('data-result', 'wrong');
-    await setGuess(page, 40);
+    await setGuess(page, first.answer);
     await page.locator('#quoteBtn').click({ force: true });
-    await expect(page.locator('#status')).toContainText('8 × 5 = 40');
+    await expect(page.locator('#status')).toContainText(`${first.base} × ${first.height} = ${first.answer}`);
     await page.locator('#nextBtn').click({ force: true });
 
     await expect(page.getByRole('heading', { name: '两块一样的才能拼' })).toBeVisible();
-    await clearOrder(page, 24);
+    await clearOrder(page, 1);
 
     await expect(page.getByRole('heading', { name: '上下底一加就好算' })).toBeVisible();
+    const third = orders[2];
     await expect(page.locator('#cutBtn')).toBeVisible();
     await page.locator('#cutBtn').click({ force: true });
     await expect(page.locator('#stage')).toHaveAttribute('data-phase', 'cut');
     await page.locator('#slideBtn').click({ force: true });
     await expect(page.locator('#quoteBtn')).toBeVisible({ timeout: 10000 });
-    await setGuess(page, 32);
+    await setGuess(page, third.answer);
     await page.locator('#quoteBtn').click({ force: true });
-    await expect(page.locator('#status')).toContainText('32');
+    await expect(page.locator('#status')).toContainText(String(third.answer));
     await page.locator('#nextBtn').click({ force: true });
 
     await expect(page.getByRole('heading', { name: '你剪出了面积公式墙！' })).toBeVisible();
@@ -125,29 +135,30 @@ test.describe('shape tailor', () => {
     await page.locator('#themeBtn').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
+    const first = await order(page, 0);
     await page.locator('#cutBtn').click({ force: true });
     await expect(page.locator('#stage')).toHaveAttribute('data-phase', 'cut');
     await page.locator('#slideBtn').click({ force: true });
     await expect(page.locator('#quoteBtn')).toBeVisible({ timeout: 10000 });
-    await setGuess(page, 40);
+    await setGuess(page, first.answer);
     await page.locator('#quoteBtn').click({ force: true });
     await page.locator('#langBtn').click();
     await expect(page.getByRole('heading', { name: 'We only price rectangles' })).toBeVisible();
-    await expect(page.locator('#status')).toContainText('40');
+    await expect(page.locator('#status')).toContainText(String(first.answer));
     await expectFitsViewport(page);
 
     await page.reload();
     await expect(page.locator('#nextBtn')).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await expect(page.locator('#soundBtn')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('#guessValue')).toHaveText('40');
+    await expect(page.locator('#guessValue')).toHaveText(String(first.answer));
     await expectFitsViewport(page);
   });
 
   test('restores completion and can reopen the shop', async ({ page }) => {
-    await clearOrder(page, 40);
-    await clearOrder(page, 24);
-    await clearOrder(page, 32);
+    await clearOrder(page, 0);
+    await clearOrder(page, 1);
+    await clearOrder(page, 2);
     await expect(page.locator('#finale')).toBeVisible();
 
     await page.reload();

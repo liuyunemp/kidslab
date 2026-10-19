@@ -537,15 +537,36 @@ button { font-family: inherit; color: inherit; }
 .curriculum-unit__rest > h2 { grid-column: 1 / -1; }
 .card__curriculum { margin: 8px 0; color: var(--ink-soft); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
 
-/* 聚合课件卡：同一课件的多关合并为一张卡，卡内是可直达对应关的关卡按钮。 */
-.card--group .card__cover { height: 108px; }
-.card__group-meta { margin: 6px 0 0; color: var(--ink-soft); font-size: 14px; font-weight: 700; line-height: 1.5; }
+/* 聚合课件卡：默认只显示课件介绍（与普通卡视觉一致），关卡收进 details 按需展开。 */
+.card__unit { margin: 4px 0 0; color: var(--ink-soft); font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+.card__stages-details { margin: 12px -16px -6px; flex: none; }
+.card__stages-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 9px 16px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 16px;
+  line-height: 1.45;
+  border-top: 2px solid color-mix(in srgb, var(--cat-c) 26%, var(--line));
+  background: color-mix(in srgb, var(--cat-c) 7%, var(--card));
+  transition: background 0.15s, color 0.15s;
+}
+.card__stages-summary::-webkit-details-marker { display: none; }
+.card__stages-summary:hover { background: color-mix(in srgb, var(--cat-c) 14%, var(--card)); }
+.card__stages-summary:focus-visible { outline: 3px solid var(--cat-c); outline-offset: -3px; }
+.card__group-meta { margin: 0; color: var(--ink-soft); font-size: 14px; font-weight: 700; line-height: 1.45; }
+.card__stages-hint { margin-left: auto; flex: none; font-weight: 800; color: color-mix(in srgb, var(--cat-c) 62%, var(--ink)); }
 .card__stages {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 10px;
   padding: 12px 16px 4px;
 }
+.card__stages-details[open] .card__stages { display: grid; }
 .stage {
   display: flex;
   align-items: center;
@@ -820,10 +841,13 @@ button { font-family: inherit; color: inherit; }
   .grade-list button { flex: 1 1 calc(50% - 6px); }
   .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .card__cover { height: 104px; }
-  .card--group .card__cover { height: 96px; }
   .card__stages { grid-template-columns: 1fr; padding: 10px 12px 2px; }
+  /* 375px 下卡片很窄：统计与提示改为换行，避免互相挤压或溢出。 */
+  .card__stages-summary { flex-wrap: wrap; gap: 2px 8px; padding: 8px 12px; }
+  .card__stages-hint { margin-left: 0; }
   .card__emoji { width: 60px; height: 60px; font-size: 34px; }
-  .card__desc { display: none; }
+  /* 卡片主体就是介绍，窄屏不再隐藏；仍限制为 2 行以免撑高卡片。 */
+  .card__desc { -webkit-line-clamp: 2; min-height: 2.9em; }
   .card__title { font-size: 16px; }
   .main { padding: 12px 12px 22px; }
 }

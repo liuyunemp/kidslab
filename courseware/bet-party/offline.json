@@ -1,6 +1,6 @@
 {
   "id": "bet-party",
-  "version": "d16cf2fe08c910dab7eaf932614d4356e2782e49d7e98ca2504212d8ed49a6c9",
+  "version": "54effd6463d1e8de57125acc549f2697c94e69bbe774dbcca1da2aa082758a46",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "65d006bb7cf92e1aabfbf816208354532b429e832db93fb5293259dea37cb8c6"
+      "sha256": "b0749afa73e4f39caa37549ef6f159a66ff16624684c1b13cc7855d2cdda8335"
     },
     {
       "path": "main.js",
-      "sha256": "fab83f7848a050965999d032904ed2c36ac1456116aef0a1103a4e77df79808c",
-      "fingerprint": "2ee8746b"
+      "sha256": "91b975fb0c4a9168bc0be5b893d4b20e3930ed09d4c3593eec8f55c9c0984847",
+      "fingerprint": "9f7ffdd7"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "a4ee99aa6225967708ce2eeb0a90e7fa35dda8f7a8d8c1711198e09506722cb9",
+      "fingerprint": "1232f2d9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "b01255e2451e657e18e4c1163ff17ea8012b933e5ed7ca9edcdff5f04d73b47f",
+      "fingerprint": "f829c8b2"
     },
     {
       "path": "style.css",

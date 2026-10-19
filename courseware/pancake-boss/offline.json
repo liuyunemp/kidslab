@@ -1,6 +1,6 @@
 {
   "id": "pancake-boss",
-  "version": "0c1e2aca695715d56f0c08727cd5c3df8a46b311be5f7cd63ce6cb0341e1ce7d",
+  "version": "a6f079641f53c3031433ea87d334d8d36bd717c3e182995bac02f0f2723aa991",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "55744d4a34efe47ff87ff5a305e3334d5872f9ceed0718856d394c37441b9331"
+      "sha256": "4780725616f08c8663a40cdbb00d5c6536ccb91a88f886dbd10eb2ce8de8f4bf"
     },
     {
       "path": "main.js",
-      "sha256": "6b6e7e13552e514605ff9e804fa41bec7df7493a2fe5ce96b796ace245baf9d0",
-      "fingerprint": "caf92d4c"
+      "sha256": "56589c7886ad3478ea2735b4732f8622a0cd70abd8dc663d15ef754c463cbca6",
+      "fingerprint": "66d94c6a"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "a246f88f13493c3b38f6f4990dfcf316158394b4445b6de5c6c60458608fc360",
+      "fingerprint": "66cf1362"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "f1dc08901ed2f2df27e36d48ebc7e0eb55dfd70882c0f0ecbf8fdda5c96bff93",
+      "fingerprint": "562c369b"
     },
     {
       "path": "style.css",
-      "sha256": "f9a04b857c248387c8306119a4f5de1244ec17fd37ab32107bc6629ac76671cb",
-      "fingerprint": "fb0430fd"
+      "sha256": "b8584ed750d01663f1ded86355c51aff402fec7af845d324d7266dc5f8b78dca",
+      "fingerprint": "0ed2a860"
     }
   ]
 }

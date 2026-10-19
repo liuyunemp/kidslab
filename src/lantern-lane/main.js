@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {lanternTask,lanternFamily,lanternIdentity,validLantern} from './random-model.js';
 (() => {
   'use strict';
 
@@ -248,7 +250,7 @@
     },
   };
 
-  const MISSIONS = [
+  const CLASSIC = [
     {
       id: 'street',
       skin: 'street',
@@ -314,6 +316,24 @@
   ];
 
   const STORAGE_KEY = 'kidslab.lantern-lane';
+  const rounds=createRounds('lantern-lane'),hadRounds=rounds.hasSnapshot;
+  const MISSIONS=CLASSIC.map((base,i)=>rounds.define(i,base,lanternTask,validLantern,lanternIdentity,lanternFamily));
+  function updateCopies(){
+    for(const lang of ['zh','en']){
+      const zh=lang==='zh',t=I18N[lang],[a,b,c,d,e]=MISSIONS;
+      t.titles=zh?[`${a.length} 米长街，每 ${a.gap} 米一盏`,`${b.length} 米石桥，每 ${b.gap} 米一根柱`,`周长 ${c.length} 米的湖，每 ${c.gap} 米一盏`,`把圆木锯成 ${d.length} 段`,`从 ${e.startFloor} 楼爬到 ${e.endFloor} 楼`]:[`${a.length} m street, lamps every ${a.gap} m`,`${b.length} m bridge, posts every ${b.gap} m`,`${c.length} m lake, lamps every ${c.gap} m`,`Saw the log into ${d.length} pieces`,`Climb from floor ${e.startFloor} to ${e.endFloor}`];
+      t.lengthTexts=[`${a.length} m`,`${b.length} m`,`${c.length} m`,zh?'1 根圆木':'1 log',`${e.startFloor} → ${e.endFloor}`];
+      t.gapTexts=[`${a.gap} m`,`${b.gap} m`,`${c.gap} m`,zh?'等长段':'Equal pieces',zh?'1 层':'1 floor'];
+      t.intervalTexts=MISSIONS.map(m=>String(m.intervals));
+      const equations=[`${a.length} ÷ ${a.gap} + 1 = ${a.answer}`,`${b.length} ÷ ${b.gap} − 1 = ${b.answer}`,`${c.length} ÷ ${c.gap} = ${c.answer}`,`${d.length} − 1 = ${d.answer}`,`${e.endFloor} − ${e.startFloor} = ${e.answer}`];
+      t.correct=equations.map((v,i)=>`${t.rules[i]}：${v}`);t.insightSubs=equations;
+      t.hints=[zh?`先算 ${a.length} ÷ ${a.gap} 个间隔，再想两端。`:`Count ${a.length} ÷ ${a.gap} gaps, then consider the ends.`,zh?`先算 ${b.length} ÷ ${b.gap}，桥两头不立柱。`:`Count ${b.length} ÷ ${b.gap} gaps; no posts at either end.`,zh?`首尾是同一点。先算 ${c.length} ÷ ${c.gap}。`:`Start and end coincide. Find ${c.length} ÷ ${c.gap}.`,zh?`${d.length} 段排一排，段与段之间有几道缝？`:`Line up ${d.length} pieces. How many gaps between them?`,zh?`从 ${e.startFloor} 走到 ${e.startFloor+1} 才是一层，继续数到 ${e.endFloor}。`:`From ${e.startFloor} to ${e.startFloor+1} is one floor. Keep counting to ${e.endFloor}.`];
+      t.short[3]=(n,need)=>zh?`只锯 ${n} 刀还不够分成 ${d.length} 段，需要 ${need} 刀。`:`${n} cuts cannot make ${d.length} pieces; need ${need}.`;
+      t.extra[3]=(n,need)=>zh?`锯 ${n} 刀太多，${d.length} 段只需 ${need} 刀。`:`${n} is too many cuts; ${d.length} pieces need ${need}.`;
+      t.short[4]=(n,need)=>zh?`你报 ${n} 层，从 ${e.startFloor} 到 ${e.endFloor} 要爬 ${need} 层。`:`You chose ${n}; floor ${e.startFloor} to ${e.endFloor} needs ${need}.`;
+      t.extra[4]=t.short[4];
+    }
+  }
   const SOUND_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
 
@@ -365,6 +385,10 @@
   let animFrame = 0;
   let sparkles = [];
   let state = loadState();
+  let everComplete=state.completed,mastered=new Set();
+  try{const old=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');mastered=new Set(old.mastered??Array.from({length:state.completed?5:state.mission},(_,i)=>i));}catch{}
+  if(!hadRounds&&rounds.explicitSeed===null&&state.placed){MISSIONS[state.mission]=CLASSIC[state.mission];rounds.adopt(state.mission,mission(),state);}
+  const active=Number(rounds.active??state.mission);state={...freshState(),mission:active,guess:MISSIONS[active].defaultGuess};updateCopies();
 
   function freshState() {
     return {
@@ -405,7 +429,7 @@
 
   function saveState() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({...state,completed:everComplete,mastered:[...mastered]}));
     } catch {
       /* ignore quota */
     }
@@ -501,6 +525,7 @@
   }
 
   function markComplete() {
+    if(everComplete)return;everComplete=true;saveState();
     try {
       window.cool?.complete?.();
     } catch {
@@ -532,7 +557,7 @@
     MISSIONS.forEach((_, index) => {
       const dot = document.createElement('span');
       dot.textContent = String(index + 1);
-      if (index < state.mission || (index === state.mission && state.solved) || state.completed) {
+      if (mastered.has(index)) {
         dot.classList.add('is-done');
       }
       if (index === state.mission && !state.completed) dot.classList.add('is-current');
@@ -561,7 +586,7 @@
     elements.unitLabel.textContent = t('units')[state.mission];
     elements.formulaText.textContent = t('formulas')[state.mission];
     elements.lessonText.textContent = t('lessons')[state.mission];
-    const showCoach = state.solved || ['hint', 'short', 'extra', 'correct'].includes(state.feedback);
+    const showCoach = state.feedback === 'hint';
     if (elements.formulaCard) elements.formulaCard.hidden = !showCoach;
     if (elements.hintCard) elements.hintCard.hidden = !showCoach;
     elements.lengthReadout.textContent = t('lengthTexts')[state.mission];
@@ -793,7 +818,7 @@
       const left = width * 0.12;
       const right = width * 0.88;
       const y = height * 0.55;
-      const pieces = 5;
+      const pieces = m.length;
       const pieceW = (right - left) / pieces;
 
       ctx.fillStyle = '#c48a4a';
@@ -966,6 +991,7 @@
     if (state.guess === m.answer) {
       state.result = 'correct';
       state.solved = true;
+      mastered.add(state.mission);
       state.feedback = 'correct';
       spawnSparkles();
       playSound('good');
@@ -996,6 +1022,7 @@
   }
 
   function resetMission() {
+    state.completed=false;closeFinale();
     const m = mission();
     state.guess = m.defaultGuess;
     state.placed = false;
@@ -1019,7 +1046,8 @@
       openFinale();
       return;
     }
-    state.mission += 1;
+    rounds.checkpoint();state.mission += 1;
+    if(rounds.record(state.mission).play){MISSIONS[state.mission]=rounds.next(state.mission);updateCopies();}
     state.guess = mission().defaultGuess;
     state.placed = false;
     state.result = 'idle';
@@ -1046,8 +1074,11 @@
   }
 
   function playAgain() {
+    for(let i=0;i<5;i++)MISSIONS[i]=rounds.next(i);updateCopies();
     state = freshState();
     sparkles = [];
+    everComplete = false;
+    // Replaying clears the course-level completion so the front page stops showing it as finished.
     try {
       localStorage.removeItem('kidslab.progress.lantern-lane');
     } catch {
@@ -1119,4 +1150,6 @@
   }
 
   boot();
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#finale',active:()=>state.mission,capture:()=>state,
+    restore:s=>{const m=mission();if(s.mission!==state.mission||!Number.isInteger(s.guess)||s.guess<m.min||s.guess>m.max||typeof s.feedback!=='string'||((s.solved||s.completed)&&s.guess!==m.answer))throw new Error('Invalid lanterns');state=s;updateChrome();if(s.completed)openFinale();},retry:resetMission});
 })();

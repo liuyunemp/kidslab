@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
+    "random:sync": "node scripts/random-rounds/sync.mjs && node scripts/g1b-sync.mjs",
     "preview": "node scripts/serve.mjs",
     "report": "node scripts/report.mjs",
     "test:unit": "node --test tests/unit/*.test.mjs",

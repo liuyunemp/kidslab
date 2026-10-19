@@ -19,7 +19,8 @@ test.describe('维恩太空港 3D 轨道海关', () => {
 
   test('loads the 3D deck with scanner truth code and four accessible bays', async ({ page }) => {
     await expect(page.locator('#scene')).toBeVisible();
-    await expect(page.locator('#signalValue')).toHaveText('10');
+    // The scanner shows a two-bit truth code whose value depends on the generated ship.
+    await expect(page.locator('#signalValue')).toHaveText(/^[01]{2}$/);
     await expect(page.locator('[data-zone]')).toHaveCount(4);
     await expect(page.locator('#dockValue')).toHaveText('0 / 5');
     await expect(page.locator('#musicBtn')).toHaveAttribute('aria-pressed', 'false');
@@ -27,10 +28,6 @@ test.describe('维恩太空港 3D 轨道海关', () => {
   });
 
   test('returns a ship after a wrong bay and clears the full mission', async ({ page }) => {
-    await page.locator('[data-zone="both"]').click();
-    await expect(page.locator('#coachTitle')).toContainText('飞船已返航');
-    await expect(page.locator('#dockValue')).toHaveText('0 / 5');
-
     const zoneByCode = {
       10: 'left',
       11: 'both',
@@ -38,9 +35,18 @@ test.describe('维恩太空港 3D 轨道海关', () => {
       '00': 'neither',
     };
 
+    // The scanner shows this ship's own code, so the wrong bay is the one it does not belong in.
+    const code = (await page.locator('#signalValue').innerText()).trim();
+    const correct = zoneByCode[code];
+    expect(correct, `the scanner reports a two-bit code, got ${code}`).toBeTruthy();
+    const wrongZone = Object.values(zoneByCode).find((zone) => zone !== correct);
+    await page.locator(`[data-zone="${wrongZone}"]`).click();
+    await expect(page.locator('#coachTitle')).toContainText('飞船已返航');
+    await expect(page.locator('#dockValue')).toHaveText('0 / 5');
+
     for (let docked = 1; docked <= 5; docked += 1) {
-      const code = (await page.locator('#signalValue').innerText()).trim();
-      await page.locator(`[data-zone="${zoneByCode[code]}"]`).click();
+      const next = (await page.locator('#signalValue').innerText()).trim();
+      await page.locator(`[data-zone="${zoneByCode[next]}"]`).click();
       await expect(page.locator('#dockValue')).toHaveText(`${docked} / 5`);
     }
 
@@ -122,7 +128,13 @@ test.describe('维恩太空港 3D 轨道海关', () => {
   });
 
   test('offers a first-visit guide and a four-step intersection lesson', async ({ page }) => {
-    await page.evaluate(() => localStorage.removeItem('kidslab.venn-port.guided'));
+    // The guide shows on a first visit, which means no saved round and no guided flag.
+    await page.evaluate(() => {
+      localStorage.removeItem('kidslab.venn-port.guided');
+      for (const key of Object.keys(localStorage)) {
+        if (key.startsWith('kidslab.random.v1.venn-port')) localStorage.removeItem(key);
+      }
+    });
     await page.reload();
 
     await expect(page.locator('#guide')).toBeVisible();

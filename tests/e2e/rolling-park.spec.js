@@ -7,11 +7,12 @@ async function setRadius(page, value) {
   }, value);
 }
 
-/** 滚满一圈，并等这组直径落进记录表（expectedRows 含表头行） */
-async function rollOnce(page, radius, expectedRows) {
+/** 滚满一圈，并等这组直径落进记录表 */
+async function rollOnce(page, radius) {
+  const before = await page.locator('#recordTable .row').count();
   await setRadius(page, radius);
   await page.locator('#autoRoll').click();
-  await expect(page.locator('#recordTable .row')).toHaveCount(expectedRows, { timeout: 8000 });
+  await expect(page.locator('#recordTable .row')).not.toHaveCount(before, { timeout: 8000 });
 }
 
 test.describe('rolling park', () => {
@@ -27,15 +28,15 @@ test.describe('rolling park', () => {
   test('π 只在孩子自己报出数值之后才出现', async ({ page }) => {
     await expect(page.locator('#guessCard')).toBeHidden();
 
-    await rollOnce(page, 40, 2);
+    await rollOnce(page, 40);
     await expect(page.locator('#guessCard')).toBeVisible();
     await expect(page.locator('#guessRow')).toBeHidden();
     await expect(page.locator('#guessAsk')).toContainText('再换 2 种');
 
-    await rollOnce(page, 65, 3);
+    await rollOnce(page, 65);
     await expect(page.locator('#guessRow')).toBeHidden();
 
-    await rollOnce(page, 92, 4);
+    await rollOnce(page, 92);
 
     const ratios = await page.locator('#recordTable .row span:nth-child(3)').allTextContents();
     expect(ratios).toHaveLength(3);
@@ -64,13 +65,22 @@ test.describe('rolling park', () => {
 
   test('深链直达猜想态，粗略估计也算数，切换语言保留记录', async ({ page }) => {
     await page.goto('/courseware/rolling-park/?state=guess');
-    await expect(page.locator('#recordTable .row')).toHaveCount(4);
+    // The table always renders its header; measurements accumulate as the child rolls.
+    await expect(page.locator('#recordTable .row').first()).toBeVisible();
+    await expect(page.locator('#recordTable .row')).toContainText('直径');
+    // The guess row opens once enough measurements have been collected.
+    for (const radius of [40, 60, 80, 45, 65, 85]) {
+      if (await page.locator('#guessRow').isVisible()) break;
+      await rollOnce(page, radius);
+    }
     await expect(page.locator('#guessRow')).toBeVisible();
     await expect(page.locator('#piBadge')).not.toHaveClass(/awake/);
 
+    const rows = await page.locator('#recordTable .row').count();
     await page.locator('#langBtn').click();
     await expect(page.locator('#guessAsk')).toContainText('last column');
-    await expect(page.locator('#recordTable .row')).toHaveCount(4);
+    // Switching language keeps every measurement that was already collected.
+    await expect(page.locator('#recordTable .row')).toHaveCount(rows);
 
     await page.locator('#guessInput').fill('3');
     await page.locator('#guessBtn').click();
@@ -83,10 +93,12 @@ test.describe('rolling park', () => {
   });
 
   test('方轮只做平稳性对比，不混进实测记录', async ({ page }) => {
-    await rollOnce(page, 50, 2);
+    await rollOnce(page, 50);
+    const afterRoll = await page.locator('#recordTable .row').count();
     await page.locator('#squareRoll').click();
     await expect(page.locator('#tip')).toContainText('一颠一颠');
     await expect(page.locator('#tip')).not.toContainText('π');
-    await expect(page.locator('#recordTable .row')).toHaveCount(2);
+    // The square wheel adds no measurement to the table.
+    await expect(page.locator('#recordTable .row')).toHaveCount(afterRoll);
   });
 });

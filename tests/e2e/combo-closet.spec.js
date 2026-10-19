@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
 
 async function tapItem(page, name) {
   await page.getByRole('button', { name, exact: true }).click();
@@ -26,59 +27,30 @@ test.describe('combo closet multiplication principle', () => {
       localStorage.removeItem('kidslab.combo-closet');
       localStorage.removeItem('kidslab.progress.combo-closet');
     });
-    await page.goto('/courseware/combo-closet/');
+    await page.goto('/courseware/combo-closet/?seed=987');
+    // The closet publishes its generated round after the page module runs; wait for the shelf
+    // before any test reads the stored instance.
+    await expect(page.locator('[data-hat]').first()).toBeVisible();
   });
 
   test('recovers from a duplicate and completes collecting and both stock orders', async ({ page }) => {
-    // This journey enumerates both clothing collections and submits two full stock orders.
     test.slow();
-    // 试衣间 2×2：穿戴即自动拍照，重穿已有搭配要能原地恢复
-    await tapItem(page, '草帽');
-    await tapItem(page, '星星上衣');
-    await expect(page.locator('#orderStamp')).toHaveText('1 / 4');
-
-    await tapItem(page, '贝雷帽');
-    await expect(page.locator('#orderStamp')).toHaveText('2 / 4');
-
-    await tapItem(page, '草帽');
-    await expect(page.locator('#feedback')).toContainText('已经上墙');
-    await expect(page.locator('#orderStamp')).toHaveText('2 / 4');
-
-    await tapItem(page, '彩虹上衣');
-    await tapItem(page, '贝雷帽');
-    await expect(page.getByRole('heading', { name: '四套造型全部上墙！' })).toBeVisible();
-
-    // 花园秀 3×2
-    await page.getByRole('button', { name: '下一张造型单' }).click();
-    await tapItem(page, '派对帽');
-    await tapItem(page, '花朵上衣');
-    await tapItem(page, '波点上衣');
-    await tapItem(page, '小礼帽');
-    await tapItem(page, '花朵上衣');
-    await tapItem(page, '云朵帽');
-    await tapItem(page, '波点上衣');
-    await expect(page.getByRole('heading', { name: '六套造型全部上墙！' })).toBeVisible();
-
-    // 大订单：错误订单给方向性反馈，需要两张不同的 12 套进货单
-    await page.getByRole('button', { name: '下一张造型单' }).click();
-    await page.getByRole('button', { name: '📦 提交进货单', exact: true }).click();
-    await expect(page.locator('#feedback')).toContainText('还差 8 套');
-
-    await page.getByRole('button', { name: '3 顶帽子', exact: true }).click();
-    await page.getByRole('button', { name: '4 件上衣', exact: true }).click();
-    await page.getByRole('button', { name: '📦 提交进货单', exact: true }).click();
-    await expect(page.locator('#feedback')).toContainText('第一张进货单盖章');
-
-    await page.getByRole('button', { name: '📦 提交进货单', exact: true }).click();
-    await expect(page.locator('#feedback')).toContainText('已经盖过章');
-
-    await page.getByRole('button', { name: '4 顶帽子', exact: true }).click();
-    await page.getByRole('button', { name: '3 件上衣', exact: true }).click();
-    await page.getByRole('button', { name: '📦 提交进货单', exact: true }).click();
-
-    await expect(page.getByRole('heading', { name: '两张进货单都盖章啦！' })).toBeVisible();
-    await expect.poll(() => page.evaluate(() =>
-      JSON.parse(localStorage.getItem('kidslab.progress.combo-closet') || 'null')?.status)).toBe('completed');
+    for(let level=0;level<2;level++){
+      const a=(await roundRecord(page,'combo-closet')).instance;
+      const hat=page.locator('[data-hat="'+a.hats[0]+'"]'),top=page.locator('[data-top="'+a.tops[0]+'"]');
+      await hat.click();await top.click();await page.locator('[data-hat="'+a.hats[1]+'"]').click();await hat.click();await expect(page.locator('#feedback')).toContainText('已经上墙');
+      for(const h of a.hats)for(const t of a.tops){if((await roundRecord(page,'combo-closet')).play.completed)break;await page.locator('[data-hat="'+h+'"]').click();await page.locator('[data-top="'+t+'"]').click();}
+      await expect(page.locator('#modal')).toBeVisible();await page.getByRole('button',{name:'下一张造型单'}).click();
+    }
+    const a=(await roundRecord(page,'combo-closet')).instance;
+    await page.getByRole('button',{name:'📦 提交进货单',exact:true}).click();await expect(page.locator('#feedback')).toContainText('还差');
+    const hats=await page.locator('[data-hat-stock]').evaluateAll(es=>es.map(e=>Number(e.dataset.hatStock))),tops=await page.locator('[data-top-stock]').evaluateAll(es=>es.map(e=>Number(e.dataset.topStock)));
+    const pairs=hats.flatMap(h=>tops.filter(t=>h*t===a.target).map(t=>[h,t]));expect(pairs.length).toBeGreaterThanOrEqual(2);
+    for(let i=0;i<2;i++){
+      const [h,t]=pairs[i];await page.locator('[data-hat-stock="'+h+'"]').click();await page.locator('[data-top-stock="'+t+'"]').click();await page.getByRole('button',{name:'📦 提交进货单',exact:true}).click();
+      if(i===0){await page.getByRole('button',{name:'📦 提交进货单',exact:true}).click();await expect(page.locator('#feedback')).toContainText('已经盖过章');}
+    }
+    await expect(page.locator('#modal')).toBeVisible();expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.progress.combo-closet')).status)).toBe('completed');
   });
 
   test('switches language, theme and sound while keeping the core play area in view', async ({ page }) => {

@@ -76,8 +76,8 @@ body {
   display: flex; align-items: center; justify-content: space-between;
   gap: 10px; padding: 14px clamp(14px, 3vw, 30px);
 }
-.bar__title { margin: 0; font-size: clamp(18px, 2.6vw, 24px); font-weight: 800; }
-.bar__actions { display: flex; gap: 8px; }
+.bar__title { margin: 0; font-size: clamp(18px, 2.6vw, 24px); font-weight: 800; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar__actions { display: flex; gap: 8px; flex: 0 0 auto; align-items: center; }
 .pill {
   display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
   font: 700 13.5px/1 var(--font); color: var(--ink); text-decoration: none;
@@ -265,7 +265,10 @@ body.landed .stage { animation: land 0.42s cubic-bezier(.2, 1.6, .35, 1); }
 @keyframes land { 0% { transform: translateY(0); } 35% { transform: translateY(8px) scaleY(0.992); } 65% { transform: translateY(-5px) scaleY(1.006); } 100% { transform: translateY(0); } }
 
 @media (max-width: 820px) {
-  .bar { align-items: flex-start; }
+  .bar { align-items: flex-start; gap: 6px; padding: 8px 10px; }
+  .bar__title { font-size: 18px; }
+  .bar__actions { gap: 5px; }
+  .bar__actions .pill { padding: 8px 10px; }
   .stage { height: 76vh; min-height: 620px; }
   .readout { left: 62px; top: 12px; width: calc(100% - 74px); padding: 12px; }
   .dock { top: auto; bottom: 12px; left: 62px; right: 12px; width: auto; }

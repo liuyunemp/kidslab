@@ -1,6 +1,6 @@
 {
   "id": "square-root-lab",
-  "version": "0d7d86f9f655234f544c24b4cace6e39e34bb16572577b31a6af3719b43f5c1d",
+  "version": "b4b3aa42127881334eb14bab8923250614d296cc1796aefdffc97a02fc7e58fe",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "cfa5273d7679b769d20f834e37936ee1a8d0299dd583a478364cbf090c6881e1"
+      "sha256": "b7c0c4cba96c6dae5f177b83b495ed690730166dac91cea3a0a8ab8160f17744"
     },
     {
       "path": "main.js",
-      "sha256": "c41c8f9fe12a0312b5eb40b5d03f145a8eb1403f2dbdd864e1bcb388421f8f97",
-      "fingerprint": "356a533f"
+      "sha256": "ffe99ea90317a0939dd3e2ba19f302f1a89ff21ee5caa8926e9958c15f45d1bf",
+      "fingerprint": "17cb8b2f"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "005af8f654b7ac36d9bb0b7ea3279bebf1224393dd6c5ed2b7b784e7f5a26f82",
+      "fingerprint": "154226f9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "acce31745671f70372ff07977bff4b4aa343d958e26ed0d3e2e0cd2a2b6c05e1",
+      "fingerprint": "72b94470"
     },
     {
       "path": "style.css",

@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {CATERPILLAR_LEVELS,patternTask,validPattern,patternIdentity,patternFamily,inferPattern,patternSpeech} from './random-model.js';
 /* ============================================================
    规律毛毛虫 · KidsLab 双语/主题模板
    —— 「语言 & 主题」段落是平台约定，整段复制、按需加 key，勿改机制
@@ -12,7 +14,7 @@
       eyebrow: '零阅读找规律', demo: '👀 演示', garden: '🦋 蝴蝶园', tray: '果盘', modeTitle: '今日规律', think: '让毛毛虫接龙', reset: '重排', next: '下一关',
       visual: '看颜色/形状排队，问号后面吃哪一个？', sound: '点喇叭听：声音也会排队。候选也能点听。', action: '看毛毛虫表演动作队列，再选下一个动作。', dual: '颜色和形状两条规律同时走。', reverse: '彩蛋：你先摆 4-6 个，毛毛虫试着接龙。',
       yes: '咕噜！规律接上啦。', no: '噗——这口不对，再试试。', fullTitle: '吃饱啦，开始结茧！', fullText: '破茧的翅膀，画满了它刚刚吃过的规律。', gardenTitle: '蝴蝶园', gardenText: (n) => `已经收藏 ${n} 只独一无二的规律蝴蝶。`, reverseGood: '它接上了！这真是一个规律。', reverseBad: '它晕圈了：还看不出 1-3 个一组的重复。',
-      l1: '红黄', l2: '形状 AB', l3: '三色', l4: 'ABB', l5: '大小', l6: '咚咚嚓', l7: '铃鼓铃', l8: '跳跳转', l9: '跳转趴', l10: '双规律', l11: '递增', l12: '你出题',
+      l1: '双色', l2: '形状 AB', l3: '三色', l4: 'ABB', l5: '大小', l6: '节奏', l7: '铃鼓', l8: '两跳一转', l9: '三个动作', l10: '双规律', l11: '数量组', l12: '你出题',
       red: '红', yellow: '黄', blue: '蓝', green: '绿', circle: '圆', star: '星', square: '方', jump: '跳', spin: '转', sleep: '趴', drum: '咚', clap: '嚓', bell: '叮', speaker: '喇叭',
     },
     en: {
@@ -20,7 +22,7 @@
       eyebrow: 'No-reading pattern play', demo: '👀 Demo', garden: '🦋 Garden', tray: 'Fruit tray', modeTitle: 'Today’s pattern', think: 'Let it continue', reset: 'Reset', next: 'Next level',
       visual: 'Watch color / shape queues. What comes after the question mark?', sound: 'Tap speaker: sounds make a queue too. Candidates can be heard.', action: 'Watch the caterpillar act a sequence, then choose the next move.', dual: 'Color and shape patterns run together.', reverse: 'Easter egg: you arrange 4-6 items; the caterpillar tries to continue.',
       yes: 'Gulp! The pattern continues.', no: 'Pff — not that one. Try again.', fullTitle: 'Full belly: cocoon time!', fullText: 'The butterfly wings are painted with every pattern it ate.', gardenTitle: 'Butterfly Garden', gardenText: (n) => `${n} unique pattern butterflies collected.`, reverseGood: 'It continued it! That is a pattern.', reverseBad: 'Dizzy: no 1-3 item repeating unit yet.',
-      l1: 'red yellow', l2: 'shape AB', l3: 'three colors', l4: 'ABB', l5: 'sizes', l6: 'boom boom clap', l7: 'bell drum bell', l8: 'jump jump spin', l9: 'jump spin sleep', l10: 'double', l11: 'growing', l12: 'you make it',
+      l1: 'two colors', l2: 'shape AB', l3: 'three colors', l4: 'ABB', l5: 'sizes', l6: 'rhythm', l7: 'bells', l8: 'two jumps', l9: 'three moves', l10: 'double', l11: 'counts', l12: 'you make it',
       red: 'red', yellow: 'yellow', blue: 'blue', green: 'green', circle: 'circle', star: 'star', square: 'square', jump: 'jump', spin: 'spin', sleep: 'sleep', drum: 'boom', clap: 'clap', bell: 'ding', speaker: 'speaker',
     },
   };
@@ -84,20 +86,8 @@
   const SHAPES = { circle: '●', star: '★', square: '■', triangle: '▲' };
   const SOUNDS = { drum: '🥁', clap: '👏', bell: '🔔' };
   const ACTIONS = { jump: '⬆️', spin: '🌀', sleep: '😴' };
-  const LEVELS = [
-    { key: 'l1', kind: 'visual', pattern: [{ color: 'red' }, { color: 'yellow' }], choices: [{ color: 'red' }, { color: 'yellow' }, { color: 'blue' }], bites: 8, hint: 'visual' },
-    { key: 'l2', kind: 'visual', pattern: [{ shape: 'circle' }, { shape: 'star' }], choices: [{ shape: 'circle' }, { shape: 'star' }, { shape: 'square' }], bites: 8, hint: 'visual' },
-    { key: 'l3', kind: 'visual', pattern: [{ color: 'red' }, { color: 'yellow' }, { color: 'blue' }], choices: [{ color: 'red' }, { color: 'yellow' }, { color: 'blue' }, { color: 'green' }], bites: 9, hint: 'visual' },
-    { key: 'l4', kind: 'visual', pattern: [{ color: 'green' }, { color: 'blue' }, { color: 'blue' }], choices: [{ color: 'green' }, { color: 'blue' }, { color: 'yellow' }], bites: 9, hint: 'visual' },
-    { key: 'l5', kind: 'visual', pattern: [{ color: 'red', size: 'small' }, { color: 'red', size: 'big' }], choices: [{ color: 'red', size: 'small' }, { color: 'red', size: 'big' }, { color: 'yellow', size: 'big' }], bites: 8, hint: 'visual' },
-    { key: 'l6', kind: 'sound', pattern: [{ sound: 'drum' }, { sound: 'drum' }, { sound: 'clap' }], choices: [{ sound: 'drum' }, { sound: 'clap' }, { sound: 'bell' }], bites: 9, hint: 'sound' },
-    { key: 'l7', kind: 'sound', pattern: [{ sound: 'bell' }, { sound: 'drum' }, { sound: 'bell' }, { sound: 'clap' }], choices: [{ sound: 'bell' }, { sound: 'drum' }, { sound: 'clap' }], bites: 8, hint: 'sound' },
-    { key: 'l8', kind: 'action', pattern: [{ action: 'jump' }, { action: 'jump' }, { action: 'spin' }], choices: [{ action: 'jump' }, { action: 'spin' }, { action: 'sleep' }], bites: 9, hint: 'action' },
-    { key: 'l9', kind: 'action', pattern: [{ action: 'jump' }, { action: 'spin' }, { action: 'sleep' }], choices: [{ action: 'jump' }, { action: 'spin' }, { action: 'sleep' }], bites: 9, hint: 'action' },
-    { key: 'l10', kind: 'visual', pattern: [{ color: 'red', shape: 'circle' }, { color: 'yellow', shape: 'star' }, { color: 'red', shape: 'square' }, { color: 'yellow', shape: 'circle' }, { color: 'red', shape: 'star' }, { color: 'yellow', shape: 'square' }], choices: [{ color: 'red', shape: 'circle' }, { color: 'yellow', shape: 'circle' }, { color: 'blue', shape: 'circle' }], bites: 10, hint: 'dual' },
-    { key: 'l11', kind: 'visual', pattern: [{ count: 1 }, { count: 2 }, { count: 3 }], choices: [{ count: 1 }, { count: 2 }, { count: 3 }, { count: 4 }], bites: 9, hint: 'visual' },
-    { key: 'l12', kind: 'reverse', pattern: [], choices: [{ color: 'red' }, { color: 'yellow' }, { color: 'blue' }, { color: 'green' }], bites: 6, hint: 'reverse' },
-  ];
+  const rounds=createRounds('pattern-caterpillar');
+  const LEVELS=CATERPILLAR_LEVELS.map(base=>rounds.define(base.key,base,patternTask,validPattern,patternIdentity,patternFamily));
   const SAVE_KEY = 'kidslab.caterpillar.butterflies';
 
   const CURRENT_KEY = 'kidslab.pattern-caterpillar.current';
@@ -134,18 +124,20 @@
   }
   function saveButterfly() {
     const arr = getButterflies();
+    if(arr.some(b=>b.level===level().key))return;
     arr.unshift({ at: Date.now(), items: eaten.slice(-14), level: level().key });
     try { localStorage.setItem(SAVE_KEY, JSON.stringify(arr.slice(0, 24))); } catch { /* ignore */ }
   }
 
   function startAudio() {
-    if (!actx) {
+    try { if (!actx) {
       actx = new (window.AudioContext || window.webkitAudioContext)();
       noise = actx.createBuffer(1, actx.sampleRate * 0.2, actx.sampleRate);
       const data = noise.getChannelData(0);
       for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
     }
-    if (actx.state === 'suspended') actx.resume();
+    if (actx.state === 'suspended') actx.resume().catch(()=>{});
+    }catch{actx=null;}
   }
   function g(t0, dur, gain = 0.14) {
     const n = actx.createGain(); n.gain.setValueAtTime(0.0001, t0); n.gain.linearRampToValueAtTime(gain, t0 + 0.01); n.gain.exponentialRampToValueAtTime(0.0001, t0 + dur); return n;
@@ -166,7 +158,6 @@
   }
 
   function expectedAt(pos = bites + 4) {
-    if (level().key === 'l11') return { count: ((pos % 3) + 1) };
     return level().pattern[pos % level().pattern.length];
   }
   function visibleSeq() {
@@ -181,7 +172,7 @@
     let body = '';
     if (item.sound) body = SOUNDS[item.sound];
     else if (item.action) body = ACTIONS[item.action];
-    else if (item.count) body = '🍎'.repeat(item.count);
+    else if (item.count) body = `<span class="apple-count">${'<span>🍎</span>'.repeat(item.count)}</span>`;
     else body = `${item.color ? COLORS[item.color].icon : ''}${item.shape ? SHAPES[item.shape] : ''}`;
     return `<div class="token ${cls}"${style}>${body}</div>`;
   }
@@ -208,7 +199,7 @@
       if (!ch.some((c) => same(c, exp))) ch[0] = exp;
     }
     currentChoices = ch;
-    $('#choices').innerHTML = ch.map((c, i) => `<button class="choice" type="button" data-choice="${i}" aria-label="choice">${tokenHTML(c)}</button>`).join('');
+    $('#choices').innerHTML = ch.map((c, i) => `<button class="choice" type="button" data-choice="${i}" data-item='${JSON.stringify(c)}' aria-label="choice">${tokenHTML(c)}</button>`).join('');
   }
   function renderTrack() {
     const seq = visibleSeq();
@@ -227,6 +218,9 @@
     renderLevels(); renderTrack(); renderCaterpillar(); renderChoices(); renderProgress(); drawWingPreview();
     $('#hint').textContent = t(level().hint);
     $('#muteBtn').textContent = soundOn ? '🔊' : '🔇';
+    $('#muteBtn').setAttribute('aria-label',lang==='zh'?'音效开关':'Sound effects');
+    $('#muteBtn').setAttribute('aria-pressed',String(!soundOn));
+    $('#readPattern')?.setAttribute('aria-label',lang==='zh'?'朗读当前队列':'Read the visible sequence');
     $('#reverseTools').hidden = level().kind !== 'reverse';
   }
 
@@ -234,7 +228,7 @@
     const s = $('#speak'); s.textContent = `${mood} ${text}`; s.classList.remove('pop'); void s.offsetWidth; s.classList.add('pop');
   }
   function animateCat(cls) {
-    const c = $('#caterpillar'); c.classList.remove('happy', 'sad', 'act-jump', 'act-spin', 'act-sleep'); void c.offsetWidth; c.classList.add(cls); setTimeout(() => c.classList.remove(cls), 700);
+    const c = $('#caterpillar'); c.classList.remove('happy', 'sad', 'act-jump', 'act-spin', 'act-sleep'); void c.offsetWidth; c.classList.add(cls); later(() => c.classList.remove(cls), 700);
   }
 
   function chooseItem(item, btn) {
@@ -249,7 +243,7 @@
       btn?.classList.add('right'); bites++; eaten.push(item); speak(t('yes'), '😋'); playTone('good'); animateCat('happy');
       if (item.action) runAction(item.action);
       render();
-      if (bites >= level().bites) { finishing = true; finishTimer = setTimeout(() => { finishTimer = null; finishLevel(); }, 500); }
+      if (bites >= level().bites) { finishing = true; finishTimer = later(() => { finishTimer = null; finishLevel(); }, 500); }
     } else {
       btn?.classList.add('wrong'); speak(t('no'), '🤪'); playTone('bad'); animateCat('sad');
     }
@@ -261,24 +255,11 @@
 
   function playDemo() {
     startAudio();
-    const seq = visibleSeq();
-    if (level().kind === 'action') {
-      seq.forEach((it, i) => setTimeout(() => { flashToken(i); runAction(it.action); playTone('good'); }, i * 620));
-    } else {
-      queue = seq.map((it, i) => ({ item: it, i })); qIndex = 0; qStart = actx.currentTime + 0.08;
-      if (scheduler) clearInterval(scheduler);
-      scheduler = setInterval(scheduleDemo, 25); scheduleDemo();
-    }
-  }
-  function scheduleDemo() {
-    const step = 0.42;
-    while (qIndex < queue.length && qStart + qIndex * step < actx.currentTime + 0.1) {
-      const ev = queue[qIndex]; const when = qStart + qIndex * step;
-      playTone(ev.item.sound || (ev.item.color ? 'bell' : 'drum'), when);
-      setTimeout(() => flashToken(ev.i), Math.max(0, (when - actx.currentTime) * 1000));
-      qIndex++;
-    }
-    if (qIndex >= queue.length) { clearInterval(scheduler); scheduler = null; }
+    const seq=visibleSeq();
+    seq.forEach((item,i)=>later(()=>{
+      flashToken(i);if(item.action)runAction(item.action);
+      playTone(item.sound||'bell');
+    },i*620));
   }
   function flashToken(i) {
     const el = document.querySelectorAll('.pattern-track .token')[i]; if (!el) return;
@@ -292,31 +273,33 @@
       window.cool?.stage?.(`basic-${basicDone.size}-of-8`);
       if (basicDone.size === 8) window.cool?.complete?.();
     }
+    finishing=true;
     renderProgress();
     saveButterfly();
-    try { localStorage.setItem(CURRENT_KEY, String((levelIndex + 1) % LEVELS.length)); } catch { /* Storage is optional. */ }
+    rounds.checkpoint();
     drawButterfly(eaten);
     $('#modalEmoji').textContent = '🦋'; $('#modalTitle').textContent = t('fullTitle'); $('#modalText').textContent = t('fullText'); $('#modalBtn').textContent = t('next'); $('#modal').hidden = false;
     confetti(); playTone('good');
   }
 
-  function nextLevel() {
-    levelIndex = (levelIndex + 1) % LEVELS.length; bites = 0; finishing = false; eaten = []; reverseSeq = []; $('#modal').hidden = true; render();
+  function resetPlay(){
+    stopMotion();bites=0;finishing=false;eaten=[];reverseSeq=structuredClone(level().initial??[]);
+    if(level().kind==='reverse'){bites=reverseSeq.length;eaten=structuredClone(reverseSeq);}
+    $('#modal').hidden=true;$('#speak').textContent='';render();
   }
-
-  function inferPeriod(seq) {
-    for (let p = 1; p <= 3; p++) {
-      if (seq.length < p * 2) continue;
-      let ok = true;
-      for (let i = p; i < seq.length; i++) if (!same(seq[i], seq[i % p])) ok = false;
-      if (ok) return p;
-    }
-    return 0;
+  function openLevel(index,fresh=false){
+    rounds.checkpoint();stopMotion();levelIndex=index;
+    if(fresh&&rounds.record(level().key).play)LEVELS[index]=rounds.next(level().key);
+    resetPlay();const play=rounds.record(level().key).play;if(play){try{restorePlay(play);}catch{resetPlay();}}
+    store.set(CURRENT_KEY,String(levelIndex));rounds.checkpoint();
   }
+  function nextLevel(){openLevel((levelIndex+1)%LEVELS.length,true);}
+  const inferPeriod=inferPattern;
   function thinkReverse() {
     startAudio();
     const p = inferPeriod(reverseSeq);
-    if (p) { const next = reverseSeq[reverseSeq.length % p]; reverseSeq.push(next); eaten.push(next); bites = reverseSeq.length; speak(t('reverseGood'), '🤓'); playTone('good'); animateCat('happy'); }
+    if (reverseSeq.length>=12)return;
+    if (p) { const next = reverseSeq[reverseSeq.length % p]; reverseSeq.push(next); eaten.push(next); bites = reverseSeq.length; speak(t('reverseGood'), '🤓'); playTone('good'); animateCat('happy');saveButterfly(); }
     else { speak(t('reverseBad'), '😵'); playTone('bad'); animateCat('sad'); }
     render();
   }
@@ -360,24 +343,38 @@
   }
 
   function bind() {
-    document.addEventListener('pointerdown', startAudio, { once: true });
-    $('#choices').addEventListener('pointerdown', (e) => {
+    document.addEventListener('click', startAudio, { once: true });
+    $('#choices').addEventListener('click', (e) => {
       const b = e.target.closest('[data-choice]'); if (!b) return;
       const item = currentChoices[Number(b.dataset.choice)]; chooseItem(item, b);
     });
-    $('#demoBtn').addEventListener('pointerdown', playDemo);
-    $('#muteBtn').addEventListener('pointerdown', () => { soundOn = !soundOn; store.set('kidslab.caterpillar.sound', soundOn ? 'on' : 'off'); render(); });
-    $('#gardenBtn').addEventListener('pointerdown', () => { const n = getButterflies().length; $('#modalEmoji').textContent = '🦋'; $('#modalTitle').textContent = t('gardenTitle'); $('#modalText').textContent = t('gardenText')(n); $('#modalBtn').textContent = t('next'); $('#modal').hidden = false; drawButterfly((getButterflies()[0] || {}).items || eaten); });
-    $('#levelStrip').addEventListener('pointerdown', (e) => { const b = e.target.closest('[data-level]'); if (!b) return; if (finishTimer) clearTimeout(finishTimer); finishTimer = null; levelIndex = Number(b.dataset.level); bites = 0; finishing = false; eaten = []; reverseSeq = []; try { localStorage.setItem(CURRENT_KEY, String(levelIndex)); } catch { /* Storage is optional. */ } render(); });
-    $('#thinkBtn').addEventListener('pointerdown', thinkReverse);
-    $('#resetReverseBtn').addEventListener('pointerdown', () => { reverseSeq = []; eaten = []; bites = 0; render(); });
-    $('#modalBtn').addEventListener('pointerdown', nextLevel);
+    $('#demoBtn').addEventListener('click', playDemo);
+    $('#muteBtn').addEventListener('click', () => { soundOn = !soundOn; store.set('kidslab.caterpillar.sound', soundOn ? 'on' : 'off'); render(); });
+    $('#gardenBtn').addEventListener('click', () => { const n = getButterflies().length; $('#modalEmoji').textContent = '🦋'; $('#modalTitle').textContent = t('gardenTitle'); $('#modalText').textContent = t('gardenText')(n); $('#modalBtn').textContent = t('next'); $('#modal').hidden = false; drawButterfly((getButterflies()[0] || {}).items || eaten); });
+    $('#levelStrip').addEventListener('click',e=>{const b=e.target.closest('[data-level]');if(b)openLevel(Number(b.dataset.level));});
+    $('#thinkBtn').addEventListener('click', thinkReverse);
+    $('#resetReverseBtn').addEventListener('click', () => { stopMotion();reverseSeq = []; eaten = []; bites = 0; render(); });
+    $('#modalBtn').addEventListener('click', nextLevel);
     addEventListener('resize', drawWingPreview);
     addEventListener('themechange', drawWingPreview);
   }
 
   /* ============================ 启动 ============================ */
+  const timers=new Set();
+  function later(fn,ms){const id=setTimeout(()=>{timers.delete(id);fn();rounds.checkpoint();},ms);timers.add(id);return id;}
+  function stopMotion(){for(const id of timers)clearTimeout(id);timers.clear();finishTimer=null;if(scheduler)clearInterval(scheduler);scheduler=null;}
+  function restorePlay(s){
+    const legal=item=>[...level().choices,...level().pattern].some(c=>same(c,item));
+    if(!Number.isInteger(s.bites)||s.bites<0||s.bites>12||!Array.isArray(s.eaten)||!Array.isArray(s.reverseSeq)||!s.eaten.every(legal)||!s.reverseSeq.every(legal))throw new Error('Invalid pattern snapshot');
+    if(level().kind!=='reverse'&&(s.eaten.length!==s.bites||s.eaten.some((item,i)=>!same(item,expectedAt(i+4)))))throw new Error('Invalid pattern history');
+    ({bites,eaten,reverseSeq,finishing}=s);render();
+    if(finishing&&level().kind!=='reverse')finishLevel();
+  }
+  const selected=LEVELS.findIndex(l=>l.key===rounds.active);if(selected>=0)levelIndex=selected;
+  resetPlay();
+  const readBtn=document.createElement('button');readBtn.id='readPattern';readBtn.className='btn btn--ghost';readBtn.type='button';readBtn.textContent='🔈';readBtn.addEventListener('click',()=>window.cool?.speech?.speak?.(patternSpeech(level(),visibleSeq(),lang),{lang}));document.querySelector('.hero__buttons').append(readBtn);
   bind();
   applyTheme();
   applyLang();
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#modal',active:()=>level().key,capture:()=>({bites,eaten,reverseSeq,finishing}),restore:restorePlay,retry:resetPlay,beforeReload:stopMotion});
 })();

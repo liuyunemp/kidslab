@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-const targets = [5, 10, 10, 12, 4, 20, 10, 10];
 const catches = [2, 2, 3, 3, 3, 3, 4, 4];
 
 function inside(point, polygon) {
@@ -55,10 +54,12 @@ async function drawLasso(page, snapshot, polygon) {
 test('数字萤火虫：实际圈选点亮八关，错误与重载可恢复', async ({ page }) => {
   test.setTimeout(180000);
   await page.addInitScript(() => localStorage.setItem('kidslab.lang', 'zh'));
-  await page.goto('/courseware/number-fireflies/?e2e=1');
+  await page.goto('/courseware/number-fireflies/?e2e=1&seed=987');
+  const saved=()=>page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('kidslab.random.v1.number-fireflies.seed-987'));return s.levels[s.active];});
   await page.locator('#startBtn').click();
   for (let level = 0; level < 8; level++) {
     await expect(page.locator('#levelText')).toHaveText(`${level + 1}/8`);
+    const a=(await saved()).instance,target=a.type==='sub'?a.start-a.result:a.target;
     if (level === 0) {
       const state = await page.evaluate(() => window.__fireflySnapshot());
       await drawLasso(page, state, Array.from({ length: 16 }, (_, i) => ({ x: 30 + Math.cos(i * Math.PI / 8) * 12, y: 28 + Math.sin(i * Math.PI / 8) * 12 })));
@@ -68,7 +69,7 @@ test('数字萤火虫：实际圈选点亮八关，错误与重载可恢复', as
       let caught = false;
       for (let attempt = 0; attempt < 50 && !caught; attempt++) {
         const before = await page.evaluate(() => window.__fireflySnapshot());
-        const polygon = findLasso(before, targets[level]);
+        const polygon = findLasso(before, target);
         if (!polygon) { await page.waitForTimeout(100); continue; }
         await drawLasso(page, before, polygon);
         const after = await page.evaluate(() => window.__fireflySnapshot());
@@ -91,4 +92,11 @@ test('数字萤火虫：实际圈选点亮八关，错误与重载可恢复', as
   }
   const progress = await page.evaluate(() => JSON.parse(localStorage.getItem('kidslab.progress.number-fireflies') || 'null'));
   expect(progress?.status).toBe('completed');
+  const last=await saved();
+  for(const action of ['retry','new','classic']){
+    await page.locator('.random-round-menu summary').click();await page.locator(`[data-round-action="${action}"]`).click();await page.waitForLoadState();
+    if(action==='retry'){expect((await saved()).instance).toEqual(last.instance);expect((await saved()).play.progress).toBe(0);}
+    if(action==='new')expect((await saved()).fingerprint).not.toBe(last.fingerprint);
+    if(action==='classic')expect((await saved()).mode).toBe('classic');
+  }
 });

@@ -1,6 +1,6 @@
 {
   "id": "fox-stones",
-  "version": "59690d4accf306b9ade64ffa82f6861eafbac76a1f96e25056f73d4420b3736a",
+  "version": "fe49d074324fa6f660b9564138ba2e16008d306d96bfa07fa77807d3d96bcedd",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "59f2563064f496d2f1f6c90572cd704bb63c111f5bf4654fe34760eea4a20d8d"
+      "sha256": "22cc92de8c859143ad28b943eec6b168126958d06c878dca3201ad506eddabdc"
     },
     {
       "path": "main.js",
-      "sha256": "8af573235f4f3e5b4127c5cd32663daade60175989f46d30354dc4cbe47dfe8e",
-      "fingerprint": "a84800ee"
+      "sha256": "b7f115609a9008d74b0c67549542daa9c8f7a7c4d636226712d8156c20a919fb",
+      "fingerprint": "c8306fbd"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "dba5a3ffee0c30871626f33c2540e946809c76f9404256d3d9456e156d9acf13",
+      "fingerprint": "f43c595e"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "a9add82daa4d3b769e2385796ebe597a97f7181067a9c9a19d61125f216e0701",
+      "fingerprint": "3b6de9b9"
     },
     {
       "path": "style.css",

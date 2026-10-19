@@ -1,6 +1,6 @@
 {
   "id": "balance-circus",
-  "version": "13f3c75c200040d0b31160c3460c484eb2e100eecfee8ba93aa95e795a1fecf1",
+  "version": "23f7e5a576db5852e11b4b657ad7bf9f634d1ab7d8ad23dfa404039821f22e8f",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "59ed8d0d9808c4aa9fd7964756830e4905332fea43ed0fb675819d598bfe052e"
+      "sha256": "82f2a299aba53e83a00ff723f6ad545d7d5d5955834633fd542e05429366e9b6"
     },
     {
       "path": "main.js",
-      "sha256": "88ea61b33fb17e37a41adb5195f7ce6c280eb6d4376c07253e91b064b642dbd4",
-      "fingerprint": "a6caabf2"
+      "sha256": "a2c3b495cce8c603345c557aea3f0437df41aec1d66f5927ae088a03c9b45600",
+      "fingerprint": "c4cc5e23"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "42e76e93d1ece6c19d07f67959c6bcc1c672ca04c407f8c1e9d41a787683db85",
+      "fingerprint": "d635b9bb"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "c7f63e22b6fa3781a831904e0ddd01fa658a8a118fdf901485d1512cbc25d3ef",
+      "fingerprint": "e2f87d5b"
     },
     {
       "path": "style.css",

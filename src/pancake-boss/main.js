@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {pancakeTask,pancakeFamily,validPancake,pancakeSchedule,pancakeChoices,pancakeCopy,pancakeEnd,minuteClock} from './random-model.js';
 (() => {
   'use strict';
 
@@ -148,11 +150,13 @@
     },
   };
 
-  const MISSIONS = [
+  const CLASSIC_MISSIONS = [
     { pancakes: ['A', 'B'], rounds: 2, kicker: 'mission1Kicker', title: 'mission1Title', text: 'mission1Text', ready: 'ready1' },
     { pancakes: ['A', 'B', 'C'], rounds: 3, kicker: 'mission2Kicker', title: 'mission2Title', text: 'mission2Text', ready: 'ready2' },
     { pancakes: ['A', 'B', 'C'], rounds: 3, kicker: 'mission3Kicker', title: 'mission3Title', text: 'mission3Text', ready: 'ready3' },
   ];
+  const rounds=createRounds('pancake-boss');
+  const MISSIONS=CLASSIC_MISSIONS.map((base,index)=>rounds.define(index,{...base,minutes:3,parallel:index===2,start:472,soy:6,deadline:495},pancakeTask,validPancake,a=>({count:a.pancakes.length,minutes:a.minutes,...a.parallel?{start:a.start,soy:a.soy,deadline:a.deadline}:{}}),index<2?pancakeFamily:undefined));
   const SAVE_KEY = 'kidslab.pancake-boss';
   const SOUND_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
@@ -191,11 +195,11 @@
   let schedules = [Array(4).fill(null), Array(6).fill(null), Array(6).fill(null)];
   let selectedToken = null;
   let history = [];
-  let soyRunning = false;
+  let soyRunning = false,currentDone=false,finishChoice=null;
   let statusMessage = { key: 'ready1', args: [], tone: '' };
 
   function text(key, ...args) {
-    return t(key, ...args);
+    return pancakeCopy(MISSIONS[missionIndex],key,language)??t(key, ...args);
   }
 
   try {
@@ -307,7 +311,7 @@
     for (let round = 0; round < mission.rounds; round += 1) {
       const label = document.createElement('div');
       label.className = 'time-label';
-      label.textContent = text('roundLabel', round * 3, (round + 1) * 3);
+      label.textContent = text('roundLabel', round * mission.minutes, (round + 1) * mission.minutes);
       el.ruler.append(label);
 
       const row = document.createElement('div');
@@ -331,7 +335,7 @@
       }
       el.schedule.append(row);
     }
-    el.totalTime.textContent = schedule.some(Boolean) ? String(mission.rounds * 3) : '0';
+    el.totalTime.textContent = schedule.some(Boolean) ? String(mission.rounds * mission.minutes) : '0';
   }
 
   function renderTray() {
@@ -364,15 +368,18 @@
     document.body.dataset.mission = String(missionIndex + 1);
     el.missionNumber.textContent = String(missionIndex + 1).padStart(2, '0');
     el.missionKicker.textContent = t(mission.kicker);
-    el.missionTitle.textContent = t(mission.title);
-    el.missionText.textContent = t(mission.text);
+    el.missionTitle.textContent = text(mission.title);
+    el.missionText.textContent = text(mission.text);
     el.parallel.hidden = missionIndex !== 2;
     el.clock.hidden = missionIndex !== 2;
     el.soy.textContent = soyRunning ? t('soyRunning') : t('startSoy');
     el.soy.setAttribute('aria-pressed', String(soyRunning));
     el.soyMachine.classList.toggle('running', soyRunning);
-    el.next.hidden = !completed.has(missionIndex) || missionIndex === 2;
-    el.check.hidden = completed.has(missionIndex) && missionIndex < 2;
+    el.next.hidden = !currentDone || missionIndex === 2;
+    el.check.hidden = currentDone && missionIndex < 2;
+    document.querySelectorAll('[data-t]').forEach(node=>{const copy=pancakeCopy(mission,node.dataset.t,language);if(copy!==null)node.textContent=copy;});
+    el.clock.querySelector('.clock span').textContent=minuteClock(mission.start);el.clock.querySelector('.clock i').textContent=`+ ${mission.rounds*mission.minutes}`;
+    el.clock.querySelector('.clock-options').innerHTML=pancakeChoices(mission).map(value=>`<label><input type="radio" name="finish-time" value="${value}" ${finishChoice===value?'checked':''}/><span>${value}</span></label>`).join('');
     renderNav();
     renderTray();
     renderSchedule();
@@ -380,6 +387,7 @@
   }
 
   function placeToken(index) {
+    currentDone=false;el.next.hidden=true;el.check.hidden=false;
     const schedule = schedules[missionIndex];
     if (!selectedToken) {
       if (schedule[index]) {
@@ -418,7 +426,7 @@
       const pair = schedule.slice(round * 2, round * 2 + 2);
       if (pair[0][0] === pair[1][0]) return { key: 'sameRound', args: [pair[0][0]], tone: 'bad', round };
     }
-    return { ok: true };
+    return pancakeSchedule(MISSIONS[missionIndex],schedule)?{ok:true}:{key:'empty',tone:'bad'};
   }
 
   function checkMission() {
@@ -448,22 +456,23 @@
         say('needClock', [], 'bad');
         return;
       }
-      if (finishTime !== '8:01') {
+      if (finishTime !== minuteClock(pancakeEnd(MISSIONS[missionIndex]))) {
         sound.play('error');
         say('wrongClock', [], 'bad');
         return;
       }
     }
 
+    currentDone=true;const firstCompletion=!completed.has(missionIndex);
     completed.add(missionIndex);
     unlocked = Math.max(unlocked, Math.min(2, missionIndex + 1));
     save();
-    window.cool?.stage?.(`order${missionIndex + 1}`);
-    window.cool?.track?.('complete_order', { mission: missionIndex + 1, minutes: MISSIONS[missionIndex].rounds * 3 });
+    if(firstCompletion)window.cool?.stage?.(`order${missionIndex + 1}`);
+    window.cool?.track?.('complete_order', { mission: missionIndex + 1, minutes: MISSIONS[missionIndex].rounds * MISSIONS[missionIndex].minutes });
     if (missionIndex === 2) {
       sound.play('complete');
       say('done3', [], 'good');
-      window.cool?.complete?.();
+      if(firstCompletion)window.cool?.complete?.();
       el.modal.hidden = false;
       requestAnimationFrame(() => el.playAgain.focus());
     } else {
@@ -475,20 +484,19 @@
     el.check.hidden = missionIndex < 2;
   }
 
-  function switchMission(index) {
-    if (index > unlocked) return;
-    missionIndex = index;
-    selectedToken = null;
-    history = [];
-    statusMessage = {
-      key: completed.has(index) ? 'missionCompleted' : MISSIONS[index].ready,
-      args: [],
-      tone: completed.has(index) ? 'good' : '',
-    };
-    renderMission();
+  function resetRound(){
+    currentDone=false;selectedToken=null;history=[];soyRunning=false;finishChoice=null;schedules[missionIndex]=Array(MISSIONS[missionIndex].rounds*2).fill(null);el.modal.hidden=true;
+    statusMessage={key:MISSIONS[missionIndex].ready,args:[],tone:''};renderMission();
   }
-
+  function switchMission(index,fresh=false){
+    if(index>unlocked)return;
+    rounds.checkpoint();
+    if(fresh&&rounds.record(index).play)MISSIONS[index]=rounds.next(index);
+    missionIndex=index;resetRound();const play=rounds.record(index).play;if(play){try{restorePlay(play);}catch{resetRound();}}
+    rounds.checkpoint();
+  }
   function clearSchedule() {
+    currentDone=false;el.check.hidden=false;el.next.hidden=true;
     schedules[missionIndex] = Array(MISSIONS[missionIndex].rounds * 2).fill(null);
     selectedToken = null;
     history = [];
@@ -499,7 +507,7 @@
   }
 
   el.check.addEventListener('click', checkMission);
-  el.next.addEventListener('click', () => switchMission(Math.min(2, missionIndex + 1)));
+  el.next.addEventListener('click', () => switchMission(Math.min(2, missionIndex + 1),true));
   el.clear.addEventListener('click', clearSchedule);
   el.undo.addEventListener('click', () => {
     const last = history.pop();
@@ -508,6 +516,7 @@
       say('cannotUndo', [], 'bad');
       return;
     }
+    currentDone=false;el.check.hidden=false;el.next.hidden=true;
     const schedule = schedules[missionIndex];
     schedule[last.index] = last.previous || null;
     if (last.existingIndex >= 0) schedule[last.existingIndex] = last.token;
@@ -535,20 +544,8 @@
   });
   el.lang.addEventListener('click', () => window.cool.preferences.toggleLang());
   el.theme.addEventListener('click', () => window.cool.preferences.toggleTheme());
-  el.playAgain.addEventListener('click', () => {
-    el.modal.hidden = true;
-    missionIndex = 0;
-    unlocked = 0;
-    completed = new Set();
-    schedules = [Array(4).fill(null), Array(6).fill(null), Array(6).fill(null)];
-    selectedToken = null;
-    history = [];
-    soyRunning = false;
-    document.querySelectorAll('input[name="finish-time"]').forEach((input) => { input.checked = false; });
-    save();
-    say('ready1');
-    renderMission();
-  });
+  el.playAgain.addEventListener('click',()=>switchMission(0,true));
+  el.clock.addEventListener('change',event=>{if(event.target.name==='finish-time'){finishChoice=event.target.value;currentDone=false;}});
 
   function renderChrome(theme = document.documentElement.dataset.theme || 'light') {
     el.sound.textContent = sound.muted ? '🔇' : '🔊';
@@ -562,6 +559,16 @@
     el.tray.setAttribute('aria-label', t('tokenTrayLabel'));
   }
 
+  function restorePlay(s){
+    const a=MISSIONS[missionIndex],tokens=tokensForMission(missionIndex);
+    if(!pancakeSchedule(a,s.schedule,true)||!Array.isArray(s.history)||s.history.length>1000||s.selectedToken!==null&&!tokens.includes(s.selectedToken)||s.finishChoice!==null&&!pancakeChoices(a).includes(s.finishChoice)||!s.statusMessage)throw new Error('Invalid cooking snapshot');
+    const index=n=>Number.isInteger(n)&&n>=0&&n<s.schedule.length,token=n=>n===null||tokens.includes(n);
+    if(s.history.some(h=>!h||!index(h.index)||!token(h.previous)||!token(h.token)||h.existingIndex!==undefined&&h.existingIndex!==-1&&!index(h.existingIndex)))throw new Error('Invalid cooking undo');
+    const previous=[...s.schedule];for(let i=s.history.length-1;i>=0;i--){const h=s.history[i];previous[h.index]=h.previous;if(h.existingIndex>=0)previous[h.existingIndex]=h.token;if(!pancakeSchedule(a,previous,true))throw new Error('Invalid cooking undo sequence');}
+    if(s.done&&(!pancakeSchedule(a,s.schedule)||a.parallel&&(!s.soyRunning||s.finishChoice!==minuteClock(pancakeEnd(a)))))throw new Error('Invalid completed schedule');
+    schedules[missionIndex]=s.schedule;selectedToken=s.selectedToken;history=s.history;soyRunning=Boolean(s.soyRunning);finishChoice=s.finishChoice;currentDone=Boolean(s.done);statusMessage=s.statusMessage;renderMission();el.modal.hidden=!(currentDone&&missionIndex===2);
+  }
+  const initial=Number(rounds.active??0);missionIndex=Number.isInteger(initial)&&initial>=0&&initial<=2?initial:0;
   window.cool.bindI18n(I18N, {
     onChange({ t: translate, lang, theme }) {
       t = translate;
@@ -571,4 +578,6 @@
       renderMission();
     },
   });
+  resetRound();
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#completeModal',active:()=>missionIndex,capture:()=>({schedule:schedules[missionIndex],selectedToken,history,soyRunning,finishChoice,done:currentDone,statusMessage}),restore:restorePlay,retry:resetRound});
 })();

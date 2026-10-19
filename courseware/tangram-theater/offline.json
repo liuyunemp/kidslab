@@ -1,6 +1,6 @@
 {
   "id": "tangram-theater",
-  "version": "b1e1fb7a5ba1e5bc78b1d7ad6c2e15612f553bc7c3608047c2df2346376dd4d3",
+  "version": "38735db62c82354f609336929619b954190f33891f28c795e9fafb06803d4aa6",
   "assets": [
     {
       "path": "audio.js",
@@ -21,12 +21,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "51c99717f41004cd93af35efc1a49a3c825423276f809adf6af33caa5d8a9a43"
+      "sha256": "6503e8fac6c6098b565ef0d9609d7cf89226cf903d81224a4397bdb6b0476a51"
     },
     {
       "path": "main.js",
-      "sha256": "a7be3d623bb73f6b3d239cdd7f8876de5c2d8ece80d9c122ad11b12f54b54bbf",
-      "fingerprint": "ca22e607"
+      "sha256": "ae4b430cd7935cf5842023fb314227283dfe16ba69d006dafaa59c7eb61bdee5",
+      "fingerprint": "44d51261"
     },
     {
       "path": "model.js",
@@ -34,9 +34,39 @@
       "fingerprint": "e5f4091a"
     },
     {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "1f5c49ba73e91d5bd32f3fe35d7ed2b38ba20fcfcad84a970f291ab4e33b4781",
+      "fingerprint": "bc64b56e"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "b5f667174878b14ab3be6f279ac8ca116131156d7dea3db8b108ab736d38da85",
+      "fingerprint": "34964bc2"
+    },
+    {
       "path": "style.css",
-      "sha256": "7a60048dff79c5eeb3bb1e97f5231a5f5af7539757fbef28affa2d7b18245d58",
-      "fingerprint": "0a157cd7"
+      "sha256": "1b9f8756e533c6c2e6622f7be30c37a87eeaf00117f1bd366408e2802a2741bf",
+      "fingerprint": "1815224e"
     }
   ]
 }

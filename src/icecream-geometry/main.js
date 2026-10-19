@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {icecreamTask,validIcecream,icecreamRatio,icecreamOrders,validIcecreamPlay} from './random-model.js';
 import * as THREE from './vendor/three.module.min.js';
 
 (() => {
@@ -6,8 +8,8 @@ import * as THREE from './vendor/three.module.min.js';
   /* ============================== i18n ============================== */
   const I18N = {
     zh: {
-      doc: '冰淇淋几何 · KidsLab', back: '返回平台', title: '冰淇淋几何', eyebrow: '六年级 · 圆柱 / 圆锥 / 旋转体',
-      tip0: '欢迎来到冰淇淋工厂！先把纸片转成立体，再去「三倍之谜」量一量：圆锥杯到底能装多少。',
+      instructions:'玩法提示',formulas:'查看公式',doc: '冰淇淋几何 · KidsLab', back: '返回平台', title: '冰淇淋几何', eyebrow: '六年级 · 圆柱 / 圆锥 / 旋转体',
+      tip0: '选一张纸片，转转看。',
       stationLathe: '🌀 旋转成型机', stationTriple: '🍦 三倍之谜', stationShop: '🏪 营业挑战',
       hintOrbit: '🖐️ 拖动空白处旋转 · 滚轮缩放',
       latheTitle: '🌀 旋转成型机', latheGoal: '🎯 任务：一张平平的纸片，绕着轴转一圈，就变出一个立体！集齐 4 种立体图鉴。',
@@ -47,15 +49,15 @@ import * as THREE from './vendor/three.module.min.js';
       equal: '一样多', cone: '甜筒多', cyl: '杯装多',
       branchDone: '🎊 金币攒够，分店开张啦！你是冰淇淋大亨！',
       volCyl: (r, h) => `V = π×${r}²×${h} = ${r * r * h}π`,
-      volCone: (r, h) => `V = π×${r}²×${h}÷3 = ${Math.round(r * r * h / 3 * 100) / 100}π`,
+      volCone: (r, h) => `V = π×${r}²×${h}÷3 = ${r * r * h}π/3`,
       volConeUnknown: (r, h) => `V = π×${r}²×${h} ÷ ？　去「三倍之谜」量出这个数`,
-      volSphere: (r) => `V = 4π×${r}³÷3 = ${Math.round(4 * r * r * r / 3 * 100) / 100}π（中学会学到）`,
+      volSphere: (r) => `V = 4π×${r}³÷3 = ${4 * r * r * r}π/3（中学会学到）`,
       volFrustum: '上小下大的圆台（公式中学会学到）',
       idleLathe: '💡 试试点下面的“转起来！”，看纸片变立体', idleTriple: '💡 点“接冰淇淋”，开始解开三倍之谜', idleShop: '💡 用右边的公式算一算，再选答案',
     },
     en: {
-      doc: 'Ice Cream Geometry · KidsLab', back: 'Back to platform', title: 'Ice Cream Geometry', eyebrow: 'Grade 6 · cylinder / cone / solids of revolution',
-      tip0: 'Welcome to the ice cream factory! Spin paper into solids, then head to the Triple Mystery and measure how much a cone cup really holds.',
+      instructions:'How to play',formulas:'Formulas',doc: 'Ice Cream Geometry · KidsLab', back: 'Back to platform', title: 'Ice Cream Geometry', eyebrow: 'Grade 6 · cylinder / cone / solids of revolution',
+      tip0: 'Pick a paper shape and give it a spin.',
       stationLathe: '🌀 Spin shaper', stationTriple: '🍦 Triple mystery', stationShop: '🏪 Shop challenge',
       hintOrbit: '🖐️ Drag empty space to orbit · scroll to zoom',
       latheTitle: '🌀 Spin shaper', latheGoal: '🎯 Goal: spin a flat piece of paper around the axis and a solid appears! Collect all 4 solids.',
@@ -95,9 +97,9 @@ import * as THREE from './vendor/three.module.min.js';
       equal: 'Same amount', cone: 'Cone has more', cyl: 'Cup has more',
       branchDone: '🎊 Enough coins — a new branch opens! Ice cream tycoon!',
       volCyl: (r, h) => `V = π×${r}²×${h} = ${r * r * h}π`,
-      volCone: (r, h) => `V = π×${r}²×${h}÷3 = ${Math.round(r * r * h / 3 * 100) / 100}π`,
+      volCone: (r, h) => `V = π×${r}²×${h}÷3 = ${r * r * h}π/3`,
       volConeUnknown: (r, h) => `V = π×${r}²×${h} ÷ ?　measure it in the Triple Mystery`,
-      volSphere: (r) => `V = 4π×${r}³÷3 = ${Math.round(4 * r * r * r / 3 * 100) / 100}π (middle school)`,
+      volSphere: (r) => `V = 4π×${r}³÷3 = ${4 * r * r * r}π/3 (middle school)`,
       volFrustum: 'A frustum: small top, big bottom (formula comes in middle school)',
       idleLathe: '💡 Try pressing “Spin!” to turn paper into a solid', idleTriple: '💡 Press “Fill cone” to start solving the mystery', idleShop: '💡 Use the formulas on the right, then pick an answer',
     },
@@ -120,28 +122,37 @@ import * as THREE from './vendor/three.module.min.js';
     { id: 'trap', solidKey: 'solidFrustum', icon: '▱' },
   ];
   // r²h all divisible so volumes are neat multiples of π
-  const orders = [
+  const CLASSIC_ORDERS = [
     { cone: [3, 12], cyl: [3, 4], ans: 'equal' }, { cone: [2, 9], cyl: [2, 4], ans: 'cyl' }, { cone: [4, 9], cyl: [4, 2], ans: 'cone' },
     { cone: [3, 6], cyl: [3, 2], ans: 'equal' }, { cone: [5, 6], cyl: [5, 3], ans: 'cyl' }, { cone: [2, 15], cyl: [2, 5], ans: 'equal' },
   ];
   const CUSTOMERS = ['🧒', '👧', '👦', '👵', '👨‍🦰', '🧑‍🎓'];
   /* 三组等底等高的杯子：换尺寸重做，才能归纳出「几杯」与大小无关 */
-  const CUP_SETS = [
+  const CLASSIC_CUPS = [
     { key: 'S', r: 0.85, h: 2.15 },
     { key: 'M', r: 1.1, h: 2.7 },
     { key: 'L', r: 1.35, h: 3.25 },
   ];
-  const CONE_NEQ = { r: 0.8, h: 2.0 };       // 不等底等高的对照锥
+  const CLASSIC_CONTROL = { r: 0.8, h: 2.0 };       // 不等底等高的对照锥
+  const rounds=createRounds('icecream-geometry'),hadSnapshot=rounds.hasSnapshot;
+  const latheTask=rounds.define('lathe',{kind:'lathe',r:3,h:6},icecreamTask,validIcecream);
+  const tripleTask=rounds.define('triple',{kind:'triple',cups:CLASSIC_CUPS,control:CLASSIC_CONTROL},icecreamTask,validIcecream);
+  const CUP_SETS=tripleTask.cups,CONE_NEQ=tripleTask.control;
+  const orders=CLASSIC_ORDERS.map((o,i)=>rounds.define(`shop-${i}`,{kind:'shop',...o},icecreamTask,validIcecream,a=>({cone:a.cone,cyl:a.cyl}),icecreamOrders));
   const NEED_SIZES = CUP_SETS.length;
+  const PROGRESS='kidslab.icecream-geometry';let earned={atlas:[],orders:[],experiment:false};
+  try{const e=JSON.parse(localStorage.getItem(PROGRESS));if(e&&Array.isArray(e.atlas)&&Array.isArray(e.orders))earned=e;}catch{}
+  function saveAwards(){store.set(PROGRESS,JSON.stringify(earned));}
+  const activeRound=()=>state.station==='shop'?`shop-${state.order%orders.length}`:state.station;
   const CONE_HOME = new THREE.Vector3(0, 0, 0.4);
   const FILL_SPOT = new THREE.Vector3(-2.5, 0, 0.4);
   const CYL_SPOT = new THREE.Vector3(2.6, 0, 0);
 
   const state = {
-    station: 'lathe', shape: 0, r: 3, h: 6, phi: 0, formed: false,
+    station: 'lathe', shape: 0, r: latheTask.r, h: latheTask.h, phi: 0, formed: false,
     scoops: 0, coneFilled: false, equal: true, busy: false, sizeIdx: 1,
     records: [], guessed: false, guessMsgKey: '',
-    atlas: new Set(), money: 0, order: 0, answered: false, branchToasted: false,
+    atlas: new Set(earned.atlas.filter(a=>shapes.some(s=>s.id===a))), money: earned.orders.length, order: 0, answered: false, branchToasted: false,
   };
   const cupDims = () => CUP_SETS[state.sizeIdx];
   const coneDims = () => (state.equal ? CUP_SETS[state.sizeIdx] : CONE_NEQ);
@@ -194,6 +205,9 @@ import * as THREE from './vendor/three.module.min.js';
 
   /* ============================== tween engine ============================== */
   const tweens = [];
+  function cancelAnimations(){
+    tweens.splice(0).forEach(t=>t.res(false));clearTimeout(shopTimer);shopTimer=null;clearTimeout(toast.timer);$('#toast').hidden=true;state.busy=false;dragCone=false;spinDrag=false;orbit.down=false;
+  }
   const easeOut = (k) => 1 - Math.pow(1 - k, 3);
   const easeInOut = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
   function tween(dur, update, ease = easeOut) { return new Promise((res) => tweens.push({ el: 0, dur, update, ease, res })); }
@@ -202,7 +216,7 @@ import * as THREE from './vendor/three.module.min.js';
     for (let i = tweens.length - 1; i >= 0; i--) {
       const tw = tweens[i]; tw.el += dt; const k = Math.min(1, tw.el / tw.dur);
       tw.update(tw.ease(k));
-      if (k >= 1) { tweens.splice(i, 1); tw.res(); }
+      if (k >= 1) { tweens.splice(i, 1); tw.res(true); }
     }
   }
 
@@ -337,19 +351,19 @@ import * as THREE from './vendor/three.module.min.js';
     state.formed = true;
     const sh = shapes[state.shape];
     if (!state.atlas.has(sh.id)) {
-      state.atlas.add(sh.id);
+      state.atlas.add(sh.id);earned.atlas=[...state.atlas];saveAwards();window.cool?.stage?.(`solid-${sh.id}`);
       toast(state.atlas.size === 4 ? t('allMade') : t('made')(loc(sh.solidKey)), state.atlas.size === 4);
       burstStars(new THREE.Vector3(0, solidHeight(sh.id, state.r, state.h) * 0.5 + 0.6, 0), latheGroup);
     }
-    renderLathePanel(); renderScore();
+    renderLathePanel(); renderScore();rounds.checkpoint();
   }
 
   async function autoSpin() {
     if (state.busy || state.station !== 'lathe') return;
     state.busy = true;
-    if (state.phi >= Math.PI * 2) { state.formed = false; await tween(0.3, (k) => setPhi((1 - k) * Math.PI * 2)); }
-    await tween(1.7, (k) => setPhi(k * Math.PI * 2), easeInOut);
-    state.busy = false; renderLathePanel();
+    if (state.phi >= Math.PI * 2) { state.formed = false; if(!await tween(0.3, (k) => setPhi((1 - k) * Math.PI * 2)))return; }
+    if(!await tween(1.7, (k) => setPhi(k * Math.PI * 2), easeInOut))return;
+    state.busy = false; renderLathePanel();rounds.checkpoint();
   }
 
   function burstStars(at, parent) {
@@ -450,7 +464,7 @@ import * as THREE from './vendor/three.module.min.js';
 
   function cupRatio() {
     const c = coneDims(), u = cupDims();
-    return (c.r * c.r * c.h / 3) / (u.r * u.r * u.h);
+    return icecreamRatio(c,u);
   }
   function syncTripleVisuals() {
     if (!renderer || !cylCream) return;
@@ -464,11 +478,11 @@ import * as THREE from './vendor/three.module.min.js';
 
   async function moveCup(to, dur = 0.55) {
     const from = coneCup.position.clone();
-    await tween(dur, (k) => {
+    if(!await tween(dur, (k) => {
       coneCup.position.lerpVectors(from, to, k);
       coneCup.position.y += Math.sin(k * Math.PI) * 0.7; // little hop
-    }, easeInOut);
-    coneCup.position.copy(to);
+    }, easeInOut))return false;
+    coneCup.position.copy(to);return true;
   }
 
   async function streamOn(x, z, topY, botY, dur) {
@@ -476,27 +490,27 @@ import * as THREE from './vendor/three.module.min.js';
     streamMesh.visible = true;
     streamMesh.position.set(x, (topY + botY) / 2, z);
     streamMesh.scale.y = (topY - botY);
-    await wait(dur);
-    streamMesh.visible = false;
+    if(!await wait(dur))return false;
+    streamMesh.visible = false;return true;
   }
 
   async function doFill() {
     if (state.station !== 'triple' || state.busy) return;
     if (state.coneFilled) { toast(t('alreadyFull')); return; }
     if (state.scoops * cupRatio() >= 0.999) { toast(t('cylFullTip')); return; }
-    state.busy = true; bumpIdle(); renderTriplePanel();
+    state.coneFilled=true;state.busy = true; bumpIdle(); renderTriplePanel();rounds.checkpoint();
     if (renderer && coneCup) {
-      await moveCup(FILL_SPOT);
+      if(!await moveCup(FILL_SPOT))return;
       const dims = coneDims();
-      const p1 = streamOn(FILL_SPOT.x, FILL_SPOT.z, 2.95, dims.h - 0.1, 0.9);
-      const p2 = (async () => { await wait(0.15); await tween(0.85, (k) => { coneCream.scale.setScalar(Math.max(0.001, k)); }); })();
-      await Promise.all([p1, p2]);
-      await tween(0.35, (k) => { coneSwirl.scale.setScalar(Math.max(0.001, k)); });
+      const p1 = streamOn(FILL_SPOT.x, FILL_SPOT.z, Math.max(2.95,dims.h+.3), dims.h - 0.1, 0.9);
+      const p2 = (async () => { if(!await wait(0.15))return false;return tween(0.85, (k) => { coneCream.scale.setScalar(Math.max(0.001, k)); }); })();
+      if((await Promise.all([p1, p2])).includes(false))return;
+      if(!await tween(0.35, (k) => { coneSwirl.scale.setScalar(Math.max(0.001, k)); }))return;
       state.coneFilled = true;
-      await moveCup(CONE_HOME);
+      if(!await moveCup(CONE_HOME))return;
     } else { state.coneFilled = true; }
     toast(t('coneFull'));
-    state.busy = false; renderTriplePanel();
+    state.busy = false; renderTriplePanel();rounds.checkpoint();
   }
 
   async function doPour() {
@@ -505,11 +519,12 @@ import * as THREE from './vendor/three.module.min.js';
     if (state.scoops * cupRatio() >= 0.999) { toast(t('cylFullTip')); return; }
     state.busy = true; bumpIdle(); renderTriplePanel();
     const startScoops = state.scoops;
+    state.scoops++;state.coneFilled=false;if(state.equal&&state.scoops===3)recordRound();rounds.checkpoint();
     const U = cupDims();
     if (renderer && coneCup) {
       const over = new THREE.Vector3(CYL_SPOT.x - 2.0, U.h + 1.9, CYL_SPOT.z);
-      await moveCup(over, 0.6);
-      await tween(0.3, (k) => { coneCup.rotation.z = -k * 2.1; });
+      if(!await moveCup(over, 0.6))return;
+      if(!await tween(0.3, (k) => { coneCup.rotation.z = -k * 2.1; }))return;
       const f0 = Math.min(1, startScoops * cupRatio()), f1 = Math.min(1, (startScoops + 1) * cupRatio());
       const p1 = streamOn(CYL_SPOT.x + 0.3, CYL_SPOT.z, 3.1, f0 * U.h + 0.1, 1.0);
       const p2 = tween(1.0, (k) => {
@@ -517,11 +532,11 @@ import * as THREE from './vendor/three.module.min.js';
         const f = f0 + (f1 - f0) * k;
         cylCream.scale.y = Math.max(0.001, f * (U.h - 0.08)); cylCream.position.y = cylCream.scale.y / 2 + 0.02;
       }, (k) => k);
-      await Promise.all([p1, p2]);
-      await tween(0.25, (k) => { coneCup.rotation.z = -(1 - k) * 2.1; });
-      await moveCup(CONE_HOME, 0.55);
+      if((await Promise.all([p1, p2])).includes(false))return;
+      if(!await tween(0.25, (k) => { coneCup.rotation.z = -(1 - k) * 2.1; }))return;
+      if(!await moveCup(CONE_HOME, 0.55))return;
     }
-    state.coneFilled = false; state.scoops += 1;
+
     const full = state.scoops * cupRatio() >= 0.999;
     if (state.equal && full) {
       recordRound();
@@ -532,7 +547,7 @@ import * as THREE from './vendor/three.module.min.js';
     } else if (full && !state.equal) {
       toast(t('cupsCount')(state.scoops));
     }
-    state.busy = false; renderTriplePanel();
+    state.busy = false; renderTriplePanel();rounds.checkpoint();
   }
 
   /* 每种尺寸只记一行；攒够三种不同大小才开放猜想 */
@@ -540,6 +555,7 @@ import * as THREE from './vendor/three.module.min.js';
     const set = CUP_SETS[state.sizeIdx];
     if (!state.records.some((rec) => rec.key === set.key)) {
       state.records.push({ key: set.key, scoops: state.scoops });
+      if(!earned.experiment){earned.experiment=true;saveAwards();window.cool?.complete?.();}
     }
   }
   function revealTriple() {
@@ -552,20 +568,22 @@ import * as THREE from './vendor/three.module.min.js';
   }
   function submitGuess() {
     const raw = $('#guessInput').value.trim();
+    if (state.records.length<NEED_SIZES)return;
     if (Number(raw) === 3) revealTriple();
     else state.guessMsgKey = 'guessRetry';
     renderTriplePanel();
   }
 
   function resetTriple(unequal) {
-    if (state.busy) return;
+    cancelAnimations();
     state.equal = !unequal; state.scoops = 0; state.coneFilled = false;
     if (renderer) { clearGroup(tripleGroup); makeTriple(); }
     renderTriplePanel();
     toast(unequal ? t('unequalStart') : t('equalStart'));
   }
   function setCupSize(idx) {
-    if (state.busy || idx === state.sizeIdx) return;
+    if(!Number.isInteger(idx)||idx<0||idx>=CUP_SETS.length||idx===state.sizeIdx)return;
+    cancelAnimations();
     state.sizeIdx = idx; state.scoops = 0; state.coneFilled = false; state.equal = true;
     if (renderer) { clearGroup(tripleGroup); makeTriple(); }
     renderTriplePanel();
@@ -659,6 +677,7 @@ import * as THREE from './vendor/three.module.min.js';
   /* ============================== UI render ============================== */
   function renderLathePanel() {
     $('#shapeButtons').innerHTML = shapes.map((s, i) => `<button class="btn btn--ghost ${i === state.shape ? 'is-active' : ''}" data-shape="${i}" type="button">${s.icon} ${t(s.id)}</button>`).join('');
+    $('#radius').value=state.r;$('#height').value=state.h;
     $('#radiusVal').textContent = state.r; $('#heightVal').textContent = state.h;
     $('#heightRow').style.display = shapes[state.shape].id === 'semi' ? 'none' : '';
     const sh = shapes[state.shape];
@@ -727,20 +746,20 @@ import * as THREE from './vendor/three.module.min.js';
     if (state.station === 'shop') renderShopPanel();
   }
 
-  function setStation(s) {
-    if (state.busy || s === state.station) { render(); return; }
-    state.station = s; bumpIdle();
-    if (renderer) {
-      clearGroup(latheGroup); latheGroup = null;
-      clearGroup(tripleGroup); tripleGroup = null;
-      clearGroup(shopGroup); shopGroup = null;
-      paperMesh = sweepMesh = sweepEdges = null;
-      if (s === 'lathe') { makeLathe(); orbit.tdist = 15; orbit.tpitch = 0.32; }
-      if (s === 'triple') { state.scoops = 0; state.coneFilled = false; state.equal = true; makeTriple(); orbit.tdist = 12.5; orbit.tpitch = 0.38; }
-      if (s === 'shop') { makeShop(); orbit.tdist = 12; orbit.tpitch = 0.34; }
-      orbit.tyaw = -0.35;
+  function rebuildStation(){
+    if(renderer){
+      clearGroup(latheGroup);latheGroup=null;clearGroup(tripleGroup);tripleGroup=null;clearGroup(shopGroup);shopGroup=null;
+      paperMesh=sweepMesh=sweepEdges=null;
+      if(state.station==='lathe'){makeLathe();orbit.tdist=15;orbit.tpitch=.32;}
+      if(state.station==='triple'){makeTriple();orbit.tdist=12.5;orbit.tpitch=.38;}
+      if(state.station==='shop'){makeShop();orbit.tdist=12;orbit.tpitch=.34;}
     }
     render();
+  }
+  function setStation(s){
+    if(!['lathe','triple','shop'].includes(s)||s===state.station){render();return;}
+    rounds.checkpoint();cancelAnimations();state.station=s;bumpIdle();
+    const play=rounds.record(activeRound()).play;if(play)restorePlay(play);else rebuildStation();rounds.checkpoint();
   }
 
   /* ============================== pointer interaction ============================== */
@@ -810,7 +829,7 @@ import * as THREE from './vendor/three.module.min.js';
   let last = performance.now();
   function loop(now) {
     requestAnimationFrame(loop);
-    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const dt = Math.max(0,Math.min(0.05, (now - last) / 1000)); last = now;
     stepTweens(dt);
     if (renderer) {
       // idle micro-motions
@@ -839,7 +858,7 @@ import * as THREE from './vendor/three.module.min.js';
     document.querySelectorAll('[data-t]').forEach((n) => { const v = I18N[lang][n.dataset.t]; if (typeof v === 'string') n.textContent = v; });
     if (langBtn) langBtn.textContent = lang === 'zh' ? 'EN' : '中';
     /* 杯口「满」标签是 3D sprite，切换语言必须重建才会跟着变 */
-    if (renderer && state.station === 'triple') { clearGroup(tripleGroup); makeTriple(); }
+    if (renderer && tripleGroup && state.station === 'triple') { cancelAnimations();clearGroup(tripleGroup);makeTriple(); }
     render();
   }
   function applyTheme() {
@@ -883,38 +902,47 @@ import * as THREE from './vendor/three.module.min.js';
   let shopTimer = null;
   function advanceOrder() {
     clearTimeout(shopTimer); shopTimer = null;
-    state.order += 1; state.answered = false;
-    renderShopPanel(); rebuildShopProducts(); bumpIdle();
+    rounds.checkpoint();const next=(state.order+1)%orders.length;orders[next]=rounds.next(`shop-${next}`);
+    state.order=next;state.answered=false;
+    renderShopPanel(); rebuildShopProducts(); bumpIdle();rounds.checkpoint();
   }
   $('#shopChoices').addEventListener('click', (e) => {
     const b = e.target.closest('[data-answer]'); if (!b || state.answered) return;
     bumpIdle();
     const o = orders[state.order % orders.length];
     const ok = b.dataset.answer === o.ans;
-    state.answered = true;
+    state.answered = ok;
     renderShopPanel();
     if (!ok) $(`#shopChoices [data-answer="${b.dataset.answer}"]`)?.classList.add('choice-bad');
     toast(ok ? t('right') : t('wrong'));
     if (ok) {
-      state.money += 1; renderScore();
+      const id=state.order%orders.length;if(!earned.orders.includes(id)){earned.orders.push(id);saveAwards();window.cool?.stage?.(`customer-${id}`);if(earned.orders.length===orders.length)window.cool?.complete?.();}state.money=earned.orders.length;renderScore();
       if (renderer && shopGroup) burstStars(new THREE.Vector3(0, 3, 1), shopGroup);
-      if (state.money >= 6 && !state.branchToasted) { state.branchToasted = true; setTimeout(() => toast(t('branchDone'), true), 1600); }
-      shopTimer = setTimeout(advanceOrder, 2200);
+      if (state.money >= 6 && !state.branchToasted) { state.branchToasted = true;toast(t('branchDone'),true); }
     }
   });
   $('#nextOrder').addEventListener('click', advanceOrder);
 
-  /* ============================== boot ============================== */
-  applyTheme(); applyLang();
-  makeStage();
-  if (renderer) { makeLathe(); orbit.tdist = 15; orbit.tpitch = 0.32; }
-  render(); resize();
-  /* 深链：?station=lathe|triple|shop、?state=guess 直达三组实测已完成的猜想态 */
-  const qp = new URLSearchParams(location.search);
-  const st0 = qp.get('station');
-  if (qp.get('state') === 'guess') {
-    for (const s of CUP_SETS) state.records.push({ key: s.key, scoops: 3 });
-    setStation('triple');
-  } else if (st0 && ['lathe', 'triple', 'shop'].includes(st0)) setStation(st0);
+  function capturePlay(){
+    if(state.station==='lathe')return {shape:state.shape,r:state.r,h:state.h,phi:state.phi,formed:state.formed};
+    if(state.station==='triple')return {scoops:state.scoops,coneFilled:state.coneFilled,equal:state.equal,sizeIdx:state.sizeIdx,records:state.records,guessed:state.guessed,guessMsgKey:state.guessMsgKey,guess:$('#guessInput').value};
+    return {answered:state.answered};
+  }
+  function restorePlay(s){
+    if(!validIcecreamPlay(s,state.station))throw new Error('Invalid ice cream state');
+    Object.assign(state,s);state.busy=false;if(state.station==='triple')$('#guessInput').value=s.guess??'';rebuildStation();
+  }
+  function retryPlay(){
+    cancelAnimations();
+    if(state.station==='lathe')Object.assign(state,{shape:0,r:latheTask.r,h:latheTask.h,phi:0,formed:false});
+    if(state.station==='triple')Object.assign(state,{scoops:0,coneFilled:false,equal:true,sizeIdx:1,records:[],guessed:false,guessMsgKey:''});
+    if(state.station==='shop')state.answered=false;rebuildStation();
+  }
+  const qp=new URLSearchParams(location.search),requested=qp.get('station');
+  const active=rounds.active??(qp.get('state')==='guess'?'triple':['lathe','triple','shop'].includes(requested)?requested:'lathe');
+  state.station=active.startsWith('shop')?'shop':active;state.order=active.startsWith('shop-')?Number(active.slice(5)):0;
+  if(qp.get('state')==='guess'&&!hadSnapshot)state.records=CUP_SETS.map(s=>({key:s.key,scoops:3}));
+  applyTheme();applyLang();makeStage();rebuildStation();resize();
+  rounds.attach({parent:'.bar__actions',compact:true,active:activeRound,capture:capturePlay,restore:restorePlay,retry:retryPlay,beforeReload:cancelAnimations});
   requestAnimationFrame(loop);
 })();

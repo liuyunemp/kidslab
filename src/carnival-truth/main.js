@@ -1,3 +1,6 @@
+import {createRounds} from './random-rounds.js';
+import {random,seedFrom} from './random-core.js';
+import {carnivalTask,carnivalFamily,validCarnival,carnivalTrials,carnivalCopy,probabilityFraction} from './random-model.js';
 (() => {
   'use strict';
 
@@ -256,7 +259,20 @@
     autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
   }
   let finaleAnimation = null;
-  let state = loadState();
+  const rounds=createRounds('carnival-truth'),hadSnapshots=rounds.hasSnapshot;
+  const bases=[{kind:'dishonest',total:12,wins:1,claimWins:6},{kind:'honest',total:10,wins:2,claimWins:2},{kind:'design',total:12,wins:4,target:2}];
+  const CASES=bases.map((base,i)=>rounds.define(i,base,carnivalTask,validCarnival,a=>a,carnivalFamily));
+  let legacy={};try{legacy=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}');}catch{}
+  let state=loadState(),completedEver=Boolean(legacy.completed);
+  const mastered=new Set(Array.isArray(legacy.mastered)?legacy.mastered:[]);
+  if(!hadSnapshots&&!rounds.explicitSeed&&!state.completed&&(state.trialWins!==null||state.selectedVerdict!==null||state.solved||state.prizeSlots!==4)){
+    CASES[state.caseIndex]=bases[state.caseIndex];rounds.adopt(state.caseIndex,CASES[state.caseIndex],state);
+  }
+  if(rounds.active!==null)state.caseIndex=Number(rounds.active);
+  if(state.completed&&!hadSnapshots)state=freshState();
+  let animationEpoch=0;
+  function stopAnimations(){animationEpoch++;cancelAutoNext();if(trialAnimation)cancelAnimationFrame(trialAnimation);trialAnimation=null;if(finaleAnimation)cancelAnimationFrame(finaleAnimation);finaleAnimation=null;clearTimeout(idleTimer);}
+
 
   function freshState() {
     return {
@@ -267,7 +283,7 @@
       trialSlots: null,
       solved: false,
       completed: false,
-      feedback: 'start',
+      feedback: 'start',trialNo:0,
     };
   }
 
@@ -282,7 +298,8 @@
         trialWins: Number.isInteger(saved.trialWins) ? Math.max(0, Math.min(1000, saved.trialWins)) : null,
         trialSlots: Number.isInteger(saved.trialSlots) ? Math.max(1, Math.min(12, saved.trialSlots)) : null,
         solved: Boolean(saved.solved),
-        completed: Boolean(saved.completed),
+        completed: Boolean(saved.runComplete??saved.completed),
+        trialNo:Number.isInteger(saved.trialNo)&&saved.trialNo>=0?saved.trialNo:0,
         feedback: typeof saved.feedback === 'string' ? saved.feedback : 'start',
       };
     } catch {
@@ -292,41 +309,23 @@
 
   function saveState() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({...state,completed:completedEver,runComplete:state.completed,mastered:[...mastered]}));
     } catch {
       // Progress remains session-local when storage is unavailable.
     }
   }
 
   function currentCase() {
-    return t('cases')[state.caseIndex];
-  }
-
-  function xorshift(seed) {
-    let value = seed >>> 0;
-    return () => {
-      value ^= value << 13;
-      value ^= value >>> 17;
-      value ^= value << 5;
-      return (value >>> 0) / 4294967296;
-    };
-  }
-
-  function simulate(total, wins, seed) {
-    const random = xorshift(seed);
-    let winCount = 0;
-    for (let index = 0; index < 1000; index += 1) {
-      if (Math.floor(random() * total) < wins) winCount += 1;
-    }
-    return winCount;
+    return carnivalCopy(t('cases')[state.caseIndex],CASES[state.caseIndex],lang);
   }
 
   function runTrial() {
     if (state.solved || trialAnimation) return;
     const current = currentCase();
     const wins = state.caseIndex === 2 ? state.prizeSlots : current.wins;
-    const seed = 90210 + state.caseIndex * 707 + wins * 97;
-    const result = simulate(current.total, wins, seed);
+    const record=rounds.record(state.caseIndex),epoch=animationEpoch;
+    const rng=random(seedFrom(`${record.version}/${record.seed}/${record.round}/${state.caseIndex}/trial/${state.trialNo}/${wins}`));
+    const result=carnivalTrials(current.total,wins,rng);state.trialNo++;
     state.trialWins = result;
     state.trialSlots = wins;
     state.feedback = 'running';
@@ -337,7 +336,8 @@
 
     const started = performance.now();
     const animate = (now) => {
-      const progress = Math.min(1, (now - started) / 720);
+      if(epoch!==animationEpoch)return;
+      const progress = Math.max(0,Math.min(1, (now - started) / 720));
       drawEvidence(progress);
       elements.experimentReadout.textContent = `${Math.round(result * progress)} / ${Math.round(1000 * progress) || 1}`;
       if (progress < 1) {
@@ -348,7 +348,7 @@
       state.feedback = 'trialReady';
       saveState();
       playSound('success');
-      render();
+      render();rounds.checkpoint();
     };
     trialAnimation = requestAnimationFrame(animate);
   }
@@ -371,7 +371,7 @@
       playSound('error');
       return;
     }
-    state.prizeSlots = next;
+    stopAnimations();state.prizeSlots = next;
     state.feedback = 'designing';
     saveState();
     playSound('tick');
@@ -391,7 +391,7 @@
     }
 
     if (state.caseIndex === 2) {
-      if (state.prizeSlots !== 2) {
+      if (state.prizeSlots !== CASES[2].target) {
         state.feedback = 'wrongDesign';
         playSound('error');
         render();
@@ -419,7 +419,7 @@
       }
     }
 
-    state.solved = true;
+    state.solved = true;mastered.add(state.caseIndex);
     state.feedback = 'correct';
     saveState();
     playSound('success');
@@ -432,35 +432,27 @@
     cancelAutoNext();
     if (!state.solved) return;
     if (state.caseIndex === 2) {
-      state.completed = true;
+      state.completed = true;const first=!completedEver;completedEver=true;
       saveState();
-      window.cool?.complete?.();
+      if(first)window.cool?.complete?.();
       window.cool?.track?.('complete_carnival_audit', { cases: 3 });
       playSound('complete');
       render();
       return;
     }
-    state.caseIndex += 1;
-    state.selectedVerdict = null;
-    state.trialWins = null;
-    state.trialSlots = null;
-    state.solved = false;
-    state.feedback = 'start';
-    saveState();
-    window.cool?.stage?.(`case-${state.caseIndex + 1}`);
-    playSound('page');
-    render();
-    scheduleIdleHint();
+    rounds.checkpoint();const next=state.caseIndex+1;
+    if(rounds.record(next).play)CASES[next]=rounds.next(next);
+    state.caseIndex=next;resetCase();window.cool?.stage?.(`case-${state.caseIndex+1}`);rounds.checkpoint();
   }
 
   function resetCase() {
-    cancelAutoNext();
+    stopAnimations();state.completed=false;state.trialNo=0;
     if (trialAnimation) {
       cancelAnimationFrame(trialAnimation);
       trialAnimation = null;
     }
     state.selectedVerdict = null;
-    state.prizeSlots = state.caseIndex === 2 ? 4 : state.prizeSlots;
+    state.prizeSlots = state.caseIndex === 2 ? CASES[2].wins : state.prizeSlots;
     state.trialWins = null;
     state.trialSlots = null;
     state.solved = false;
@@ -471,14 +463,8 @@
     scheduleIdleHint();
   }
 
-  function playAgain() {
-    if (finaleAnimation) cancelAnimationFrame(finaleAnimation);
-    state = freshState();
-    saveState();
-    window.cool?.stage?.('case-1');
-    playSound('page');
-    render();
-    scheduleIdleHint();
+  function playAgain(){
+    rounds.checkpoint();const a=rounds.next(0);stopAnimations();CASES[0]=a;state=freshState();resetCase();rounds.checkpoint();
   }
 
   function showHint() {
@@ -514,6 +500,8 @@
 
   function render() {
     const current = currentCase();
+    document.querySelector('[data-t=designGoal]').textContent=lang==='zh'?`目标中奖概率 ${probabilityFraction(CASES[2].target,CASES[2].total)}`:`Target chance: ${probabilityFraction(CASES[2].target,CASES[2].total)}`;
+    document.querySelector('[data-t=finalText]').textContent=lang==='zh'?'三份调查已归档，你用理论概率核对承诺，再用试验观察频率。':'All three cases are filed: compare promises with theoretical probability, then observe trial frequencies.';
     const designer = state.caseIndex === 2;
     const activeWins = designer ? state.prizeSlots : current.wins;
     const divisor = greatestCommonDivisor(activeWins, current.total);
@@ -561,10 +549,10 @@
     elements.nextBtn.hidden = !state.solved;
     elements.nextBtn.querySelector('span').textContent = state.caseIndex === 2 ? t('finish') : t('next');
     elements.caseNav.innerHTML = [0, 1, 2].map((index) => {
-      const className = index < state.caseIndex || (index === state.caseIndex && state.solved)
+      const className = mastered.has(index)
         ? 'is-done'
         : index === state.caseIndex ? 'is-current' : '';
-      return `<span class="${className}" aria-label="${index + 1}">${index < state.caseIndex || (index === state.caseIndex && state.solved) ? '✓' : index + 1}</span>`;
+      return `<span class="${className}" aria-label="${index + 1}">${mastered.has(index) ? '✓' : index + 1}</span>`;
     }).join('');
     elements.caseNav.setAttribute('aria-label', t('navLabel'));
     elements.soundBtn.textContent = muted ? '🔇' : '🔊';
@@ -657,7 +645,7 @@
     const values = [resultWins, resultLosses];
     const labels = lang === 'zh' ? ['中奖', '未中'] : ['WIN', 'MISS'];
     const barColors = [cssVar('--gold'), cssVar('--red')];
-    ctx.font = `900 ${compact ? 12 : 16}px ${getComputedStyle(document.body).fontFamily}`;
+    ctx.font = `900 ${16}px ${getComputedStyle(document.body).fontFamily}`;
     ctx.textAlign = 'center';
     values.forEach((value, index) => {
       const x = chartX + index * (barWidth + barGap);
@@ -783,12 +771,6 @@
   elements.soundBtn.addEventListener('click', toggleSound);
   elements.langBtn.addEventListener('click', () => window.cool.preferences.toggleLang());
   elements.themeBtn.addEventListener('click', () => window.cool.preferences.toggleTheme());
-  document.addEventListener('keydown', (event) => {
-    if (state.completed && event.key === 'Tab') {
-      event.preventDefault();
-      elements.playAgainBtn.focus();
-    }
-  });
   addEventListener('DOMContentLoaded', syncStarMapBack);
   addEventListener('resize', () => drawEvidence(1));
 
@@ -799,6 +781,12 @@
     muted = false;
   }
 
+  function restorePlay(s){
+    const a=CASES[state.caseIndex];
+    if(s.caseIndex!==state.caseIndex||!Number.isInteger(s.prizeSlots)||s.prizeSlots<1||s.prizeSlots>6||s.trialWins!==null&&(!Number.isInteger(s.trialWins)||s.trialWins<0||s.trialWins>1000)||!Number.isInteger(s.trialNo??0))throw new Error('Invalid probability record');
+    if(s.solved&&(s.trialWins===null||(a.kind==='design'?s.prizeSlots!==a.target||s.trialSlots!==a.target:s.selectedVerdict!==(a.claimWins===a.wins?'honest':'dishonest'))))throw new Error('Invalid verdict');
+    state={...s,trialNo:s.trialNo??0};if(state.feedback==='running')state.feedback='trialReady';saveState();render();
+  }
   window.cool.bindI18n(I18N, {
     onChange({ t: translate, lang: nextLang, theme }) {
       t = translate;
@@ -810,6 +798,8 @@
       render();
     },
   });
-  window.cool?.stage?.(`case-${state.caseIndex + 1}`);
+  const currentIndex=state.caseIndex;state={...freshState(),caseIndex:currentIndex,prizeSlots:CASES[2].wins};
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#finale',active:()=>state.caseIndex,capture:()=>state,restore:restorePlay,retry:resetCase,beforeReload:stopAnimations});
+  render();window.cool?.stage?.(`case-${state.caseIndex + 1}`);
   scheduleIdleHint();
 })();

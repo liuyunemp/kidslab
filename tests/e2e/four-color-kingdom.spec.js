@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {levelRecord} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -34,13 +35,69 @@ async function expectFitsViewport(page) {
   expect(layout.containers.filter(({ clientHeight, scrollHeight }) => scrollHeight > clientHeight + 1)).toEqual([]);
 }
 
+// Entering a map regenerates it asynchronously, so wait for the stage number and then read the
+// instance that the page has actually published, rather than racing the generation.
+const mapInstance = async (page, index) => {
+  await expect(page.locator('#missionNumber')).toHaveText(String(index + 1).padStart(2, '0'));
+  let instance = null;
+  await expect.poll(async () => {
+    const record = await levelRecord(page, 'four-color-kingdom', index).catch(() => null);
+    if (!record?.instance) return 0;
+    instance = record.instance;
+    return 1;
+  }).toBe(1);
+  return instance;
+};
+
+
+// Tapping a land paints it with the loaded bucket, and tapping a bucket repaints the land that is
+// still current, so a land is always made current before its colour is chosen.
 async function paint(page, regionId, colorId) {
   await page.locator(`[data-region="${regionId}"]`).click();
   await page.locator(`[data-color="${colorId}"]`).click();
 }
 
+// Reads the colour each region currently shows, straight from the rendered map.
+async function paintedColors(page) {
+  return page.evaluate(() => {
+    const toRgb = (hex) => {
+      const value = hex.replace('#', '');
+      const [r, g, b] = [0, 2, 4].map((i) => Number.parseInt(value.slice(i, i + 2), 16));
+      return `rgb(${r}, ${g}, ${b})`;
+    };
+    const swatches = {};
+    for (const button of document.querySelectorAll('[data-color]')) {
+      swatches[(button.querySelector('.swatch__blob')?.style?.background || '').trim()] = button.dataset.color;
+    }
+    const painted = {};
+    for (const path of document.querySelectorAll('path.region[data-region]')) {
+      const fill = (path.getAttribute('fill') || '').trim();
+      painted[path.dataset.region] = swatches[fill] ?? swatches[toRgb(fill)] ?? null;
+    }
+    return painted;
+  });
+}
+
+// Repaints until every region matches the model's solution, because the closing operations of the
+// sweep can still move the previous bucket onto the region that was painted last.
+async function paintAll(page, layout) {
+  const { regions, solution, fixed = {} } = layout;
+  const target = regions.filter((region) => !fixed[region.id]);
+  for (let pass = 0; pass < 4; pass += 1) {
+    for (const region of target) await paint(page, region.id, solution[region.id]);
+    const painted = await paintedColors(page);
+    if (target.every((region) => painted[region.id] === solution[region.id])) return;
+  }
+  throw new Error('the map never matched the generated solution');
+}
+
 async function present(page) {
   await page.locator('#checkBtn').click();
+}
+
+// Paints one map with the solution the model produced for it, skipping the fixed regions.
+async function solveMap(page, layout) {
+  await paintAll(page, layout);
 }
 
 test.describe('four-color kingdom', () => {
@@ -52,66 +109,80 @@ test.describe('four-color kingdom', () => {
       localStorage.removeItem('kidslab.progress.four-color-kingdom');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/four-color-kingdom/');
+    await page.goto('/courseware/four-color-kingdom/?seed=987');
+    // The course solves its first map asynchronously, so the controls are only wired once the
+    // palette has rendered. Clicking before that silently does nothing.
+    await expect(page.locator('#palette [data-color]').first()).toBeVisible();
   });
 
   test('recovers from conflicts and budget mistakes, then finishes all four maps', async ({ page }) => {
     await expect(page.getByRole('heading', { name: '相邻领地，不能同色' })).toBeVisible();
 
-    // Conflict: paint two neighbors the same color, then submit
-    await paint(page, 'crown', 'rose');
-    await paint(page, 'east', 'rose');
+    // Map 1: the opening four-way conflict. Every region touches the other three.
+    const welcome = await mapInstance(page, 0);
+    const first = welcome.regions[0];
+    const neighbour = welcome.regions.find((region) => first.neighbors.includes(region.id));
+    expect(neighbour, 'the opening map must keep a neighbouring pair').toBeTruthy();
+    // Leave one region unpainted so the first submit reports the missing colour.
+    const others = welcome.regions.filter((region) => region.id !== first.id && region.id !== neighbour.id);
+    await paint(page, first.id, 'rose');
+    await paint(page, neighbour.id, 'rose');
     await present(page);
     await expect(page.locator('#status')).toContainText('空白');
 
-    await paint(page, 'west', 'mint');
-    await paint(page, 'south', 'sky');
+    // Painting every remaining region the same colour makes the conflict visible.
+    for (const region of others) await paint(page, region.id, 'rose');
     await present(page);
     await expect(page.locator('#status')).toContainText('相邻同色');
 
-    await paint(page, 'east', 'sun');
+    await solveMap(page, welcome);
     await present(page);
     await expect(page.locator('#status')).toContainText('过关');
     await page.locator('#nextBtn').click();
 
-    // Map 2 budget 3: opening a 4th color is blocked
-    await paint(page, 'lake', 'rose');
-    await paint(page, 'harbor', 'sun');
-    await paint(page, 'orchard', 'mint');
-    await page.locator('[data-region="mine"]').click();
-    await page.locator('[data-color="sky"]').click();
+    // Map 2 is a three-colour budget map: opening a fourth colour must be refused.
+    const budget = await mapInstance(page, 1);
+    expect(budget.budget, 'the second map keeps its three-colour budget').toBe(3);
+    // Fill the map with the model's three-colour solution first.
+    await solveMap(page, budget);
+    const outside = ['rose', 'sun', 'mint', 'sky'].find((color) => !Object.values(budget.solution).includes(color));
+    expect(outside, 'the budgeted map holds a fourth colour back').toBeTruthy();
+    // Repainting a region whose colour is used elsewhere would keep all three colours open
+    // and add this fourth one, which is exactly what the budget forbids.
+    const counts = Object.values(budget.solution).reduce((tally, color) => ({ ...tally, [color]: (tally[color] ?? 0) + 1 }), {});
+    const spareRegion = budget.regions.find(
+      (region) => !budget.fixed?.[region.id] && counts[budget.solution[region.id]] > 1,
+    );
+    expect(spareRegion, 'the three-colour map repeats a colour so a fourth would overspend').toBeTruthy();
+    // Selecting the bucket first and then the land is the shape that reaches the budget check:
+    // tapping a land after a bucket would otherwise paint it with the bucket already loaded.
+    await page.locator(`[data-color="${outside}"]`).click();
+    await page.locator(`[data-region="${spareRegion.id}"]`).click();
     await expect(page.locator('#status')).toContainText('预算');
+    // The refused colour is never applied, so the map keeps the model's valid solution.
+    expect(await page.evaluate(() => {
+      const key = Object.keys(localStorage).find((k) => k.startsWith('kidslab.random.v1.four-color-kingdom'));
+      return JSON.parse(localStorage.getItem(key)).levels['1'].play?.colors ?? {};
+    })).toEqual(budget.solution);
 
-    await paint(page, 'mine', 'sun');
-    await paint(page, 'peak', 'mint');
     await present(page);
     await expect(page.locator('#status')).toContainText('过关');
     await page.locator('#nextBtn').click();
 
-    // Map 3: locked lord keep
-    await page.locator('[data-region="lord"]').click();
+    // Map 3 locks one region; the rest still follow the generated solution.
+    const locked = await mapInstance(page, 2);
+    const lockedRegion = Object.keys(locked.fixed ?? {})[0];
+    expect(lockedRegion, 'the third map locks a lord keep').toBeTruthy();
+    await page.locator(`[data-region="${lockedRegion}"]`).click();
     await expect(page.locator('#status')).toContainText('锁');
-    await paint(page, 'plain', 'rose');
-    await paint(page, 'coast', 'rose');
-    await paint(page, 'isle', 'sun');
-    await paint(page, 'ridge', 'sky');
-    await paint(page, 'core', 'mint');
+    await solveMap(page, locked);
     await present(page);
     await expect(page.locator('#status')).toContainText('过关');
     await page.locator('#nextBtn').click();
 
-    // Map 4 devil map with 4 colors, skip grape
-    for (const [region, color] of [
-      ['a', 'rose'],
-      ['b', 'sun'],
-      ['c', 'rose'],
-      ['d', 'mint'],
-      ['e', 'sky'],
-      ['f', 'mint'],
-      ['g', 'sun'],
-    ]) {
-      await paint(page, region, color);
-    }
+    // Map 4 is the four-colour challenge.
+    const devil = await mapInstance(page, 3);
+    await solveMap(page, devil);
     await present(page);
     await expect(page.getByRole('heading', { name: '你摸到了四色定理的手感！' })).toBeVisible();
     await expect(page.locator('#playAgainBtn')).toBeFocused();

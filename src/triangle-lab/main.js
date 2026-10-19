@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { triangleExperiment, validTriangleExperiment, validTriangle } from './random-model.js';
 (() => {
   'use strict';
 
@@ -141,16 +143,22 @@
     { kicker: 'phase2Kicker', title: 'phase2Title', text: 'phase2Text', console: 'phase2Console', lesson: 'phase2Lesson', icon: '📐' },
     { kicker: 'phase3Kicker', title: 'phase3Title', text: 'phase3Text', console: 'phase3Console', lesson: 'phase3Lesson', icon: '🪵' },
   ];
-  const TRIANGLES = [
+  const BASE_TRIANGLES = [
     [{ x: .22, y: .76 }, { x: .50, y: .18 }, { x: .81, y: .72 }],
     [{ x: .18, y: .70 }, { x: .35, y: .20 }, { x: .84, y: .77 }],
     [{ x: .17, y: .77 }, { x: .68, y: .22 }, { x: .84, y: .72 }],
   ];
-  const STICK_SETS = [
+  const BASE_STICK_SETS = [
     { lengths: [2, 3, 7], canBuild: false },
     { lengths: [4, 5, 6], canBuild: true },
     { lengths: [3, 3, 6], canBuild: false },
   ];
+
+  const rounds=createRounds('triangle-lab');
+  const migrateLegacy=!rounds.hasSnapshot&&rounds.explicitSeed===null;
+  const bases=[{type:'frame',width:50,height:55},{type:'angles',triangles:BASE_TRIANGLES},{type:'sticks',sets:BASE_STICK_SETS}];
+  const experiments=rounds.prepare(bases,triangleExperiment,validTriangleExperiment);
+  const TRIANGLES=experiments[1].triangles,STICK_SETS=experiments[2].sets;
 
   const $ = (selector) => document.querySelector(selector);
   const el = {
@@ -210,6 +218,10 @@
 
   try {
     const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    if(migrateLegacy&&Number.isInteger(saved.phase)){
+      for(let i=0;i<3;i++){rounds.adopt(i,bases[i],null);experiments[i]=bases[i];}
+      TRIANGLES.splice(0,TRIANGLES.length,...BASE_TRIANGLES);STICK_SETS.splice(0,STICK_SETS.length,...BASE_STICK_SETS);
+    }
     unlocked = Math.min(2, Math.max(0, Number(saved.unlocked) || 0));
     phase = Math.min(unlocked, Math.max(0, Number(saved.phase) || 0));
     stabilityDone = Boolean(saved.stabilityDone);
@@ -223,6 +235,16 @@
     if (phase === 1) statusMessage = { key: angleDone ? 'phase2Success' : 'phase2Ready', tone: angleDone ? 'good' : '', args: angleDone ? exactDisplayAngles() : [] };
     if (phase === 2) statusMessage = stickStatus();
   } catch {}
+  if(!migrateLegacy||rounds.explicitSeed!==null){
+    phase=Math.min(2,Math.max(0,Number(rounds.active)||0));
+    if(!rounds.record(phase).play){
+      completed=false;
+      if(phase===0){shelfCollapsed=false;braceAdded=false;stabilityDone=false;}
+      if(phase===1){triangleIndex=0;vertices=TRIANGLES[0].map(p=>({...p}));angleDone=false;}
+      if(phase===2)stickIndex=0;
+      statusMessage=phase===2?stickStatus():{key:phase===0?'phase1Ready':'phase2Ready',tone:'',args:[]};
+    }
+  }
 
   class SoundEngine {
     constructor() {
@@ -441,10 +463,10 @@
 
   function drawShelf(ctx) {
     const { width: w, height: h } = canvasSize;
-    const left = w * .25;
+    const left = w * (1-experiments[0].width/100)/2;
     const top = h * .2;
-    const shelfW = w * .5;
-    const shelfH = h * .55;
+    const shelfW = w * experiments[0].width/100;
+    const shelfH = h * experiments[0].height/100;
     const skew = shelfCollapsed ? Math.min(w * .12, 72) : 0;
     ctx.save();
     ctx.translate(skew * .15, 0);
@@ -696,7 +718,8 @@
   }
 
   function newTriangle() {
-    triangleIndex = (triangleIndex + 1) % TRIANGLES.length;
+    const next=rounds.next(1);TRIANGLES.splice(0,TRIANGLES.length,...next.triangles);
+    triangleIndex = 0;
     vertices = TRIANGLES[triangleIndex].map((point) => ({ ...point }));
     angleDone = false;
     setStatus('phase2Ready');
@@ -760,7 +783,6 @@
 
   function reset() {
     phase = 0;
-    unlocked = 0;
     shelfCollapsed = false;
     braceAdded = false;
     stabilityDone = false;
@@ -803,10 +825,12 @@
   el.canvas.addEventListener('pointermove', (event) => {
     if (draggingVertex < 0 || phase !== 1 || angleDone) return;
     const point = pointerPosition(event);
-    vertices[draggingVertex] = {
+    const candidate=vertices.map(p=>({...p}));
+    candidate[draggingVertex] = {
       x: Math.max(.12, Math.min(.88, point.x)),
       y: Math.max(.14, Math.min(.82, point.y)),
     };
+    if(validTriangle(candidate))vertices=candidate;
     draw();
   });
 
@@ -848,4 +872,11 @@
     },
   });
   window.cool?.stage?.(`triangle-lab-${phase + 1}`);
+  rounds.attach({parent:el.hint.parentElement,dialog:'#completeModal',active:()=>phase,
+    capture:()=>({phase,unlocked,shelfCollapsed,braceAdded,stabilityDone,triangleIndex,vertices,angleDone,stickIndex,completed,statusMessage}),
+    restore:s=>{
+      if(s.phase!==phase||!validTriangle(s.vertices)||!Number.isInteger(s.stickIndex)||s.stickIndex<0||s.stickIndex>3||!s.statusMessage||!Array.isArray(s.statusMessage.args))throw new Error('Invalid triangle experiment');
+      unlocked=Math.max(unlocked,s.unlocked);
+      ({shelfCollapsed,braceAdded,stabilityDone,triangleIndex,vertices,angleDone,stickIndex,completed,statusMessage}=s);save();render();
+    },retry:()=>{completed=false;el.modal.hidden=true;el.course.inert=false;render();}});
 })();

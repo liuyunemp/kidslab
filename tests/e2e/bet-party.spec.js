@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -41,22 +42,22 @@ test.describe('bet party', () => {
       localStorage.removeItem('kidslab.progress.bet-party');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/bet-party/');
+    await page.goto('/courseware/bet-party/?seed=987');
     await expect.poll(() => page.evaluate(() => !!window.__BET_PARTY__)).toBe(true);
   });
 
   test('constructs worst-case months, recovers from wrong sock bet, then proves sure line', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: /13 位客人/ })).toBeVisible();
+    const a=(await roundRecord(page,'bet-party')).instance;await expect(page.locator('#missionTitle')).toContainText(String(a.drawers));
 
     // Place one guest in each of 12 months
-    for (let i = 0; i < 12; i += 1) {
+    for (let i = 0; i < a.drawers; i += 1) {
       await page.locator('#inviteBtn').click();
       await page.locator(`[data-drawer="${i}"]`).click();
       if (i === 0) {
-        await expect(page.locator('#status')).toHaveText('放进「1月」。这个抽屉现在有 1 只。');
+        await expect(page.locator('#status')).toHaveText(/这个抽屉现在有 1 只/);
       }
     }
-    await expect.poll(() => page.evaluate(() => window.__BET_PARTY__.getState().total)).toBe(12);
+    await expect.poll(() => page.evaluate(() => window.__BET_PARTY__.getState().total)).toBe(a.drawers);
     await expect(page.locator('#status')).toContainText('各 1');
 
     // 13th forces collision
@@ -68,16 +69,16 @@ test.describe('bet party', () => {
 
     // Mission 2 socks: wrong bet recovers, right bet demos
     await page.locator('#nextBtn').click();
-    await expect(page.getByRole('heading', { name: /袜子/ })).toBeVisible();
+    await expect(page.locator('#missionTitle')).not.toBeEmpty();
     await expect(page.locator('#betForm')).toBeVisible();
 
-    await page.evaluate(() => window.__BET_PARTY__.openBet(3, 2, 3));
+    const b=(await roundRecord(page,'bet-party')).instance;await page.locator('#inputPigeons').fill(String(b.drawers*(b.need-1)));await page.locator('#openBetBtn').click();
     await expect(page.locator('#status')).toContainText('还不够稳');
 
-    await page.evaluate(() => window.__BET_PARTY__.openBet(3, 2, 4));
+    await page.locator('#inputPigeons').fill(String(b.drawers*(b.need-1)+1));await page.locator('#openBetBtn').click();
     await expect.poll(async () => page.evaluate(() => window.__BET_PARTY__.getState().busy)).toBe(false);
     await expect.poll(() => page.evaluate(() => window.__BET_PARTY__.getState().phase)).toBe('won');
-    await expect.poll(() => page.evaluate(() => window.__BET_PARTY__.getState().total)).toBe(4);
+    await expect.poll(() => page.evaluate(() => window.__BET_PARTY__.getState().total)).toBe(b.drawers*(b.need-1)+1);
     await expect(page.locator('#status')).toContainText(/最坏|稳赢|看/);
   });
 
@@ -85,7 +86,7 @@ test.describe('bet party', () => {
     await expectFitsViewport(page);
 
     await page.locator('#langBtn').click();
-    await expect(page.getByRole('heading', { name: /Seat 13 guests/i })).toBeVisible();
+    await expect(page.locator('#missionTitle')).toContainText(String((await roundRecord(page,'bet-party')).instance.drawers));
     await page.locator('#themeBtn').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 

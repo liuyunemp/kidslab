@@ -1,4 +1,6 @@
 /* 平方根建筑师 · Square Root Builder */
+import {createRounds} from './random-rounds.js';
+import {rootTask,rootFamily,rootIdentity,validRoot,rootQuestion} from './random-model.js';
 (() => {
   'use strict';
 
@@ -69,20 +71,27 @@
     },
   };
 
-  const CHALLENGES = [
-    { answer: 1, area: 49 },
-    { answer: 1, area: 20 },
-    { answer: 1, area: 72 },
-    { answer: 1, area: 10 },
-    { answer: 2, area: 144 },
+  const BASE_CHALLENGES = [
+    {kind:'tile', answer: 1, area: 49,values:[6,7,8] },
+    {kind:'bounds', answer: 1, area: 20,values:[[3,4],[4,5],[5,6]] },
+    {kind:'simplify', answer: 1, area: 72,values:[[3,8],[6,2],[8,2]] },
+    {kind:'decimal', answer: 1, area: 10,values:[306,316,326] },
+    {kind:'reverse', answer: 2, area: 144,values:[24,122,144] },
   ];
+  const rounds=createRounds('square-root-lab');
+  const CHALLENGES=BASE_CHALLENGES.map((base,i)=>rounds.define(i,base,rootTask,validRoot,rootIdentity,rootFamily(base).length?rootFamily:undefined));
+  const initial=rounds.define('explore',{kind:'explore',area:72},rootTask,validRoot,rootIdentity);
   const MAX_AREA = 1_000_000_000_000;
   const SOUND_KEY = 'kidslab.square-root-lab.sound';
   const $ = (selector) => document.querySelector(selector);
   let t = (key) => key;
   let lang = window.cool.preferences.lang;
-  let currentArea = 72;
-  let challengeIndex = 0;
+  let currentArea = initial.area;
+  let challengeIndex = rounds.active!==null&&rounds.active!=='explore'?Number(rounds.active):0;
+  if(!Number.isInteger(challengeIndex)||challengeIndex<0||challengeIndex>=5)challengeIndex=0;
+  let courseMode='explore';
+  const achievements=new Set();
+  try{for(const n of JSON.parse(localStorage.getItem('kidslab.square-root-lab.finished')||'[]'))achievements.add(n);}catch{}
   let challengeSolved = false;
   let audioContext = null;
   let muted = false;
@@ -379,6 +388,8 @@
   }
 
   function renderMode(mode) {
+    rounds.checkpoint();
+    courseMode=mode;
     const explore = mode === 'explore';
     $('#explorePanel').hidden = !explore;
     $('#challengePanel').hidden = explore;
@@ -387,18 +398,19 @@
     $('#exploreTab').setAttribute('aria-selected', String(explore));
     $('#challengeTab').setAttribute('aria-selected', String(!explore));
     if (!explore) {
-      challengeIndex = 0;
-      challengeSolved = false;
+      challengeSolved=Boolean(rounds.record(challengeIndex).play?.challengeSolved);
       renderChallenge();
       window.cool?.stage('challenge');
       window.cool?.track('start_root_challenge');
+    }else{
+      showArea(rounds.record('explore').play?.currentArea??initial.area,{announce:false,playSound:false});
     }
     requestAnimationFrame(resizeCanvas);
     tone('tap');
   }
 
   function renderChallenge() {
-    const questionText = t('challengeQuestions')[challengeIndex];
+    const questionText = rootQuestion(CHALLENGES[challengeIndex],lang);
     const challenge = CHALLENGES[challengeIndex];
     $('#levelBadge').textContent = t('level', challengeIndex + 1, CHALLENGES.length);
     $('#streak').textContent = `${'◆ '.repeat(challengeIndex)}${'◇ '.repeat(CHALLENGES.length - challengeIndex)}`.trim();
@@ -422,6 +434,12 @@
     });
     showArea(challenge.area, { announce: false, playSound: false });
     $('#feedback').textContent = '';
+    if(challengeSolved){
+      $('#choiceGrid').querySelectorAll('button').forEach((button,i)=>{button.disabled=true;button.classList.toggle('is-correct',i===challenge.answer);});
+      $('#challengeFeedback').className='challenge-feedback is-success';
+      $('#challengeFeedback').textContent=t(challengeIndex===4?'completed':'correct');
+      $('#nextChallenge').hidden=false;$('#nextChallenge').textContent=t(challengeIndex===4?'restart':'next');
+    }
   }
 
   function chooseAnswer(index, button) {
@@ -438,6 +456,9 @@
       return;
     }
     challengeSolved = true;
+    const firstCompletion=!achievements.has(challengeIndex);
+    achievements.add(challengeIndex);
+    safeStorageSet('kidslab.square-root-lab.finished',JSON.stringify([...achievements]));
     button.classList.add('is-correct');
     $('#choiceGrid').querySelectorAll('button').forEach((choice) => { choice.disabled = true; });
     feedback.className = 'challenge-feedback is-success';
@@ -447,7 +468,7 @@
     next.hidden = false;
     if (challengeIndex === CHALLENGES.length - 1) {
       next.textContent = t('restart');
-      window.cool?.complete?.();
+      if(firstCompletion)window.cool?.complete?.();
       window.cool?.track('complete_root_challenge');
       tone('complete');
     } else {
@@ -457,7 +478,9 @@
 
   function nextChallenge() {
     if (!challengeSolved) return;
+    rounds.checkpoint();
     challengeIndex = challengeIndex === CHALLENGES.length - 1 ? 0 : challengeIndex + 1;
+    if(rounds.record(challengeIndex).play?.challengeSolved)CHALLENGES[challengeIndex]=rounds.next(challengeIndex);
     challengeSolved = false;
     renderChallenge();
     tone('tap');
@@ -478,7 +501,6 @@
     canvas.setAttribute('aria-label', t('canvasLabel'));
     renderSoundButton();
     if (!$('#challengePanel').hidden) {
-      challengeSolved = false;
       renderChallenge();
     } else {
       showArea(currentArea, { announce: false, playSound: false });
@@ -516,4 +538,12 @@
       renderLanguageAndTheme(theme);
     },
   });
+  renderMode(rounds.active!==null&&rounds.active!=='explore'?'challenge':'explore');
+  rounds.attach({parent:'.bar__actions',compact:true,active:()=>courseMode==='explore'?'explore':challengeIndex,
+    capture:()=>({currentArea,challengeSolved:courseMode==='challenge'&&challengeSolved}),
+    restore:s=>{
+      if(!Number.isFinite(s.currentArea)||s.currentArea<0||s.currentArea>MAX_AREA)throw new Error('Invalid area');
+      currentArea=s.currentArea;challengeSolved=Boolean(s.challengeSolved);
+      if(courseMode==='challenge')renderChallenge();else showArea(currentArea,{announce:false,playSound:false});
+    },retry:()=>{challengeSolved=false;if(courseMode==='challenge')renderChallenge();else showArea(initial.area,{announce:false,playSound:false});}});
 })();

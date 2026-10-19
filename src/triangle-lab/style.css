@@ -491,7 +491,9 @@ a:focus-visible {
   .formula { bottom: 7px; padding: 5px 9px; font-size: 16px; }
   .console {
     grid-template-columns: minmax(0, 1.2fr) minmax(145px, .8fr);
-    grid-template-rows: 1fr auto;
+    /* minmax(0, 1fr) keeps the controls row from growing past the panel and covering
+       the action row below it, which made "next lab" unclickable at 375px. */
+    grid-template-rows: minmax(0, 1fr) auto;
     gap: 6px;
     padding: 6px;
   }
@@ -503,7 +505,7 @@ a:focus-visible {
   }
   .lesson-panel > span { display: none; }
   .lesson-panel p { font-size: 16px; line-height: 1.24; }
-  .controls { grid-column: 2; grid-row: 1; gap: 5px; }
+  .controls { grid-column: 2; grid-row: 1; gap: 5px; min-height: 0; overflow: hidden; }
   .control-label { font-size: 16px; line-height: 1.12; }
   .action,
   .secondary,

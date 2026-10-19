@@ -113,6 +113,7 @@
           <button class="secondary" id="hintBtn" type="button"><span aria-hidden="true">💡</span> <span data-t="hint">轻提示</span></button>
           <button class="secondary" id="clearBtn" type="button"><span aria-hidden="true">↺</span> <span data-t="clearPans">清空托盘</span></button>
           <button class="primary" id="weighBtn" type="button"><span data-t="weigh">称量一次</span> <span aria-hidden="true">⚖️</span></button>
+          <div id="biasChoices" hidden><button class="secondary" type="button" data-bias="light">偏轻</button><button class="secondary" type="button" data-bias="heavy">偏重</button></div>
           <button class="secondary" id="accuseBtn" type="button"><span data-t="accuseMode">指认假币</span></button>
           <button class="secondary" id="resetBtn" type="button"><span data-t="resetJob">重开本关</span></button>
           <button class="primary" id="nextBtn" type="button" hidden><span data-t="next">下一票货</span> <span aria-hidden="true">→</span></button>
@@ -131,6 +132,6 @@
     </section>
   </div>
 
-  <script src="main.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>

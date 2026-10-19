@@ -1,6 +1,6 @@
 {
   "id": "pirate-scales",
-  "version": "a7c62d2d0ad22d2451f19d04398237da55a773a462fe9529a09bfe993c2a9b58",
+  "version": "1cd2f738c6290e6c700a55a948f0b2525c74c8d2309a3382b316dd4a82c2eb92",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "ae965f7bf717af5438ea28128f732dc61c16a4e201f29ed85cfe6d5929941e9b"
+      "sha256": "100440e72b071ca1c76775f3ea025a7ec4aed44dfe092ab327285aceb0f05f2f"
     },
     {
       "path": "main.js",
-      "sha256": "77af6e6226d710fabf9863f79fc8315c0be246d2bd2f9ed4e5ec4607ad190199",
-      "fingerprint": "9887b6df"
+      "sha256": "5e515de2c6711f637f43454b9bc97bca8441c0e1bc08e3a0c0f0ce3b3f0521a2",
+      "fingerprint": "7e59cc01"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "9ce4df817364799700c8c3854085ff5913c8571a6e7b2931d3dffa15f1546d8e",
+      "fingerprint": "aebc4371"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "b7d350b46f7b92ba178d9f2ea1e9407efe15eddcd6d39b6ebe8ab4348e3d9a91",
+      "fingerprint": "1ddd340c"
     },
     {
       "path": "style.css",
-      "sha256": "cd7e21b7714b993cb37ad303922c6fa935c8a3cef8847704115fe7a78277ca20",
-      "fingerprint": "22b89be9"
+      "sha256": "653fec0dacb2fa63ca8ad61c7377b29bd760ccb242d5cd5936d35c91c00d66ec",
+      "fingerprint": "9bab27d1"
     }
   ]
 }

@@ -39,7 +39,7 @@ test.describe('inkblot monsters', () => {
       localStorage.removeItem('kidslab.progress.inkblot-monsters');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/inkblot-monsters/');
+    await page.goto('/courseware/inkblot-monsters/?seed=987');
   });
 
   test('recovers from mistakes and completes all three symmetry missions', async ({ page }) => {
@@ -56,23 +56,11 @@ test.describe('inkblot monsters', () => {
     await page.locator('#foldBtn').click();
 
     await expect(page.getByRole('heading', { name: '补回另一半' })).toBeVisible();
-    await page.getByRole('button', { name: '候选点 A' }).click();
-    await expect(page.locator('#status')).toContainText('距离不同');
-    const mirrorCanvas = await page.locator('#inkCanvas').boundingBox();
-    const mirrorScale = Math.min(mirrorCanvas.width / 900, mirrorCanvas.height / 460);
-    const mirrorOffsetX = (mirrorCanvas.width - 900 * mirrorScale) / 2;
-    const mirrorOffsetY = (mirrorCanvas.height - 460 * mirrorScale) / 2;
-    await page.mouse.click(
-      mirrorCanvas.x + mirrorOffsetX + 605 * mirrorScale,
-      mirrorCanvas.y + mirrorOffsetY + 260 * mirrorScale,
-    );
-    await expect(page.locator('#status')).toContainText('距离不同');
-    await page.mouse.click(
-      mirrorCanvas.x + mirrorOffsetX + 605 * mirrorScale,
-      mirrorCanvas.y + mirrorOffsetY + 150 * mirrorScale,
-    );
-    await page.getByRole('button', { name: '候选点 A' }).click();
-    await page.getByRole('button', { name: '候选点 C' }).click();
+    const mirror=await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.random.v1.inkblot-monsters.seed-987')).levels['1'].instance);
+    await page.locator(`[data-choice="${(mirror.rounds[0].correct+1)%3}"]`).click();
+    const box=await page.locator('#inkCanvas').boundingBox(),scale=Math.min(box.width/900,box.height/460),ox=(box.width-900*scale)/2,oy=(box.height-460*scale)/2;
+    const r=mirror.rounds[0];await page.mouse.click(box.x+ox+(450+r.distance)*scale,box.y+oy+r.y*scale);
+    for(const r of mirror.rounds.slice(1))await page.locator(`[data-choice="${r.correct}"]`).click();
 
     // 第 2 关完成后应用会自动进入第 3 关。先等待这次状态转换结束，
     // 再验证导航回切，避免导航点击和 850ms 自动跳关定时器竞速。
@@ -81,9 +69,9 @@ test.describe('inkblot monsters', () => {
     await expect(page.getByRole('heading', { name: '甩墨再对折' })).toBeVisible();
     await page.locator('#missionNav button').nth(2).click();
     await expect(page.getByRole('heading', { name: '揪出冒牌怪' })).toBeVisible();
-    await page.getByRole('button', { name: '1 号怪物' }).click();
-    await expect(page.locator('#status')).toContainText('每个细节都能');
-    await page.getByRole('button', { name: '2 号怪物' }).click();
+    const detective=await page.evaluate(()=>JSON.parse(localStorage.getItem('kidslab.random.v1.inkblot-monsters.seed-987')).levels['2'].instance);
+    await page.locator(`[data-suspect="${(detective.impostor+1)%3}"]`).click();
+    await page.locator(`[data-suspect="${detective.impostor}"]`).click();
 
     await expect(page.getByRole('heading', { name: '轴对称驯兽师！' })).toBeVisible();
     await expect(page.locator('#playAgainBtn')).toBeFocused();
@@ -117,7 +105,7 @@ test.describe('inkblot monsters', () => {
     await expect(page.locator('#status')).toContainText('dashed line is the symmetry axis');
     await expect(page.locator('#missionNav')).toHaveAttribute('aria-label', 'Lab missions');
     await expect(page.locator('#soundBtn')).toHaveAttribute('aria-label', 'Turn sound on');
-    await expect(page.locator('[data-choice="0"]')).toHaveAttribute('aria-label', /Candidate A, 1 grid step/);
+    await expect(page.locator('[data-choice="0"]')).toHaveAttribute('aria-label', /Candidate A, \d+ drawing units/);
   });
 
   test('keeps every mission readable inside both target viewports', async ({ page }) => {

@@ -1,24 +1,59 @@
 {
   "id": "laser-mirrors",
-  "version": "158c628933d749b72c177dcd9ccc25e492579dc9ea04dcf8e14a4397bef1b79f",
+  "version": "b04c42704867d91233228a7fa5485639c2ebc745ae98e7ac3b503622ad53e321",
   "assets": [
+    {
+      "path": "classic-rooms.js",
+      "sha256": "8874b992aca9fe3f69e13c9e172b1a5c4c93bf8229f966845513cbb5a70c3e0b",
+      "fingerprint": "c09c2e32"
+    },
     {
       "path": "course.json",
       "sha256": "4154fbc460828ea4844a29f83cc2fb29e76d9bd7acebc36025d4046bd28397d0"
     },
     {
       "path": "index.html",
-      "sha256": "67c6afa6dae2857a941465a5cf4b0ef7e040059a5c7bef8b86931f46bec0e9c6"
+      "sha256": "88537616b5259e045374712107498f23ec637ad4857f377add0873203c385ef2"
     },
     {
       "path": "main.js",
-      "sha256": "87c7314cabad46bedd366754f2f5f90dd726ad863951791581248d48ee55eb97",
-      "fingerprint": "4c3e6558"
+      "sha256": "f562dd9d778f33c237586e7d0d290080bc7253e04d9a43f825495f8f1fee6494",
+      "fingerprint": "bb0f50af"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "daaec40f7baa746930f13d8b40d9cfefc8954c9c5f6fe24078d351f173ecc531",
+      "fingerprint": "7f39355b"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "fafcc32d24c3e9afad922bc83e8383ec3a39f31d63b580401a5dd7b3a82c06d2",
+      "fingerprint": "15f25b59"
     },
     {
       "path": "style.css",
-      "sha256": "76b1a1c8282bd277c6371223c65e89278ad05899cda92372cdd6a68cbc58dce8",
-      "fingerprint": "a30029db"
+      "sha256": "c337913204787656c516c0ca9bfbc650a446036d3f53afee9be024569dccab80",
+      "fingerprint": "f72f8f09"
     }
   ]
 }

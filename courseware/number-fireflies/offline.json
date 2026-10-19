@@ -1,6 +1,6 @@
 {
   "id": "number-fireflies",
-  "version": "69bca5252f767482f5ca78085e76ff840ef62e0e0a5a3fb412f8639a2abacffc",
+  "version": "6390f32127b0bcd61d0af29ede9e7dc0a585d3366637763c970acdc9937dfb9e",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "9515714dc8dbdbbb3626a22a9d9ed0c740da907dab0894a1d78b864fa6c9a451"
+      "sha256": "37a37a10ebc32ae2a98abfac4d16094d227c88f82956ccfe13ec3b67ccee9a88"
     },
     {
       "path": "main.js",
-      "sha256": "9a52af2dbbbb19ce77480f2089b3f63554646eeaaabf22f96025d6f4cde85764",
-      "fingerprint": "ec1dcdaf"
+      "sha256": "4e4f8e78f6730069cd6e13654919f60b97f48bd202d10488673bd6b05141069a",
+      "fingerprint": "044002d7"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "005af8f654b7ac36d9bb0b7ea3279bebf1224393dd6c5ed2b7b784e7f5a26f82",
+      "fingerprint": "154226f9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "acce31745671f70372ff07977bff4b4aa343d958e26ed0d3e2e0cd2a2b6c05e1",
+      "fingerprint": "72b94470"
     },
     {
       "path": "style.css",
-      "sha256": "0fe68a529adadf84306417e50ccd8ccecab9688291b021cd04bca3b37718b742",
-      "fingerprint": "0a637555"
+      "sha256": "d3e102d59a572c8bb2f93c59d86803425ab6d2a9892f1465108c82fb6bebc5b5",
+      "fingerprint": "e06e566e"
     }
   ]
 }

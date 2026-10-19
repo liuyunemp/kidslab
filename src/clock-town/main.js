@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { clock, validClock } from './random-model.js';
 (() => {
   'use strict';
 
@@ -110,7 +112,7 @@
     },
   };
 
-  const ORDERS = [
+  const BASE_ORDERS = [
     { target: 420, start: 380, period: 'morning', scene: 'dawn', face: '👩‍🍳', emoji: '🥐✨', activity: 'bakery' },
     { target: 480, start: 445, period: 'morning', scene: 'day', face: '🧒', emoji: '🚌💨', activity: 'school' },
     { target: 750, start: 700, period: 'noon', scene: 'noon', face: '🐈', emoji: '🐈💤', activity: 'nap' },
@@ -121,6 +123,8 @@
     { target: 600, start: 545, period: 'morning', scene: 'day', face: '📚', emoji: '📚✨', activity: 'library' },
   ];
   const ROUND_SAVE_KEY = 'kidslab.clock-town.eight-order';
+  const rounds=createRounds('clock-town');
+  const ORDERS=rounds.prepare(BASE_ORDERS,clock,validClock,a=>({target:a.target,start:a.start}));
   let savedLevel = 0;
   try {
     if (localStorage.getItem(`${ROUND_SAVE_KEY}.version`) !== '2') {
@@ -130,6 +134,7 @@
     const value = Number(localStorage.getItem(ROUND_SAVE_KEY));
     if (Number.isInteger(value) && value >= 0 && value < ORDERS.length) savedLevel = value;
   } catch { /* Storage is optional. */ }
+  if(rounds.active!==null&&Number(rounds.active)>=0&&Number(rounds.active)<ORDERS.length)savedLevel=Number(rounds.active);
 
   const LS = { lang: 'kidslab.lang', theme: 'kidslab.theme' };
   const store = {
@@ -385,9 +390,9 @@
     return t('winRuleMinute')(targetHour, mark, targetMinute);
   }
 
-  function showWin() {
+  function showWin(restoring=false) {
     const last = state.level === ORDERS.length - 1;
-    if (last) window.cool?.complete?.();
+    if (last&&!restoring) window.cool?.complete?.();
     els.winClock.textContent = timeLabel(order().target, false);
     els.winEmoji.textContent = last ? '🕰️🌟' : order().emoji;
     els.winTitle.textContent = last ? t('finalTitle') : copy().win;
@@ -535,4 +540,7 @@
 
   buildTicks();
   resetLevel();
+  rounds.attach({parent:'.control',dialog:'#win',active:()=>state.level,
+    capture:()=>{if(state.spinning||state.dragging)throw new Error('Busy');return {time:state.time,stars:state.stars,hintStep:state.hintStep,solved:state.solved};},
+    restore:value=>{if(!Number.isInteger(value.time)||value.time<0||value.time>=1440||!Number.isInteger(value.stars)||value.stars<1||value.stars>3)throw new Error('Invalid clock');Object.assign(state,value);render();if(value.solved)showWin(true);},retry:resetLevel});
 })();

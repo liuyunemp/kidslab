@@ -312,3 +312,15 @@ body {
 .cell.alt { background: var(--surface-alt); }
 .pet { background: var(--surface-soft); border-color: var(--surface-border); }
 .btn--ghost { color: var(--page-ink); background: var(--surface); }
+:root{--card:var(--surface);--ink:var(--page-ink)}
+body{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}.bar{flex:0 0 60px;padding:8px 12px;flex-wrap:nowrap}.bar__title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bar__right{flex-shrink:0;align-items:center}
+.wrap{flex:1;min-height:0;width:100%;padding:0 10px 12px}.game{height:100%;display:flex;flex-direction:column;gap:8px}.stage{flex:1;min-height:0;align-items:stretch}.board-wrap{height:100%;max-height:560px;width:auto;aspect-ratio:1;overflow:auto}.board{min-width:calc(var(--n)*44px);min-height:calc(var(--n)*44px)}.cell{min-height:44px;font-size:24px}
+.pill,.btn,.tool{font-size:16px;min-height:44px;min-width:44px}.badge,.badge b,.coach__bubble,.win__card p,.lv__name,.menu__toggle{font-size:16px}.coach{margin:0;align-items:center}.coach__bubble{flex:1;padding:6px 10px;line-height:1.4}.coach__face{font-size:32px}
+.lv__sub{font-size:14px;color:var(--page-muted)}.menu{height:100%;overflow:auto}.side{justify-content:center}.pet{min-width:44px;min-height:44px}.pet__count{font-size:14px}.tools{gap:6px}
+@media(max-width:720px){
+  .bar{flex-basis:54px;padding:5px 6px;gap:5px}.bar>a span{display:none}.bar__title{font-size:18px}.bar__right{gap:4px}.pill{padding:6px}
+  .wrap{padding:0 6px 8px}.game{gap:5px}.game__top{gap:4px;flex-wrap:nowrap}.badges{gap:4px;flex-wrap:nowrap}.badge{padding:5px}.badge--level{max-width:134px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.badge:last-child{display:none}
+  .stage{flex-direction:column;gap:6px}.board-wrap{flex:1;width:100%;min-height:190px;aspect-ratio:auto;padding:5px;max-height:none}.board{min-width:calc(var(--n)*44px);min-height:calc(var(--n)*44px);max-width:100%;aspect-ratio:1}
+  .side{flex:0 0 auto;gap:5px;flex-direction:column}.tray{display:flex;overflow:auto;padding:5px;gap:5px}.pet{flex:0 0 44px}.tools{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.tool{padding:5px 2px;font-size:16px}.tool__icon{font-size:20px}.coach__face{display:none}.coach__bubble{font-size:16px;line-height:1.35;padding:5px 8px}.lv{padding:12px}
+}
+[hidden]{display:none!important}

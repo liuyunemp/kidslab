@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {stoneTask,stoneFamily,validStones,stonePit,stoneTake,validStonePlay} from './random-model.js';
 /* ============================================================
    狐狸的石子 · KidsLab 双语/主题模板
    —— 「语言 & 主题」段落是平台约定，整段复制、按需加 key，勿改机制
@@ -128,13 +130,19 @@
     { id: 'setup', max: 3, misere: false, chooser: false, setup: true, title: 'setup', sub: 'setupSub' },
   ];
 
+  const rounds=createRounds('fox-stones');
+  const tasks=MODES.map((m,i)=>rounds.define(i,{...m,initial:i===0?9:i===1?17:17},stoneTask,validStones,a=>({id:a.id,initial:a.initial}),stoneFamily));
+  const credited=new Set(Array.isArray(save.credited)?save.credited:[]);
+  const timers=new Set();
+  function later(fn,ms){const id=setTimeout(()=>{timers.delete(id);fn();},ms);timers.add(id);return id;}
+  function cancelTimers(){timers.forEach(clearTimeout);timers.clear();roundToken++;}
   const el = {
     modeTitle: $('#modeTitle'), modePicker: $('#modePicker'), modeSummary: $('#modeSummary'), tip: $('#tip'), fox: $('#fox'), foxMood: $('#foxMood'), modes: $('#modeTabs'), remaining: $('#remaining'), turn: $('#turnBadge'), streak: $('#streak'),
     quickRules: $('#quickRules'), ruleTake: $('#ruleTake'), ruleFox: $('#ruleFox'), ruleGoal: $('#ruleGoal'), dismissRules: $('#dismissRules'), rulesBtn: $('#rulesBtn'), moveLog: $('#moveLog'),
     choice: $('#choicePanel'), humanFirst: $('#humanFirst'), foxFirst: $('#foxFirst'), stones: $('#stones'), takes: $$('.take'), coach: $('#coach'), glasses: $('#glasses'), setupBox: $('#setupBox'), setupCount: $('#setupCount'), setupOut: $('#setupOut'), newRound: $('#newRound'), replayBtn: $('#replayBtn'), replay: $('#replayModal'), closeReplay: $('#closeReplay'), resultEmoji: $('#resultEmoji'), resultTitle: $('#resultTitle'), resultText: $('#resultText'), line: $('#numberLine'), explain: $('#explain'), again: $('#againBtn'), badge: $('#badge'),
   };
 
-  let modeIndex = Math.max(0, MODES.findIndex((m) => m.id === (save.games ? (save.mode || 'classic') : 'classic')));
+  let modeIndex=rounds.active!==null?Number(rounds.active):Math.max(0,MODES.findIndex(m=>m.id===(save.mode||'classic')));
   let stones = 9;
   let initial = 9;
   let turn = 'human';
@@ -158,34 +166,16 @@
   }
 
   function mode() { return MODES[modeIndex]; }
-  function randStart() {
-    if (games === 0 && mode().id === 'classic') return 9;
-    const min = mode().id === 'max4' ? 16 : 13;
-    const max = 21;
-    return min + Math.floor(Math.random() * (max - min + 1));
-  }
-  function base() { return mode().max + 1; }
-  function isPit(n) {
-    if (mode().misere) return n % base() === 1;
-    return n % base() === 0;
-  }
-  function bestTake(n) {
-    const max = Math.min(mode().max, n);
-    for (let take = 1; take <= max; take += 1) {
-      const left = n - take;
-      if (left === 0) {
-        if (!mode().misere) return take;
-      } else if (isPit(left)) return take;
-    }
-    return Math.min(max, 1 + Math.floor(Math.random() * max));
-  }
-  function randomLegal(n) { return 1 + Math.floor(Math.random() * Math.min(mode().max, n)); }
+  function base(){return mode().max+1;}
+  function isPit(n){return stonePit(n,mode());}
+  function bestTake(n){return stoneTake(n,mode());}
 
-  function newRound(keepMode = true) {
+  function newRound(fresh = true,override=null) {
+    if(fresh||override!==null)rounds.checkpoint();if(fresh)tasks[modeIndex]=rounds.next(modeIndex);cancelTimers();el.replay.hidden=true;el.badge.hidden=true;
     const m = mode();
     roundToken += 1;
     moving = false;
-    stones = m.setup ? Number(el.setupCount.value) : randStart();
+    stones = override??tasks[modeIndex].initial;el.setupCount.value=stones;
     initial = stones;
     history = [{ who: 'start', left: stones, take: 0 }];
     over = false;
@@ -193,22 +183,23 @@
     waitingChoice = m.chooser;
     turn = m.setup ? 'rabbit' : 'human';
     foxState = 'idle';
-    if (!keepMode) save.mode = m.id;
+    save.mode=m.id;
     if (!waitingChoice && !m.setup && isPit(stones)) turn = 'fox';
     setMoveMessage(turn === 'fox' ? 'foxStarts' : m.setup ? 'rabbitStarts' : 'startMove');
     render();
     if (turn === 'fox') {
       const token = roundToken;
-      setTimeout(() => foxMove(token), 550);
+      later(() => foxMove(token), 550);
     }
   }
 
   function setMode(i) {
+    if(!Number.isInteger(i)||i<0||i>=MODES.length)return;rounds.checkpoint();
     modeIndex = i;
     save.mode = mode().id;
     persist();
     el.modePicker.open = false;
-    newRound(false);
+    newRound(false);const p=rounds.record(i).play;if(p){try{restorePlay(p);}catch{newRound(false);}}rounds.checkpoint();
     window.cool?.track('change-stone-rule', { mode: mode().id });
   }
 
@@ -227,65 +218,44 @@
     window.cool?.stage('fox-stones-play');
     window.cool?.track('take-stones', { actor, count: n, mode: mode().id });
 
-    setTimeout(() => {
-      if (token !== roundToken) return;
-      stones -= n;
-      history.push({ who: actor, take: n, left: stones });
-      setMoveMessage(actor === 'rabbit' ? 'rabbitTook' : 'youTook', n, stones);
-      moving = false;
-      if (checkEnd(actor, wasGlasses)) return;
-      turn = 'fox';
-      foxState = 'think';
-      render();
-      setTimeout(() => foxMove(token), 520);
-    }, 360);
+    stones-=n;history.push({who:actor,take:n,left:stones});
+    if(checkEnd(actor,wasGlasses)){moving=false;rounds.checkpoint();return;}
+    turn='fox';foxState='think';rounds.checkpoint();
+    later(()=>{if(token!==roundToken)return;moving=false;setMoveMessage(actor==='rabbit'?'rabbitTook':'youTook',n,stones);render();later(()=>foxMove(token),520);},360);
   }
 
-  function foxMove(token = roundToken) {
-    if (token !== roundToken || over || moving || turn !== 'fox') return;
-    const n = bestTake(stones);
-    moving = true;
-    setMoveMessage('foxTaking');
-    animateTake(n, 'fox');
-    render();
-
-    setTimeout(() => {
-      if (token !== roundToken) return;
-      stones -= n;
-      history.push({ who: 'fox', take: n, left: stones });
-      setMoveMessage('foxTook', n, stones);
-      moving = false;
-      if (checkEnd('fox', false)) return;
-      turn = mode().setup ? 'rabbit' : 'human';
-      foxState = 'idle';
-      render();
-      window.cool?.track('fox-take-stones', { count: n, mode: mode().id });
-    }, 360);
+  function foxMove(token=roundToken){
+    if(token!==roundToken||over||moving||turn!=='fox')return;
+    const n=bestTake(stones);moving=true;setMoveMessage('foxTaking');animateTake(n,'fox');render();
+    stones-=n;history.push({who:'fox',take:n,left:stones});
+    if(checkEnd('fox',false)){moving=false;rounds.checkpoint();return;}
+    turn=mode().setup?'rabbit':'human';foxState='idle';rounds.checkpoint();
+    later(()=>{if(token!==roundToken)return;moving=false;setMoveMessage('foxTook',n,stones);render();window.cool?.track('fox-take-stones',{count:n,mode:mode().id});rounds.checkpoint();},360);
   }
 
   function checkEnd(actor, usedGlasses) {
     if (stones > 0) return false;
+    if(over)return true;
     over = true;
     const humanSide = actor === 'human' || actor === 'rabbit';
     let humanWon = mode().misere ? !humanSide : humanSide;
     if (mode().setup) humanWon = humanSide;
     lastWinner = humanWon ? 'human' : 'fox';
     foxState = humanWon ? 'sad' : 'smug';
-    games += 1;
-    save.games = games;
-    glassesUnlocked = games >= 3;
-    if (humanWon && !usedGlasses && !el.glasses.checked) noGlassesStreak += 1; else if (!humanWon) noGlassesStreak = 0;
+    const credit=`${mode().id}:${initial}`;
+    if(!credited.has(credit)){credited.add(credit);games++;if(humanWon&&!usedGlasses&&!el.glasses.checked)noGlassesStreak++;else if(!humanWon)noGlassesStreak=0;}
+    save.credited=[...credited];save.games=games;glassesUnlocked=games>=3;
     save.noGlassesStreak = noGlassesStreak;
     persist();
     render();
     const token = roundToken;
-    setTimeout(() => { if (token === roundToken) showReplay(); }, 650);
+    later(() => { if (token === roundToken) showReplay(); }, 650);
     if (humanWon) {
       window.cool?.track('win-stone-round', { mode: mode().id, usedGlasses });
-      if (mode().id === 'classic') window.cool?.complete?.();
+      save.completed=Array.isArray(save.completed)?save.completed:[];if(!save.completed.includes(mode().id)){save.completed.push(mode().id);persist();window.cool?.complete?.();}
     }
-    if (glassesUnlocked && games === 3) setTimeout(() => { el.tip.textContent = t('unlocked'); }, 900);
-    if (noGlassesStreak >= 3) setTimeout(showBadge, 1050);
+    if (glassesUnlocked && games === 3) later(() => { el.tip.textContent = t('unlocked'); }, 900);
+    if (noGlassesStreak >= 3) later(showBadge, 1050);
     return true;
   }
 
@@ -301,7 +271,7 @@
 
   function showBadge() {
     el.badge.hidden = false;
-    setTimeout(() => { el.badge.hidden = true; }, 3600);
+    later(() => { el.badge.hidden = true; }, 3600);
   }
 
   function buildModes() {
@@ -417,13 +387,14 @@
   }
 
   function chooseFirst(who) {
+    if(!waitingChoice||!['human','fox'].includes(who))return;
     waitingChoice = false;
     turn = who;
     setMoveMessage(who === 'fox' ? 'foxStarts' : 'startMove');
     render();
     if (turn === 'fox') {
       const token = roundToken;
-      setTimeout(() => foxMove(token), 550);
+      later(() => foxMove(token), 550);
     }
   }
 
@@ -453,12 +424,18 @@
     render();
   });
   el.glasses.addEventListener('change', render);
-  el.setupCount.addEventListener('input', () => { el.setupOut.textContent = el.setupCount.value; if (mode().setup && over) newRound(); });
+  el.setupCount.addEventListener('input',()=>{const n=Number(el.setupCount.value);if(mode().setup&&Number.isInteger(n)&&n>=7&&n<=29)newRound(false,n);});
   addEventListener('resize', () => { cssVar('--ink'); render(); });
   addEventListener('themechange', () => { cssVar('--paper'); render(); });
 
   /* ============================ 启动 ============================ */
-  newRound();
+  function restorePlay(s){
+    if(!validStonePlay(s,tasks[modeIndex]))throw new Error('Invalid stones snapshot');cancelTimers();
+    stones=s.stones;initial=s.initial;turn=s.turn;over=s.over;history=s.history;waitingChoice=Boolean(s.waitingChoice);lastWinner=s.lastWinner;moving=false;foxState=over?(lastWinner==='human'?'sad':'smug'):turn==='fox'?'think':'idle';moveMessage=s.moveMessage??{key:'startMove',args:[]};el.setupCount.value=initial;el.glasses.checked=Boolean(s.glasses)&&glassesUnlocked;render();
+    if(over)showReplay();else if(turn==='fox'&&!waitingChoice){const token=roundToken;later(()=>foxMove(token),550);}
+  }
+  newRound(false);
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#replayModal',active:()=>modeIndex,capture:()=>({stones,initial,turn,over,history,waitingChoice,lastWinner,moveMessage,glasses:el.glasses.checked}),restore:restorePlay,retry:()=>newRound(false),beforeReload:cancelTimers});
   applyTheme();
   applyLang();
 })();

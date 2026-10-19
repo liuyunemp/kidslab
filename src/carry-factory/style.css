@@ -532,7 +532,7 @@ button { font-family: var(--font); }
   from { opacity: 0; transform: translateY(-24px) scale(0.55); }
 }
 @keyframes lever-ready {
-  to { transform: translateY(-3px); box-shadow: 3px 6px 0 var(--line), 0 0 16px var(--brass-light); }
+  to { box-shadow: 3px 6px 0 var(--line), 0 0 16px var(--brass-light); }
 }
 @keyframes factory-thump {
   40% { transform: translateY(3px); }

@@ -1,19 +1,54 @@
 {
   "id": "ferry-tales",
-  "version": "d1a02b792bfc1e1312a33ef3172b5e529e5f4acdbf9913a9d6f02c9b13a770ed",
+  "version": "669eb61812d2d0bd3c0a161d7006dc35e8c92e7c41aa753b0baa64befb9e4375",
   "assets": [
+    {
+      "path": "classic-levels.js",
+      "sha256": "2b04736573bc2ab0c4c93a9ef80daabc0a9393144aec32df2c260bd989eb306d",
+      "fingerprint": "f0cc9551"
+    },
     {
       "path": "course.json",
       "sha256": "2a6986eab3d11006903c1cdd01e46db77f0f69874cace97e9bc581d0e3219c3f"
     },
     {
       "path": "index.html",
-      "sha256": "330c62f1701f94a74ec942127a382638b464611efc94dcb70631d94aa753218f"
+      "sha256": "59fb1eed963a4e24f0ee604d8dfa4312ba7db33366f55a2f03bd8cd127469b6e"
     },
     {
       "path": "main.js",
-      "sha256": "f0539bc4b1616770a4da9a2a1c6bb879c00fe9d0b9e0723ccbdc1384854042e7",
-      "fingerprint": "eaef386e"
+      "sha256": "0b941330efd0afd2498f9da52b787e023fd6d71277667b9322dd4f1ce874e234",
+      "fingerprint": "50a35afd"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "9708e767d51cfd3ef64f17b7bf0febb39119c73f3768f05a8ddd120676d3c53f",
+      "fingerprint": "d2e44b70"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "edf712b2d73687533cc39095886b4893ee946d2901c8b007d4a9677770b041bc",
+      "fingerprint": "6c403b98"
     },
     {
       "path": "style.css",

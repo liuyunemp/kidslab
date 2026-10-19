@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>🍎 果园订单 · KidsLab</title>
-  <link rel="stylesheet" href="style.css?v=bdf4047b" />
+  <link rel="stylesheet" href="style.css?v=34c65604" />
   <script>
     /* 防闪烁：进 body 前先定好主题与语言（与主站同一套 localStorage 键） */
     (() => {
@@ -71,9 +71,10 @@
       </div>
 
       <aside class="book card">
-        <h3 data-t="bookTitle">口诀图鉴</h3>
+        <details class="field-book"><summary data-t="bookTitle">口诀图鉴</summary><div class="field-book__contents"><h3 data-t="bookTitle">口诀图鉴</h3>
         <p class="book__hint" data-t="bookHint">每找到一种新种法，就贴一张苹果贴纸。</p>
         <div class="cards" id="cards"></div>
+        </div></details>
         <button class="btn btn--wide" id="nextBtn" type="button" data-t="next">下一张订单 →</button>
         <button class="btn btn--ghost btn--wide" id="restartBtn" type="button" data-t="restart">从头开园</button>
       </aside>
@@ -82,6 +83,6 @@
     <div class="toast" id="toast" hidden></div>
   </main>
 
-  <script src="main.js?v=58f88a3a"></script>
+  <script type="module" src="main.js?v=4a902050"></script>
 </body>
 </html>

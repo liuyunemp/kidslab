@@ -1,6 +1,6 @@
 {
   "id": "shape-tailor",
-  "version": "843d480596c6246f3b92d8dc8862159d48589109e82fae7b8bb6f4a0a2750e9a",
+  "version": "8ab58a9b1f7a78cf32b0bd408f6afc0afc39b3e84232916c72e831992dd3bdb2",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "e93814c779bd687cf9a9b3498d72c99a1c36b7778a4a049827cffc148e110fe0"
+      "sha256": "aa9b2e4338b1f95ef880331eb9809d76f02837766d0d1e8974191b6be6f46f89"
     },
     {
       "path": "main.js",
-      "sha256": "0c1375b842568da7d2e315631fadbc54dc88f914c53fae4bdca4be34ce5439f5",
-      "fingerprint": "7fbd5cd8"
+      "sha256": "996355e800d27a43e0edb23e9e33029de372df0fc0e04d249776b7f55fa5c43b",
+      "fingerprint": "3ade0b2f"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "005af8f654b7ac36d9bb0b7ea3279bebf1224393dd6c5ed2b7b784e7f5a26f82",
+      "fingerprint": "154226f9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "acce31745671f70372ff07977bff4b4aa343d958e26ed0d3e2e0cd2a2b6c05e1",
+      "fingerprint": "72b94470"
     },
     {
       "path": "style.css",
-      "sha256": "369930a2c30b6b5fc36b359fc03d9ef6aa4c40e75011a074d56587dfe2e91bd9",
-      "fingerprint": "b986e0d2"
+      "sha256": "896dc6c07a49e26173532b90fb93757d2c51b71e8ca743fcf511b41d4aec4863",
+      "fingerprint": "9b35b2dd"
     }
   ]
 }

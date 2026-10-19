@@ -1,6 +1,6 @@
 {
   "id": "icecream-geometry",
-  "version": "2a3cb6b3a7812089a5febe69e3ac8c721d3ea44f61014024dafa325ec22319ec",
+  "version": "57445a56c60cc7c46eb7d9c86cceab309eb2598b3393c0a8e9c655057bd8a822",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "a8a321872c7fdc2a17280b662237b107d5ffa4550dacd0a93aac2c64fb2bf4b9"
+      "sha256": "24fb914a5c9e7e5abb9273286bd3297e3a73a7da2ea00d45c62fd867d6d600b1"
     },
     {
       "path": "main.js",
-      "sha256": "9bbfc63245c9e2f150f1fb86ed5f8b718a196c0a1dde943d8890ebce66f5fd8c",
-      "fingerprint": "e444a080"
+      "sha256": "186e4e4d76b1f2b3d3a9b7f2e91c0228a1e0b6230562e4207bd6fe14f50b21ea",
+      "fingerprint": "1fad9ada"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "149e68eb02c0e2050237e2e364044881fa6232fae74cde69d61e668ade9b5c75",
+      "fingerprint": "2af38a36"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "089515689a48e2bb42ad596ddd865afb6c2a4c82543a527388c28c04f834a31b",
+      "fingerprint": "8eb1d30b"
     },
     {
       "path": "style.css",
-      "sha256": "23e4e9625981a13a04b5839600ee5cb0eb08cf67387ca433b7f954b6785a058a",
-      "fingerprint": "65106c4d"
+      "sha256": "f4a03fb902093f1a5b4b1b95756dd3e56a606f04f5ba045997bbcc4a4f46cd00",
+      "fingerprint": "177a2375"
     },
     {
       "path": "vendor/three.module.min.js",

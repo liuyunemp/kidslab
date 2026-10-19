@@ -1,6 +1,6 @@
 {
   "id": "fraction-beats",
-  "version": "5a4725cac3410e041cf3ca7e743ee386cc51b9978500e075e7e11d8bd0fff9c7",
+  "version": "92b0d47e30acc00ed9477926b58b1727c6280cea418035e2350e2d3b81de949a",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,42 @@
     },
     {
       "path": "index.html",
-      "sha256": "9457fb17b1affefbd634a16dc03db75dac64006bd4a303468773d3938dfbcf32"
+      "sha256": "56defc7d26354c2d8eeeae27642faab72b079b5fb5048ac1b182ac1dcafb418d"
     },
     {
       "path": "main.js",
-      "sha256": "658fa1883dce153cfde8bdfa638665297290cd1b6b0fd1fa5515f733d8088675",
-      "fingerprint": "2b0476ca"
+      "sha256": "04c5f297dc6cf38f14893dda23ca42545c6c4fa449540fb7cfe5abc6e228e377",
+      "fingerprint": "2f299cf1"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "005af8f654b7ac36d9bb0b7ea3279bebf1224393dd6c5ed2b7b784e7f5a26f82",
+      "fingerprint": "154226f9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "acce31745671f70372ff07977bff4b4aa343d958e26ed0d3e2e0cd2a2b6c05e1",
+      "fingerprint": "72b94470"
     },
     {
       "path": "style.css",

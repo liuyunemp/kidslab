@@ -1,3 +1,6 @@
+import {createRounds} from './random-rounds.js';
+import {laserClassic,laserTask,validLaser,laserIdentity,validLaserMirrors,laserTrace,laserHint} from './random-model.js';
+import {CLASSIC_ROOMS} from './classic-rooms.js';
 (() => {
   'use strict';
 
@@ -150,90 +153,13 @@
     },
   };
 
-  const ROOMS = [
-    {
-      code: 'L-01',
-      kicker: 'room1Kicker',
-      title: 'room1Title',
-      text: 'room1Text',
-      goal: 'goal1',
-      lesson: 'lesson1',
-      hint: 'hint1',
-      limit: 1,
-      source: { y: 4, color: 'white' },
-      targets: [{ x: 3, y: 0, color: 'white' }],
-      fixed: [],
-    },
-    {
-      code: 'L-02',
-      kicker: 'room2Kicker',
-      title: 'room2Title',
-      text: 'room2Text',
-      goal: 'goal2',
-      lesson: 'lesson2',
-      hint: 'hint2',
-      limit: 2,
-      source: { y: 1, color: 'white' },
-      targets: [{ x: 6, y: 5, color: 'white' }],
-      fixed: [
-        { x: 4, y: 1, type: 'wall' },
-        { x: 4, y: 2, type: 'wall' },
-        { x: 4, y: 3, type: 'wall' },
-        { x: 4, y: 4, type: 'wall' },
-      ],
-    },
-    {
-      code: 'L-03',
-      kicker: 'room3Kicker',
-      title: 'room3Title',
-      text: 'room3Text',
-      goal: 'goal3',
-      lesson: 'lesson3',
-      hint: 'hint3',
-      limit: 2,
-      source: { y: 3, color: 'white' },
-      targets: [
-        { x: 6, y: 5, color: 'white' },
-        { x: 0, y: 1, color: 'white' },
-      ],
-      fixed: [{ x: 3, y: 3, type: 'splitter', mirror: '/' }],
-    },
-    {
-      code: 'L-04',
-      kicker: 'room4Kicker',
-      title: 'room4Title',
-      text: 'room4Text',
-      goal: 'goal4',
-      lesson: 'lesson4',
-      hint: 'hint4',
-      limit: 2,
-      source: { y: 2, color: 'white' },
-      targets: [
-        { x: 6, y: 0, color: 'red' },
-        { x: 0, y: 5, color: 'blue' },
-      ],
-      fixed: [
-        { x: 2, y: 2, type: 'splitter', mirror: '\\' },
-        { x: 4, y: 2, type: 'filter', color: 'red' },
-        { x: 2, y: 3, type: 'filter', color: 'blue' },
-      ],
-    },
-  ];
+  const rounds=createRounds('laser-mirrors');
+  const ROOMS=CLASSIC_ROOMS.map((base,i)=>rounds.define(i,laserClassic(base),laserTask,validLaser,laserIdentity));
 
   const SAVE_KEY = 'kidslab.laser-mirrors';
   const SOUND_KEY = 'kidslab.sound.muted';
   const WIDTH = 8;
   const HEIGHT = 6;
-  const DIR = {
-    R: { x: 1, y: 0 },
-    D: { x: 0, y: 1 },
-    L: { x: -1, y: 0 },
-    U: { x: 0, y: -1 },
-  };
-  const REFLECT = {
-    '/': { R: 'U', U: 'R', L: 'D', D: 'L' },
-    '\\': { R: 'D', D: 'R', L: 'U', U: 'L' },
-  };
   const $ = (selector) => document.querySelector(selector);
   const el = {
     roomNumber: $('#roomNumber'),
@@ -277,7 +203,7 @@
   let busy = false;
   let won = false;
   let statusMessage = { key: 'ready', args: [], tone: '' };
-  let fireTimer = 0;
+  let fireTimer = 0,completeTimer=0,fired=false;
 
   try {
     const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
@@ -427,7 +353,7 @@
   }
 
   function updateStatus() {
-    el.status.textContent = t(statusMessage.key, ...statusMessage.args);
+    el.status.textContent=statusMessage.key===currentRoom().hint?laserHint(currentRoom(),Object.fromEntries(mirrors),language):t(statusMessage.key,...statusMessage.args);
     el.status.className = `status${statusMessage.tone ? ` ${statusMessage.tone}` : ''}`;
   }
 
@@ -458,23 +384,27 @@
     draw();
   }
 
-  function loadRoom(index) {
-    if (index > unlocked || busy) return;
-    window.clearTimeout(fireTimer);
+  function resetRoom(index=roomIndex) {
+    window.clearTimeout(fireTimer);window.clearTimeout(completeTimer);el.modal.hidden=true;fired=false;
     roomIndex = index;
     mirrors = new Map();
     beams = [];
     litTargets = new Set();
     wrongColor = false;
-    won = completed.has(index);
+    won = false;
     busy = false;
     setStatus(won ? 'success' : 'ready', [], won ? 'good' : '');
     render();
   }
 
+  function loadRoom(index,fresh=false){
+    if(index>unlocked)return;rounds.checkpoint();if(fresh)ROOMS[index]=rounds.next(index);resetRoom(index);const play=rounds.record(index).play;if(play){try{restorePlay(play);}catch{resetRoom(index);}}rounds.checkpoint();
+  }
   function placeMirror(x, y) {
     if (busy || won) return;
     const room = currentRoom();
+    if(!Number.isInteger(x)||!Number.isInteger(y)||x<0||x>=WIDTH||y<0||y>=HEIGHT||fixedAt(room,x,y)||targetAt(room,x,y)>=0)return;
+    fired=false;
     const key = cellKey(x, y);
     const existing = mirrors.get(key);
     if (existing) {
@@ -501,7 +431,7 @@
     if (mirrors.size === 0) {
       setStatus('ready');
     } else {
-      mirrors.clear();
+      fired=false;mirrors.clear();
       beams = [];
       litTargets = new Set();
       wrongColor = false;
@@ -512,74 +442,7 @@
     render();
   }
 
-  function traceRoom() {
-    const room = currentRoom();
-    const finishedBeams = [];
-    const hits = new Set();
-    let mismatch = false;
-    const queue = [{
-      x: -1,
-      y: room.source.y,
-      dir: 'R',
-      color: room.source.color,
-      points: [{ x: 0, y: room.source.y + 0.5 }],
-    }];
-    const visited = new Set();
-
-    while (queue.length) {
-      const beam = queue.shift();
-      let { x, y, dir, color } = beam;
-      const points = [...beam.points];
-      for (let steps = 0; steps < 80; steps += 1) {
-        const vector = DIR[dir];
-        x += vector.x;
-        y += vector.y;
-        if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
-          points.push({
-            x: Math.min(WIDTH, Math.max(0, x + 0.5)),
-            y: Math.min(HEIGHT, Math.max(0, y + 0.5)),
-          });
-          break;
-        }
-
-        points.push({ x: x + 0.5, y: y + 0.5 });
-        const stateKey = `${x},${y},${dir},${color}`;
-        if (visited.has(stateKey)) break;
-        visited.add(stateKey);
-
-        const targetIndex = targetAt(room, x, y);
-        if (targetIndex >= 0) {
-          const target = room.targets[targetIndex];
-          if (target.color === 'white' || target.color === color || color === 'white') {
-            hits.add(targetIndex);
-          } else {
-            mismatch = true;
-          }
-          break;
-        }
-
-        const fixed = fixedAt(room, x, y);
-        if (fixed?.type === 'wall') break;
-        if (fixed?.type === 'filter') color = fixed.color;
-        if (fixed?.type === 'splitter') {
-          const branchDirection = REFLECT[fixed.mirror][dir];
-          queue.push({
-            x,
-            y,
-            dir: branchDirection,
-            color,
-            points: [{ x: x + 0.5, y: y + 0.5 }],
-          });
-        }
-
-        const mirror = mirrors.get(cellKey(x, y));
-        if (mirror) dir = REFLECT[mirror][dir];
-      }
-      finishedBeams.push({ color, points });
-    }
-
-    return { beams: finishedBeams, hits, mismatch };
-  }
+  function traceRoom(){return laserTrace(currentRoom(),Object.fromEntries(mirrors));}
 
   function fire() {
     if (busy || won) return;
@@ -593,10 +456,14 @@
     busy = true;
     setStatus('firing');
     sound.play('fire');
-    const result = traceRoom();
+    fired=true;const result = traceRoom();
     beams = result.beams;
     litTargets = result.hits;
     wrongColor = result.mismatch;
+    if(litTargets.size===currentRoom().targets.length){
+      won=true;const first=!completed.has(roomIndex);completed.add(roomIndex);unlocked=Math.max(unlocked,Math.min(ROOMS.length-1,roomIndex+1));persist();if(first){window.cool?.stage?.(`room${roomIndex+1}`);if(roomIndex===ROOMS.length-1)window.cool?.complete?.();}
+    }
+    rounds.checkpoint();
     el.glow.classList.remove('on');
     void el.glow.offsetWidth;
     el.glow.classList.add('on');
@@ -616,28 +483,14 @@
     }, 520);
   }
 
-  function completeRoom() {
-    won = true;
-    completed.add(roomIndex);
-    unlocked = Math.max(unlocked, Math.min(ROOMS.length - 1, roomIndex + 1));
-    setStatus('success', [], 'good');
-    persist();
-    sound.play(roomIndex === ROOMS.length - 1 ? 'complete' : 'success');
-    window.cool?.stage?.(`room${roomIndex + 1}`);
-    render();
-
-    if (roomIndex === ROOMS.length - 1) {
-      window.cool?.complete?.();
-      window.setTimeout(() => {
-        el.modal.hidden = false;
-        el.playAgain.focus();
-      }, 250);
-    }
+  function completeRoom(){
+    setStatus('success',[],'good');sound.play(roomIndex===ROOMS.length-1?'complete':'success');render();
+    if(roomIndex===ROOMS.length-1)completeTimer=setTimeout(()=>{el.modal.hidden=false;el.playAgain.focus();},250);rounds.checkpoint();
   }
 
   function nextRoom() {
     if (!won || roomIndex >= ROOMS.length - 1) return;
-    loadRoom(roomIndex + 1);
+    loadRoom(roomIndex + 1,true);
   }
 
   function drawRoundedRect(context, x, y, width, height, radius) {
@@ -847,13 +700,7 @@
   el.sound.addEventListener('click', () => sound.toggle());
   el.theme.addEventListener('click', () => window.cool.preferences.toggleTheme());
   el.lang.addEventListener('click', () => window.cool.preferences.toggleLang());
-  el.playAgain.addEventListener('click', () => {
-    el.modal.hidden = true;
-    unlocked = 0;
-    completed = new Set();
-    persist();
-    loadRoom(0);
-  });
+  el.playAgain.addEventListener('click',()=>loadRoom(0,true));
 
   window.addEventListener('resize', draw);
 
@@ -865,4 +712,12 @@
       render();
     },
   });
+  function restorePlay(s){
+    if(!s||!Array.isArray(s.mirrors)||s.mirrors.some(pair=>!Array.isArray(pair)||pair.length!==2)||new Set(s.mirrors.map(p=>p[0])).size!==s.mirrors.length||!validLaserMirrors(currentRoom(),Object.fromEntries(s.mirrors))||!['slash','backslash'].includes(s.selectedTool)||typeof s.fired!=='boolean'||!s.statusMessage||!Array.isArray(s.statusMessage.args))throw new Error('Invalid laser snapshot');
+    mirrors=new Map(s.mirrors);selectedTool=s.selectedTool;fired=s.fired;statusMessage=s.statusMessage;
+    if(fired){const result=traceRoom();beams=result.beams;litTargets=result.hits;wrongColor=result.mismatch;won=litTargets.size===currentRoom().targets.length;setStatus(won?'success':wrongColor?'colorMiss':'miss',[],won?'good':'bad');}
+    render();if(won&&roomIndex===ROOMS.length-1)el.modal.hidden=false;
+  }
+  const initial=Number(rounds.active??roomIndex);resetRoom(Number.isInteger(initial)&&initial>=0&&initial<=unlocked?initial:roomIndex);
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#completeModal',active:()=>roomIndex,capture:()=>({mirrors:[...mirrors],selectedTool,fired,statusMessage}),restore:restorePlay,retry:resetRoom,beforeReload:()=>{clearTimeout(fireTimer);clearTimeout(completeTimer);}});
 })();

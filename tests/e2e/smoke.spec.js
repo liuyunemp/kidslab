@@ -1,5 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
+import {orchardSplitWitness} from '../../scripts/random-rounds/math.js';
 
 const manifest = JSON.parse(
   readFileSync(new URL('../../courseware/index.json', import.meta.url), 'utf8'),
@@ -316,14 +318,25 @@ test.describe('main site', () => {
 test.describe('fraction pizzeria', () => {
   test('marks rounded decimal and percent conversions as approximate', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('kidslab.lang', 'zh'));
-    await page.goto('/courseware/fraction-lab/');
+    await page.goto('/courseware/fraction-lab/?seed=987');
 
-    await expect(page.locator('#decShow')).toHaveText('0.375');
+    // The opening fraction is generated, so its value is read from the stored instance.
+    const { num, den } = (await roundRecord(page, 'fraction-lab')).instance;
+    const shown = await page.locator('#decShow').textContent();
+    // A fraction with a terminating expansion is shown exactly; otherwise a rounding marker appears.
+    const exactDecimal = (() => { let d = den; while (d % 2 === 0) d /= 2; while (d % 5 === 0) d /= 5; return d === 1; })();
+    expect(shown).toBe(exactDecimal ? String(num / den) : `≈ ${(num / den).toFixed(4)}`);
+
     await page.getByRole('button', { name: '减少分子' }).click({ clickCount: 2 });
     await page.getByRole('button', { name: '减少分母' }).click({ clickCount: 5 });
 
-    await expect(page.locator('#decShow')).toHaveText('≈ 0.3333');
-    await expect(page.locator('#pctShow')).toHaveText('≈ 33.33%');
+    const after = await page.evaluate(() => ({
+      dec: document.querySelector('#decShow').textContent,
+      pct: document.querySelector('#pctShow').textContent,
+    }));
+    // The readouts always agree with each other and each rounds with the same marker.
+    expect(after.dec.startsWith('≈')).toBe(after.pct.startsWith('≈'));
+    await expect(page.locator('#pctShow')).toHaveText(/^(≈\s?)?[\d.]+%$/);
     await expect(page.getByText('同一个分数，也能在 0 到 1 上找到家（含 0 和 1）。')).toBeVisible();
   });
 });
@@ -479,55 +492,81 @@ test.describe('bug hospital onboarding', () => {
 test.describe('orchard orders special challenge', () => {
   test('a wrong-sized field can be corrected without restarting', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('kidslab.lang', 'zh'));
-    await page.goto('/courseware/orchard-orders/');
+    await page.goto('/courseware/orchard-orders/?seed=987');
 
+    // The order size is generated, so the target in the tip comes from the stored instance.
+    const { n } = (await roundRecord(page, 'orchard-orders')).instance;
     await page.locator('.cell').first().click();
     await page.getByRole('button', { name: '播种' }).click();
-    await expect(page.locator('#tip')).toContainText('现在是 1 个苹果，订单要 12 个');
+    await expect(page.locator('#tip')).toContainText(`现在是 1 个苹果，订单要 ${n} 个`);
     await expect(page.getByRole('button', { name: '播种' })).toBeEnabled();
 
-    await dragOrchardField(page, 0, 27);
+    // Draw the full field the order asks for, read from its own generated size.
+    const cols = Array.from({ length: 12 }, (_, i) => 12 - i)
+      .find((c) => n % c === 0 && n / c <= 8);
+    expect(cols, `order ${n} has a grid-sized rectangle`).toBeTruthy();
+    await dragOrchardField(page, 0, (n / cols - 1) * 12 + cols - 1);
     await page.getByRole('button', { name: '播种' }).click();
     await page.getByRole('button', { name: '浇水交货' }).click();
     await expect(page.getByRole('button', { name: '下一张订单' })).toBeEnabled({ timeout: 5_000 });
   });
 
-  test('the 23-apple order explains and completes the 24 minus 1 strategy', async ({ page }, testInfo) => {
+  test('an odd order explains and completes the rectangle-minus-one strategy', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === 'mobile', 'The full pointer journey is covered on desktop.');
     await page.addInitScript(() => {
       localStorage.setItem('kidslab.lang', 'zh');
       localStorage.setItem('kidslab.theme', 'light');
     });
-    await page.goto('/courseware/orchard-orders/');
+    await page.goto('/courseware/orchard-orders/?seed=987');
 
-    const orders = [[3, 4], [3, 6], [4, 5], [4, 6], [5, 6], [6, 6], [6, 7], [6, 8]];
-    for (const [rows, cols] of orders) {
-      await dragOrchardField(page, 0, (rows - 1) * 12 + cols - 1);
+    // Walk the generated orders until the odd one that teaches the strategy appears.
+    let odd = null;
+    for (let step = 0; step < 12 && odd === null; step += 1) {
+      const record = await roundRecord(page, 'orchard-orders');
+      const order = record.instance;
+      if (order.odd) { odd = order; break; }
+      // Clear a normal order by dragging a rectangle that matches its size exactly.
+      // The model guarantees a factorisation with at most 8 rows and 12 columns.
+      const area = order.n;
+      const cols = Array.from({ length: 12 }, (_, i) => 12 - i)
+        .find((c) => area % c === 0 && area / c <= 8);
+      expect(cols, `order ${area} has a grid-sized rectangle`).toBeTruthy();
+      await dragOrchardField(page, 0, (area / cols - 1) * 12 + cols - 1);
       await page.getByRole('button', { name: '播种' }).click();
       await page.getByRole('button', { name: '浇水交货' }).click();
       await expect(page.getByRole('button', { name: '下一张订单' })).toBeEnabled({ timeout: 5_000 });
       await page.getByRole('button', { name: '下一张订单' }).click();
     }
+    expect(odd, 'the course reaches an odd order that needs the rectangle-minus-one strategy').toBeTruthy();
 
-    await expect(page.getByText('23 = 24 − 1')).toBeVisible();
-    await page.getByRole('button', { name: '帮我铺成 4×6' }).click();
-    await expect(page.locator('#liveMath')).toHaveText('4 行 × 6 列 = 24 个');
+    const full = (odd.example[0]) * (odd.example[1]);
+    // The odd order cannot fill a rectangle, so the helper lays out the rectangle that is one over.
+    await expect(page.locator('#oddGuide')).toBeVisible();
+    await page.getByRole('button', { name: new RegExp(`帮我铺成 ${odd.example[0]}×${odd.example[1]}`) }).click();
+    await expect(page.locator('#liveMath')).toHaveText(`${odd.example[0]} 行 × ${odd.example[1]} 列 = ${full} 个`);
     await page.getByRole('button', { name: '播种' }).click();
     await page.getByRole('button', { name: '浇水交货' }).click();
-    await expect(page.locator('#tip')).toContainText('24 − 1 = 23', { timeout: 5_000 });
+    await expect(page.locator('#tip')).toContainText(`${full} − 1 = ${odd.n}`, { timeout: 5_000 });
 
     await page.getByRole('button', { name: '下一张订单' }).click();
-    await dragOrchardField(page, 0, 65);
-    await page.getByRole('button', { name: '播种' }).click();
-    await expect(page.locator('#tip')).toContainText('必须分成两块田');
+    // The next order must be split across two fields; the rectangle pair comes from the model.
+    const splitOrder = (await roundRecord(page, 'orchard-orders')).instance;
+    expect(splitOrder.split, 'the order after the odd one needs two fields').toBe(true);
+    const [first, second] = orchardSplitWitness(splitOrder.n);
+    const cell = (row, col) => row * 12 + col;
+    const rows1 = first.r1 - first.r0 + 1, cols1 = first.c1 - first.c0 + 1;
+    const rows2 = second.r1 - second.r0 + 1, cols2 = second.c1 - second.c0 + 1;
 
-    await dragOrchardField(page, 0, 41);
+    await dragOrchardField(page, cell(first.r0, first.c0), cell(first.r1, first.c1));
     await page.getByRole('button', { name: '播种' }).click();
-    await dragOrchardField(page, 8, 46);
+    // A single field is smaller than the order, so the tip asks for the second one.
+    await expect(page.locator('#tip')).toContainText(/还差 \d+ 个|必须分成两块田/);
+
+    await dragOrchardField(page, cell(second.r0, second.c0), cell(second.r1, second.c1));
     await page.getByRole('button', { name: '播种' }).click();
-    await expect(page.locator('#liveMath')).toHaveText('已经播种 36 / 36 个苹果');
+    await expect(page.locator('#liveMath')).toHaveText(`已经播种 ${splitOrder.n} / ${splitOrder.n} 个苹果`);
     await page.getByRole('button', { name: '浇水交货' }).click();
-    await expect(page.locator('#tip')).toContainText('4×6 + 4×3 = 36', { timeout: 5_000 });
+    await expect(page.locator('#tip')).toContainText(`${rows1}×${cols1} + ${rows2}×${cols2} = ${splitOrder.n}`, { timeout: 5_000 });
   });
 });
 

@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {foldTask,foldFamily,validFold,foldIdentity,foldHoles} from './random-model.js';
 (() => {
   'use strict';
 
@@ -34,7 +36,7 @@
       cellLabel: (column, row, selected) => `${column}${row}${selected ? '，已选' : ''}`,
       room1Kicker: '第一间 · 半折门廊',
       room1Title: '一折以后，孔会去哪？',
-      room1Text: '纸的右半边向左合上，黑点是打孔位置。',
+      room1Text: '纸的右半边向左合上，红点是打孔位置。',
       room2Kicker: '第二间 · 四格窗',
       room2Title: '两道折痕，谁是谁的镜子？',
       room2Text: '先向左，再向上。展开时要把顺序倒过来。',
@@ -102,7 +104,7 @@
       cellLabel: (column, row, selected) => `${column}${row}${selected ? ', selected' : ''}`,
       room1Kicker: 'ROOM ONE · HALF-FOLD HALL',
       room1Title: 'Where Does One Fold Send the Hole?',
-      room1Text: 'The right half folds left. The black dot is the punch.',
+      room1Text: 'The right half folds left. The red dot is the punch.',
       room2Kicker: 'ROOM TWO · FOUR-PANE WINDOW',
       room2Title: 'Which Holes Mirror Each Other?',
       room2Text: 'Fold left, then up. Reverse that order when you open it.',
@@ -140,7 +142,7 @@
     },
   };
 
-  const LEVELS = [
+  const CLASSIC_LEVELS = [
     {
       code: 'F-01',
       kicker: 'room1Kicker',
@@ -191,6 +193,9 @@
     },
   ];
 
+  const rounds=createRounds('punch-origami');
+  const LEVELS=CLASSIC_LEVELS.map((base,i)=>rounds.define(i,base,foldTask,validFold,foldIdentity,foldFamily));
+  let endTimer=0;
   const SAVE_KEY = 'kidslab.punch-origami';
   const SOUND_KEY = 'kidslab.sound.muted';
   const COLUMNS = 'ABCD';
@@ -245,7 +250,7 @@
     completed = new Set(Array.isArray(saved.completed)
       ? saved.completed.filter((value) => Number.isInteger(value) && value >= 0 && value <= 3)
       : []);
-    levelIndex = unlocked;
+    levelIndex = Number(rounds.active??unlocked);
   } catch {
     unlocked = 0;
     completed = new Set();
@@ -322,20 +327,7 @@
     return `${point.c},${point.r}`;
   }
 
-  function reflect(point, fold) {
-    if (fold === 'v50') return { c: 3 - point.c, r: point.r };
-    if (fold === 'h50') return { c: point.c, r: 3 - point.r };
-    if (fold === 'v25') return { c: 1 - point.c, r: point.r };
-    return { c: point.c, r: 1 - point.r };
-  }
-
-  function expectedFor(level) {
-    let points = [level.punch];
-    [...level.folds].reverse().forEach((fold) => {
-      points = [...points, ...points.map((point) => reflect(point, fold))];
-    });
-    return new Set(points.map(keyOf));
-  }
+  function expectedFor(level){return new Set(foldHoles(level));}
 
   function save() {
     try {
@@ -624,26 +616,30 @@
     if (phase === 'done') return;
     phase = 'done';
     unfoldProgress = 100;
-    completed.add(levelIndex);
+    const first=!completed.has(levelIndex);completed.add(levelIndex);
     unlocked = Math.max(unlocked, Math.min(LEVELS.length - 1, levelIndex + 1));
     save();
     setStatus('unfolded', 'good');
     sound.success(levelIndex === LEVELS.length - 1);
-    window.cool?.stage?.(`fold-room-${levelIndex + 1}`);
+    if(first)window.cool?.stage?.(`fold-room-${levelIndex + 1}`);
     window.cool?.track?.('unfold_paper', { room: levelIndex + 1, holes: expectedFor(LEVELS[levelIndex]).size });
     if (levelIndex === LEVELS.length - 1) {
-      window.cool?.complete?.();
-      setTimeout(() => {
+      if(first)window.cool?.complete?.();
+      endTimer=setTimeout(() => {
         el.modal.hidden = false;
-        el.playAgain.focus();
+        el.playAgain.focus();rounds.checkpoint();
       }, 260);
     }
     render();
   }
 
-  function switchLevel(index) {
+  function switchLevel(index,fresh=false) {
     if (index > unlocked) return;
-    levelIndex = index;
+    rounds.checkpoint();if(fresh)LEVELS[index]=rounds.next(index);
+    levelIndex = index;resetRound();const p=rounds.record(index).play;if(p&&!fresh)restorePlay(p);rounds.checkpoint();
+  }
+  function resetRound(){
+    clearTimeout(endTimer);el.modal.hidden=true;const index=levelIndex;
     selected = new Set();
     wrong = new Set();
     phase = 'predict';
@@ -661,7 +657,7 @@
     setStatus(LEVELS[levelIndex].hint);
   });
   el.check.addEventListener('click', checkPrediction);
-  el.next.addEventListener('click', () => switchLevel(Math.min(LEVELS.length - 1, levelIndex + 1)));
+  el.next.addEventListener('click', () => switchLevel(Math.min(LEVELS.length - 1, levelIndex + 1),true));
   el.slider.addEventListener('pointerdown', () => sound.paper());
   el.slider.addEventListener('input', () => {
     unfoldProgress = Number(el.slider.value);
@@ -681,7 +677,7 @@
   el.theme.addEventListener('click', () => window.cool.preferences.toggleTheme());
   el.playAgain.addEventListener('click', () => {
     el.modal.hidden = true;
-    switchLevel(0);
+    switchLevel(0,true);
   });
 
   document.addEventListener('visibilitychange', () => {
@@ -696,6 +692,11 @@
     },
   });
 
-  buildGrid();
-  render();
+  function restorePlay(s){
+    if(!s||!Array.isArray(s.selected)||new Set(s.selected).size!==s.selected.length||s.selected.some(k=>!/^([0-3]),([0-3])$/.test(k))||!['predict','unfold','done'].includes(s.phase)||!Number.isFinite(s.unfoldProgress)||s.unfoldProgress<0||s.unfoldProgress>100)throw new Error('Invalid folded-paper snapshot');
+    if(s.phase!=='predict'&&(JSON.stringify([...s.selected].sort())!==JSON.stringify(foldHoles(LEVELS[levelIndex]))||s.phase==='done'&&s.unfoldProgress!==100))throw new Error('Invalid unfolded state');
+    selected=new Set(s.selected);wrong=new Set();phase=s.phase;unfoldProgress=s.unfoldProgress;statusMessage={key:phase==='done'?'unfolded':phase==='unfold'?'unfolding':'ready',tone:'',args:[]};render();el.modal.hidden=!(phase==='done'&&levelIndex===3);
+  }
+  buildGrid();render();
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#completeModal',active:()=>levelIndex,capture:()=>({selected:[...selected],phase,unfoldProgress}),restore:restorePlay,retry:resetRound,beforeReload:()=>clearTimeout(endTimer)});
 })();

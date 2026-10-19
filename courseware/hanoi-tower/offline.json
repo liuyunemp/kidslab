@@ -1,6 +1,6 @@
 {
   "id": "hanoi-tower",
-  "version": "ad38837380dadd7c0fed02fbca190e9a472979ca4de11996468445ab8853f668",
+  "version": "4251addfda4a36d7f7260eb2aa1d52139a443ede65b3c0acba9968dc3efde38d",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "4e7c467fc2b2e1a91b75ec74269ce05161d6e0f302d746957a008d58dc24c58e"
+      "sha256": "8277dc64b4357c2a54f096ffb477f4ba703e9ab45a9e2cf1d2d93c8431eecf33"
     },
     {
       "path": "main.js",
-      "sha256": "ee5ad96e097f9cdbc8cf4ed538877425b1e7ca6a5ff878134302a810c630c280",
-      "fingerprint": "54004b7c"
+      "sha256": "0788e992fc6f99481f55f8c6d5fbf50ca215fddcbb0e6a3f79f02f0fa8691985",
+      "fingerprint": "f5eb4524"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "9f72120ae1acfa7aeb551a83c886ec2cd294c8c8a5f27a673bc614a4dcf5de80",
+      "fingerprint": "b2f23437"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "785e0f8fa4dd755c6193260b3c742c169b619bc585aa5447a58f59f282989544",
+      "fingerprint": "fdbb3b91"
     },
     {
       "path": "style.css",
-      "sha256": "8e3ecd0754b46a6a13cca6de39a72c899629997647631b8e36f11e0edae328ac",
-      "fingerprint": "940c5e43"
+      "sha256": "cb119a798ba0a9ffcb1359ec47b9e4523678b17f32eabb5bc1549284cee991b4",
+      "fingerprint": "eda29f3e"
     }
   ]
 }

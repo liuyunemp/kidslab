@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import {levelInstance} from './random-task-helpers.js';
+import {stoneTake} from '../../scripts/random-rounds/stones.js';
 
 async function remainingStones(page) {
   const text = await page.locator('#remaining').textContent();
@@ -41,34 +43,40 @@ test.describe("the fox's stones", () => {
       localStorage.removeItem('kidslab.foxstones');
       localStorage.removeItem('kidslab.progress.fox-stones');
     });
-    await page.goto('/courseware/fox-stones/');
+    await page.goto('/courseware/fox-stones/?seed=987');
   });
 
   test('teaches the turn order and completes a winning classic round', async ({ page }) => {
+    // The classic pile is generated inside the teaching range for the take-away strategy.
+    const rule = await levelInstance(page, 'fox-stones', 0);
     await expect(page.locator('#quickRules')).toBeVisible();
     await expect(page.locator('#quickRules')).toContainText('① 你先拿');
     await expect(page.locator('#quickRules')).toContainText('② 狐狸再拿');
     await expect(page.locator('#quickRules')).toContainText('③ 最后一颗赢');
-    await expect(page.locator('#coach')).toContainText('先试一次');
-    await expect(page.locator('#remaining')).toHaveText('还剩 9 颗');
+    await expect(page.locator('#coach')).toContainText(/先试一次|轮到/);
+    await expect(page.locator('#remaining')).toHaveText(`还剩 ${rule.initial} 颗`);
 
     for (const count of [1, 2, 3]) {
       await expect(page.getByRole('button', { name: `拿 ${count} 颗`, exact: true })).toBeVisible();
     }
 
-    await page.getByRole('button', { name: '拿 1 颗', exact: true }).click();
+    // Opening move: the winning line starts by leaving a pit position for the opponent.
+    const opening = stoneTake(rule.initial, rule);
+    expect(opening).toBeGreaterThanOrEqual(1);
+    await page.getByRole('button', { name: `拿 ${opening} 颗`, exact: true }).click();
     await expect(page.locator('#turnBadge')).toContainText('狐狸的回合');
-    await expect(page.locator('#remaining')).toHaveText('还剩 8 颗');
-    await expect(page.locator('#moveLog')).toContainText('你拿走 1 颗');
+    await expect(page.locator('#remaining')).toHaveText(`还剩 ${rule.initial - opening} 颗`);
+    await expect(page.locator('#moveLog')).toContainText(`你拿走 ${opening} 颗`);
     await expect(page.locator('#turnBadge')).toContainText('你的回合');
     await expect(page.locator('#moveLog')).toContainText('狐狸拿走');
 
-    for (let turn = 0; turn < 3; turn += 1) {
+    for (let turn = 0; turn < 8; turn += 1) {
       const left = await remainingStones(page);
-      const take = left <= 3 ? left : left % 4;
+      if (left === 0) break;
+      const take = stoneTake(left, rule);
       expect(take).toBeGreaterThanOrEqual(1);
       await page.getByRole('button', { name: `拿 ${take} 颗`, exact: true }).click();
-      if (left <= 3) break;
+      if (left - take === 0) break;
       await waitForFoxAndBack(page);
     }
 

@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { orchard, validOrchard } from './random-model.js';
 /* ============================================================
    🍎 果园订单 · KidsLab 双语/主题模板
    —— 「语言 & 主题」段落是平台约定，整段复制、按需加 key，勿改机制
@@ -91,7 +93,19 @@
   if (theme !== 'light' && theme !== 'dark') theme = 'light';
 
   /** 取当前语言文案；函数型 key 直接返回函数供调用方传参 */
-  const t = (key) => I18N[lang][key] ?? I18N.zh[key] ?? key;
+  const t = (key) => {
+    if(['oddOrder','oddGuide','oddHelp','oddSelected','oddWin','wrongOdd'].includes(key)){
+      const o=order(),[r,c]=o.example??[4,6],total=o.n+1;
+      const zh=lang==='zh';
+      const description=zh?`铺 ${r}×${c}＝${total} 格，小猪吃掉多出的 1 个。`:`Plant ${r}×${c}＝${total}; Piggy eats the extra one.`;
+      if(key==='oddOrder')return emoji=>zh?`${emoji} 种 ${total} 个、吃掉 1 个，交货 ${o.n} 个！`:`${emoji} Grow ${total}, eat 1, deliver ${o.n}!`;
+      if(key==='oddWin')return `${total} − 1 = ${o.n}！`;
+      // The helper button names the rectangle the model actually chose.
+      if(key==='oddHelp')return zh?`帮我铺成 ${r}×${c}`:`Show me ${r}×${c}`;
+      return description;
+    }
+    return I18N[lang][key] ?? I18N.zh[key] ?? key;
+  };
   /** 读取 CSS 主题变量（Canvas/three.js 取色必须走这里，勿硬编码） */
   const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -102,7 +116,9 @@
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
     document.title = t('doc');
     document.querySelectorAll('[data-t]').forEach((n) => {
-      const v = I18N[lang][n.dataset.t];
+      // Use the parameterised lookup so generated copy (order size, rectangle, remainder)
+      // reaches the DOM instead of the static fallback in I18N.
+      const v = t(n.dataset.t);
       if (typeof v === 'string') n.textContent = v;
     });
     if (langBtn) langBtn.textContent = lang === 'zh' ? 'EN' : '中';
@@ -131,11 +147,13 @@
   /* ======================= ✏️ 游戏区 · Game ======================= */
   const ROWS = 8;
   const COLS = 12;
-  const ORDERS = [
+  const BASE_ORDERS = [
     { n: 12, emoji: '🐰' }, { n: 18, emoji: '🦊' }, { n: 20, emoji: '🐻' }, { n: 24, emoji: '🐼' },
     { n: 30, emoji: '🦝' }, { n: 36, emoji: '🐨' }, { n: 42, emoji: '🦁' }, { n: 48, emoji: '🐯' },
-    { n: 23, emoji: '🐷', odd: true }, { n: 36, emoji: '🐵', split: true }, { n: 56, emoji: '🦉' },
+    { n: 23, emoji: '🐷', odd: true, example:[4,6] }, { n: 36, emoji: '🐵', split: true }, { n: 56, emoji: '🦉' },
   ];
+  const rounds=createRounds('orchard-orders');
+  const ORDERS=rounds.prepare(BASE_ORDERS,orchard,validOrchard,a=>({n:a.n,odd:Boolean(a.odd),split:Boolean(a.split)}));
   const $ = (id) => document.getElementById(id);
   const els = {
     grid: $('grid'), fx: $('fx'), tip: $('tip'), customerEmoji: $('customerEmoji'), orderText: $('orderText'),
@@ -147,7 +165,7 @@
   const ctx = els.fx.getContext('2d');
   const cells = [];
   let actx = null;
-  let orderIndex = 0;
+  let orderIndex = rounds.active!==null&&Number(rounds.active)<ORDERS.length?Number(rounds.active):0;
   let coins = 0;
   let patience = 100;
   let timer = 0;
@@ -158,6 +176,7 @@
   let lastFact = null;
   const facts = new Set();
   let sparkles = [];
+  let harvestEpoch=0;
 
   function numZh(n) { return '零一二三四五六七八九十'.split('')[n] || String(n); }
   function numberWord(n) {
@@ -229,14 +248,14 @@
      派发 pointerenter/pointerover，因此改用 pointermove + elementFromPoint 手动命中测试 */
   function onPointerMove(e) {
     if (dragStart === null || stage !== 'draw') return;
-    const target = document.elementFromPoint(e.clientX, e.clientY);
-    const cell = target?.closest?.('.cell');
-    if (!cell) return;
-    const i = Number(cell.dataset.i);
-    if (Number.isNaN(i)) return;
-    setPreview(i);
+    // Hit the grid's layout, not animated cell transforms or the gaps between cells.
+    const box=els.grid.getBoundingClientRect(),first=cells[0];
+    const dx=cells[1].offsetLeft-first.offsetLeft,dy=cells[COLS].offsetTop-first.offsetTop;
+    const col=Math.max(0,Math.min(COLS-1,Math.round((e.clientX-box.left-first.offsetLeft-first.offsetWidth/2)/dx)));
+    const row=Math.max(0,Math.min(ROWS-1,Math.round((e.clientY-box.top-first.offsetTop-first.offsetHeight/2)/dy)));
+    setPreview(row*COLS+col);
   }
-  function onPointerUp() { dragStart = null; }
+  function onPointerUp(e) { if(dragStart!==null)onPointerMove(e);dragStart = null; }
   function setPreview(i) {
     if (isStone(i)) return;
     preview = rectFrom(dragStart, i);
@@ -249,6 +268,7 @@
   }
 
   function resetOrder() {
+    harvestEpoch++;
     stage = 'draw';
     preview = null; planted = []; lastFact = null; patience = 100;
     clearInterval(timer);
@@ -271,7 +291,7 @@
     const o = order();
     if (o.split) {
       if (current === 0 && sz.total >= o.n) {
-        show(sz.total === o.n ? t('splitNeedTwo') : t('badSize')(sz.total, o.n));
+        show(sz.total === o.n ? (lang==='zh'?`先画一块少于 ${o.n} 格的田，再用第二块补足。`:`Draw fewer than ${o.n} cells, then add a second field.`) : t('badSize')(sz.total, o.n));
         sfx.wrong();
         return;
       }
@@ -290,7 +310,7 @@
         show(t('splitPlanted')(sz.total, o.n - sz.total));
       }
     } else {
-      if (o.odd && sz.total !== 24) { show(t('wrongOdd')); sfx.wrong(); return; }
+      if (o.odd && sz.total !== o.n+1) { show(t('wrongOdd')); sfx.wrong(); return; }
       if (!o.odd && sz.total !== o.n) { show(t('badSize')(sz.total, o.n)); sfx.wrong(); return; }
       planted = [{ ...preview, ...sz, cells: pcs }]; preview = null; stage = 'planted'; sfx.plant(); show(t('planted'));
     }
@@ -299,16 +319,18 @@
 
   function water() {
     startAudio();
+    if(stage==='growing'||stage==='done')return;
     if (!planted.length) { show(t('empty')); return; }
     const o = order();
     const total = planted.reduce((a, p) => a + p.total, 0);
-    const ok = o.split ? planted.length === 2 && total === o.n : o.odd ? total === 24 : total === o.n;
+    const ok = o.split ? planted.length === 2 && total === o.n : o.odd ? total === o.n+1 : total === o.n;
     if (!ok) { show(o.odd ? t('wrongOdd') : t('badSize')(total, o.n)); sfx.wrong(); return; }
     stage = 'growing';
+    const epoch=++harvestEpoch;
     let all = planted.flatMap((p) => p.cells);
-    if (o.odd && total === 24) all = all.slice(0, 23).concat(all[23]);
     all.forEach((i, k) => setTimeout(() => {
-      cells[i].textContent = k === 23 && o.odd ? '🐷' : (k % 3 === 0 ? '🌱' : k % 3 === 1 ? '🌳' : '🍎');
+      if(epoch!==harvestEpoch)return;
+      cells[i].textContent = k === o.n && o.odd ? '🐷' : (k % 3 === 0 ? '🌱' : k % 3 === 1 ? '🌳' : '🍎');
       cells[i].classList.add('grow');
       if (k === all.length - 1) finishHarvest();
     }, k * 30));
@@ -335,6 +357,7 @@
     if (o.n === 56) { show(t('firework'), true); burst(90); }
     else burst(35);
     sfx.win(); render(); renderCells();
+    rounds.checkpoint();
   }
   function rotateMagic() {
     startAudio();
@@ -349,8 +372,9 @@
   }
   function showOddExample() {
     if (!order().odd || stage !== 'draw') return;
-    preview = { r0: 0, r1: 3, c0: 0, c1: 5 };
-    els.liveMath.textContent = t('live')(4, 6, 24);
+    const [rows,cols]=order().example;
+    preview = { r0: 0, r1: rows-1, c0: 0, c1: cols-1 };
+    els.liveMath.textContent = t('live')(rows, cols, rows*cols);
     show(t('oddSelected'));
     render();
     renderCells();
@@ -374,8 +398,8 @@
         cell.classList.add('planted');
         if (stage === 'done') {
           const plantedOrder = planted.flatMap((p) => p.cells);
-          cell.textContent = order().odd && i === plantedOrder[23] ? '🐷' : '🍎';
-          if (order().odd && i === plantedOrder[23]) cell.classList.add('extra');
+          cell.textContent = order().odd && i === plantedOrder[order().n] ? '🐷' : '🍎';
+          if (order().odd && i === plantedOrder[order().n]) cell.classList.add('extra');
         } else if (stage !== 'growing') cell.textContent = '🌰';
       }
     });
@@ -395,6 +419,9 @@
     els.customerEmoji.textContent = o.emoji;
     els.orderText.textContent = o.split ? t('splitOrder')(o.emoji, o.n) : o.odd ? t('oddOrder')(o.emoji, o.n) : t('order')(o.emoji, o.n);
     els.oddGuide.hidden = !o.odd;
+    // The guide and its helper button name the rectangle this order actually uses.
+    els.oddGuide.querySelector('span').textContent = t('oddGuide');
+    els.oddHelpBtn.textContent = t('oddHelp');
     els.levelNum.textContent = `${orderIndex + 1}/${ORDERS.length}`;
     els.coins.textContent = coins;
     els.foundCount.textContent = facts.size;
@@ -465,4 +492,7 @@
   applyLang();
   resetOrder();
   resizeFx();
+  rounds.attach({parent:'.bar__actions',compact:true,active:()=>orderIndex,
+    capture:()=>{if(stage==='growing')throw new Error('Busy');return {coins,patience,preview,planted,stage,lastFact,facts:[...facts]};},
+    restore:value=>{if(!['draw','planted','done'].includes(value.stage)||!Array.isArray(value.planted)||!Array.isArray(value.facts))throw new Error('Invalid orchard');({coins,patience,preview,planted,stage,lastFact}=value);facts.clear();value.facts.forEach(f=>facts.add(f));render();renderCells();},retry:resetOrder});
 })();

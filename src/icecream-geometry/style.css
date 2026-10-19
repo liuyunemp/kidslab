@@ -73,3 +73,27 @@ label { display:grid; grid-template-columns:auto 34px 1fr; align-items:center; g
 
 /* hidden 属性硬保证：任何 display 规则都不得覆盖 */
 [hidden] { display: none !important; }
+body{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.bar{padding:8px 14px;flex:0 0 62px}.bar__title{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.bar__actions{flex-shrink:0;align-items:center}
+.pill,.tab,.btn{font-size:16px;min-width:44px;min-height:44px;line-height:1.25}
+.wrap{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;gap:8px;padding:0 12px 10px}
+.hero,.mode-tabs{padding:6px 10px;margin:0}.hero>div:first-child{flex:1}.eyebrow{display:none}.tip{font-size:16px;margin:0}.scoreboard span{padding:4px 8px;min-height:32px;font-size:16px}
+.game{flex:1;min-height:0;grid-template-columns:minmax(0,1fr) 380px;padding:8px;gap:10px}
+.scene-wrap,#scene{min-height:0;height:100%}.panel{min-height:0;overflow:auto;padding:2px 4px 6px}.station-panel{gap:8px}
+.station-panel>h2{display:none}.instructions summary{font-size:16px;cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--ink-soft)}
+.instructions[open]{padding:6px;border:1px solid var(--line);border-radius:12px}.instructions .goal,.instructions .steps li{font-size:16px;line-height:1.45}.goal{padding:6px}
+.scene-hint,.size-label,.atlas .chip{font-size:14px}.scene-hint{max-width:calc(100% - 20px);line-height:1.45}.customer,.guess__ask,.guess__out,.trow,.formula--hint{font-size:16px}.customer{padding:8px;gap:6px;line-height:1.45}.customer .emoji{font-size:32px}
+.size-label,.ttable,.guess{margin:0}.ttable{display:flex;gap:4px}.trow{flex:1;grid-template-columns:1fr auto;padding:5px}.trow:first-child{display:none}.guess{padding:6px}.guess__row{margin-top:6px;flex-direction:row}.guess__input{padding:6px;min-height:44px}
+#shapeButtons{display:grid;grid-template-columns:1fr 1fr}.choices{gap:6px}.choices .btn{padding:6px;flex:1 1 0}
+input[type=range]{min-height:44px}.formula{padding:5px 8px;min-height:34px}#atlasList{gap:3px}.atlas .chip{padding:4px}
+@media(max-width:880px){
+  .bar{flex-wrap:nowrap;padding:5px 7px;flex-basis:54px;gap:6px}.bar>a span{display:none}.bar__title{width:auto;order:0;font-size:18px}.pill{padding:6px 8px}.bar__actions{gap:4px}
+  .wrap{padding:0 5px 6px;gap:5px}.hero{flex-direction:row;align-items:center;padding:4px 6px}.hero .scoreboard{gap:3px}.hero .scoreboard span{font-size:14px;padding:3px}.hero .tip{font-size:16px}.hero .scoreboard #branch{display:none}
+  .mode-tabs{padding:4px;gap:4px;flex-wrap:nowrap}.tab{flex:1 1 0;padding:5px;font-size:16px}
+  .game{grid-template-columns:1fr;grid-template-rows:minmax(135px,1fr) auto;gap:5px;padding:5px}
+  .scene-wrap{min-height:135px}.panel{order:0;max-height:340px}.station-panel{gap:5px}
+  #lathePanel{grid-template-columns:1fr 1fr;align-items:center}#lathePanel .instructions,#shapeButtons,#latheFormula,#atlasList{grid-column:1/-1}
+  #lathePanel label{grid-template-columns:auto 25px;gap:1px}#lathePanel label input{grid-column:1/-1}#spinBtn{grid-column:1/-1}
+  .instructions summary{min-height:30px}.scene-hint{display:none}.atlas{display:none}#shapeButtons .btn{font-size:16px}
+  #triplePanel .size-label{display:none}.guess__ask{line-height:1.25}.guess__out{line-height:1.25}.customer{line-height:1.3}
+}

@@ -1,0 +1,45 @@
+export const CLASSIC_LEVELS = [
+    {
+      title: 'level1Title',
+      mission: 'level1Mission',
+      ruleTitle: 'level1RuleTitle',
+      items: [
+        { id: 'wolf', emoji: '🐺' },
+        { id: 'goat', emoji: '🐐' },
+        { id: 'cabbage', emoji: '🥬' },
+      ],
+      dangers: [
+        ['wolf', 'goat', 'eat'],
+        ['goat', 'cabbage', 'eat'],
+      ],
+      guard: null,
+    },
+    {
+      title: 'level2Title',
+      mission: 'level2Mission',
+      ruleTitle: 'level2RuleTitle',
+      items: [
+        { id: 'redParrot', emoji: '🦜' },
+        { id: 'blueParrot', emoji: '🦜' },
+        { id: 'dog', emoji: '🐕' },
+      ],
+      dangers: [['redParrot', 'blueParrot', 'argue']],
+      guard: 'dog',
+    },
+    {
+      title: 'level3Title',
+      mission: 'level3Mission',
+      ruleTitle: 'level3RuleTitle',
+      items: [
+        { id: 'cat', emoji: '🐈' },
+        { id: 'bird', emoji: '🐦' },
+        { id: 'seeds', emoji: '🌻' },
+        { id: 'dog', emoji: '🐕' },
+      ],
+      dangers: [
+        ['cat', 'bird', 'eat'],
+        ['bird', 'seeds', 'eat'],
+      ],
+      guard: 'dog',
+    },
+  ];

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { courses } from '../../scripts/g1-games/data.mjs';
-import { WORDS } from '../../scripts/g1-games/engine.js';
+import { WORDS } from '../../src/g1-weight-lab/engine.js';
 import { MILESTONE_STREAK, ROUND_COUNT, encourageText, milestoneFor, praiseText, speakText } from '../../scripts/g1-games/model.js';
 
 /* 每道题在中文模式下的朗读文本必须非空、且不得出现任何答案标记。 */

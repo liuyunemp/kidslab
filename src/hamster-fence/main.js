@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { fence, validFence } from './random-model.js';
 /* ============================================================
    仓鼠围栏 · KidsLab 双语/主题模板
    —— 「语言 & 主题」段落是平台约定，整段复制、按需加 key，勿改机制
@@ -126,7 +128,7 @@
   const nextBtn = document.getElementById('nextBtn');
   const againBtn = document.getElementById('againBtn');
 
-  const LEVELS = [
+  const BASE_LEVELS = [
     { kind: 'normal', budget: 14, goal: 12, start: { w: 3, h: 4 } },
     { kind: 'normal', budget: 16, goal: 15, start: { w: 1, h: 7 } },
     { kind: 'normal', budget: 16, goal: 16, start: { w: 2, h: 6 } },
@@ -136,9 +138,12 @@
     { kind: 'l', budget: 22, goal: 25, start: { w: 3, h: 3, ew: 2, eh: 2 } },
     { kind: 'reverse', area: 24, goalPerimeter: 20, start: { w: 3, h: 8 } },
   ];
+  const rounds=createRounds('hamster-fence');
+  const LEVELS=rounds.prepare(BASE_LEVELS,fence,validFence);
+  let winTimer=0;
 
   const state = {
-    level: 0, width: 1, height: 1, dpr: 1, grid: { cols: 12, rows: 9, size: 42, x: 0, y: 0 },
+    level: Math.min(7,Math.max(0,Number(rounds.active)||0)), width: 1, height: 1, dpr: 1, grid: { cols: 12, rows: 9, size: 42, x: 0, y: 0 },
     shape: { w: 3, h: 4, ew: 2, eh: 3 }, drag: null, message: '', hamsters: [], particles: [], shake: 0, opened: false, stars: 1,
   };
 
@@ -170,6 +175,7 @@
   function rand(min, max) { return min + Math.random() * (max - min); }
 
   function resetLevel() {
+    clearTimeout(winTimer);
     const lv = currentLevel();
     state.shape = { w: lv.start.w, h: lv.start.h, ew: lv.start.ew || 2, eh: lv.start.eh || 3 };
     state.message = goalText(lv);
@@ -235,6 +241,7 @@
   }
 
   function openPark() {
+    if(state.opened)return;
     ensureAudio();
     const lv = currentLevel();
     const m = metrics();
@@ -247,9 +254,9 @@
       flop(); render(); return;
     }
     state.opened = true;
-    state.message = lv.kind === 'wall' && lv.magic ? t('wallMagic') : t('success')(levelName(), m.area, m.perimeter);
+    state.message = t('success')(levelName(), m.area, m.perimeter);
     cheer(); fireworks(lv.kind === 'wall' ? 110 : 65);
-    setTimeout(() => showWin(), 650);
+    winTimer=setTimeout(() => showWin(), 650);
   }
 
   function showWin() {
@@ -260,7 +267,7 @@
     winDesc.textContent = last ? t('allDesc') : t('winDesc')(state.stars);
     nextBtn.textContent = last ? t('again') : t('next');
   }
-  function advance() { state.level = (state.level + 1) % LEVELS.length; resetLevel(); }
+  function advance() { state.level = (state.level + 1) % LEVELS.length;LEVELS[state.level]=rounds.next(state.level); resetLevel(); }
 
   function makeHamsters(n) {
     return Array.from({ length: n }, (_, i) => ({ x: rand(0.1, 0.8), y: rand(0.1, 0.8), vx: rand(-0.18, 0.18), vy: rand(-0.15, 0.15), roll: rand(0, 6), emoji: ['🐹', '🐭', '🐹', '🐰'][i % 4] }));
@@ -479,5 +486,9 @@
   applyLang();
   resize();
   resetLevel();
+  rounds.attach({parent:'.controls',dialog:'#win',active:()=>state.level,
+    capture:()=>({shape:state.shape,opened:state.opened}),
+    restore:s=>{if(!s.shape||!['w','h','ew','eh'].every(k=>Number.isInteger(s.shape[k])&&s.shape[k]>=1&&s.shape[k]<=12))throw new Error('Invalid fence');state.shape=s.shape;state.opened=Boolean(s.opened)&&isSuccess();render();if(state.opened)showWin();},
+    retry:resetLevel,beforeReload:()=>clearTimeout(winTimer)});
   requestAnimationFrame(loop);
 })();

@@ -1,9 +1,11 @@
 // Pure transactional models shared as local copies by the 17 standalone courses.
+import { supportsRandom, activityRound } from './random-explorations.js';
+import { uint32 } from './random-core.js';
 export const VERSION = 2;
 const clone = value => JSON.parse(JSON.stringify(value));
 const integer = (n, min = 0, max = 100) => Number.isInteger(n) && n >= min && n <= max;
 export const text = (pair, lang = 'zh') => typeof pair === 'string' ? pair : pair?.[lang] ?? pair?.zh ?? '';
-export function current(course, state) { return course.activities[state.active]; }
+export function current(course, state) { return state.random?.records[state.active].instance ?? course.activities[state.active]; }
 export function valueOf(room) { return room.tens * 10 + room.ones; }
 export function moneyValue(coins) { return Object.entries(coins).reduce((n, [v, count]) => n + Number(v) * count, 0); }
 export const DENOMINATIONS = [10000, 5000, 2000, 1000, 500, 100, 50, 10, 5, 2, 1];
@@ -23,15 +25,17 @@ export function roomFor(course, activity) {
     stroke: 0, ink: [], initial: '', syllable: '', entry: '',
     slots: [null, null, null], punctuation: '。', line: 0,
     order: [2, 0, 1], played: false, evidence: false, included: [],
-    positions: (activity.pieces ?? []).map((_, i) => ({ x: -3.6 + i * 1.8, z: 1.8 })),
-    rotations: (activity.pieces ?? []).map(() => 0), placedPieces: [], turned: false,
+    positions: activity.initialPositions ? clone(activity.initialPositions) : (activity.pieces ?? []).map((_, i) => ({ x: -3.6 + i * 1.8, z: 1.8 })),
+    rotations: activity.initialRotations ? [...activity.initialRotations] : (activity.pieces ?? []).map(() => 0), placedPieces: [], turned: false,
     wallet: coinsFor(activity.budget ?? 0), tray: coinsFor(0), spent: 0,
     price: activity.price ?? 0, budget: activity.budget ?? 0, layout: false,
   };
 }
-export function initialState(course) {
+export function initialState(course, { seed, classic = false } = {}) {
+  const random = supportsRandom(course) && uint32(seed)
+    ? { version: 1, seed, classic, records: course.activities.map((_,i)=>activityRound(course,i,seed,null,classic)) } : null;
   return { version: VERSION, courseId: course.id, active: 0, free: false, done: [],
-    rooms: course.activities.map(a => roomFor(course, a)), histories: course.activities.map(() => []), log: [] };
+    ...(random ? {random} : {}), rooms: course.activities.map((a,i) => roomFor(course, random?.records[i].instance ?? a)), histories: course.activities.map(() => []), log: [] };
 }
 export function speechText(course, state, lang = 'zh') {
   const a = current(course, state);
@@ -75,6 +79,11 @@ export function reduce(course, before, action, { replay = false } = {}) {
   } else if (action.type === 'free') {
     if (typeof action.value !== 'boolean') return reject('invalid');
     s.free = action.value;
+  } else if (action.type === 'newRound' || action.type === 'classic') {
+    if (!s.random || !supportsRandom(course)) return reject('invalid');
+    try { s.random.records[s.active] = activityRound(course,s.active,s.random.seed,s.random.records[s.active],action.type==='classic'); }
+    catch { return reject('invalid'); }
+    s.rooms[s.active]=roomFor(course,current(course,s));s.histories[s.active]=[];s.free=false;
   } else if (action.type === 'reset') {
     s.rooms[s.active] = roomFor(course, a); s.histories[s.active] = [];
   } else if (action.type === 'undo') {
@@ -204,7 +213,8 @@ export function reduce(course, before, action, { replay = false } = {}) {
   if (!replay) s.log.push(clone(action));
   return { ok: true, state: s, discovered, complete: s.done.length === 8, changed };
 }
-export function serialize(state) { return { version: VERSION, courseId: state.courseId, done: [...state.done], log: state.log }; }
+export function serialize(state) { return { version: state.random ? 3 : VERSION, courseId: state.courseId, done: [...state.done], log: state.log,
+  ...(state.random ? {generatorVersion:1,seed:state.random.seed,classic:state.random.classic,instances:state.random.records.map(record=>record.instance)} : {}) }; }
 // 教材入口只选择已有活动；沿用日志恢复，保留进度，不触发玩法或音频。
 export function openActivity(course, state, activityId) {
   const index = course.activities.findIndex(activity => activity.id === activityId);
@@ -214,21 +224,27 @@ export function openActivity(course, state, activityId) {
   if (next.active !== index) next = reduce(course, next, { type: 'select', index }).state;
   return next;
 }
-export function restore(course, saved) {
-  if (!saved || saved.version !== VERSION || saved.courseId !== course.id || !Array.isArray(saved.log) || saved.log.length > 10000) return initialState(course);
-  let state = initialState(course);
+export function restore(course, saved, options = {}) {
+  const validSave = saved && [VERSION,3].includes(saved.version) && saved.courseId === course.id && Array.isArray(saved.log) && saved.log.length <= 10000;
+  const randomSave = validSave && saved.version===3 && saved.generatorVersion===1 && uint32(saved.seed) && supportsRandom(course);
+  const defaults = supportsRandom(course) ? options : {};
+  if (!validSave || (saved.version===3&&!randomSave)) return initialState(course,defaults);
+  // Legacy actions replay against their original fixed examples before new rounds become random.
+  const initialOptions=randomSave?{seed:saved.seed,classic:saved.classic===true}:uint32(defaults.seed)?{seed:defaults.seed,classic:true}:{};
+  let state = initialState(course,initialOptions);
   try {
     for (const action of saved.log) {
       const result = reduce(course, state, action, {replay:true});
-      if (!result.ok) return initialState(course);
+      if (!result.ok) return initialState(course,defaults);
       state = result.state;
     }
     state.log = clone(saved.log);
+    if(randomSave&&JSON.stringify(saved.instances)!==JSON.stringify(state.random.records.map(record=>record.instance)))return initialState(course,defaults);
     // 主站聚合卡片读取 done 展示关卡级✓；与日志重放结果合并，缺省或非法 id 时保持不变。
     if (Array.isArray(saved.done)) {
       const ids = new Set(course.activities.map(a => a.id));
       for (const id of saved.done) if (ids.has(id) && !state.done.includes(id)) state.done.push(id);
     }
     return state;
-  } catch { return initialState(course); }
+  } catch { return initialState(course,defaults); }
 }

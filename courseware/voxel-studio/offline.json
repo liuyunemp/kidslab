@@ -1,6 +1,6 @@
 {
   "id": "voxel-studio",
-  "version": "90254612e17b8fc60cfb9d346de0c4e26c98e3cb4c9f77044c8e889437a6849c",
+  "version": "93213457a508548388e31da701195978d1cc93af2304fe8c9e5d3e9720a9c0e7",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "6b85a7c24813e1620ef1bae57b510cfcf120d4416099421fdd0608e9718571b4"
+      "sha256": "a4732eb5839a14ee109d961ee54884b54a47b07c2af1222d1352aefd437cbd52"
     },
     {
       "path": "main.js",
-      "sha256": "aabe690f0d4f06bf396ec4416eadede6a9af631c5d9b29ef9f9483f841adce1f",
-      "fingerprint": "12399561"
+      "sha256": "5ad0faaa8f0290b9893048efd065ddfac7a2b152bd12a41645bdff90a01ad3b5",
+      "fingerprint": "10a8d657"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "005af8f654b7ac36d9bb0b7ea3279bebf1224393dd6c5ed2b7b784e7f5a26f82",
+      "fingerprint": "154226f9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "acce31745671f70372ff07977bff4b4aa343d958e26ed0d3e2e0cd2a2b6c05e1",
+      "fingerprint": "72b94470"
     },
     {
       "path": "style.css",
-      "sha256": "48af61291e7449cbff7d4a1c0f0cde01ee365a1a63aa82ddb9b92f0dd781218a",
-      "fingerprint": "166d3601"
+      "sha256": "1df3c8a96be987b0d7e9d23f8957b858c17d18aa57fbee27993b0dea449311dd",
+      "fingerprint": "d5ce412f"
     },
     {
       "path": "vendor/three.module.min.js",

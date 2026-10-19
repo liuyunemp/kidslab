@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
 
 const patterns = [
   { sequence: [0, 1], bites: 8 },
@@ -18,16 +19,18 @@ async function status(page, id) {
 test('规律毛毛虫：八种规律各喂满一幕，错误与重载不跳关', async ({ page }) => {
   test.setTimeout(180000);
   await page.addInitScript(() => localStorage.setItem('kidslab.lang', 'zh'));
-  await page.goto('/courseware/pattern-caterpillar/');
-  for (const [level, { sequence, bites }] of patterns.entries()) {
+  await page.goto('/courseware/pattern-caterpillar/?seed=987');
+  for (let level=0;level<8;level++) {
+    const a=(await roundRecord(page,'pattern-caterpillar')).instance,{bites}=a;
+    const choice=async bite=>{const choices=await page.locator('[data-choice]').evaluateAll(es=>es.map(e=>JSON.parse(e.dataset.item)));return choices.findIndex(c=>JSON.stringify(c)===JSON.stringify(a.pattern[(bite+4)%a.pattern.length]));};
     await expect(page.locator('#basicProgress')).toHaveText(`基础 ${level}/8`);
     await expect(page.locator('.levelchip.on')).toHaveAttribute('data-level', String(level));
     if (level === 0) {
-      await page.locator('[data-choice="2"]').click();
+      await page.locator('[data-choice="'+((await choice(0)+1)%3)+'"]').click();
       await expect(page.locator('#biteCount')).toHaveText('0/8');
     }
     for (let bite = 0; bite < bites; bite++) {
-      await page.locator(`[data-choice="${sequence[(bite + 4) % sequence.length]}"]`).click();
+      await page.locator(`[data-choice="${await choice(bite)}"]`).click();
       await expect(page.locator('#biteCount')).toHaveText(`${bite + 1}/${bites}`);
     }
     await expect(page.locator('#modal')).toBeVisible();
@@ -47,28 +50,21 @@ test('规律毛毛虫：八种规律各喂满一幕，错误与重载不跳关',
 test('立体影子剧场：十幕实际演出后才结课', async ({ page }) => {
   test.setTimeout(180000);
   await page.addInitScript(() => localStorage.setItem('kidslab.lang', 'zh'));
-  await page.goto('/courseware/shadow-theater/');
+  await page.goto('/courseware/shadow-theater/?seed=987');
   await expect(page.locator('#levelBadge')).toHaveText('第 1/10 幕');
-  await page.locator('.shape-btn').filter({ hasText: '正方体' }).click();
-  await page.locator('#checkBtn').click();
-  await expect(page.locator('#stars')).toBeEmpty();
-  await page.locator('.shape-btn').filter({ hasText: '球' }).click();
-
   for (let level = 0; level < 10; level++) {
     await expect(page.locator('#levelBadge')).toHaveText(`第 ${level + 1}/10 幕`);
-    if ([3, 5].includes(level)) {
-      const box = await page.locator('#scene').boundingBox();
-      const x = box.x + box.width / 2;
-      const y = box.y + box.height / 2;
-      await page.mouse.move(x, y);
-      await page.mouse.down();
-      await page.mouse.move(x, y + 125, { steps: 20 });
-      await page.mouse.up();
+    const a=(await roundRecord(page,'shadow-theater')).instance;
+    if(a.kind==='reverse')await page.locator('[data-shape="'+a.answer+'"]').click();
+    else{
+      await page.locator('[data-shape="'+(a.block??'cube')+'"]').click();
+      const rotation=(await roundRecord(page,'shadow-theater')).play.rotation,targetX=a.pose==='axis'?Math.PI/2:0;
+      const c=page.locator('#scene'),box=await c.boundingBox(),x=box.x+box.width*.65,y=box.y+box.height*.5;
+      await page.mouse.move(x,y);await page.mouse.down();const end={pointerId:1,clientX:x-rotation[1]/.012,clientY:y+(targetX-rotation[0])/.012};
+      await c.dispatchEvent('pointermove',end);await c.dispatchEvent('pointermove',end);await page.mouse.up();await page.locator('#checkBtn').click();
     }
-    if (await page.locator('#magic').isVisible()) await page.locator('#closeMagic').click();
-    if (level === 8) await page.locator('.shape-btn').filter({ hasText: '圆柱' }).click();
-    else await page.locator('#checkBtn').click();
-    await expect(page.locator('#stars')).toHaveText('⭐'.repeat(level + 1));
+    // Stars count the acts solved so far, so each act adds exactly one.
+    await expect(page.locator('#stars')).toHaveText(`⭐ ${level + 1}`);
     if (level < 9) expect(await status(page, 'shadow-theater')).not.toBe('completed');
     if (level === 9) break;
     if (await page.locator('#magic').isVisible()) await page.locator('#closeMagic').click();

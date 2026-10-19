@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
+const answer=async page=>{const a=(await roundRecord(page,'balance-circus')).instance;return (a.right.c-a.left.c)/(a.left.x-a.right.x);};
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -31,17 +33,17 @@ async function expectFitsViewport(page) {
 
 async function finishFirstAct(page) {
   await page.locator('[data-operation="0"]').click();
-  await expect(page.locator('#equation')).toHaveText('x + 10 = 28');
+  await expect(page.locator('#equation')).toHaveText(`x + 10 = ${await answer(page)+10}`);
   await page.locator('[data-operation="0"]').click();
-  await expect(page.locator('#status')).toContainText('x 重 18 kg');
+  await expect(page.locator('#status')).toContainText(`x 重 ${await answer(page)} kg`);
   await page.locator('#nextBtn').click();
 }
 
 async function finishSecondAct(page) {
   await page.locator('[data-operation="0"]').click();
-  await expect(page.locator('#equation')).toHaveText('x + 3 = 8');
+  await expect(page.locator('#equation')).toHaveText(`x + 3 = ${await answer(page)+3}`);
   await page.locator('[data-operation="1"]').click();
-  await expect(page.locator('#status')).toContainText('x 重 5 kg');
+  await expect(page.locator('#status')).toContainText(`x 重 ${await answer(page)} kg`);
   await page.locator('#nextBtn').click();
 }
 
@@ -55,14 +57,14 @@ test.describe('balance circus', () => {
       localStorage.removeItem('kidslab.progress.balance-circus');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/balance-circus/');
+    await page.goto('/courseware/balance-circus/?seed=987');
   });
 
   test('recovers from a one-sided tumble and solves all three acts', async ({ page }) => {
     await expect(page.getByRole('heading', { name: '让 x 独自站稳' })).toBeVisible();
     await page.locator('[data-side="left"]').click();
     await expect(page.locator('#status')).toContainText('演员全滚下来了');
-    await expect(page.locator('#equation')).toHaveText('x + 20 = 38');
+    await expect(page.locator('#equation')).toHaveText(`x + 20 = ${await answer(page)+20}`);
     await page.waitForTimeout(1100);
 
     await finishFirstAct(page);
@@ -71,14 +73,14 @@ test.describe('balance circus', () => {
 
     await expect(page.getByRole('heading', { name: '把 3 个 x 平均拆开' })).toBeVisible();
     await page.locator('[data-operation="1"]').click();
-    await expect(page.locator('#equation')).toHaveText('x + 2 = 10');
+    await expect(page.locator('#equation')).toHaveText(`x + 2 = ${await answer(page)+2}`);
     await expect(page.locator('[data-operation="0"]')).toContainText('两边都撤 2');
     await page.locator('[data-operation="0"]').click();
-    await expect(page.locator('#status')).toContainText('x 重 8 kg');
+    await expect(page.locator('#status')).toContainText(`x 重 ${await answer(page)} kg`);
     await page.locator('#nextBtn').click();
 
     await expect(page.getByRole('heading', { name: '蒙面演员揭面了！' })).toBeVisible();
-    await expect(page.locator('#revealWeight')).toHaveText('8 kg');
+    await expect(page.locator('#revealWeight')).toHaveText(`${await answer(page)} kg`);
     await expect(page.locator('#playAgainBtn')).toBeFocused();
     await expect(page.locator('.course')).toHaveJSProperty('inert', true);
     await expect.poll(() => page.evaluate(() =>
@@ -99,7 +101,7 @@ test.describe('balance circus', () => {
     await expectFitsViewport(page);
 
     await page.reload();
-    await expect(page.locator('#equation')).toHaveText('x + 10 = 28');
+    await expect(page.locator('#equation')).toHaveText(`x + 10 = ${await answer(page)+10}`);
     await expect(page.locator('#historyList')).toContainText('Remove 10 from both');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await expect(page.locator('#soundBtn')).toHaveAttribute('aria-pressed', 'true');
@@ -117,6 +119,6 @@ test.describe('balance circus', () => {
     await expect(page.getByRole('heading', { name: '蒙面演员揭面了！' })).toBeVisible();
     await page.locator('#playAgainBtn').click();
     await expect(page.getByRole('heading', { name: '让 x 独自站稳' })).toBeVisible();
-    await expect(page.locator('#equation')).toHaveText('x + 20 = 38');
+    await expect(page.locator('#equation')).toHaveText(`x + 20 = ${await answer(page)+20}`);
   });
 });

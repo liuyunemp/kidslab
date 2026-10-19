@@ -155,3 +155,29 @@ canvas { display: block; touch-action: none; }
 
 /* hidden 属性硬保证：任何 display 规则都不得覆盖 */
 [hidden] { display: none !important; }
+
+html,body { height: 100%; overflow: hidden; }
+.bar { height: 60px; padding: 6px 14px; gap: 6px; }
+.bar__title { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar__actions { flex-shrink: 0; gap: 4px; }
+.bar__actions .btn, .pill { min-width: 44px; min-height: 44px; padding: 6px; font-size: 16px; }
+.wrap { height: calc(100dvh - 60px); display: flex; flex-direction: column; gap: 8px; padding: 0 12px 12px; }
+.hero { flex-shrink: 0; margin: 0; padding: 8px; gap: 8px; }
+.playcard { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 8px; }
+.tip { margin: 0 0 6px; font-size: 16px; line-height: 1.45; }
+#stage { height: 0; min-height: 0; flex: 1; }
+.stats span,.lantern__top { font-size: 14px; }
+.lantern small { font-size: 16px; }
+.btn { font-size: 16px; min-height: 44px; }
+@media(max-width:760px){
+  .hero { grid-template-columns: 90px 1fr; }
+  .lantern { grid-row: span 2; min-height: 100px; padding: 8px 4px; }
+  .lantern strong { font-size: 30px; }
+  .lantern small { display: none; }
+  .stats { gap: 4px; }
+  .stats div { padding: 4px; }
+  .stats span { margin-bottom: 2px; }
+  .stats b { font-size: 18px; }
+  .actions { gap: 5px; }
+  .actions .btn { padding: 6px; }
+}

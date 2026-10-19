@@ -10,6 +10,8 @@
 - [F3] 重复独立试验的次数增加时，事件的相对频率通常会趋近其理论概率，但有限次试验的结果不必与理论概率完全相等。[S1]
 - [F4] 12 个等大扇区中设置 2 个大奖区时，单次中奖概率为 \(2/12=1/6\)，约为 \(16.7\%\)。[S1]
 
+- [F5] 随机实例保持 12 个等大扇区或 10 个等可能球；中奖数 w 的理论概率为 w/n。夸大案例保证声明概率大于 w/n，诚信案例相等，设计任务用整数扇区数实现目标概率；装饰颜色不改变概率。[S1][S2]
+
 ## 来源
 - [S1] OpenStax, *Introductory Statistics 2e*, §3.1 “Terminology”; https://openstax.org/books/introductory-statistics-2e/pages/3-1-terminology
 - [S2] OpenStax, *Introductory Statistics 2e*, §3.2 “Independent and Mutually Exclusive Events”; https://openstax.org/books/introductory-statistics-2e/pages/3-2-independent-and-mutually-exclusive-events

@@ -1,24 +1,59 @@
 {
   "id": "sudoku-zoo",
-  "version": "a08aaa5fa0cafdc07c3ff22828e64dbe701be01cc98fcec13f3c43a57f15893a",
+  "version": "6817f04c3278b99bab9158d12c9413256c48c077483a2db6fe9fe2f01fdbfedc",
   "assets": [
+    {
+      "path": "classic-puzzles.js",
+      "sha256": "9d5b3ff3f39fe1654c0bf34612c3b5daa01db6c750114a0832f753b3e75a8d56",
+      "fingerprint": "f04efcec"
+    },
     {
       "path": "course.json",
       "sha256": "d9f02c7059dd45527c8634c0c88dcb0f7302da4bbde28ba41d40bc626dff5315"
     },
     {
       "path": "index.html",
-      "sha256": "b3e5cde17effd53f0f9f512fb9fb1e2d9c9602e2b41ffd8b7ca53ba6d4ecfe9d"
+      "sha256": "4ed85c16245b0dde30c1d7f3e61e2b3c5c9cedf2da9c28ac7bd5a1754e839492"
     },
     {
       "path": "main.js",
-      "sha256": "210bae5da3df50b222b38f7c3d6b910641260bf0170acec83ff610a7d77f922b",
-      "fingerprint": "88897f4c"
+      "sha256": "98070c4ffd4fbd9d6ed921227a00508b69ac5c6db3e39c56cbade025a5405dbe",
+      "fingerprint": "926f7167"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "9ccb440a230ef228b6db1a09110eed6d52ec561b4ecf438cbdcd2f5f71c97c28",
+      "fingerprint": "e24b9351"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "863835aa25576189fdc9daaaf23644dcbd6c527eedb47918aaa4fbdd4bd0f678",
+      "fingerprint": "00825d97"
     },
     {
       "path": "style.css",
-      "sha256": "624036de685234a6344d4c1dca08cfc876ea1d71e6b0606a918835c9e4d6434a",
-      "fingerprint": "0484f0d5"
+      "sha256": "60e07237d0745f7cdda7d77429b99d5a383b82f1e5201fd209e0087cd576556e",
+      "fingerprint": "1bd109e5"
     }
   ]
 }

@@ -1,7 +1,9 @@
+import {createRounds} from './random-rounds.js';
+import {vennTask,vennFamily,vennIdentity,validVenn} from './random-model.js';
 import { createAudio } from './audio.js';
 import { createPort3D } from './game3d.js';
 import {
-  LEVELS,
+  LEVELS as CLASSIC_LEVELS,
   checksFor,
   expectedZone,
   missionSolution,
@@ -316,9 +318,12 @@ if (!['light', 'dark'].includes(theme)) theme = 'light';
 
 const t = () => I18N[lang];
 const audio = createAudio();
+const rounds=createRounds('venn-port');
+const LEVELS=CLASSIC_LEVELS.map((base,i)=>rounds.define(i,base,vennTask,validVenn,vennIdentity,vennFamily));
+const PROGRESS='kidslab.venn-port';let earned=[];try{const s=JSON.parse(store.get(PROGRESS));if(Array.isArray(s?.completed))earned=s.completed.filter(i=>Number.isInteger(i)&&i>=0&&i<4);}catch{}
 const solutions = LEVELS.map((level) => missionSolution(level));
 let game = null;
-let levelIndex = 0;
+let levelIndex = Number(rounds.active??0);
 let shipIndex = 0;
 let mistakes = 0;
 let locked = false;
@@ -330,6 +335,9 @@ let demoIndex = 0;
 let demoPlaying = false;
 let demoToken = 0;
 let demoSnapshot = null;
+let playToken=0,winTimer=0;
+function cancelRound(){playToken++;demoToken++;demoPlaying=false;clearTimeout(winTimer);clearHint();}
+function award(){if(earned.includes(levelIndex))return;earned.push(levelIndex);store.set(PROGRESS,JSON.stringify({completed:earned}));window.cool?.stage?.(`venn_level_${levelIndex+1}`);if(earned.length===4)window.cool?.complete?.();}
 
 const level = () => LEVELS[levelIndex];
 const ship = () => level().ships[Math.min(shipIndex, level().ships.length - 1)];
@@ -475,6 +483,7 @@ function updateMissionUi() {
 
 async function chooseZone(zone) {
   if (mode !== 'play' || locked) return;
+  const token=playToken;
   audio.unlock();
   audio.grab();
   clearHint();
@@ -493,7 +502,7 @@ async function chooseZone(zone) {
       'alert',
     );
     track('wrong_bay', { level: levelIndex + 1, ship: item.id, chosen: zone, expected });
-    await game?.flyToZone(zone, { correct: false, duration: motionSeconds(0.72) });
+    rounds.checkpoint();await game?.flyToZone(zone, { correct: false, duration: motionSeconds(0.72) });if(token!==playToken)return;
     locked = false;
     refreshControls();
     return;
@@ -507,8 +516,8 @@ async function chooseZone(zone) {
     'success',
   );
   track('ship_landed', { level: levelIndex + 1, ship: item.id, zone });
-  await game?.flyToZone(zone, { correct: true, duration: motionSeconds(0.68) });
-  shipIndex += 1;
+  shipIndex++;if(shipIndex===level().ships.length)award();rounds.checkpoint();
+  await game?.flyToZone(zone, { correct: true, duration: motionSeconds(0.68) });if(token!==playToken)return;
   updateHud();
   if (shipIndex >= level().ships.length) {
     finishLevel();
@@ -560,22 +569,21 @@ function updateWinUi() {
   $('#winNextBtn').textContent = levelIndex === LEVELS.length - 1 ? t().again : t().nextMission;
 }
 
-function finishLevel() {
+function finishLevel(restored=false) {
   locked = true;
   mode = 'win';
   refreshControls();
   updateWinUi();
-  game?.celebrate();
-  audio.win();
-  launchConfetti();
+  if(!restored){game?.celebrate();audio.win();launchConfetti();}
   setCoach(t().winTitles[levelIndex], t().winNotes[levelIndex], 'CLEAR', 'success');
-  window.cool?.stage?.(`venn_level_${levelIndex + 1}`);
-  if (levelIndex === LEVELS.length - 1) window.cool?.complete?.();
+  award();
   track('complete_mission', { level: levelIndex + 1, mistakes });
-  setTimeout(() => { $('#win').hidden = false; }, motionMs(480));
+  if(restored)$('#win').hidden=false;else winTimer=setTimeout(()=>{$('#win').hidden=false;rounds.checkpoint();},motionMs(480));
 }
 
-function startLevel(index, { announce = true } = {}) {
+function startLevel(index, { announce = true, fresh=false, restore=true } = {}) {
+  rounds.checkpoint();cancelRound();
+  if(fresh){LEVELS[index]=rounds.next(index);solutions[index]=missionSolution(LEVELS[index]);}
   demoToken += 1;
   demoPlaying = false;
   clearHint();
@@ -593,11 +601,11 @@ function startLevel(index, { announce = true } = {}) {
   if (announce) {
     setCoach(t().coachReadyTitle, t().missionBriefs[levelIndex], 'SCAN');
   }
-  window.cool?.stage?.(`venn_level_${levelIndex + 1}_started`);
+  const snapshot=rounds.record(levelIndex).play;if(restore&&snapshot)restorePlay(snapshot);rounds.checkpoint();
 }
 
 function nextLevel() {
-  startLevel(levelIndex === LEVELS.length - 1 ? 0 : levelIndex + 1);
+  startLevel(levelIndex === LEVELS.length - 1 ? 0 : levelIndex + 1,{fresh:true});
 }
 
 function demoItemAt(index) {
@@ -674,7 +682,7 @@ async function playDemo() {
     audio.dock();
     game?.setHint(null);
     demoIndex += 1;
-    updateDemoUi();
+    updateDemoUi();rounds.checkpoint();
     await sleep(motionMs(150 / speed));
   }
 
@@ -824,7 +832,7 @@ function bindUi() {
   $('#hintBtn').addEventListener('click', requestHint);
   $('#resetBtn').addEventListener('click', () => {
     audio.unlock();
-    startLevel(levelIndex, { announce: false });
+    startLevel(levelIndex, { announce: false,restore:false });
     setCoach(t().coachResetTitle, t().coachResetText, 'RESET');
     track('reset_mission', { level: levelIndex + 1 });
   });
@@ -894,12 +902,30 @@ function init() {
   }
   applyTheme();
   applyLanguage();
-  startLevel(0, { announce: false });
+  startLevel(levelIndex, { announce: false,restore:false });
   setCoach(t().coachReadyTitle, t().coachReadyText, 'SCAN');
   updateAudioButtons();
-  if (!store.get('kidslab.venn-port.guided')) {
+  // attach() always leaves an initial snapshot behind, so a first visit is recognised by
+  // progress that has not moved yet rather than by the absence of a snapshot.
+  const played = (() => {
+    const play = rounds.record(levelIndex)?.play;
+    if (!play) return false;
+    return (play.shipIndex ?? 0) > 0 || (play.mistakes ?? 0) > 0 || Boolean(play.demoIndex);
+  })();
+  if (!played&&!store.get('kidslab.venn-port.guided')) {
     setTimeout(() => { $('#guide').hidden = false; }, 520);
   }
 }
 
+function restorePlay(s){
+  if(!s||!Number.isInteger(s.shipIndex)||s.shipIndex<0||s.shipIndex>5||!Number.isInteger(s.mistakes)||s.mistakes<0||!['play','win','demo','lesson'].includes(s.mode))throw new Error('Invalid port snapshot');
+  shipIndex=s.shipIndex;mistakes=s.mistakes;mode='play';locked=false;presentShip({animate:false,announce:false});
+  if(s.mode==='demo'){
+    if(!Number.isInteger(s.demoIndex)||s.demoIndex<0||s.demoIndex>5||!s.demoSnapshot)throw new Error('Invalid demonstration');
+    demoSnapshot=s.demoSnapshot;mode='demo';locked=true;demoPlaying=false;demoIndex=s.demoIndex;$('#demoBar').hidden=false;document.body.classList.add('is-demo');showDemoPosition(demoIndex);updateDemoUi();
+  }else if(shipIndex===5)finishLevel(true);
+  else if(s.mode==='lesson'){mode='lesson';lessonIndex=Math.max(0,Math.min(t().lessonSteps.length-1,s.lessonIndex||0));$('#lessonCard').hidden=false;document.body.classList.add('is-lesson');renderLesson();}
+  refreshControls();
+}
 init();
+rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#win',active:()=>levelIndex,capture:()=>({shipIndex,mistakes,mode,demoIndex,demoSnapshot,lessonIndex}),restore:restorePlay,retry:()=>startLevel(levelIndex,{restore:false}),beforeReload:cancelRound});

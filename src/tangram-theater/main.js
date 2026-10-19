@@ -11,6 +11,8 @@ import {
   clampSceneIndex,
 } from './model.js';
 import { createAudio } from './audio.js';
+import { createRounds } from './random-rounds.js';
+import { tangram, validTangram, validTangramPlay } from './random-model.js';
 
 (() => {
   'use strict';
@@ -144,14 +146,15 @@ import { createAudio } from './audio.js';
     },
   };
 
-  const TARGETS = MODEL_TARGETS;
+  const rounds=createRounds('tangram-theater');
+  const instances=rounds.prepare(MODEL_TARGETS.map((targets,i)=>({targets,mirror:1,dx:0,dy:0,rotations:targets.map((_,j)=>normalizeAngle(j*45+i*90))})),tangram,validTangram,a=>a.targets);
+  const TARGETS = instances.map(a=>a.targets);
   const PIECE_DEFS = MODEL_PIECE_DEFS;
   const COLORS = MODEL_COLORS;
 
   const SAVE_KEY = 'kidslab.tangram-theater';
   try {
     if (localStorage.getItem(`${SAVE_KEY}.eight-act-version`) !== '2') {
-      localStorage.removeItem('kidslab.progress.tangram-theater');
       localStorage.setItem(`${SAVE_KEY}.eight-act-version`, '2');
     }
   } catch { /* Storage is optional. */ }
@@ -260,7 +263,7 @@ import { createAudio } from './audio.js';
         x: source.x,
         y: source.y,
         // 起始角度必须落在 45° 网格上：否则左右转按钮永远转不到目标角度。
-        rotation: normalizeAngle(index * 45 + sceneIndex * 90),
+        rotation: instances[sceneIndex].rotations[index],
         flip: 1,
         placed: false,
         snapBack: null,
@@ -363,12 +366,34 @@ import { createAudio } from './audio.js';
     ctx.restore();
   }
 
-  // 剪影 = 影子的"家"。三层绘制：光晕 → 底色 → 描边，确保孩子在暖色舞台上真的看得见。
+  // 剪影 = 影子的"家"。两批绘制：先画安静/退后的剪影把舞台压暗，再画高亮态（选中/就绪/提示）
+  // 用"明亮内芯 + 多层发光描边"做出孩子一眼能认出的光晕。旧的"光晕层"被 --ghost 深色底盖掉，
+  // 在暖黄舞台上几乎看不见，这次把发光描边后置、并叠加彩色内芯，兑现"拖到发光的影子上"。
   function drawTargets(now) {
     const focused = dragging ? dragging.index : selected;
     // 供 E2E 观察高亮/就绪状态，不参与渲染逻辑。
     canvas.dataset.focusedTarget = String(focused);
     canvas.dataset.armedTarget = String(armedTarget);
+
+    // 第一批：安静的剪影。不启用 shadowBlur（昂贵），只给极淡的底与虚线边，形成聚光灯背景。
+    pieces.forEach((piece, index) => {
+      if (piece.placed) return;
+      if (index === focused || index === armedTarget) return;
+      const target = targetFor(index);
+      pathPiece(piece, target);
+      ctx.save();
+      ctx.globalAlpha = 0.15;
+      ctx.fillStyle = cssVar('--ghost');
+      ctx.fill();
+      ctx.globalAlpha = 0.30;
+      ctx.strokeStyle = cssVar('--line');
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 6]);
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // 第二批：高亮态。仅 focused / armed 一两个剪影用 shadowBlur，避免每帧 7 次模糊拖慢。
     pieces.forEach((piece, index) => {
       // 灯笼提示刚放下的那块：画一圈会呼吸的光环，兑现"灯笼照亮了它的位置"。
       if (index === hintPulse) {
@@ -385,54 +410,47 @@ import { createAudio } from './audio.js';
         ctx.restore();
       }
       if (piece.placed) return;
-      const target = targetFor(index);
       const isFocused = index === focused;
-      const isHint = index === hintPulse;
       const isArmed = index === armedTarget && Boolean(dragging);
-      const color = cssVar(COLORS[index]);
+      if (!isFocused && !isArmed) return;
+      const target = targetFor(index);
+      const color = isArmed ? cssVar('--success') : cssVar(COLORS[index]);
+      // 呼吸节奏：就绪态最快，选中其次。
+      const breath = isArmed ? Math.sin(now / 130) : Math.sin(now / 320);
+      const glowPulse = 0.6 + 0.4 * (breath * 0.5 + 0.5);
 
-      // 呼吸节奏：提示态最快，选中其次，安静时最慢。
-      const breath = isHint ? Math.sin(now / 170)
-        : isArmed ? Math.sin(now / 130)
-          : isFocused ? Math.sin(now / 320)
-            : Math.sin(now / 500);
-      const base = isHint ? 0.62 : isArmed ? 0.72 : isFocused ? 0.60 : 0.34;
-      const amplitude = isFocused || isHint || isArmed ? 0.14 : 0.10;
-
-      // 选中一块木片时，其余剪影退到背景，形成聚光灯效应：一眼看出"这块板要去那里"。
-      const dimmed = index !== focused && (Boolean(dragging) || selected !== index);
-
+      // 1) 明亮内芯：让形状本体在暖黄/深色舞台上都可辨，不再被深色底稀释到看不见。
       pathPiece(piece, target);
-
-      // 1) 光晕层：真正画出发光感（旧实现只有透明度叠加，孩子看不到任何光）。
       ctx.save();
-      ctx.globalAlpha = dimmed ? 0.16 : base * 0.85;
-      ctx.fillStyle = isArmed ? cssVar('--success') : color;
-      ctx.shadowColor = isArmed ? cssVar('--success') : color;
-      ctx.shadowBlur = (isHint ? 30 : isArmed ? 26 : isFocused ? 22 : 15) + breath * 6;
+      ctx.globalAlpha = isArmed ? 0.50 : 0.42;
+      ctx.fillStyle = color;
       ctx.fill();
       ctx.restore();
 
-      // 2) 底色层：让剪影本体在暖黄舞台上足够实，不再被 globalAlpha 二次稀释到看不见。
+      // 2) 多层发光描边：外圈粗而淡 = 光晕，内圈细而亮 = 清晰边界。两套主题都清晰可辨。
+      const dashed = isArmed; // 接近落点用流动虚线强调"松手就能放"。
       ctx.save();
-      ctx.globalAlpha = dimmed ? 0.14 : Math.min(0.92, base + amplitude * breath);
-      ctx.fillStyle = cssVar('--ghost');
+      ctx.shadowColor = color;
+      ctx.shadowBlur = (isArmed ? 22 : 16) * glowPulse + 10;
+      ctx.globalAlpha = 0.40 + 0.30 * glowPulse;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = isArmed ? 10 : 8;
+      ctx.setLineDash(dashed ? [11, 7] : []);
+      ctx.lineDashOffset = dashed ? -now / 40 : 0;
       pathPiece(piece, target);
-      ctx.fill();
-      ctx.restore();
-
-      // 3) 描边层：边界始终清晰，保证形状与朝向可读。
-      ctx.save();
-      ctx.globalAlpha = dimmed ? 0.22 : 0.78;
-      ctx.strokeStyle = isArmed ? cssVar('--success') : isHint ? cssVar('--gold') : cssVar('--line');
-      ctx.lineWidth = isHint ? 4.5 : isArmed ? 4 : isFocused ? 3.5 : 2.5;
-      ctx.setLineDash(isArmed || isHint ? [9, 7] : [5, 6]);
-      ctx.lineDashOffset = isArmed || isHint ? -now / 45 : 0;
+      ctx.stroke();
+      // 内圈亮芯：再描一道更细的实线，锁住边界轮廓。
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha = 0.95;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = isArmed ? 4.5 : 3.5;
+      ctx.setLineDash(dashed ? [11, 7] : []);
+      ctx.lineDashOffset = dashed ? -now / 40 : 0;
       pathPiece(piece, target);
       ctx.stroke();
       ctx.restore();
 
-      // 4) 刚被选中的一瞬：放大脉冲，把注意力引到这块影子上。
+      // 3) 刚被选中的一瞬：放大脉冲，把注意力引到这块影子上。
       if (isFocused && focusPulseAt) {
         const elapsed = now - focusPulseAt;
         if (elapsed < 400) {
@@ -732,8 +750,7 @@ import { createAudio } from './audio.js';
 
   function nextScene() {
     if (sceneIndex === TARGETS.length - 1) {
-      completed = 0;
-      unlocked = 0;
+      instances[0]=rounds.next(0);TARGETS[0]=instances[0].targets;
       switchScene(0);
       return;
     }
@@ -828,6 +845,7 @@ import { createAudio } from './audio.js';
   });
 
   readSave();
+  if(rounds.active!==null)sceneIndex=clampSceneIndex(Number(rounds.active),TARGETS.length);
   new ResizeObserver(resizeCanvas).observe(canvas);
   window.cool.bindI18n(I18N, {
     onChange({ t: translate, lang, theme }) {
@@ -838,5 +856,15 @@ import { createAudio } from './audio.js';
       renderUI();
     },
   });
+  resizeCanvas();
+  rounds.attach({parent:els.hint.parentElement,dialog:'#modal',compact:true,active:()=>sceneIndex,
+    capture:()=>({selected,pieces:pieces.map((p,i)=>({x:p.snapBack?sourceFor(i).x/cssWidth:p.x/cssWidth,y:p.snapBack?sourceFor(i).y/cssHeight:p.y/cssHeight,rotation:p.rotation,flip:p.flip,placed:p.placed})),finished:pieces.every(p=>p.placed)}),
+    restore:s=>{
+      if(!validTangramPlay(s))throw new Error('Invalid tangram');
+      selected=s.selected;
+      pieces=s.pieces.map((p,i)=>({...PIECE_DEFS[i],...p,x:p.placed?targetFor(i).x:p.x*cssWidth,y:p.placed?targetFor(i).y:p.y*cssHeight,snapBack:null}));
+      if(s.finished&&pieces.every(p=>p.placed)){finaleStarted=performance.now();showModal();}
+      renderUI();
+    },retry:()=>resetPieces(false)});
   requestAnimationFrame(draw);
 })();

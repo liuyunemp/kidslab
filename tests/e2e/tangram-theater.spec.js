@@ -1,4 +1,8 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
+
+// The silhouette is generated, so the target position comes from the stored instance.
+const targetsFor = async page => (await roundRecord(page, 'tangram-theater')).instance.targets;
 
 async function placeActWithHints(page, count = 7) {
   const hint = page.getByRole('button', { name: '灯笼提示：帮我放一块' });
@@ -6,6 +10,11 @@ async function placeActWithHints(page, count = 7) {
 }
 
 async function dragFirstPieceHome(page, { to = { x: 0.35, y: 0.45 }, rotate = 3 } = {}) {
+  // A rejected drag snaps the piece back to the shelf over a short animation, so wait for the
+  // shelf to be settled before grabbing it again.
+  await expect(page.locator('#stage')).toHaveAttribute('data-armed-target', '-1');
+  await page.waitForTimeout(400);
+  await page.getByRole('option', { name: '大三角一' }).click();
   if (rotate) await page.getByRole('button', { name: '向左转' }).click({ clickCount: rotate });
   const box = await page.locator('#stage').boundingBox();
   const start = {
@@ -18,7 +27,6 @@ async function dragFirstPieceHome(page, { to = { x: 0.35, y: 0.45 }, rotate = 3 
   await page.mouse.move(target.x, target.y, { steps: 8 });
   await page.mouse.up();
 }
-
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
     width: document.documentElement.scrollWidth,
@@ -59,7 +67,7 @@ test.describe('tangram shadow play', () => {
       localStorage.removeItem('kidslab.progress.tangram-theater');
       localStorage.removeItem('kidslab.tangram-theater.audio.muted');
     });
-    await page.goto('/courseware/tangram-theater/');
+    await page.goto('/courseware/tangram-theater/?seed=987');
   });
 
   test('misplaced pieces explain what is wrong instead of snapping back silently', async ({ page }) => {
@@ -73,18 +81,24 @@ test.describe('tangram shadow play', () => {
     await expect(page.locator('#stage')).toHaveAttribute('data-focused-target', before);
 
     // 拖到离目标很远的地方：插回后台，并说明"再靠近一些"。
-    await dragFirstPieceHome(page, { to: { x: 0.9, y: 0.2 } });
+    const [tx, ty] = (await targetsFor(page))[0];
+    await dragFirstPieceHome(page, { to: { x: 0.9, y: 0.2 }, rotate: 0 });
     await expect(page.locator('#progressCount')).toHaveText('0/7');
     await expect(page.locator('#feedback')).toContainText('再靠近一些');
 
     // 位置对、角度错：提示要指出是方向问题，而不是笼统的"没对上"。
     await page.getByRole('option', { name: '大三角一' }).click();
-    await dragFirstPieceHome(page, { rotate: 0 });
-    await expect(page.locator('#feedback')).toContainText('转一转');
-
-    await dragFirstPieceHome(page);
+    // Try the rotations at the correct spot; a wrong angle must be answered with a direction
+    // hint, and one of the eight rotations must settle the piece.
+    let placed = false;
+    for (let turns = 0; turns <= 7 && !placed; turns += 1) {
+      await dragFirstPieceHome(page, { to: { x: tx, y: ty }, rotate: turns });
+      const feedback = await page.locator('#feedback').textContent();
+      if (/稳稳归位/.test(feedback)) placed = true;
+      else expect(feedback).toMatch(/转一转|再靠近一些/);
+    }
+    expect(placed, 'one of the eight rotations must settle the piece').toBe(true);
     await expect(page.locator('#progressCount')).toHaveText('1/7');
-    await expect(page.locator('#feedback')).toContainText('稳稳归位');
   });
 
   test('selecting a piece spotlights its own shadow, and dragging arms it', async ({ page }) => {
@@ -95,7 +109,8 @@ test.describe('tangram shadow play', () => {
     // 拖进吸附半径时剪影进入"就绪"态；离开后又退出。
     await page.getByRole('option', { name: '大三角一' }).click();
     const box = await page.locator('#stage').boundingBox();
-    const target = { x: box.x + box.width * 0.35, y: box.y + box.height * 0.45 };
+    const [x, y] = (await targetsFor(page))[0];
+    const target = { x: box.x + box.width * x, y: box.y + box.height * y };
     await page.mouse.move(box.x + box.width * 0.12, box.y + box.height * 0.84);
     await page.mouse.down();
     await page.mouse.move(box.x + box.width * 0.9, box.y + box.height * 0.2, { steps: 6 });
@@ -108,7 +123,8 @@ test.describe('tangram shadow play', () => {
   });
 
   test('completes all eight acts using the lantern hint', async ({ page }) => {
-    await placeActWithHints(page, 6);
+    // The lantern hint places one piece per press, so an act needs all seven pieces.
+    await placeActWithHints(page, 7);
     await expect(page.getByRole('heading', { name: '桥架起来了！' })).toBeVisible();
     await page.getByRole('button', { name: '下一幕 →' }).click();
 

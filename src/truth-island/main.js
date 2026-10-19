@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {TRUTH_BASES,truthTask,validTruth,truthIdentity,truthFamily,truthCopy} from './random-model.js';
 (() => {
   'use strict';
 
@@ -150,6 +152,8 @@
     },
   };
 
+  const rounds=createRounds('truth-island');
+  const CASES=TRUTH_BASES.map((a,i)=>rounds.define(i,a,truthTask,validTruth,truthIdentity,truthFamily));
   const SAVE_KEY = 'kidslab.truth-island';
   const MUTE_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
@@ -182,10 +186,12 @@
     next: $('#nextBtn'),
   };
 
-  let t = (key) => key;
+  let translate=(key)=>key;
+  const t=key=>truthCopy(CASES[level],key,lang)??translate(key);
   let lang = window.cool.preferences.lang;
   let level = 0;
   let unlocked = 0;
+  let completed=new Set();
   let assignments = { mia: '', noah: '' };
   let magicAsked = false;
   let solved = false;
@@ -202,6 +208,7 @@
     if (saved && Number.isInteger(saved.level) && Number.isInteger(saved.unlocked)) {
       level = Math.max(0, Math.min(2, saved.level));
       unlocked = Math.max(level, Math.min(2, saved.unlocked));
+      completed=new Set(Array.isArray(saved.completed)?saved.completed.filter(n=>Number.isInteger(n)&&n>=0&&n<=2):Array.from({length:unlocked},(_,i)=>i));
     }
   } catch {
     // Storage is optional; the game remains playable in this tab.
@@ -209,7 +216,7 @@
 
   function persist() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify({ level, unlocked }));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ level, unlocked,completed:[...completed] }));
     } catch {
       // Storage is optional.
     }
@@ -272,9 +279,9 @@
   }
 
   function renderBadges() {
-    const fixed = level > 0;
-    const miaRole = fixed ? 'truth' : assignments.mia;
-    const noahRole = fixed ? 'liar' : assignments.noah;
+    const fixed = level === 1;
+    const miaRole = fixed ? (CASES[level].roles.mia?'truth':'liar') : level===2?'':assignments.mia;
+    const noahRole = fixed ? (CASES[level].roles.noah?'truth':'liar') : level===2?'':assignments.noah;
     for (const [node, role] of [[el.miaBadge, miaRole], [el.noahBadge, noahRole]]) {
       node.textContent = badgeText(role);
       node.classList.toggle('is-truth', role === 'truth');
@@ -284,7 +291,7 @@
 
   function renderLevels() {
     el.levels.innerHTML = t('levels').map((name, index) =>
-      `<button class="level-button ${index === level ? 'is-active' : ''} ${index < unlocked ? 'is-done' : ''}" type="button" data-level="${index}" ${index > unlocked ? 'disabled' : ''}>${index + 1}. ${name}</button>`).join('');
+      `<button class="level-button ${index === level ? 'is-active' : ''} ${completed.has(index) ? 'is-done' : ''}" type="button" data-level="${index}" ${index > unlocked ? 'disabled' : ''}>${index + 1}. ${name}</button>`).join('');
     el.levels.querySelectorAll('[data-level]').forEach((button) => {
       button.addEventListener('click', () => setLevel(Number(button.dataset.level)));
     });
@@ -365,7 +372,10 @@
     el.reset.setAttribute('aria-label', t('reset'));
     el.hint.setAttribute('aria-label', t('hint'));
     el.scene.classList.toggle('is-pointing', level === 2 && magicAsked);
-    el.scene.classList.toggle('is-solved', solved);
+    el.scene.classList.toggle('is-solved', solved&&level>0);
+    document.querySelectorAll('.point-arrow').forEach(node=>{node.textContent=CASES[level].road==='left'?'➜':'⬅';});
+    $('#treasure').style.left=CASES[level].road==='right'?'auto':'8%';$('#treasure').style.right=CASES[level].road==='right'?'8%':'auto';
+    $('#moonGate').classList.toggle('is-open',Boolean(CASES[level].gateOpen));
     setStatus(statusKey, statusType);
     renderBadges();
     renderLevels();
@@ -375,6 +385,7 @@
   }
 
   function assignRole(person, role) {
+    if(solved||!['mia','noah'].includes(person)||!['truth','liar'].includes(role))return;
     assignments[person] = role;
     setStatus('status0');
     tone('pick');
@@ -384,12 +395,13 @@
   }
 
   function checkAssignments() {
+    if(solved)return;
     if (!assignments.mia || !assignments.noah) {
       setStatus('chooseBoth', 'error');
       tone('wrong');
       return;
     }
-    if (assignments.mia !== 'truth' || assignments.noah !== 'liar') {
+    if ((assignments.mia==='truth')!==CASES[0].roles.mia || (assignments.noah==='truth')!==CASES[0].roles.noah) {
       setStatus('identityWrong', 'error');
       tone('wrong');
       window.cool.track('retry_identity_badges');
@@ -403,7 +415,8 @@
   }
 
   function chooseRoad(road) {
-    if (road !== 'left') {
+    if(solved)return;
+    if (road !== CASES[level].road) {
       setStatus('roadWrong', 'error');
       tone('wrong');
       window.cool.track('retry_or_clue');
@@ -418,6 +431,7 @@
   }
 
   function askQuestion(index) {
+    if(solved||magicAsked)return;
     if (index !== 2) {
       setStatus(index === 0 ? 'directFail' : 'selfFail', 'error');
       tone('wrong');
@@ -434,7 +448,8 @@
   }
 
   function chooseFinalRoad(road) {
-    if (road !== 'left') {
+    if(solved||!magicAsked)return;
+    if (road !== CASES[level].road) {
       setStatus('finalWrong', 'error');
       tone('wrong');
       window.cool.track('retry_opposite_road');
@@ -444,26 +459,21 @@
     solved = true;
     setStatus('finalRight', 'success');
     window.cool.track('find_truth_island_treasure');
-    window.cool.complete?.();
+
     tone('complete');
     render();
     completeLevel();
   }
 
-  function completeLevel() {
-    if (level < 2) {
-      unlocked = Math.max(unlocked, level + 1);
-      persist();
-    }
-    clearTimeout(completionTimer);
-    completionTimer = window.setTimeout(() => {
-      el.modalMagic.textContent = level === 2 ? '🏝️ 🗝️ ✨' : '🧭 ✦';
-      el.modalTitle.textContent = t('solvedTitles')[level];
-      el.modalText.textContent = t('solvedTexts')[level];
-      el.next.textContent = level === 2 ? t('replay') : t('next');
-      el.modal.hidden = false;
-      renderLevels();
-    }, 260);
+  function showCompletion(){
+    el.modalMagic.textContent=level===2?'🏝️ 🗝️ ✨':'🧭 ✦';el.modalTitle.textContent=t('solvedTitles')[level];
+    el.modalText.textContent=level===0?t('identityRight'):level===1?t('roadRight'):t('solvedTexts')[2];
+    el.next.textContent=level===2?t('replay'):t('next');el.modal.hidden=false;renderLevels();
+  }
+  function completeLevel(){
+    const first=!completed.has(level);solved=true;completed.add(level);unlocked=Math.max(unlocked,Math.min(2,level+1));persist();
+    clearTimeout(hintTimer);clearTimeout(completionTimer);rounds.checkpoint();if(first&&level===2)window.cool.complete?.();
+    completionTimer=setTimeout(showCompletion,260);
   }
 
   function resetLevel() {
@@ -480,20 +490,18 @@
     scheduleHint();
   }
 
-  function setLevel(nextLevel) {
+  function setLevel(nextLevel,fresh=false) {
     if (nextLevel > unlocked) {
       setStatus('locked', 'error');
       tone('wrong');
       return;
     }
-    level = nextLevel;
-    persist();
-    resetLevel();
+    rounds.checkpoint();if(fresh)CASES[nextLevel]=rounds.next(nextLevel);level=nextLevel;persist();resetLevel();const play=rounds.record(level).play;if(play){try{restorePlay(play);}catch{resetLevel();}}rounds.checkpoint();
   }
 
   function nextLevel() {
     el.modal.hidden = true;
-    setLevel(level === 2 ? 0 : level + 1);
+    setLevel(level === 2 ? 0 : level + 1,true);
   }
 
   function showHint(withSound = true) {
@@ -524,14 +532,20 @@
 
   window.cool.bindI18n(I18N, {
     onChange(context) {
-      t = context.t;
+      translate = context.t;
       lang = context.lang;
       document.title = t('doc');
       el.lang.textContent = lang === 'zh' ? 'EN' : '中';
       el.theme.textContent = context.theme === 'light' ? '🌙' : '☀️';
-      render();
+      render();if(!el.modal.hidden&&solved)showCompletion();
     },
   });
 
-  resetLevel();
+  function restorePlay(s){
+    if(!s||!s.assignments||['mia','noah'].some(p=>!['','truth','liar'].includes(s.assignments[p]))||typeof s.magicAsked!=='boolean'||typeof s.solved!=='boolean'||typeof s.statusKey!=='string'||!['','error','success'].includes(s.statusType))throw new Error('Invalid truth snapshot');
+    if(s.solved&&(level===0&&['mia','noah'].some(p=>(s.assignments[p]==='truth')!==CASES[0].roles[p])||level===2&&!s.magicAsked))throw new Error('Invalid case solution');
+    assignments=s.assignments;magicAsked=s.magicAsked;solved=s.solved;statusKey=s.statusKey;statusType=s.statusType;render();if(solved){clearTimeout(hintTimer);showCompletion();}
+  }
+  const initial=Number(rounds.active??level);level=Number.isInteger(initial)&&initial>=0&&initial<=unlocked?initial:level;resetLevel();
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#modal',active:()=>level,capture:()=>({assignments,magicAsked,solved,statusKey,statusType}),restore:restorePlay,retry:resetLevel,beforeReload:()=>{clearTimeout(hintTimer);clearTimeout(completionTimer);}});
 })();

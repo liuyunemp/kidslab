@@ -1,10 +1,15 @@
+const rounds=createRounds('magic-cube');
+const ROUND_BASES={},ROUNDS={};
+for(const size of [2,3,4])for(const diff of [0,1,2]){const id=`${size}-${diff}`,base=twistBase('cube',size,diff);ROUND_BASES[id]=base;ROUNDS[id]=rounds.define(id,base,twistTask,validTwist,twistIdentity);}
 /* ============================================================
    魔方小达人 · KidsLab
    —— 玩法胶水层：双语/主题（平台约定）+ 游戏状态机 + 参数面板
    ============================================================ */
 import { createCubeApp } from './cube3d.js';
 import { createAudio } from './audio.js';
-import { solveLBL } from './solver.js';
+import {createRounds} from './random-rounds.js';
+import {runRoundWorker} from './random-worker-client.js';
+import {twistBase,twistTask,validTwist,twistIdentity,twistPath,twistIsSolved,twistInverse,validTwistPlay} from './random-model.js';
 
 /* ================= 语言 & 主题 · Language & Theme ================= */
 const I18N = {
@@ -342,6 +347,35 @@ function boot() {
   const bests = (() => { try { return JSON.parse(store.get(LS.best) || '{}') || {}; } catch { return {}; } })();
 
   /* ---------- 转动记号提示 ---------- */
+  const roundId=()=>`${S.size}-${S.diff}`;
+  const active=String(rounds.active||'3-0').split('-').map(Number);
+  if(ROUND_BASES[active.join('-')]){S.size=active[0];S.diff=active[1];}
+  let displaySnapshot=null,winTimer=0;
+  function captureRound(){
+    if(displaySnapshot)return displaySnapshot;
+    return {history:S.history.map(m=>({...m})),userStack:S.userStack.map(m=>({...m})),moves:S.moves,hints:S.hints,
+      seconds:S.startAt?(performance.now()-S.startAt)/1000:S.elapsed,started:!!S.startAt,
+      phase:S.phase==='idle'?'idle':'playing',won:!!S.won,state:twistPath(ROUND_BASES[roundId()],S.history)};
+  }
+  function restoreRound(p){
+    if(!validTwistPlay(p,ROUND_BASES[roundId()]))throw new Error('Invalid saved twist');
+    S.gen++;hinting=false;clearTimeout(winTimer);clearTimeout(notationTimer);displaySnapshot=null;cube.build(S.size);cube.setSkin(S.skin);cube.setIdleSpin(false);
+    S.history=p.history;S.userStack=p.userStack;S.moves=p.moves;S.hints=p.hints;S.elapsed=p.seconds;S.startAt=p.started?performance.now()-p.seconds*1000:0;
+    for(const m of S.history)cube.applyInstant(m);
+    S.won=!!p.won&&cube.isSolved();setPhase(p.phase);setTip(cube.isSolved()?'tipSolvedIdle':'tipPlay');
+    $('win').hidden=!S.won;if(S.won){$('winTitle').textContent=t('winTitle');$('winStats').textContent=t('winStats')(fmtTime(S.elapsed),S.moves);}
+  }
+  function currentSolution(){
+    const base=ROUND_BASES[roundId()],state=twistPath(base,S.history),fallback=S.history.slice().reverse().map(m=>({...twistInverse(m,base),stage:'rewind'}));
+    return runRoundWorker({payload:{state,size:S.size},fallback:()=>fallback,
+      validate:path=>{try{return Array.isArray(path)&&twistIsSolved(twistPath(base,path,state),base);}catch{return false;}},
+      workerFactory:()=>new Worker(new URL('./solver-worker.js',import.meta.url),{type:'module'})});
+  }
+  function changeDifficulty(size,diff){
+    rounds.checkpoint();S.size=size;S.diff=diff;
+    ROUNDS[roundId()]=rounds.next(roundId());reset();rounds.checkpoint();
+  }
+
   let notationTimer = 0;
   function showNotation(mv) {
     const info = cube.notation(mv);
@@ -400,12 +434,13 @@ function boot() {
 
   /* ---------- 玩家拖拽转动一层（来自 3D 引擎回调） ---------- */
   onUserTwistRef = (mv) => {
-    audio.click(0.9 + Math.random() * 0.25);
+    S.won=false;audio.click(0.9 + Math.random() * 0.25);
     invalidateHint();               // 玩家亲自动手 → 解题计划重新规划
     pushHistory(mv);
     showNotation(mv);
     markMoved();
     if (S.phase === 'playing') {
+      window.cool?.stage?.(roundId());
       if (!S.startAt) S.startAt = performance.now();  // 计时从玩家第一步开始
       S.userStack.push(mv);
       S.moves += 1;
@@ -414,47 +449,27 @@ function boot() {
       S.userStack.push(mv);
       if (cube.isSolved()) { S.history = []; S.userStack = []; }
     }
-    render();
+    render();rounds.checkpoint();
   };
 
   /* ---------- 打乱开局 ---------- */
-  async function scramble() {
-    if (cube.isBusy() || S.phase === 'scrambling' || S.phase === 'solving') return;
-    audio.ensure();
-    cube.setIdleSpin(false);
-    cube.build(S.size);           // 重建即复位
-    stageHide();
-    invalidateHint();
-    const gen = ++S.gen;
-    S.history = []; S.userStack = [];
-    S.moves = 0; S.hints = 0; S.startAt = 0; S.elapsed = 0;
-    setPhase('scrambling');
-    setTip('tipScrambling');
-    for (const mv of cube.randomScramble(SCRAMBLE[S.size][S.diff])) {
-      pushHistory(mv);
-      await cube.animateMove(mv, 0.085);
-      if (S.gen !== gen) return;  // 期间被重建（切阶数/复原）→ 放弃
-      audio.whoosh();
-    }
-    S.startAt = 0;                // 计时等待玩家第一步
-    markMoved();
-    setPhase('playing');
-    setTip('tipPlay');
+  function scramble() {
+    audio.ensure();rounds.checkpoint();
+    ROUNDS[roundId()]=rounds.next(roundId());reset();rounds.checkpoint();
   }
 
-  /* ---------- 撤销玩家最后一步 ---------- */
   async function undo() {
     if (cube.isBusy() || !S.userStack.length || (S.phase !== 'playing' && S.phase !== 'idle')) return;
     invalidateHint();
     const gen = S.gen;
     const mv = S.userStack.pop();
     const inv = cube.invert(mv);
+    pushHistory(inv);if(S.phase==='playing')S.moves=Math.max(0,S.moves-1);rounds.checkpoint();
     render();
     await cube.animateMove(inv, baseDur());
     if (S.gen !== gen) return;
     audio.click(0.75);
-    pushHistory(inv);
-    if (S.phase === 'playing') S.moves = Math.max(0, S.moves - 1);
+
     markMoved();
     if (cube.isSolved()) {
       if (S.phase === 'playing') { onWin(false); return; }
@@ -472,119 +487,49 @@ function boot() {
   const invalidateHint = () => { hintPlan = null; };
 
   async function hint() {
-    if (hinting || cube.isBusy() || S.phase !== 'playing' || !S.history.length) return;
-    const gen = S.gen;
-    /* 2×2/3×3：真求解器按公式给下一步；4×4：倒带一步 */
-    let step, stageKey;
-    if (S.size === 4) {
-      step = cube.invert(S.history[S.history.length - 1]);
-      stageKey = 'rewind';
-    } else {
-      if (!hintPlan || hintPlan.idx >= hintPlan.steps.length || hintPlan.nextSig !== stateSig()) {
-        const sol = solveLBL(cube.getState(), S.size);
-        if (!sol || !sol.length) return;
-        hintPlan = { steps: sol, idx: 0, nextSig: stateSig() };
-      }
-      step = hintPlan.steps[hintPlan.idx];
-      stageKey = step.stage;
-    }
-    hinting = true;
-    cube.setLocked(true);        // 亮灯预告期间不许拖
-    S.hints += 1;
-    S.moves += 1;
-    if (!S.startAt) S.startAt = performance.now();
-    S.userStack = [];            // 提示之后不可再撤销更早的步
-    render();
+    if(hinting||cube.isBusy()||S.phase!=='playing'||!S.history.length)return;
+    const gen=S.gen;hinting=true;cube.setLocked(true);render();
     try {
-      /* 显示公式阶段 + 点亮要搬运的那层零件，看清楚了再转 */
-      stageShow(stageKey);
-      const turnDur = baseDur() * 1.5;
-      cube.flashLayer(step.axis, step.coord, 0.55 + turnDur + 0.6);
-      audio.click(1.3);
-      await sleep(550);
-      if (S.gen !== gen || S.phase !== 'playing') return;
-      showNotation(step);
-      await cube.animateMove(step, turnDur);
-      if (S.gen !== gen) return;
-      audio.click(1.15);
-      pushHistory(step);
-      if (S.size !== 4 && hintPlan) {   // 计划推进一步，记录预期状态
-        hintPlan.idx += 1;
-        hintPlan.nextSig = stateSig();
+      if(!hintPlan||hintPlan.idx>=hintPlan.steps.length||hintPlan.nextSig!==stateSig()){
+        const steps=await currentSolution();if(gen!==S.gen)return;
+        hintPlan={steps,idx:0,nextSig:stateSig()};
       }
-      markMoved();
-      if (cube.isSolved()) { onWin(false); return; }
-    } finally {
-      hinting = false;
-      setPhase(S.phase);         // 按当前阶段重算锁定与按钮
-    }
+      const step=hintPlan.steps[hintPlan.idx];if(!step)return;
+      S.hints++;S.moves++;S.userStack=[];if(!S.startAt)S.startAt=performance.now();
+      stageShow(step.stage||'rewind');showNotation(step);pushHistory(step);
+      if(twistIsSolved(twistPath(ROUND_BASES[roundId()],S.history),ROUND_BASES[roundId()]))onWin(false);rounds.checkpoint();
+      await cube.animateMove(step,baseDur());if(gen!==S.gen)return;
+      hintPlan.idx++;hintPlan.nextSig=stateSig();audio.click(1.15);markMoved();
+      if(cube.isSolved()&&!S.won)onWin(false);
+    }finally{if(gen===S.gen){hinting=false;setPhase(S.phase);rounds.checkpoint();}}
   }
 
-  /* ---------- 还原演示：2×2/3×3 层先法公式逐阶段演示，4×4 原路倒带 ---------- */
   async function autoSolve() {
-    if (cube.isBusy() || !S.history.length || S.phase === 'scrambling' || S.phase === 'solving') return;
-    const gen = S.gen;
-    invalidateHint();
-    setPhase('solving');
-    S.userStack = [];
-    if (S.size === 4) {
-      /* 4×4：原路倒带（讲清楚这是"记路回家"不是公式） */
-      setTip('tipSolving4');
-      stageShow('rewind', null, true);
-      while (S.history.length && S.phase === 'solving') {
-        const inv = cube.invert(S.history[S.history.length - 1]);
-        showNotation(inv);
-        await cube.animateMove(inv, Math.max(0.15, baseDur() * 0.8));
-        if (S.gen !== gen) { stageHide(); return; }
-        audio.whoosh();
-        pushHistory(inv);
-      }
-    } else {
-      /* 层先法：孩子学的公式，一个阶段一个阶段来 */
-      setTip('tipSolving');
-      const sol = solveLBL(cube.getState(), S.size);
-      if (!sol) {   // 理论不发生；兜底倒带
-        while (S.history.length && S.phase === 'solving') {
-          const inv = cube.invert(S.history[S.history.length - 1]);
-          await cube.animateMove(inv, 0.15);
-          if (S.gen !== gen) return;
-          pushHistory(inv);
-        }
-      } else {
-        const order = [...new Set(sol.map((s) => s.stage))];
-        for (const step of sol) {
-          if (S.phase !== 'solving') break;
-          stageShow(step.stage, order, true);
-          showNotation(step);
-          await cube.animateMove(step, Math.max(0.14, baseDur() * 0.7));
-          if (S.gen !== gen) { stageHide(); return; }
-          audio.whoosh();
-          pushHistory(step);
-        }
-      }
+    if(cube.isBusy()||!S.history.length||S.phase==='solving'||hinting)return;
+    const gen=S.gen;displaySnapshot=captureRound();invalidateHint();setPhase('solving');setTip('tipSolving');
+    const sol=await currentSolution();if(gen!==S.gen)return;
+    const order=[...new Set(sol.map(s=>s.stage||'rewind'))];
+    for(const step of sol){
+      if(gen!==S.gen)return;
+      stageShow(step.stage||'rewind',order,true);showNotation(step);
+      pushHistory(step);await cube.animateMove(step,Math.max(.1,baseDur()*.6));
+      if(gen!==S.gen)return;audio.whoosh();
     }
-    stageHide();
-    if (S.phase === 'solving') onWin(true);
+    stageHide();if(cube.isSolved())onWin(true);
   }
 
-  /* ---------- 复原重置 ---------- */
   function reset() {
-    cube.build(S.size);
-    cube.setSkin(S.skin);
-    S.gen += 1;
-    stageHide();
-    invalidateHint();
-    S.history = []; S.userStack = [];
-    S.moves = 0; S.hints = 0; S.startAt = 0; S.elapsed = 0;
-    $('win').hidden = true;
-    setPhase('idle');
-    setTip('tipSolvedIdle');
+    S.gen++;hinting=false;clearTimeout(winTimer);clearTimeout(notationTimer);displaySnapshot=null;
+    cube.build(S.size);cube.setSkin(S.skin);cube.setIdleSpin(false);stageHide();invalidateHint();
+    const a=ROUNDS[roundId()];S.history=a.moves.map(m=>({...m}));S.userStack=[];
+    for(const m of S.history)cube.applyInstant(m);
+    S.moves=0;S.hints=0;S.startAt=0;S.elapsed=0;S.won=false;
+    $('win').hidden=true;setPhase(a.standard?'idle':'playing');setTip(a.standard?'tipSolvedIdle':'tipPlay');markMoved();
   }
 
-  /* ---------- 胜利 / 演示完成 ---------- */
   function onWin(isDemo) {
     S.elapsed = S.startAt ? (performance.now() - S.startAt) / 1000 : 0;
-    S.history = []; S.userStack = [];
+    S.userStack = [];S.won=!isDemo;S.startAt=0;
     stageHide();
     setPhase('idle');
     $('winEmoji').textContent = isDemo ? '🪄' : '🎉';
@@ -593,6 +538,8 @@ function boot() {
       $('winStats').textContent = '';
       $('winNote').textContent = t('winDemoNote');
     } else {
+      const completedKey='kidslab.magic-cube.completed.'+roundId();
+      if(!store.get(completedKey)&&!bests[bestKey()])window.cool?.complete?.();store.set(completedKey,'1');
       cube.celebrate();
       audio.win();
       $('winStats').textContent = t('winStats')(fmtTime(S.elapsed), S.moves);
@@ -610,8 +557,8 @@ function boot() {
       $('winNote').textContent = note;
     }
     setTip('tipSolvedIdle');
-    setTimeout(() => { $('win').hidden = false; }, isDemo ? 250 : 850);
-    render();
+    winTimer=setTimeout(() => { $('win').hidden = false; }, isDemo ? 250 : 850);
+    render();rounds.checkpoint();
   }
 
   /* ---------- 🔍 结构秘密课：按阶数分支的分步讲解 ---------- */
@@ -711,7 +658,8 @@ function boot() {
   }
 
   async function startLesson() {
-    if (lessonOn) return;
+    if (lessonOn||cube.isBusy()||hinting||S.phase==='solving') return;
+    displaySnapshot=captureRound();
     guide.hidden = true;
     store.set(LS.guided, '1');
     audio.ensure();
@@ -742,7 +690,7 @@ function boot() {
     document.body.classList.remove('lesson-mode');
     cube.setLessonView(false);
     while (cube.isBusy()) await sleep(50);
-    reset();                          // 回到所选阶数的复原态
+    const saved=displaySnapshot;reset();if(saved)restoreRound(saved);                          // 回到所选阶数的复原态
     cube.setIdleSpin(false);
     setTip('tipIdle');
   }
@@ -765,8 +713,8 @@ function boot() {
       cb(b.dataset[attr]);
     });
   }
-  segWire('sizeSeg', 'size', (v) => { S.size = +v; reset(); });
-  segWire('diffSeg', 'diff', (v) => { S.diff = +v; render(); }); // 下一次打乱生效
+  segWire('sizeSeg', 'size', (v) => changeDifficulty(+v,S.diff));
+  segWire('diffSeg', 'diff', (v) => changeDifficulty(S.size,+v)); // 下一次打乱生效
   segWire('skinSeg', 'skin', (v) => { S.skin = v; cube.setSkin(v); });
   $('speedRange').addEventListener('input', (e) => {
     S.speed = +e.target.value;
@@ -779,7 +727,7 @@ function boot() {
   btns.solve.addEventListener('click', autoSolve);
   btns.reset.addEventListener('click', reset);
   $('winAgainBtn').addEventListener('click', () => { $('win').hidden = true; scramble(); });
-  $('winCloseBtn').addEventListener('click', () => { $('win').hidden = true; });
+  $('winCloseBtn').addEventListener('click', () => {const saved=displaySnapshot;if(saved)restoreRound(saved);$('win').hidden=true;rounds.checkpoint();});
 
   /* 面板收起/展开（手机默认收起，桌面默认展开） */
   const panelBody = $('panelBody'), panelHandle = $('panelHandle'), panelArrow = $('panelArrow');
@@ -827,6 +775,8 @@ function boot() {
 
   /* ---------- 统一渲染（语言/主题/状态变化都走这里） ---------- */
   render = () => {
+    document.querySelectorAll('[data-diff]').forEach(b=>b.classList.toggle('is-on',Number(b.dataset.diff)===S.diff));
+    document.querySelectorAll('[data-size]').forEach(b=>b.classList.toggle('is-on',Number(b.dataset.size)===S.size));
     moveVal.textContent = String(S.moves);
     if (S.phase !== 'playing' || !S.startAt) timeVal.textContent = fmtTime(S.elapsed);
     const b = bests[bestKey()];
@@ -853,5 +803,7 @@ function boot() {
   applyLang();
   cube.setSkin(S.skin);   // 默认金属镜面
   setTip('tipIdle');
+  reset();
+  rounds.attach({active:roundId,capture:captureRound,restore:restoreRound,retry:reset,parent:'#panel',compact:true,dialog:'#win',beforeReload:()=>{S.gen++;lessonGen++;clearTimeout(winTimer);}});
   render();
 }

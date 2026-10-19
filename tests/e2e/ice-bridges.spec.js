@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {levelInstance} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -59,12 +60,27 @@ test.describe('seven bridges on ice', () => {
     await page.locator('#nextBtn').click();
 
     await expect(page.getByRole('heading', { name: '这张地图没有奇点，把五座桥一笔滑完' })).toBeVisible();
-    await page.locator('[data-node="aurora"]').click();
-    await page.locator('[data-node="harbor"]').click();
+    // The cycle is generated, so read its edges instead of assuming fixed neighbours.
+    const ring = await levelInstance(page, 'ice-bridges', 1);
+    const neighbours = (a, b) => ring.edges.some((edge) => [edge.a, edge.b].includes(a) && [edge.a, edge.b].includes(b));
+    const ids = ring.nodes.map((node) => node.id);
+    const apex = ids[0];
+    const disconnected = ids.find((id) => id !== apex && !neighbours(apex, id));
+    expect(disconnected, 'a five-node cycle must leave at least one node unconnected to its start').toBeTruthy();
+    await page.locator(`[data-node="${apex}"]`).click();
+    await page.locator(`[data-node="${disconnected}"]`).click();
     await expect(page.locator('#status')).toContainText('没有桥');
-    for (const node of ['pine', 'harbor', 'market', 'mill', 'aurora']) {
-      await page.locator(`[data-node="${node}"]`).click();
+    // Walk the actual cycle: from each node take the bridge not used yet, ending back at the start.
+    const used = new Set();
+    let current = apex;
+    for (let step = 0; step < 5; step += 1) {
+      const next = ids.find((id) => id !== current && neighbours(current, id) && !used.has([current, id].sort().join('/')));
+      expect(next, `node ${current} still has an unused bridge at step ${step}`).toBeTruthy();
+      used.add([current, next].sort().join('/'));
+      await page.locator(`[data-node="${next}"]`).click();
+      current = next;
     }
+    expect(current).toBe(apex);
     await expect(page.locator('#status')).toContainText('每座桥恰好一次');
     await expect(page.locator('.bridge-group.used')).toHaveCount(5);
     await page.locator('#nextBtn').click();
@@ -113,6 +129,8 @@ test.describe('seven bridges on ice', () => {
   });
 
   test('restores completion and can restart from the first mission', async ({ page }) => {
+    // A pre-randomization save only recorded the completed missions. Registering a second
+    // init script runs after the beforeEach cleanup, so the save survives every reload.
     await page.addInitScript(() => {
       localStorage.setItem('kidslab.ice-bridges', JSON.stringify({ unlocked: 2, completed: [0, 1, 2] }));
     });

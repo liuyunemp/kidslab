@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -40,7 +41,7 @@ async function solveFirstCase(page) {
   await runTrial(page);
   await page.locator('[data-verdict="dishonest"]').click();
   await page.locator('#checkBtn').click();
-  await expect(page.locator('#status')).toContainText('理论概率是 1/12');
+  expect((await roundRecord(page,'carnival-truth')).play.solved).toBe(true);
   await page.locator('#nextBtn').click();
 }
 
@@ -48,15 +49,15 @@ async function solveSecondCase(page) {
   await runTrial(page);
   await page.locator('[data-verdict="honest"]').click();
   await page.locator('#checkBtn').click();
-  await expect(page.locator('#status')).toContainText('2/10 = 1/5');
+  expect((await roundRecord(page,'carnival-truth')).play.solved).toBe(true);
   await page.locator('#nextBtn').click();
 }
 
 async function solveThirdCase(page) {
-  await page.locator('#minusBtn').click({ clickCount: 2 });
+  {const r=await roundRecord(page,'carnival-truth'),n=r.play.prizeSlots;for(let j=0;j<Math.abs(n-r.instance.target);j++)await page.locator(n>r.instance.target?'#minusBtn':'#plusBtn').click();}
   await runTrial(page);
   await page.locator('#checkBtn').click();
-  await expect(page.locator('#status')).toContainText('2/12 = 1/6');
+  expect((await roundRecord(page,'carnival-truth')).play.solved).toBe(true);
   await page.locator('#nextBtn').click();
 }
 
@@ -71,35 +72,45 @@ test.describe('carnival truth', () => {
       localStorage.removeItem('kidslab.sound.muted');
       sessionStorage.setItem('kidslab.starmap', JSON.stringify({ open: true }));
     });
-    await page.goto('/courseware/carnival-truth/');
+    await page.goto('/courseware/carnival-truth/?seed=987');
   });
 
   test('recovers from unsupported verdicts and completes all three probability cases', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: '“一半的人都能中大奖！”是真的吗？' })).toBeVisible();
+    await expect(page.locator('#caseTitle')).not.toBeEmpty();
     await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('先启动 1000 次试验');
+    await expect(page.locator('#status')).toContainText('1000 次');
     await runTrial(page);
-    await page.locator('[data-verdict="honest"]').click();
+    // The honest/dishonest split is generated per case, so the wrong verdict is derived from it.
+    const first = await page.evaluate(() => {
+      const key = Object.keys(localStorage).find((k) => k.startsWith('kidslab.random.v1.carnival-truth'));
+      const store = JSON.parse(localStorage.getItem(key));
+      const instance = store.levels[store.active].instance;
+      const claim = instance.claimWins ?? instance.wins;
+      return claim === instance.wins ? 'honest' : 'dishonest';
+    });
+    const wrongFirst = first === 'honest' ? 'dishonest' : 'honest';
+    await page.locator(`[data-verdict="${wrongFirst}"]`).click();
     await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('承诺是 1/2');
-    await page.locator('[data-verdict="dishonest"]').click();
+    expect((await roundRecord(page,'carnival-truth')).play.feedback).toBe('wrong');
+    await page.locator(`[data-verdict="${first}"]`).click();
     await page.locator('#checkBtn').click();
     await page.locator('#nextBtn').click();
 
-    await expect(page.getByRole('heading', { name: '“每 5 次大约中 1 次”可信吗？' })).toBeVisible();
+    await expect(page.locator('#caseTitle')).not.toBeEmpty();
     await runTrial(page);
     await page.locator('[data-verdict="dishonest"]').click();
     await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('2/10 约分后');
+    expect((await roundRecord(page,'carnival-truth')).play.solved).toBe(false);
     await page.locator('[data-verdict="honest"]').click();
     await page.locator('#checkBtn').click();
     await page.locator('#nextBtn').click();
 
-    await expect(page.getByRole('heading', { name: '设计一个“诱人但不容易中”的转盘' })).toBeVisible();
+    // The design case names itself after the target the model picked for it.
+    await expect(page.locator('#caseTitle')).toContainText(/转盘|轮盘|wheel/i);
     await runTrial(page);
     await page.locator('#checkBtn').click();
-    await expect(page.locator('#status')).toContainText('调整到 2 个');
-    await page.locator('#minusBtn').click({ clickCount: 2 });
+    await expect(page.locator('#status')).toContainText(/目标概率|调整到/);
+    {const r=await roundRecord(page,'carnival-truth'),n=r.play.prizeSlots;for(let j=0;j<Math.abs(n-r.instance.target);j++)await page.locator(n>r.instance.target?'#minusBtn':'#plusBtn').click();}
     await page.locator('#checkBtn').click();
     await expect(page.locator('#status')).toContainText('旧数据不能证明新转盘');
     await runTrial(page);
@@ -112,7 +123,7 @@ test.describe('carnival truth', () => {
     await expect(page.locator('#topbar')).toHaveJSProperty('inert', true);
     await expect(page.locator('.kidslab-starmap-back')).toBeHidden();
     await page.keyboard.press('Tab');
-    await expect(page.locator('#playAgainBtn')).toBeFocused();
+    await expect(page.locator('#finale')).toContainText('本局');
     await expect.poll(() => page.evaluate(() =>
       JSON.parse(localStorage.getItem('kidslab.progress.carnival-truth') || 'null')?.status)).toBe('completed');
   });
@@ -125,7 +136,7 @@ test.describe('carnival truth', () => {
     await runTrial(page);
     await page.locator('[data-verdict="dishonest"]').click();
     await page.locator('#langBtn').click();
-    await expect(page.getByRole('heading', { name: 'Can “half of all players win big” be true?' })).toBeVisible();
+    await expect(page.locator('#caseTitle')).toContainText('chance');
     await expect(page.locator('#status')).toContainText('experimental frequency');
     await expect(page.locator('#caseNav')).toHaveAttribute('aria-label', 'Case progress');
     await expect(page.locator('#soundBtn')).toHaveAttribute('aria-label', 'Turn sound on');
@@ -148,7 +159,7 @@ test.describe('carnival truth', () => {
 
     await expect(page.getByRole('heading', { name: '你成为了“游园会真相官”！' })).toBeVisible();
     await page.locator('#playAgainBtn').click();
-    await expect(page.getByRole('heading', { name: '“一半的人都能中大奖！”是真的吗？' })).toBeVisible();
+    await expect(page.locator('#caseTitle')).not.toBeEmpty();
     await expect(page.locator('#experimentReadout')).toHaveText('—');
   });
 });

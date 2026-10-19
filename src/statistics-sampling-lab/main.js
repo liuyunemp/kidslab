@@ -1,4 +1,6 @@
 import { createAudio } from './audio.js';
+import { createRounds } from './random-rounds.js';
+import { sampling, validSampling } from './random-model.js';
 import {
   DISTRICT_IDS,
   DISTRICT_MEANS,
@@ -200,13 +202,22 @@ const coach = $('coach');
 const feedback = $('feedback');
 
 const audio = createAudio(STORE_KEY);
-let lab = createLab();
+const rounds=createRounds('statistics-sampling-lab');
+const migrateLegacy=!rounds.hasSnapshot&&rounds.explicitSeed===null;
+const initial=rounds.define('survey',{seed:42,n:40,method:'simple'},sampling,validSampling);
+let lab = createLab(initial);
 let scene = null;
 let unlocked = false;
 
 try {
   const saved = localStorage.getItem(STORE_KEY);
-  if (saved) lab = parseLab(saved);
+  if (saved && migrateLegacy) {
+    const old=JSON.parse(saved);
+    if(old.version===1&&validSampling(old)&&Array.isArray(old.trials)){
+      lab=parseLab(old);
+      rounds.adopt('survey',{seed:lab.seed,n:lab.n,method:lab.method},old);
+    }
+  }
 } catch { /* private mode */ }
 
 let panelOpen = matchMedia('(min-width: 761px)').matches;
@@ -571,12 +582,11 @@ $('resetBtn').addEventListener('click', () => {
   unlockAll();
   audio.click();
   window.cool?.track?.('reset');
-  applyResult(resetLab(lab));
+  applyResult({ok:true,lab:createLab(rounds.record('survey').instance)});
   feedback.textContent = t('feedbackIdle');
   coach.textContent = t('tip0');
   try {
-    localStorage.removeItem(STORE_KEY);
-    localStorage.removeItem('kidslab.progress.statistics-sampling-lab');
+    localStorage.setItem(STORE_KEY,serializeLab(lab));
   } catch { /* private mode */ }
   paint();
 });
@@ -622,3 +632,7 @@ window.cool.bindI18n(I18N, {
 });
 syncWelcome();
 renderChrome();
+rounds.attach({parent:'#panelBody',active:()=>'survey',
+  capture:()=>JSON.parse(serializeLab(lab)),
+  restore:value=>{if(value.version!==1||!validSampling(value)||!Array.isArray(value.trials))throw new Error('Invalid survey');lab=parseLab(value);persist();renderChrome();},
+  retry:()=>{lab=createLab(rounds.record('survey').instance);persist();renderChrome();}});

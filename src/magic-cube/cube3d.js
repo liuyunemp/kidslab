@@ -724,6 +724,7 @@ export function createCubeApp({ canvas, cssVar, onUserTwist, onFirstInteract, on
     build,
     setSkin,
     animateMove,
+    applyInstant: commit,
     isSolved,
     randomScramble,
     invert,

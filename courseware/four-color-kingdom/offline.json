@@ -1,19 +1,54 @@
 {
   "id": "four-color-kingdom",
-  "version": "897cacb63c7c1fe501b658a5681cfb74d205c17122dbc4da9a6f7c25464b1a19",
+  "version": "2e88ae3d74042aa4897534691c3edf8dc9d9ea79e7211053de2ab366e85148a3",
   "assets": [
+    {
+      "path": "classic-maps.js",
+      "sha256": "2d7dcd4f8390fcfe5bf1376194fc998b8688a01811c032857f1f3f597b0bb33c",
+      "fingerprint": "7f9eac2a"
+    },
     {
       "path": "course.json",
       "sha256": "38abf99f959b65de42a3636a021b873eafd2e3ce9e97e3291a577d4c45f9dc1b"
     },
     {
       "path": "index.html",
-      "sha256": "64b455d288d7b4895f470adf709509d7730612a86ae586babf86ab24663ea3e0"
+      "sha256": "d743c63007b9b617eea1a46ea218483a4cc88b6820c5ca8f238b9cea3b8dcaaa"
     },
     {
       "path": "main.js",
-      "sha256": "107a7ea14732dc284da4ef6416bcfe6f3f33fc4e0d0dddca9baa3e860c8e2b37",
-      "fingerprint": "3a536d58"
+      "sha256": "268fc4c61a7b70f06ba92eea1c7ba61290ad2fa04a3913cd074a3969b897afe3",
+      "fingerprint": "100faba4"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "7ef3f8cfc6600202810929aeec1025fb0a411cd9a7dfda25de0bc845a9fd7224",
+      "fingerprint": "9228a501"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "d124632fa55815e2e54cc447438f62454cb5692246112fe020ebfec129cfa388",
+      "fingerprint": "49c04e1f"
     },
     {
       "path": "style.css",

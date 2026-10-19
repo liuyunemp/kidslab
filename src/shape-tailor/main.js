@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {tailorTask,tailorFamily,tailorIdentity,validTailor,tailorShape,tailorPiece} from './random-model.js';
 (() => {
   'use strict';
 
@@ -188,7 +190,7 @@
     },
   };
 
-  const MISSIONS = [
+  const CLASSIC = [
     {
       id: 'parallelogram',
       kind: 'parallelogram',
@@ -228,6 +230,23 @@
   ];
 
   const STORAGE_KEY = 'kidslab.shape-tailor';
+  const rounds=createRounds('shape-tailor'),hadRounds=rounds.hasSnapshot;
+  const MISSIONS=CLASSIC.map((base,i)=>rounds.define(i,base,tailorTask,validTailor,tailorIdentity,tailorFamily));
+  function updateCopies(){
+    for(const lang of ['zh','en']){
+      const zh=lang==='zh',t=I18N[lang];
+      t.baseTexts=MISSIONS.map(m=>m.kind==='trapezoid'?`a = ${m.top}, b = ${m.base}`:`a = ${m.base}`);
+      t.heightTexts=MISSIONS.map(m=>`h = ${m.height}`);
+      t.formulasOpen=MISSIONS.map(m=>`S = ${m.kind==='trapezoid'?`(${m.top} + ${m.base}) ÷ 2`:m.kind==='triangle'?`½ × ${m.base}`:m.base} × ${m.height}`);
+      t.afterSnap=MISSIONS.map((m,i)=>(zh?['拼成长方形了！','拼成平行四边形了，面积要折半。','转动角片，拼成长方形了！'][i]:['Rectangle joined!','Parallelogram joined; halve its area.','Rotate the corner to join a rectangle!'][i])+` ${t.formulasOpen[i]}`);
+      t.correct=MISSIONS.map((m,i)=>`${zh?'成交！':'Sold!'} ${t.formulasOpen[i]} = ${m.answer}`);
+      t.insightAreas=MISSIONS.map(m=>String(m.answer));
+      t.slide=zh?'移动拼合':'Move to join';
+      t.afterCut[1]=zh?'复制好了！移动并转半圈，让两块三角形贴紧。':'Twin ready! Move and turn it halfway to join.';
+      t.afterCut[2]=zh?'裁好了！把角片转半圈，补到上面的空位。':'Cut done! Turn the corner halfway into the top gap.';
+      t.hints[2]=zh?'角片绕高的中点转半圈，拼成平均底乘高的长方形。':'Turn the corner halfway around the midpoint of the height to make an average-base rectangle.';
+    }
+  }
   const SOUND_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
 
@@ -286,6 +305,16 @@
   let pieceT = 0;
   let cutProgress = 1;
   let state = loadState();
+  let motionEpoch=0,sliding=false;
+  let everComplete=state.completed;
+  let mastered=new Set();
+  try{const old=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');mastered=new Set(old.mastered??Array.from({length:state.completed?3:state.mission},(_,i)=>i));}catch{}
+  if(!hadRounds&&rounds.explicitSeed===null&&state.phase!=='ready'){
+    MISSIONS[state.mission]=CLASSIC[state.mission];rounds.adopt(state.mission,mission(),state);
+  }
+  const active=Number(rounds.active??state.mission);
+  state={...freshState(),mission:active,guess:MISSIONS[active].defaultGuess};
+  updateCopies();
 
   function freshState() {
     return {
@@ -338,7 +367,8 @@
           guess: state.guess,
           result: state.result,
           solved: state.solved,
-          completed: state.completed,
+          completed: everComplete,
+          mastered:[...mastered],
           feedback: state.feedback,
           pieceT: state.pieceT,
         }),
@@ -445,6 +475,8 @@
   }
 
   function markComplete() {
+    if(everComplete)return;
+    everComplete=true;
     try {
       window.cool?.complete?.();
     } catch {
@@ -505,7 +537,7 @@
     MISSIONS.forEach((_, index) => {
       const dot = document.createElement('span');
       dot.textContent = String(index + 1);
-      if (index < state.mission || (index === state.mission && state.solved) || state.completed) {
+      if (mastered.has(index)) {
         dot.classList.add('is-done');
       }
       if (index === state.mission && !state.completed) dot.classList.add('is-current');
@@ -539,8 +571,8 @@
       state.solved || state.phase === 'solved' ? t('money', m.answer * m.unitPrice) : '—';
     elements.formulaText.textContent = open || state.solved ? t('formulasOpen')[state.mission] : t('formulasLocked')[state.mission];
     elements.lessonText.textContent = t('lessons')[state.mission];
-    const showFormula = state.phase !== 'ready' || state.solved || state.feedback === 'hint';
-    const showLesson = state.solved || ['hint', 'snapped', 'correct', 'wrong-low', 'wrong-high'].includes(state.feedback);
+    const showFormula = state.feedback === 'hint';
+    const showLesson = false;
     if (elements.formulaCard) elements.formulaCard.hidden = !showFormula;
     if (elements.hintCard) elements.hintCard.hidden = !showLesson;
     elements.stepperLabel.textContent = t('stepperLabels')[state.mission];
@@ -586,159 +618,15 @@
   }
 
   function geometry(m, width, height) {
-    const finish = (g) => {
-      const pc = centroid(g.piece);
-      const tc = centroid(g.target);
-      g.slide = { x: tc.x - pc.x, y: tc.y - pc.y };
-      return g;
-    };
-    const pad = 36;
-    const tableW = width - pad * 2;
-    const tableH = height - pad * 2;
-    const scale = Math.min(tableW / 14, tableH / 10);
-    const cx = width / 2;
-    const cy = height / 2 + 8;
-    const base = m.base * scale;
-    const h = m.height * scale;
-    const skew = scale * 2.4;
-
-    if (m.kind === 'parallelogram') {
-      const x0 = cx - base / 2 - skew / 2;
-      const y0 = cy + h / 2;
-      return finish({
-        scale,
-        cx,
-        cy,
-        body: [
-          { x: x0 + skew, y: y0 - h },
-          { x: x0 + skew + base, y: y0 - h },
-          { x: x0 + base, y: y0 },
-          { x: x0, y: y0 },
-        ],
-        piece: [
-          { x: x0, y: y0 },
-          { x: x0 + skew, y: y0 - h },
-          { x: x0 + skew, y: y0 },
-        ],
-        remain: [
-          { x: x0 + skew, y: y0 - h },
-          { x: x0 + skew + base, y: y0 - h },
-          { x: x0 + base, y: y0 },
-          { x: x0 + skew, y: y0 },
-        ],
-        target: [
-          { x: x0 + base, y: y0 },
-          { x: x0 + base + skew, y: y0 - h },
-          { x: x0 + base + skew, y: y0 },
-        ],
-        rect: [
-          { x: x0 + skew, y: y0 - h },
-          { x: x0 + skew + base, y: y0 - h },
-          { x: x0 + skew + base, y: y0 },
-          { x: x0 + skew, y: y0 },
-        ],
-        cutFrom: { x: x0 + skew, y: y0 - h },
-        cutTo: { x: x0 + skew, y: y0 },
-        labels: {
-          base: { x: cx, y: y0 + 18 },
-          height: { x: x0 + skew - 16, y: cy },
-        },
-        slide: { x: base, y: 0 },
-      });
-    }
-
-    if (m.kind === 'triangle') {
-      const x0 = cx - base / 2;
-      const y0 = cy + h / 2;
-      const apex = { x: cx - base * 0.1, y: y0 - h };
-      return finish({
-        scale,
-        cx,
-        cy,
-        body: [
-          { x: x0, y: y0 },
-          { x: x0 + base, y: y0 },
-          apex,
-        ],
-        piece: [
-          { x: x0, y: y0 },
-          { x: x0 + base, y: y0 },
-          apex,
-        ],
-        remain: [
-          { x: x0, y: y0 },
-          { x: x0 + base, y: y0 },
-          apex,
-        ],
-        target: [
-          { x: x0 + base, y: y0 },
-          { x: x0 + base * 2, y: y0 },
-          { x: x0 + base + (apex.x - x0), y: apex.y },
-        ],
-        rect: [
-          { x: x0, y: y0 },
-          { x: x0 + base * 2, y: y0 },
-          { x: x0 + base + (apex.x - x0), y: apex.y },
-          apex,
-        ],
-        cutFrom: apex,
-        cutTo: { x: x0 + base / 2, y: y0 },
-        labels: {
-          base: { x: cx, y: y0 + 18 },
-          height: { x: apex.x - 18, y: cy },
-        },
-        slide: { x: base, y: 0 },
-        twinOrigin: { x: x0, y: y0 },
-      });
-    }
-
-    // trapezoid
-    const top = m.top * scale;
-    const bot = m.base * scale;
-    const x0 = cx - bot / 2;
-    const y0 = cy + h / 2;
-    const leftOver = (bot - top) / 2;
-    return finish({
-      scale,
-      cx,
-      cy,
-      body: [
-        { x: x0 + leftOver, y: y0 - h },
-        { x: x0 + leftOver + top, y: y0 - h },
-        { x: x0 + bot, y: y0 },
-        { x: x0, y: y0 },
-      ],
-      piece: [
-        { x: x0 + leftOver + top, y: y0 - h },
-        { x: x0 + bot, y: y0 },
-        { x: x0 + leftOver + top, y: y0 },
-      ],
-      remain: [
-        { x: x0 + leftOver, y: y0 - h },
-        { x: x0 + leftOver + top, y: y0 - h },
-        { x: x0 + leftOver + top, y: y0 },
-        { x: x0, y: y0 },
-      ],
-      target: [
-        { x: x0 + leftOver, y: y0 - h },
-        { x: x0, y: y0 },
-        { x: x0 + leftOver, y: y0 },
-      ],
-      rect: [
-        { x: x0 + leftOver, y: y0 - h },
-        { x: x0 + leftOver + top + leftOver, y: y0 - h },
-        { x: x0 + leftOver + top + leftOver, y: y0 },
-        { x: x0 + leftOver, y: y0 },
-      ],
-      cutFrom: { x: x0 + leftOver + top, y: y0 - h },
-      cutTo: { x: x0 + leftOver + top, y: y0 },
-      labels: {
-        base: { x: cx, y: y0 + 18 },
-        height: { x: x0 + leftOver - 16, y: cy },
-        top: { x: cx, y: y0 - h - 14 },
-      },
-      slide: { x: -(top), y: 0 },
-    });
+    const raw=tailorShape(m),points=[...raw.body,...raw.rect],maxX=Math.max(...points.map(p=>p.x));
+    const scale=Math.max(1,Math.min((width-88)/maxX,(height-76)/m.height));
+    const left=(width-maxX*scale)/2,bottom=(height+m.height*scale)/2;
+    const map=p=>({x:left+p.x*scale,y:bottom-p.y*scale}),g={...raw,scale,cx:width/2,cy:height/2};
+    for(const key of ['body','piece','remain','target','rect'])g[key]=raw[key].map(map);
+    for(const key of ['cutFrom','cutTo','pivot'])if(raw[key])g[key]=map(raw[key]);
+    const pc=centroid(g.piece),tc=centroid(g.target);g.slide={x:tc.x-pc.x,y:tc.y-pc.y};
+    g.labels={base:{x:left+m.base*scale/2,y:bottom+22},height:{x:left-24,y:height/2},top:{x:left+(m.top||m.base)*scale/2,y:bottom-m.height*scale-16}};
+    return g;
   }
 
   function pathPoly(ctx, pts) {
@@ -807,7 +695,7 @@
     const muted = cssVar('--muted');
     ctx.save();
     ctx.fillStyle = ink;
-    ctx.font = '800 15px ui-rounded, sans-serif';
+    ctx.font = '800 16px ui-rounded, sans-serif';
     ctx.textAlign = 'center';
     if (m.kind === 'trapezoid') {
       ctx.fillText(`b=${m.base}`, g.labels.base.x, g.labels.base.y);
@@ -864,9 +752,7 @@
       drawLabels(ctx, g, m);
     } else if (phase === 'cut') {
       drawFabric(ctx, g.remain, cloth, stroke);
-      const dx = g.slide.x * pT + (drag ? drag.dx : 0);
-      const dy = g.slide.y * pT + (drag ? drag.dy : 0);
-      const moved = translatePoly(g.piece, dx, dy);
+      const moved = tailorPiece(g, pT);
       drawFabric(ctx, moved, cloth2, stroke);
       // target ghost
       ctx.save();
@@ -884,7 +770,7 @@
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         const c = centroid(g.rect);
-        ctx.fillText(`${m.answer}`, c.x, c.y);
+        ctx.fillText(`${m.kind==='triangle'?m.answer*2:m.answer}`, c.x, c.y);
         ctx.restore();
       }
       drawLabels(ctx, g, m);
@@ -992,17 +878,19 @@
   }
 
   function doSlide() {
-    if (state.phase !== 'cut') return;
+    if (state.phase !== 'cut'||sliding) return;
+    sliding=true;const epoch=++motionEpoch;
     playSound('slide');
     const start = performance.now();
     const from = state.pieceT;
     const tick = (now) => {
+      if(epoch!==motionEpoch)return;
       const u = Math.min(1, (now - start) / 420);
       state.pieceT = from + (1 - from) * (1 - (1 - u) ** 3);
       pieceT = state.pieceT;
       drawScene();
       if (u < 1) requestAnimationFrame(tick);
-      else completeSlide();
+      else {sliding=false;completeSlide();rounds.checkpoint();}
     };
     requestAnimationFrame(tick);
   }
@@ -1016,6 +904,7 @@
       track('quote_ok');
       state.phase = 'solved';
       state.solved = true;
+      mastered.add(state.mission);
       state.result = 'correct';
       state.feedback = 'correct';
       stageProgress();
@@ -1043,7 +932,9 @@
       render();
       return;
     }
+    rounds.checkpoint();
     state.mission += 1;
+    if(rounds.record(state.mission).play){MISSIONS[state.mission]=rounds.next(state.mission);updateCopies();}
     state.phase = 'ready';
     state.guess = MISSIONS[state.mission].defaultGuess;
     state.result = 'idle';
@@ -1057,6 +948,7 @@
   }
 
   function doReset() {
+    motionEpoch++;sliding=false;drag=null;state.completed=false;
     playSound('tap');
     track('reset');
     const m = mission();
@@ -1107,9 +999,7 @@
     if (state.phase !== 'cut') return;
     const g = geometry(mission(), elements.canvas.clientWidth, elements.canvas.clientHeight);
     const pos = pointerPos(event);
-    const dx = g.slide.x * state.pieceT;
-    const dy = g.slide.y * state.pieceT;
-    const moved = translatePoly(g.piece, dx, dy);
+    const moved = tailorPiece(g, state.pieceT);
     const c = centroid(moved);
     const dist = Math.hypot(pos.x - c.x, pos.y - c.y);
     if (dist > 64) return;
@@ -1180,9 +1070,12 @@
     elements.playAgainBtn?.addEventListener('click', () => {
       playSound('tap');
       track('replay');
-      state = freshState();
-      sparkles = [];
+      motionEpoch++;sliding=false;drag=null;
+      for(let i=0;i<3;i++)MISSIONS[i]=rounds.next(i);
+      updateCopies();state = freshState();
+      everComplete=false;
       clearProgress();
+      sparkles = [];
       saveState();
       render();
     });
@@ -1218,5 +1111,11 @@
   });
 
   stageProgress();
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#finale',active:()=>state.mission,capture:()=>state,
+    restore:s=>{
+      const m=mission();
+      if(s.mission!==state.mission||!['ready','cut','snapped','quote','solved'].includes(s.phase)||!Number.isInteger(s.guess)||s.guess<m.min||s.guess>m.max||!Number.isFinite(s.pieceT)||s.pieceT<0||s.pieceT>1||((s.solved||s.completed)&&s.guess!==m.answer))throw new Error('Invalid cloth');
+      state=s;pieceT=s.pieceT;render();
+    },retry:doReset,beforeReload:()=>{motionEpoch++;sliding=false;drag=null;}});
   requestAnimationFrame(loop);
 })();

@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { rolling as generateWheel, validRolling, rollingSetup, validRollingSetup, validRollingPlay } from './random-model.js';
 /* ============================================================
    🎡 滚轮乐园 · KidsLab 双语/主题模板
    —— 「语言 & 主题」段落是平台约定，整段复制、按需加 key，勿改机制
@@ -143,11 +145,16 @@
     questionText: $('questionText'), answer: $('answer'), wheelChoice: $('wheelChoice'), verifyBtn: $('verifyBtn'), nextQBtn: $('nextQBtn'), scoreText: $('scoreText'),
   };
   const ctx = els.canvas.getContext('2d');
+  const rounds=createRounds('rolling-park');
+  const initialRoll=rounds.define('roll',{radius:60,slices:16},rollingSetup,validRollingSetup,a=>a.radius);
+  const initialArea=rounds.define('area',{radius:60,slices:16},rollingSetup,validRollingSetup,a=>a.slices);
   let W = 900, H = 560, dpr = 1;
-  let mode = 'roll';
-  let radius = 60;
+  let mode = rounds.active?.startsWith('q')?'challenge':['roll','area'].includes(rounds.active)?rounds.active:'roll';
+  let radius = initialRoll.radius;
+  els.radius.value=radius;
   let roll = 0;
   let rolling = false;
+  let motionEpoch=0;
   let dragging = false;
   let square = { on: false, p: 0 };
   const records = [];
@@ -155,14 +162,18 @@
   const GUESS_MIN = 2.9, GUESS_MAX = 3.3, GUESS_NEED = 3;
   let guessed = false;
   let guessMsgKey = '';
-  let slices = 16;
+  let slices = initialArea.slices;
+  els.slices.value=slices;
   let areaAnim = 0;        // 0 = 圆形，1 = 拼成长方形
   let areaTarget = 0;
   let areaSliced = false;
   let areaRaf = 0;
   let actx = null;
-  let score = 0;
-  let qIndex = 0;
+  let completedQuestions=[];
+  try {const old=JSON.parse(localStorage.getItem('kidslab.rolling-park.completed'));if(Array.isArray(old))completedQuestions=[...new Set(old.filter(n=>Number.isInteger(n)&&n>=0&&n<6))];}catch{}
+  let score = completedQuestions.length;
+  let qIndex = /^q[0-5]$/.test(rounds.active)?Number(rounds.active.slice(1)):0;
+  let answered=false;
   /** 答对后自动进下一题；手动点「下一题」会取消它，避免连跳两题 */
   let autoNextTimer = 0;
   function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
@@ -170,11 +181,12 @@
     cancelAutoNext();
     autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
   }
-  const questions = [
+  const BASE_QUESTIONS = [
     { type: 'forward', d: 2, laps: 3 }, { type: 'forward', d: 1.5, laps: 4 }, { type: 'forward', d: 0.8, laps: 10 },
     { type: 'reverse', dist: 31.4, laps: 5, choices: [1, 2, 3] }, { type: 'reverse', dist: 18.8, laps: 4, choices: [1.5, 2.5, 3] },
     { type: 'forward', d: 3, laps: 2 },
   ];
+  const questions=BASE_QUESTIONS.map((base,index)=>rounds.define(`q${index}`,base,generateWheel,validRolling,a=>({type:a.type,d:a.d??null,dist:a.dist??null,laps:a.laps})));
 
   const clamp01 = (v) => Math.max(0, Math.min(1, v));
   const lerp = (a, b, p) => a + (b - a) * p;
@@ -474,11 +486,13 @@
 
   /* ---------- 交互 ---------- */
   function autoRoll() {
+    const epoch=++motionEpoch;
     startAudio(); rolling = true; roll = 0; square.on = false; sfx.roll();
     const t0 = performance.now();
     const step = (now) => {
+      if(epoch!==motionEpoch)return;
       const d = Math.min(1, (now - t0) / 1800); roll = ease(d); render();
-      if (d < 1 && rolling) requestAnimationFrame(step); else { rolling = false; roll = 1; recordCurrent(); render(); }
+      if (d < 1 && rolling) requestAnimationFrame(step); else { rolling = false; roll = 1; recordCurrent(); render(); rounds.checkpoint(); }
     };
     requestAnimationFrame(step);
   }
@@ -523,31 +537,39 @@
     els.scoreText.textContent = `${score}/${questions.length}`; render();
   }
   function verify() {
+    if(answered)return;
     cancelAutoNext();
     startAudio(); const q = questions[qIndex]; const ans = answerFor(q); let ok = false;
     if (q.type === 'forward') ok = Math.abs(Number(els.answer.value) - ans) <= 0.35;
     else ok = Math.abs(Number(els.wheelChoice.value) - ans) <= 0.15;
     if (ok) {
-      score += 1; els.tip.textContent = t('ok'); sfx.magic();
+      answered=true;
+      if(!completedQuestions.includes(qIndex))completedQuestions.push(qIndex);
+      score=completedQuestions.length;
+      try{localStorage.setItem('kidslab.rolling-park.completed',JSON.stringify(completedQuestions));}catch{}
+      els.tip.textContent = t('ok'); sfx.magic();
       if (qIndex < questions.length - 1) scheduleAutoNext(nextQuestion);
     } else {
       const near = q.type === 'forward' && Math.abs(Number(els.answer.value) - ans) <= 1;
       els.tip.textContent = (near ? t('close') : t('miss'))(fmt(ans)); sfx.bonk();
     }
-    roll = 0; const t0 = performance.now();
-    const step = (now) => { const d = Math.min(1, (now - t0) / 1400); roll = ease(d); render(); if (d < 1) requestAnimationFrame(step); };
+    roll = 0; const t0 = performance.now(),epoch=++motionEpoch;
+    const step = (now) => { if(epoch!==motionEpoch)return;const d = Math.min(1, (now - t0) / 1400); roll = ease(d); render(); if (d < 1) requestAnimationFrame(step);else rounds.checkpoint(); };
     requestAnimationFrame(step);
     els.scoreText.textContent = `${score}/${questions.length}`;
   }
   function nextQuestion() {
+    ++motionEpoch;
     cancelAutoNext();
     qIndex += 1;
-    if (qIndex >= questions.length) { qIndex = 0; els.tip.textContent = t('done'); score = 0; }
+    if (qIndex >= questions.length) { qIndex = 0; els.tip.textContent = t('done'); }
     else els.tip.textContent = t('chGo');
-    setupQuestion();
+    questions[qIndex]=rounds.next(`q${qIndex}`);answered=false;
+    setupQuestion();rounds.checkpoint();
   }
 
   function switchMode(next) {
+    ++motionEpoch;rolling=false;
     cancelAutoNext();
     mode = next; document.querySelectorAll('.tab').forEach((b) => b.classList.toggle('on', b.dataset.mode === mode));
     els.rollPanel.hidden = mode !== 'roll'; els.areaPanel.hidden = mode !== 'area'; els.challengePanel.hidden = mode !== 'challenge';
@@ -614,6 +636,7 @@
   /* 深链：?mode=roll|area|challenge&state=done|guess|rect，方便分享与教学演示 */
   const qp = new URLSearchParams(location.search);
   const m0 = qp.get('mode');
+  switchMode(mode);
   if (m0 && ['roll', 'area', 'challenge'].includes(m0)) switchMode(m0);
   if (qp.get('state') === 'done' && mode === 'roll') roll = 1;
   /* guess：直接摆好三组实测记录，课堂上可跳过滚轮直接讲「你发现了什么」 */
@@ -623,4 +646,12 @@
   }
   if (qp.get('state') === 'rect' && mode === 'area') { areaSliced = true; areaAnim = 1; areaTarget = 1; }
   resize();
+  rounds.attach({parent:'.panel.card',active:()=>mode==='challenge'?`q${qIndex}`:mode,
+    capture:()=>({mode,radius,slices,qIndex,roll,records,guessed,guessMsgKey,areaTarget,areaSliced,answered,answer:els.answer.value,wheel:els.wheelChoice.value}),
+    restore:s=>{
+      if(!validRollingPlay(s))throw new Error('Invalid wheel experiment');
+      ({radius,slices,qIndex,guessed,guessMsgKey,areaTarget,areaSliced,answered}=s);
+      els.radius.value=radius;els.slices.value=slices;records.splice(0,records.length,...s.records);areaAnim=areaTarget;
+      setupQuestion();switchMode(s.mode);roll=s.roll;els.answer.value=s.answer;els.wheelChoice.value=s.wheel;render();
+    },retry:()=>{},beforeReload:cancelAutoNext});
 })();

@@ -1,6 +1,6 @@
 {
   "id": "lantern-lane",
-  "version": "736661f423f493ee1c0950f9fc60b6595df99c4b9dec7ba04d56f3301cdaf7ed",
+  "version": "c638d361608364e48d0473478f5fdd4bb6d96a5309e73084d5f7f4b4ab08adf9",
   "assets": [
     {
       "path": "course.json",
@@ -8,17 +8,47 @@
     },
     {
       "path": "index.html",
-      "sha256": "1591dc29e717f565518a07cc00acbee8ed71a28ac8286ac00855af9a6b155e2b"
+      "sha256": "30db0b22695e28d7429edcb876b70d1d30bb0c3d42121ee91970c9b717988683"
     },
     {
       "path": "main.js",
-      "sha256": "e7eeba081fef43de9d1a9d617c15561e2befe85838a97fa2c339549e11e34064",
-      "fingerprint": "2a0ee537"
+      "sha256": "33f1561a6a43c669d0aebed74fadad0ab918ad05a1d3d4d8738e8d917e6ccfab",
+      "fingerprint": "851d1c86"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-explorations.js",
+      "sha256": "ddd042bb820a2739bd60b561b537e35073adda8bbeb1f9dcd77ea5e60b91fb46",
+      "fingerprint": "09d7192e"
+    },
+    {
+      "path": "random-model.js",
+      "sha256": "005af8f654b7ac36d9bb0b7ea3279bebf1224393dd6c5ed2b7b784e7f5a26f82",
+      "fingerprint": "154226f9"
+    },
+    {
+      "path": "random-rounds.js",
+      "sha256": "f1fa701ea4691ae863916294c1b1c86b70effdefd3afab32880edb3762dbdda0",
+      "fingerprint": "83e6f105"
+    },
+    {
+      "path": "random-worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "acce31745671f70372ff07977bff4b4aa343d958e26ed0d3e2e0cd2a2b6c05e1",
+      "fingerprint": "72b94470"
     },
     {
       "path": "style.css",
-      "sha256": "24e56b25161bbcbad4cec8fb9985b8fb992290bb01254f4571333cf85f51d5db",
-      "fingerprint": "2278805a"
+      "sha256": "7b55915100f4d39574977fa4cfe52f28542a4c1c223813a77e4d7798979bea74",
+      "fingerprint": "06fff7d7"
     }
   ]
 }

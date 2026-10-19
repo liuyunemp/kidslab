@@ -271,6 +271,7 @@ button, a { color: inherit; font: inherit; }
 .stock-pill strong { font: 900 22px/1 var(--display); }
 
 #sceneCanvas {
+  height: 0;
   width: 100%;
   flex: 1;
   min-height: 180px;
@@ -489,9 +490,8 @@ button, a { color: inherit; font: inherit; }
   background: var(--panel);
   box-shadow: 3px 3px 0 var(--line);
 }
-.primary-btn:hover, .secondary-btn:hover { transform: translateY(-1px); }
+.primary-btn:hover, .secondary-btn:hover { filter: brightness(1.04); }
 .primary-btn:active, .secondary-btn:active {
-  transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 var(--line);
 }
 .primary-btn[disabled], .secondary-btn[disabled] {
@@ -635,4 +635,36 @@ button, a { color: inherit; font: inherit; }
   .mission-card__copy h2 { font-size: 20px; }
   .console { padding: 12px; }
   .stepper output { min-width: 52px; font-size: 28px; }
+}
+
+.topbar h1 { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar__actions { flex-shrink: 0; }
+.console > * { flex-shrink: 0; }
+@media(max-width:900px){
+  html,body { height: 100%; overflow: hidden; }
+  .topbar { height: 58px; padding: 6px 12px; gap: 6px; }
+  .topbar__actions { gap: 4px; }
+  .pill { padding: 6px; min-width: 44px; }
+  .lane { height: calc(100dvh - 66px); min-height: 0; max-height: none; }
+  .mission-card { grid-template-columns: 1fr; min-height: 0; padding: 6px 10px; gap: 4px; }
+  .mission-card__number, .mission-card__copy p, .mission-nav, .console__head, .stage__head, .reset-btn, .formula-card, .hint-card { display: none !important; }
+  .mission-card__copy h2 { margin: 0; font-size: 18px; }
+  .workspace { grid-template-rows: minmax(180px,1fr) auto; gap: 8px; }
+  .stage { min-height: 0; padding: 6px; }
+  #sceneCanvas { height: 0; flex: 1; min-height: 120px; }
+  .readouts { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 3px; margin-top: 4px; }
+  .readouts span { padding: 4px; }
+  .readouts span:nth-child(3) { display: none; }
+  .readouts strong { font-size: 16px; }
+  .readouts small { font-size: 14px; }
+  .console { padding: 6px; gap: 5px; overflow: hidden; }
+  .status { min-height: 0; padding: 6px; font-size: 16px; line-height: 1.45; }
+  .stepper-card { padding: 5px; }
+  .stepper-card > span,.stepper-card > small { display: none; }
+  .stepper { margin: 0; }
+  .actions { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .actions button { padding: 6px; min-height: 44px; }
+  .finale__card { padding: 12px; }
+  .finale__grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 4px; }
+  .finale__grid article { padding: 6px; }
 }

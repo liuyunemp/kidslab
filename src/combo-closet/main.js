@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {closet,closetFamily,closetIdentity,validCloset,validClosetPlay} from './random-model.js';
 (() => {
   'use strict';
 
@@ -150,11 +152,31 @@
 
   const HAT_IDS = ['straw', 'beret', 'party', 'top', 'cloud'];
   const TOP_IDS = ['star', 'rainbow', 'flower', 'dot'];
-  const LEVELS = [
+  const BASE_LEVELS = [
     { mode: 'collect', hats: ['straw', 'beret'], tops: ['star', 'rainbow'] },
     { mode: 'collect', hats: ['party', 'top', 'cloud'], tops: ['flower', 'dot'] },
     { mode: 'stock', target: 12, ordersNeeded: 2 },
   ];
+
+  const rounds=createRounds('combo-closet');
+  const LEVELS=BASE_LEVELS.map((base,i)=>rounds.define(i,base,closet,validCloset,closetIdentity,closetFamily));
+  function updateCopies(){
+    for(const language of ['zh','en']){
+      const zh=language==='zh',t=I18N[language],target=LEVELS[2].target;
+      Object.assign(t,{
+        targetSign:zh?`🎯 目标 ${target} 套`:`🎯 Goal: ${target} looks`,
+        missions:LEVELS.map(a=>a.mode==='stock'?(zh?`设计两张 ${target} 套进货单`:`Design two orders for ${target} looks`):(zh?`拍齐 ${a.hats.length} × ${a.tops.length} 套造型`:`Snap all ${a.hats.length} × ${a.tops.length} outfits`)),
+        stockStart:zh?`选好两个数，让格子刚好摆满 ${target} 格。`:`Pick two numbers that fill exactly ${target} boxes.`,
+        stockFirst:(h,t)=>zh?`${h} × ${t} = ${target}，第一张进货单盖章！再找一组。`:`${h} × ${t} = ${target}. First order stamped! Find another pair.`,
+        stockDone:(h,t)=>zh?`${h} × ${t} = ${target}，两张进货单都盖章啦！`:`${h} × ${t} = ${target}. Both orders are stamped!`,
+        stockDup:zh?`这张进货单已经盖过章啦！换一组数字，乘出来还是 ${target}。`:`That order is already stamped. Find another pair making ${target}.`,
+        stockHint:zh?`哪两个 2 到 6 的数相乘等于 ${target}？交换两个数试试！`:`Which two numbers from 2 to 6 multiply to ${target}? Try swapping them!`,
+        completeTitles:LEVELS.map(a=>a.mode==='stock'?t.completeTitles[2]:(zh?`${a.hats.length*a.tops.length} 套造型全部上墙！`:`All ${a.hats.length*a.tops.length} outfits collected!`)),
+        completeTexts:LEVELS.map(a=>a.mode==='stock'?(zh?'交换两个因数，乘积不变！':'Swapping the factors keeps the product unchanged.'):(zh?`${a.hats.length} 顶帽子，每顶都配 ${a.tops.length} 件上衣，共 ${a.hats.length*a.tops.length} 套。`:`${a.hats.length} hats, each with ${a.tops.length} tops: ${a.hats.length*a.tops.length} outfits.`)),
+      });
+    }
+  }
+  updateCopies();
 
   const $ = (selector) => document.querySelector(selector);
   const SAVE_KEY = 'kidslab.combo-closet';
@@ -214,7 +236,9 @@
   let lang = window.cool.preferences.lang;
   let theme = window.cool.preferences.theme;
   let levelIndex = Math.min(2, Math.max(0, Number(saved.level) || 0));
+  if(rounds.active!==null&&Number(rounds.active)>=0&&Number(rounds.active)<3)levelIndex=Number(rounds.active);
   let unlocked = Math.min(2, Math.max(levelIndex, Number(saved.unlocked) || 0));
+  const finished=new Set(Array.isArray(saved.finished)?saved.finished:[]);
   let wornHat = null;
   let wornTop = null;
   let currentKey = null;
@@ -224,6 +248,8 @@
   let foundOrders = [];
   let completed = false;
   let idleTimer = 0;
+  let motionEpoch=0;
+  function later(fn,ms){const epoch=motionEpoch;return window.setTimeout(()=>{if(epoch===motionEpoch)fn();},ms);}
   let muted = false;
   let audioContext = null;
   const leafRefs = new Map();
@@ -292,7 +318,7 @@
 
   function persist() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify({ level: levelIndex, unlocked }));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ level: levelIndex, unlocked,finished:[...finished] }));
     } catch {
       // Progress persistence is optional; the current session remains playable.
     }
@@ -305,7 +331,7 @@
 
   function scheduleIdleHint() {
     clearTimeout(idleTimer);
-    idleTimer = window.setTimeout(() => {
+    idleTimer = later(() => {
       if (!completed && el.modal.hidden) setFeedback(t(level().mode === 'stock' ? 'stockHint' : 'idleHint'), '💡');
     }, 30000);
   }
@@ -340,7 +366,7 @@
     el.alpaca.classList.remove('is-happy', 'is-sad');
     void el.alpaca.getBoundingClientRect();
     el.alpaca.classList.add(mood);
-    window.setTimeout(() => el.alpaca.classList.remove(mood), 700);
+    later(() => el.alpaca.classList.remove(mood), 700);
   }
 
   function flashCamera() {
@@ -434,9 +460,10 @@
 
     if (discovered.size === total) {
       completed = true;
+      commitCompletion();
       clearTimeout(idleTimer);
-      window.setTimeout(() => tone('fanfare'), 450);
-      window.setTimeout(showCompletion, 950);
+      later(() => tone('fanfare'), 450);
+      later(showCompletion, 950);
     }
   }
 
@@ -475,7 +502,7 @@
       revealLeaf(key);
     };
     photo.addEventListener('transitionend', finish, { once: true });
-    window.setTimeout(finish, 700);
+    later(finish, 700);
   }
 
   /* ---------- drag & tap ---------- */
@@ -498,7 +525,7 @@
     node.style.opacity = '0';
     const cleanup = () => node.remove();
     node.addEventListener('transitionend', cleanup, { once: true });
-    window.setTimeout(cleanup, 500);
+    later(cleanup, 500);
   }
 
   function wearTargetRect(type) {
@@ -643,13 +670,14 @@
 
     if (foundOrders.length >= current.ordersNeeded) {
       completed = true;
+      commitCompletion();
       clearTimeout(idleTimer);
       setFeedback(t('stockDone', stockHats, stockTops), '🎉');
       window.cool.track('complete_stock_order');
       renderWall();
       renderProgress();
-      window.setTimeout(() => tone('fanfare'), 500);
-      window.setTimeout(showCompletion, 1150);
+      later(() => tone('fanfare'), 500);
+      later(showCompletion, 1150);
     } else {
       setFeedback(t('stockFirst', stockHats, stockTops), '🎉');
       window.cool.track('stamp_stock_order');
@@ -665,7 +693,7 @@
         cell.classList.add('is-lit');
         return;
       }
-      window.setTimeout(() => {
+      later(() => {
         cell.classList.add('is-lit');
         if (index % 4 === 0) tone('tick');
       }, index * 45);
@@ -749,13 +777,17 @@
     scheduleIdleHint();
   }
 
-  function showCompletion() {
+  function commitCompletion() {
     if (levelIndex < LEVELS.length - 1) {
       unlocked = Math.max(unlocked, levelIndex + 1);
       persist();
-    } else {
+    } else if(!finished.has(levelIndex)) {
       window.cool.complete?.();
     }
+    finished.add(levelIndex);persist();rounds.checkpoint();
+  }
+
+  function showCompletion() {
     el.celebration.textContent = levelIndex === 2 ? '📦✨' : levelIndex === 1 ? '🌸🦙🌸' : '📸';
     el.modalTitle.textContent = t('completeTitles')[levelIndex];
     el.modalText.textContent = t('completeTexts')[levelIndex];
@@ -766,6 +798,8 @@
   }
 
   function resetLevel() {
+    motionEpoch++;
+    clearTimeout(idleTimer);
     wornHat = null;
     wornTop = null;
     currentKey = null;
@@ -786,13 +820,19 @@
       setFeedback(t('locked'), '🔒');
       return;
     }
+    rounds.checkpoint();
     levelIndex = index;
     persist();
     resetLevel();
+    const play=rounds.record(index).play;
+    if(play)restorePlay(play);
+    rounds.checkpoint();
   }
 
   function nextLevel() {
     el.modal.hidden = true;
+    const next=levelIndex===LEVELS.length-1?0:levelIndex+1;
+    if(rounds.record(next).play?.completed){LEVELS[next]=rounds.next(next);updateCopies();}
     setLevel(levelIndex === LEVELS.length - 1 ? 0 : levelIndex + 1);
   }
 
@@ -845,6 +885,7 @@
     el.collect.hidden = isStock;
     el.stock.hidden = !isStock;
     el.mission.textContent = t('missions')[levelIndex];
+    document.querySelector('[data-t="targetSign"]').textContent=t('targetSign');
     el.reset.setAttribute('aria-label', t('reset'));
 
     if (isStock) {
@@ -892,4 +933,11 @@
   });
 
   resetLevel();
+  function capturePlay(){return {wornHat,wornTop,currentKey,discovered:[...discovered],stockHats,stockTops,foundOrders,completed};}
+  function restorePlay(s){
+    if(!validClosetPlay(s,level()))throw new Error('Invalid outfit snapshot');
+    ({wornHat,wornTop,currentKey,stockHats,stockTops,foundOrders,completed}=s);
+    discovered=new Set(s.discovered);render();if(completed)showCompletion();
+  }
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#modal',active:()=>levelIndex,capture:capturePlay,restore:restorePlay,retry:resetLevel});
 })();

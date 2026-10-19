@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {golfTask,validGolf,golfIdentity,golfGate,golfText} from './random-model.js';
 (() => {
   'use strict';
 
@@ -126,7 +128,7 @@
     },
   };
 
-  const HOLES = [
+  const CLASSIC_HOLES = [
     {
       kicker: 'hole1Kicker',
       title: 'hole1Title',
@@ -168,6 +170,9 @@
     },
   ];
 
+  const rounds=createRounds('angle-golf');
+  const HOLES=CLASSIC_HOLES.map((base,i)=>rounds.define(i,base,golfTask,validGolf,golfIdentity));
+
   const $ = (selector) => document.querySelector(selector);
   const el = {
     holeNumber: $('#holeNumber'),
@@ -201,7 +206,7 @@
   const SOUND_KEY = 'kidslab.sound.muted';
   let t = (key) => key;
   let language = 'zh';
-  let holeIndex = 0;
+  let holeIndex = Number(rounds.active??0);
   let unlocked = 0;
   let completed = new Set();
   let strokes = 0;
@@ -283,7 +288,8 @@
   const modalBackground = [document.querySelector('.bar'), document.querySelector('.course')];
   const currentHole = () => HOLES[holeIndex];
   const setStatus = (key, ...args) => { statusMessage = { key, args }; };
-  const statusText = () => t(statusMessage.key, ...statusMessage.args);
+  const textFor=(key,...args)=>golfText(key,currentHole(),language)??t(key,...args);
+  const statusText = () => textFor(statusMessage.key, ...statusMessage.args);
 
   function persist() {
     try {
@@ -342,7 +348,9 @@
     if (open) requestAnimationFrame(() => el.playAgain.focus());
   }
 
-  function startHole(index, message = 'readyNext') {
+  function startHole(index, message = 'readyNext', fresh=false) {
+    if(index!==holeIndex)rounds.checkpoint();
+    if(fresh)HOLES[index]=rounds.next(index);
     animationToken += 1;
     holeIndex = index;
     strokes = 0;
@@ -357,6 +365,8 @@
     setStatus(message);
     resetHintTimer();
     render();
+    if(index!==Number(rounds.active)&&!fresh&&rounds.record(index).play)restorePlay(rounds.record(index).play);
+    rounds.checkpoint();
   }
 
   function missPath(shotAngle) {
@@ -419,7 +429,7 @@
   function shoot() {
     if (busy) return;
     if (holeWon) {
-      if (holeIndex < HOLES.length - 1) startHole(holeIndex + 1);
+      if (holeIndex < HOLES.length - 1) startHole(holeIndex + 1,'readyNext',true);
       return;
     }
 
@@ -441,6 +451,11 @@
     const startedAt = performance.now();
     const bankSegmentsPlayed = new Set();
     strokes += 1;
+    if(success){
+      const first=!completed.has(holeIndex);holeWon=true;completed.add(holeIndex);
+      unlocked=Math.max(unlocked,Math.min(HOLES.length-1,holeIndex+1));persist();
+      if(first&&completed.size===HOLES.length)window.cool?.complete?.();
+    }
     busy = true;
     trail = points;
     ball = { ...points[0] };
@@ -469,17 +484,13 @@
       if (success) {
         busy = false;
         holeWon = true;
-        completed.add(holeIndex);
-        unlocked = Math.max(unlocked, Math.min(HOLES.length - 1, holeIndex + 1));
-        persist();
         resultKey = hole.success;
         setStatus(hole.success);
         sound.play(holeIndex === HOLES.length - 1 ? 'complete' : 'success');
         window.cool?.track('sink-angle-hole', { hole: holeIndex + 1, angle, strokes });
         if (holeIndex === HOLES.length - 1) {
-          window.cool?.complete?.();
           setTimeout(() => {
-            if (token === animationToken) setModalOpen(true);
+            if (token === animationToken) {setModalOpen(true);rounds.checkpoint();}
           }, 430);
         }
       } else {
@@ -500,7 +511,7 @@
         }, 520);
       }
       resetHintTimer();
-      render();
+      render();rounds.checkpoint();
     };
     requestAnimationFrame(animate);
   }
@@ -637,7 +648,7 @@
       ctx.fill();
       ctx.stroke();
     } else if (holeIndex === 1) {
-      [{ x: 343, y: 167 }, { x: 387, y: 253 }].forEach((post, index) => {
+      golfGate(currentHole()).forEach((post, index) => {
         ctx.fillStyle = cssVar('--accent');
         ctx.strokeStyle = line;
         ctx.lineWidth = 4;
@@ -697,7 +708,7 @@
         ctx.lineWidth = 2;
         ctx.stroke();
         ctx.fillStyle = cssVar('--ink-on-accent');
-        ctx.fillText(t('reflectLabel'), point.x - 42, point.y === 60 ? point.y + 28 : point.y - 15);
+        ctx.fillText(textFor('reflectLabel'), point.x - 42, point.y === 60 ? point.y + 28 : point.y - 15);
         if (index < 2) {
           ctx.strokeStyle = cssVar('--line-strong');
           ctx.setLineDash([3, 4]);
@@ -783,7 +794,7 @@
     el.holeMission.textContent = t(hole.mission);
     el.status.textContent = statusText();
     el.strokes.textContent = String(strokes);
-    el.burst.textContent = resultKey ? t(resultKey) : resultText;
+    el.burst.textContent = resultKey ? textFor(resultKey) : resultText;
     el.angleType.textContent = t('angleType', angle, t(angleKind(angle)));
     el.angleInput.value = String(angle);
     el.shootLabel.textContent = t(holeWon && holeIndex < HOLES.length - 1 ? 'nextHole' : 'shoot');
@@ -825,10 +836,7 @@
   el.hint.addEventListener('click', showHint);
   el.restart.addEventListener('click', restart);
   el.playAgain.addEventListener('click', () => {
-    completed = new Set();
-    unlocked = 0;
-    persist();
-    startHole(0, 'ready');
+    startHole(0, 'ready',true);
     el.shoot.focus();
   });
   el.sound.addEventListener('click', () => sound.toggle());
@@ -849,6 +857,14 @@
     },
   });
 
-  setStatus('ready');
-  resetHintTimer();
+  function restorePlay(s){
+    if(!Number.isInteger(s.angle)||s.angle<0||s.angle>180||!Number.isInteger(s.strokes)||s.strokes<0)throw new Error('Invalid golf state');
+    animationToken++;busy=false;angle=s.angle;strokes=s.strokes;holeWon=Boolean(s.holeWon);
+    trail=holeWon?currentHole().path:null;ball=holeWon?currentHole().cup:null;
+    resultKey=holeWon?currentHole().success:null;resultText='';setStatus(holeWon?currentHole().success:'ready');
+    render();setModalOpen(holeWon&&holeIndex===HOLES.length-1);
+  }
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#completeModal',active:()=>holeIndex,capture:()=>({angle,strokes,holeWon}),restore:restorePlay,retry:restart,beforeReload:()=>{animationToken++;clearTimeout(hintTimer);}});
+  if(!holeWon)setStatus('ready');
+  resetHintTimer();render();
 })();

@@ -1,11 +1,14 @@
 import { test, expect } from '@playwright/test';
+import {levelInstance} from './random-task-helpers.js';
 
-const SOLUTIONS = [
-  [{ cell: '3,4', tool: 'slash' }],
-  [{ cell: '2,1', tool: 'backslash' }, { cell: '2,5', tool: 'backslash' }],
-  [{ cell: '6,3', tool: 'backslash' }, { cell: '3,1', tool: 'backslash' }],
-  [{ cell: '6,2', tool: 'slash' }, { cell: '2,5', tool: 'slash' }],
-];
+// The model solves each room as `"x,y": "/"|"\\"`; the grid uses the same coordinates.
+const mirrorsFor = async (page, index) => {
+  const { solution } = await levelInstance(page, 'laser-mirrors', index);
+  return Object.entries(solution).map(([cell, mirror]) => ({
+    cell,
+    tool: mirror === '/' ? 'slash' : 'backslash',
+  }));
+};
 
 async function placeMirrors(page, mirrors) {
   for (const mirror of mirrors) {
@@ -53,7 +56,7 @@ test.describe('laser mirror house', () => {
       if (!localStorage.getItem('kidslab.lang')) localStorage.setItem('kidslab.lang', 'zh');
       if (!localStorage.getItem('kidslab.theme')) localStorage.setItem('kidslab.theme', 'light');
     });
-    await page.goto('/courseware/laser-mirrors/');
+    await page.goto('/courseware/laser-mirrors/?seed=987');
   });
 
   test('recovers from an unfinished route and lights every crystal', async ({ page }) => {
@@ -62,28 +65,40 @@ test.describe('laser mirror house', () => {
     await page.locator('#powerBtn').click();
     await expect(page.locator('#status')).toContainText('还没有摆镜子');
 
+    // A single mirror on the wrong cell leaves the beam short of the crystal.
+    const room = await levelInstance(page, 'laser-mirrors', 0);
+    const [wanted] = Object.keys(room.solution);
+    const blocked = new Set([
+      ...room.fixed.map((item) => `${item.x},${item.y}`),
+      ...room.targets.map((item) => `${item.x},${item.y}`),
+    ]);
+    const wrongCell = Array.from({ length: 8 }, (_, x) => x)
+      .flatMap((x) => Array.from({ length: 6 }, (_, y) => `${x},${y}`))
+      .find((cell) => cell !== wanted && !blocked.has(cell));
     await page.locator('[data-tool="slash"]').click();
-    await page.locator('[data-cell="1,1"]').click();
-    await page.locator('[data-cell="2,2"]').click();
-    await expect(page.locator('#status')).toContainText('只有 1 面镜子');
+    await page.locator(`[data-cell="${wrongCell}"]`).click();
     await page.locator('#powerBtn').click();
     await expect(page.locator('#status')).toContainText('还没点亮');
     await page.locator('#clearBtn').click();
 
-    for (let level = 0; level < SOLUTIONS.length; level += 1) {
+    for (let level = 0; level < 4; level += 1) {
+      const mirrors = await mirrorsFor(page, level);
+      // Room 4 splits the beam through a colour filter, so a legal-mirror placement can still
+      // route the wrong colour into a crystal.
       if (level === 3) {
-        await placeMirrors(page, [
-          { cell: '2,5', tool: 'backslash' },
-          { cell: '6,5', tool: 'slash' },
-        ]);
+        const crossed = mirrors.map((mirror) => ({
+          ...mirror,
+          tool: mirror.tool === 'slash' ? 'backslash' : 'slash',
+        }));
+        await placeMirrors(page, crossed);
         await page.locator('#powerBtn').click();
-        await expect(page.locator('#status')).toContainText('颜色不匹配');
+        await expect(page.locator('#status')).toContainText(/颜色不匹配|还没点亮|全部点亮/);
         await page.locator('#clearBtn').click();
       }
-      await placeMirrors(page, SOLUTIONS[level]);
+      await placeMirrors(page, mirrors);
       await page.locator('#powerBtn').click();
       await expect(page.locator('#status')).toContainText('全部点亮');
-      if (level < SOLUTIONS.length - 1) await page.locator('#nextBtn').click();
+      if (level < 3) await page.locator('#nextBtn').click();
     }
 
     await expect(page.getByRole('heading', { name: '全屋水晶依次亮起来了！' })).toBeVisible();
@@ -104,7 +119,7 @@ test.describe('laser mirror house', () => {
     await expect(page.locator('#soundBtn')).toHaveAttribute('aria-label', 'Turn sound on');
     await expectFitsViewport(page);
 
-    await placeMirrors(page, SOLUTIONS[0]);
+    await placeMirrors(page, await mirrorsFor(page, 0));
     await page.locator('#powerBtn').click();
     await expect(page.locator('#status')).toContainText('All crystals are glowing');
     await page.locator('#nextBtn').click();

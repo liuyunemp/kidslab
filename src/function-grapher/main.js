@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { parameterSet, validParameters } from './random-model.js';
 /* 函数变形记 Function Shapeshifter */
 (() => {
   'use strict';
@@ -92,10 +94,12 @@
     },
   };
 
-  let type = 'quadratic';
+  const rounds = createRounds('function-grapher');
+  let type = Object.hasOwn(PRESETS,rounds.active) ? rounds.active : 'quadratic';
   const values = {};
   for (const [k, preset] of Object.entries(PRESETS)) {
-    values[k] = Object.fromEntries(Object.entries(preset.params).map(([p, [, , , d]]) => [p, d]));
+    const base = {ranges:preset.params,values:Object.fromEntries(Object.entries(preset.params).map(([p,[,,,d]])=>[p,d]))};
+    values[k] = rounds.define(k,base,parameterSet,validParameters,a=>a.values).values;
   }
 
   const $ = (s) => document.querySelector(s);
@@ -250,4 +254,8 @@
   addEventListener('resize', resize);
 
   resize();
+  rounds.attach({parent:'.side',active:()=>type,
+    capture:()=>({values:values[type]}),
+    restore:snapshot=>{if(!validParameters(snapshot,{ranges:PRESETS[type].params}))throw new Error('Invalid parameters');values[type]={...snapshot.values};renderSliders();draw();},
+    retry:()=>{values[type]=rounds.record(type).instance.values;renderSliders();draw();}});
 })();

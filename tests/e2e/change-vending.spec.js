@@ -1,7 +1,8 @@
 import {test,expect} from '@playwright/test';
-test('integer-fen wallet: failed purchase, exchange, return, exact payment and change',async({page})=>{
+test('classic integer-fen wallet: failed purchase, exchange, return, exact payment and change',async({page})=>{
  await page.addInitScript(()=>localStorage.setItem('kidslab.lang','zh'));
  await page.goto('/courseware/change-vending/');await page.locator('#activitySelect').selectOption('2');
+ await page.locator('#randomControls summary').click();await page.locator('#classicRoundBtn').click();
  const click=(type,coin)=>page.locator(`[data-action="${type}"]${coin?`[data-coin="${coin}"]`:''}`).click();
  await click('buy');await expect(page.locator('#progress')).toHaveText('0/8');
  await click('coin',100);await click('return',100);await expect(page.locator('#stageReadout')).toContainText('托盘 0 元');

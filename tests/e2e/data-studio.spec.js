@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -50,12 +51,12 @@ test.describe('data studio', () => {
       localStorage.removeItem('kidslab.progress.data-studio');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/data-studio/');
+    await page.goto('/courseware/data-studio/?seed=987');
   });
 
   test('recovers from wrong choices and completes the live data show', async ({ page }) => {
     await expect(page.getByRole('heading', { name: '用“正”字接住 20 张选票' })).toBeVisible();
-    await page.locator('[data-song="bubble"]').click();
+    const actual=await page.locator('#voterCard').getAttribute('data-vote');await page.locator('[data-song]').filter({hasNot:page.locator('none')}).evaluateAll((es,actual)=>es.find(e=>e.dataset.song!==actual).click(),actual);
     await expect(page.locator('#status')).toContainText('选的不是这首');
     await recordAllVotes(page);
     await expect(page.locator('#status')).toContainText('20 张票一张不少');
@@ -71,13 +72,12 @@ test.describe('data studio', () => {
     await page.locator('#nextBtn').click();
 
     await expect(page.getByRole('heading', { name: '读懂图表，完成三句直播' })).toBeVisible();
-    await page.locator('[data-answer="bubble"]').click();
-    await expect(page.locator('#status')).toContainText('播错了');
-    await page.locator('[data-answer="rocket"]').click();
-    await page.locator('[data-answer="18"]').click();
-    await expect(page.locator('#status')).toContainText('播错了');
-    await page.locator('[data-answer="20"]').click();
-    await page.locator('[data-answer="5"]').click();
+    const a=(await roundRecord(page,'data-studio')).instance,total=a.counts.reduce((x,y)=>x+y,0),winner=a.ids[a.counts.indexOf(Math.max(...a.counts))];
+    for(const value of [winner,total,total/a.counts.length]){
+      const wrong=page.locator('[data-answer]').filter({hasNot:page.locator('none')});
+      await wrong.evaluateAll((es,value)=>es.find(e=>e.dataset.answer!==String(value)).click(),value);
+      await expect(page.locator('#status')).toContainText('播错了');await page.locator('[data-answer="'+value+'"]').click();
+    }
 
     await expect(page.getByRole('heading', { name: '你把数据讲明白了！' })).toBeVisible();
     await expect(page.locator('#playAgainBtn')).toBeFocused();

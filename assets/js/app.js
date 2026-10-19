@@ -184,6 +184,9 @@ const CourseCatalog = (() => {
       gradeAll: '全部年级',
       otherCourses: '本年级其他课件',
       wholeCourse: '整课探索',
+      showStages: (n) => `查看 ${n} 个关卡`,
+      hideStages: (n) => `收起 ${n} 个关卡`,
+      cardUnit: (label) => label,
       curriculumCount: (courses, entries) => `共 ${courses} 个课件 · ${entries} 个探索入口`,
       unitCount: (entries) => `${entries} 个探索入口`,
       stageCount: (n, m) => `${n} 关 · 已玩 ${m} 关`,
@@ -238,6 +241,9 @@ const CourseCatalog = (() => {
       gradeAll: 'All grades',
       otherCourses: 'Other courses in this grade',
       wholeCourse: 'Explore the course',
+      showStages: (n) => `Show ${n} level${n === 1 ? '' : 's'}`,
+      hideStages: (n) => `Hide ${n} level${n === 1 ? '' : 's'}`,
+      cardUnit: (label) => label,
       curriculumCount: (courses, entries) => `${courses} courses · ${entries} exploration entries`,
       unitCount: (entries) => `${entries} exploration entries`,
       stageCount: (n, m) => `${n} levels · ${m} played`,
@@ -626,8 +632,9 @@ const CourseCatalog = (() => {
     return a;
   }
 
-  // 聚合卡：同一课件的多关合并为一张卡，卡内关卡按钮直达对应关（?activity=）。
-  function groupCard(course, entries, i) {
+  // 聚合卡：默认只显示课件介绍（与普通卡一致），关卡收进 details 按需展开。
+  // 关卡入口保留 ?activity= 深链与已玩 ✓，不因折叠丢失功能。
+  function groupCard(course, entries, i, unitText = '') {
     const box = document.createElement('article');
     box.className = 'card card--group';
     box.dataset.courseId = course.id;
@@ -660,10 +667,37 @@ const CourseCatalog = (() => {
     const h = document.createElement('h3');
     h.className = 'card__title';
     h.textContent = course.title[state.lang];
-    const meta = document.createElement('p');
-    meta.className = 'card__group-meta';
+    // 同一课件横跨多个教材单元时会重复出现，用所属单元小字消歧。
+    if (unitText) {
+      const unit = document.createElement('p');
+      unit.className = 'card__unit';
+      unit.textContent = t().cardUnit(unitText);
+      body.append(h, unit);
+    } else {
+      body.append(h);
+    }
+    // 核心修复：聚合卡此前从不渲染课件自己的介绍，导致只剩一排关卡按钮。
+    const p = document.createElement('p');
+    p.className = 'card__desc';
+    p.textContent = course.description?.[state.lang] || course.title[state.lang];
+    body.append(p);
+
+    // 关卡列表默认收起；summary 承载「N 关 · 已玩 M 关」，与普通卡的文案层级保持一致。
+    const details = document.createElement('details');
+    details.className = 'card__stages-details';
+    const summary = document.createElement('summary');
+    summary.className = 'card__stages-summary';
     const done = stageDone(course.id);
-    meta.textContent = t().stageCount(entries.length, entries.filter((entry) => done.includes(entry.activity)).length);
+    const playedCount = entries.filter((entry) => done.includes(entry.activity)).length;
+    summary.innerHTML = '<span class="card__group-meta"></span><span class="card__stages-hint"></span>';
+    summary.querySelector('.card__group-meta').textContent = t().stageCount(entries.length, playedCount);
+    const hint = summary.querySelector('.card__stages-hint');
+    const syncHint = () => {
+      hint.textContent = `${details.open ? t().hideStages(entries.length) : t().showStages(entries.length)} ${details.open ? '▴' : '▾'}`;
+    };
+    syncHint();
+    details.addEventListener('toggle', syncHint);
+
     const stages = document.createElement('div');
     stages.className = 'card__stages';
     entries.forEach((entry, stageIndex) => {
@@ -681,7 +715,8 @@ const CourseCatalog = (() => {
         + (played ? `<span class="stage__check" aria-hidden="true">✓</span>` : '');
       stages.appendChild(link);
     });
-    body.append(h, meta, stages);
+    details.append(summary, stages);
+    body.append(details);
 
     const foot = document.createElement('div');
     foot.className = 'card__meta';
@@ -710,7 +745,16 @@ const CourseCatalog = (() => {
     const grouped = new Set(groups.flatMap(group => group.items.map(item => item.course.id)));
     const rest = list.filter(c => !grouped.has(c.id));
     el.grid.classList.toggle('grid--curriculum', groups.length > 0);
+    // 同一课件横跨多个单元时会在多张卡上重复出现，先统计出现次数以决定是否加单元小字消歧。
+    const courseUnitCount = new Map();
+    for (const group of groups) {
+      for (const id of new Set(group.items.map((item) => item.course.id))) {
+        courseUnitCount.set(id, (courseUnitCount.get(id) || 0) + 1);
+      }
+    }
     let index = 0;
+    // Count every curriculum entry, which is what the summary line reports.
+    let entryTotal = groups.reduce((total, group) => total + group.items.length, 0);
     for (const [groupIndex, group] of groups.entries()) {
       const section = document.createElement('section');
       section.className = 'curriculum-unit';
@@ -723,7 +767,7 @@ const CourseCatalog = (() => {
       const book = document.createElement('p');
       book.className = 'curriculum-unit__book';
       book.textContent = group.bookTitle[state.lang];
-      heading.textContent = [unitLabel(group), group.unitTitle[state.lang]].filter(Boolean).join(' · ');
+      heading.textContent = [unitLabel(group), group.unitTitle?.[state.lang]].filter(Boolean).join(' · ');
       const count = document.createElement('p');
       count.className = 'curriculum-unit__count';
       count.textContent = t().unitCount(group.items.length);
@@ -740,7 +784,10 @@ const CourseCatalog = (() => {
           if (rendered.has(course.id)) continue;
           rendered.add(course.id);
           const entries = group.items.filter((item) => item.course.id === course.id && item.entry.activity).map((item) => item.entry);
-          grid.appendChild(groupCard(course, entries, index++));
+          // 只在同课确实跨单元重复时才显示所属单元，避免单次出现也徒增一行文字。
+          const unitText = (courseUnitCount.get(course.id) || 0) > 1
+            ? [unitLabel(group), group.unitTitle?.[state.lang]].filter(Boolean).join(' · ') : '';
+          grid.appendChild(groupCard(course, entries, index++, unitText));
         } else {
           grid.appendChild(card(course, index++, entry));
         }
@@ -761,7 +808,7 @@ const CourseCatalog = (() => {
       rest.forEach(c => grid.appendChild(card(c, index++)));
     }
     el.empty.hidden = list.length > 0;
-    el.countText.textContent = groups.length ? t().curriculumCount(list.length, index) : t().count(list.length);
+    el.countText.textContent = groups.length ? t().curriculumCount(list.length, entryTotal) : t().count(list.length);
     el.crumb.innerHTML = `<b>${t().levels[state.level]}</b>${state.grade !== 'all' ? ` · ${t().grades[state.grade]}` : ''}${state.term !== 'all' ? ` · ${t().terms[state.term]}` : ''} · ${t().cats[state.cat]}${state.q ? ` · “${esc(state.q)}”` : ''}`;
     el.courseTotal.textContent = t().total(state.courses.length);
     el.clearProgress.hidden = !local.keys().some((key) => key.startsWith(PROGRESS_PREFIX));

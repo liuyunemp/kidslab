@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {PIRATE_BASES,pirateTask,validPirate,pirateIdentity,pirateFamily,pirateCandidates,pirateOutcome,pirateHint} from './random-model.js';
 (() => {
   'use strict';
 
@@ -198,12 +200,8 @@
     },
   };
 
-  const MISSIONS = [
-    { id: 'nine-free', coins: 9, maxWeigh: 6, unknownBias: false, strict: false, icon: '⅓' },
-    { id: 'nine-two', coins: 9, maxWeigh: 2, unknownBias: false, strict: true, icon: '2×' },
-    { id: 'twentyseven', coins: 27, maxWeigh: 3, unknownBias: false, strict: true, icon: '27' },
-    { id: 'twelve-hard', coins: 12, maxWeigh: 3, unknownBias: true, strict: true, icon: '±' },
-  ];
+  const rounds=createRounds('pirate-scales');
+  const MISSIONS=PIRATE_BASES.map((base,i)=>rounds.define(i,base,pirateTask,validPirate,pirateIdentity,pirateFamily));
 
   class SoundEngine {
     constructor() {
@@ -337,6 +335,7 @@
   let showLesson = false;
   let sawTrim = false;
   let lastTilt = 'flat';
+  let log=[],guessKind='light',weighTimer=0,focusTimer=0,language='zh';
 
   function saveProgress() {
     try {
@@ -354,30 +353,8 @@
     } catch { return null; }
   }
 
-  function pickFake(count, unknownBias) {
-    const debug = readDebug();
-    if (debug && debug.mission === missionIndex) {
-      const id = Math.max(1, Math.min(count, Number(debug.fakeId) || 1));
-      const kind = debug.fakeKind === 'heavy' ? 'heavy' : 'light';
-      if (!unknownBias) return { id, kind: 'light' };
-      return { id, kind };
-    }
-    const id = 1 + Math.floor(Math.random() * count);
-    if (!unknownBias) return { id, kind: 'light' };
-    return { id, kind: Math.random() < 0.5 ? 'light' : 'heavy' };
-  }
 
-  function rebuildPossibilities() {
-    const m = mission();
-    possibilities = [];
-    if (m.unknownBias) {
-      for (let id = 1; id <= coinCount; id += 1) {
-        possibilities.push({ id, kind: 'light' }, { id, kind: 'heavy' });
-      }
-    } else {
-      for (let id = 1; id <= coinCount; id += 1) possibilities.push({ id, kind: 'light' });
-    }
-  }
+  function rebuildPossibilities(){possibilities=pirateCandidates(mission(),log);}
 
   function suspectIds() {
     if (mission().unknownBias) {
@@ -399,39 +376,8 @@
     return possibilities.length;
   }
 
-  function coinWeight(id) {
-    if (id !== fakeId) return 0;
-    return fakeKind === 'heavy' ? 1 : -1;
-  }
-
-  function sideWeight(ids) {
-    let w = 0;
-    ids.forEach((id) => { w += coinWeight(id); });
-    return w;
-  }
-
-  /** @returns {'left'|'right'|'balance'} which side sinks (is heavier) */
-  function weighResult(leftIds, rightIds) {
-    const lw = sideWeight(leftIds);
-    const rw = sideWeight(rightIds);
-    if (lw > rw) return 'left';
-    if (rw > lw) return 'right';
-    return 'balance';
-  }
-
-  function simulateOutcome(leftIds, rightIds, hyp) {
-    const weight = (id) => {
-      if (id !== hyp.id) return 0;
-      return hyp.kind === 'heavy' ? 1 : -1;
-    };
-    let lw = 0;
-    let rw = 0;
-    leftIds.forEach((id) => { lw += weight(id); });
-    rightIds.forEach((id) => { rw += weight(id); });
-    if (lw > rw) return 'left';
-    if (rw > lw) return 'right';
-    return 'balance';
-  }
+  function weighResult(l,r){return pirateOutcome(l,r,{id:fakeId,kind:fakeKind});}
+  const simulateOutcome=pirateOutcome;
 
   function applyWeighLogic(leftIds, rightIds, outcome) {
     const m = mission();
@@ -457,22 +403,15 @@
     return { before, after, gone: before - after };
   }
 
-  /** 破案后自动进入下一宗谜案；手动点按钮会取消它，避免连跳 */
-  let autoNextTimer = 0;
-  function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
-  function scheduleAutoNext(fn, ms = 1400) {
-    cancelAutoNext();
-    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
-  }
+  function cancelAutoNext(){clearTimeout(weighTimer);clearTimeout(focusTimer);}
 
   function startMission(index, opts = {}) {
     cancelAutoNext();
     missionIndex = index;
     const m = mission();
     coinCount = m.coins;
-    const picked = pickFake(coinCount, m.unknownBias);
-    fakeId = picked.id;
-    fakeKind = m.unknownBias ? picked.kind : 'light';
+    const debug=readDebug();if(rounds.explicitSeed===null&&debug?.mission===index){const a={...m,fakeId:Number(debug.fakeId),fakeKind:m.unknownBias&&debug.fakeKind==='heavy'?'heavy':'light'};if(validPirate(a,m)){MISSIONS[index]=a;rounds.adopt(index,a,null);}}
+    fakeId=mission().fakeId;fakeKind=mission().fakeKind;log=[];guessKind='light';
     left = new Set();
     right = new Set();
     genuine = new Set();
@@ -501,7 +440,7 @@
   /** 手动/自动进入下一宗谜案；先取消待触发的自动跳转，避免连跳两关 */
   function nextMission() {
     cancelAutoNext();
-    if (missionIndex < MISSIONS.length - 1) startMission(missionIndex + 1);
+    if (missionIndex < MISSIONS.length - 1) switchMission(missionIndex + 1,true);
   }
 
   function setStatus(type, payload = {}) {
@@ -509,6 +448,7 @@
     renderStatus();
   }
 
+  function resultText(key){return t(key)+' '+(mission().unknownBias?t('markedUnknown',possibilityCount()):t('markedLight',suspectCount(),statusKey.gone??0));}
   function renderStatus() {
     const s = statusKey;
     const map = {
@@ -521,9 +461,9 @@
       needEqual: () => t('needEqual', s.a, s.b),
       emptyPan: () => t('emptyPan'),
       weighing: () => t('weighing'),
-      resultLeft: () => `${t('resultLeft')} ${s.extra || ''}`.trim(),
-      resultRight: () => `${t('resultRight')} ${s.extra || ''}`.trim(),
-      resultBalance: () => `${t('resultBalance')} ${s.extra || ''}`.trim(),
+      resultLeft:()=>resultText('resultLeft'),
+      resultRight:()=>resultText('resultRight'),
+      resultBalance:()=>resultText('resultBalance'),
       overWeigh: () => t('overWeigh'),
       wrongAccuse: () => t('wrongAccuse', s.n),
       correctAccuse: () => t('correctAccuse', s.n, s.w, s.kind),
@@ -534,7 +474,8 @@
       magicMoment: () => t('magicMoment'),
       wonNext: () => t('wonNext'),
       allDone: () => t('allDone'),
-      hint: () => t(`m${missionIndex + 1}Hint`),
+      hint: ()=>{const p=pirateHint(mission(),possibilities);return p?(language==='en'?`Try left: ${p.left.join(', ')}; right: ${p.right.join(', ')}.`:`试试左盘：${p.left.join('、')}；右盘：${p.right.join('、')}。`):t('accuseHelp');},
+      wrongKind:()=>language==='en'?'The coin is right, but its weight direction conflicts with the scale.':'找对了金币，但轻重方向与称量不符。',
     };
     el.status.textContent = (map[s.type] || map.ready)();
   }
@@ -554,10 +495,7 @@
       setStatus('onlySuspects');
       return;
     }
-    if (mission().unknownBias && genuine.has(id)) {
-      setStatus('onlySuspects');
-      return;
-    }
+
     removeFromPans(id);
     if (side === 'left') left.add(id);
     else right.add(id);
@@ -582,7 +520,7 @@
       render();
       return;
     }
-    if (genuine.has(id)) {
+    if (genuine.has(id)&&!mission().unknownBias) {
       setStatus('onlySuspects');
       return;
     }
@@ -639,61 +577,12 @@
       return;
     }
 
-    busy = true;
-    accuseMode = false;
-    selectedId = null;
-    setStatus('weighing');
-    el.beamWrap.classList.add('is-weighing');
-    el.beamWrap.dataset.tilt = 'flat';
-    sound.weigh();
-    window.cool?.track?.('weigh');
-    renderChrome();
-
-    const leftIds = [...left];
-    const rightIds = [...right];
-    const outcome = weighResult(leftIds, rightIds);
-
-    window.setTimeout(() => {
-      el.beamWrap.classList.remove('is-weighing');
-      lastTilt = outcome === 'balance' ? 'flat' : outcome;
-      el.beamWrap.dataset.tilt = lastTilt;
-      weighCount += 1;
-
-      const trim = applyWeighLogic(leftIds, rightIds, outcome);
-      if (outcome === 'balance') sound.balance();
-      else sound.tilt();
-
-      const kept = mission().unknownBias ? possibilityCount() : suspectCount();
-      const extraText = mission().unknownBias
-        ? t('markedUnknown', kept)
-        : t('markedLight', suspectCount(), Math.max(0, trim.before - trim.after));
-
-      showLesson = true;
-      if (sawTrim && weighCount === 1) {
-        setStatus('magicMoment');
-      } else if (outcome === 'left') {
-        setStatus('resultLeft', { extra: extraText });
-      } else if (outcome === 'right') {
-        setStatus('resultRight', { extra: extraText });
-      } else {
-        setStatus('resultBalance', { extra: extraText });
-      }
-
-      // auto-return coins to tray after reading result, keep genuine dimmed
-      left.clear();
-      right.clear();
-
-      if (mission().strict && weighCount >= mission().maxWeigh && suspectCount() > 1 && !won) {
-        // still can accuse if one left
-        if (suspectCount() === 1) {
-          /* allow accuse */
-        }
-      }
-
-      el.resultChip.hidden = false;
-      busy = false;
-      render();
-    }, 650);
+    const leftIds=[...left],rightIds=[...right],outcome=weighResult(leftIds,rightIds);
+    busy=true;accuseMode=false;selectedId=null;weighCount++;log.push({left:leftIds,right:rightIds,outcome});const trim=applyWeighLogic(leftIds,rightIds,outcome);
+    left.clear();right.clear();lastTilt=outcome==='balance'?'flat':outcome;showLesson=true;
+    setStatus(outcome==='left'?'resultLeft':outcome==='right'?'resultRight':'resultBalance',{gone:trim.gone});rounds.checkpoint();
+    el.beamWrap.classList.add('is-weighing');sound.weigh();window.cool?.track?.('weigh');render();
+    weighTimer=setTimeout(()=>{busy=false;el.beamWrap.classList.remove('is-weighing');el.beamWrap.dataset.tilt=lastTilt;el.resultChip.hidden=false;if(outcome==='balance')sound.balance();else sound.tilt();render();rounds.checkpoint();},650);
   }
 
   function doAccuse(id) {
@@ -705,26 +594,27 @@
     }
 
     window.cool?.track?.('accuse');
+    if(id===fakeId&&mission().unknownBias&&guessKind!==fakeKind){setStatus('wrongKind');sound.bad();return;}
     if (id === fakeId) {
       won = true;
       accuseMode = false;
       showLesson = true;
       sound.ok();
       setStatus('correctAccuse', { n: id, w: weighCount, kind: fakeKind });
-      completed.add(missionIndex);
+      const first=!completed.has(missionIndex);completed.add(missionIndex);
       unlocked = Math.max(unlocked, Math.min(MISSIONS.length - 1, missionIndex + 1));
       saveProgress();
-      window.cool?.stage?.(`cleared${missionIndex + 1}`);
+      if(first)window.cool?.stage?.(`cleared${missionIndex + 1}`);
 
       if (missionIndex >= MISSIONS.length - 1) {
-        window.cool?.complete?.();
+        if(first)window.cool?.complete?.();
         el.completeModal.hidden = false;
         el.course.inert = true;
         sound.finale();
-        window.setTimeout(() => el.playAgainBtn?.focus(), 30);
+        focusTimer=setTimeout(() => el.playAgainBtn?.focus(), 30);
       } else {
         el.nextBtn.hidden = false;
-        scheduleAutoNext(nextMission);
+
       }
       // 保留 correctAccuse 文案，通关弹窗自行展示总结
       render();
@@ -799,13 +689,15 @@
       btn.title = open ? '' : t('lockedMission');
       btn.addEventListener('click', () => {
         if (!open || busy) return;
-        startMission(index);
+        switchMission(index);
       });
       el.missionNav.appendChild(btn);
     });
   }
 
   function renderChrome() {
+    const bias=document.getElementById('biasChoices');bias.hidden=!mission().unknownBias;
+    bias.querySelectorAll('[data-bias]').forEach(b=>{b.textContent=language==='en'?(b.dataset.bias==='light'?'Lighter':'Heavier'):(b.dataset.bias==='light'?'偏轻':'偏重');b.setAttribute('aria-pressed',String(guessKind===b.dataset.bias));b.disabled=won||lost||busy;});
     const m = mission();
     const n = missionIndex + 1;
     el.missionNumber.textContent = String(n).padStart(2, '0');
@@ -891,14 +783,7 @@
   });
   el.resetBtn.addEventListener('click', () => startMission(missionIndex));
   el.nextBtn.addEventListener('click', nextMission);
-  el.playAgainBtn.addEventListener('click', () => {
-    completed = new Set();
-    unlocked = 0;
-    saveProgress();
-    el.completeModal.hidden = true;
-    el.course.inert = false;
-    startMission(0);
-  });
+  el.playAgainBtn.addEventListener('click',()=>switchMission(0,true));
 
   el.sound.addEventListener('click', () => {
     sound.setMuted(!sound.muted);
@@ -939,7 +824,7 @@
 
   window.cool.bindI18n(I18N, {
     onChange({ t: translate, lang, theme }) {
-      t = translate;
+      t = translate;language=lang;
       document.title = t('doc');
       if (el.lang) el.lang.textContent = lang === 'zh' ? 'EN' : '中';
       if (el.theme) el.theme.textContent = theme === 'light' ? '🌙' : '☀️';
@@ -950,5 +835,14 @@
   el.lang?.addEventListener('click', () => window.cool.preferences.toggleLang());
   el.theme?.addEventListener('click', () => window.cool.preferences.toggleTheme());
 
-  startMission(missionIndex, { silent: true });
+  function switchMission(index,fresh=false){rounds.checkpoint();if(fresh)MISSIONS[index]=rounds.next(index);startMission(index);const s=rounds.record(index).play;if(s){try{restorePlay(s);}catch{startMission(index);}}rounds.checkpoint();}
+  function restorePlay(s){
+    const a=mission(),ids=xs=>Array.isArray(xs)&&new Set(xs).size===xs.length&&xs.every(n=>Number.isInteger(n)&&n>=1&&n<=a.coins);
+    if(!s||!ids(s.left)||!ids(s.right)||s.left.some(n=>s.right.includes(n))||!['left','right'].includes(s.targetSide)||!['light','heavy'].includes(s.guessKind)||!s.statusKey||!['flat','left','right'].includes(s.lastTilt)||s.selectedId!==null&&(!Number.isInteger(s.selectedId)||s.selectedId<1||s.selectedId>a.coins))throw new Error('Invalid pirate snapshot');
+    const candidates=pirateCandidates(a,s.log);if(s.won&&(s.guessKind!==a.fakeKind||s.statusKey.type!=='correctAccuse'||s.statusKey.n!==a.fakeId))throw new Error('Invalid counterfeit conclusion');
+    log=s.log;weighCount=log.length;possibilities=candidates;const alive=new Set(candidates.map(p=>p.id));genuine=new Set(Array.from({length:a.coins},(_,i)=>i+1).filter(id=>!alive.has(id)));left=new Set(s.left);right=new Set(s.right);targetSide=s.targetSide;guessKind=s.guessKind;selectedId=s.selectedId;accuseMode=Boolean(s.accuseMode);won=Boolean(s.won);lost=Boolean(s.lost);showRule=Boolean(s.showRule);showLesson=Boolean(s.showLesson);statusKey=s.statusKey;lastTilt=s.lastTilt;busy=false;el.beamWrap.dataset.tilt=lastTilt;el.resultChip.hidden=!log.length;render();if(won&&missionIndex===3){el.completeModal.hidden=false;el.course.inert=true;}
+  }
+  document.querySelectorAll('[data-bias]').forEach(b=>b.addEventListener('click',()=>{if(won||lost||busy)return;guessKind=b.dataset.bias;render();}));
+  const initial=Number(rounds.active??missionIndex);startMission(Number.isInteger(initial)&&initial>=0&&initial<=unlocked?initial:missionIndex,{silent:true});
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#completeModal',active:()=>missionIndex,capture:()=>({log,left:[...left],right:[...right],selectedId,targetSide,guessKind,accuseMode,won,lost,statusKey,showRule,showLesson,lastTilt}),restore:restorePlay,retry:()=>startMission(missionIndex),beforeReload:cancelAutoNext});
 })();

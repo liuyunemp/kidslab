@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {crystal,crystalFamily,validCrystal,factorOptions,primeFactors,validFactorPlay} from './random-model.js';
 (() => {
   'use strict';
 
@@ -140,15 +142,27 @@
     },
   };
 
-  const TARGETS = [12, 18];
-  const WALL_NUMBERS = [10, 12, 14, 15, 18, 21, 22, 24, 27, 30];
-  const FACTOR_CHOICES = {
-    4: [[2, 2], [2, 3], [1, 4], [3, 4]],
-    6: [[2, 3], [3, 3], [2, 4], [1, 6]],
-    9: [[3, 3], [2, 4], [2, 5], [1, 9]],
-    12: [[3, 4], [2, 6], [2, 5], [4, 4]],
-    18: [[3, 6], [2, 9], [3, 5], [4, 5]],
-  };
+  const BASE_CHAMBERS=[{kind:'first',target:12},{kind:'second',target:18},{kind:'wall',numbers:[10,12,14,15,18,21,22,24,27,30]}];
+  const rounds=createRounds('crystal-cave');
+  const migrateLegacy=!rounds.hasSnapshot&&rounds.explicitSeed===null;
+  const chambers=BASE_CHAMBERS.map((base,i)=>rounds.define(i,base,crystal,validCrystal,a=>a,base.kind==='wall'?undefined:crystalFamily));
+  if(migrateLegacy){try{const old=JSON.parse(localStorage.getItem('kidslab.crystal-cave'));if(old?.factors?.some(s=>s.history?.length)||old?.resonance?.length){for(let i=0;i<3;i++){chambers[i]=BASE_CHAMBERS[i];rounds.adopt(i,chambers[i],null);}}}catch{}}
+  let TARGETS=chambers.slice(0,2).map(a=>a.target),WALL_NUMBERS=chambers[2].numbers;
+  function updateCopies(){
+    TARGETS=chambers.slice(0,2).map(a=>a.target);WALL_NUMBERS=chambers[2].numbers;
+    for(const language of ['zh','en']){
+      const zh=language==='zh',t=I18N[language];
+      for(let i=0;i<2;i++){
+        const n=TARGETS[i];
+        Object.assign(t.missions[i],{title:zh?`把 ${n} 敲成质数原石`:`Crack ${n} into prime stones`,start:zh?`找两个大于 1 的整数，把 ${n} 整齐敲开。`:`Find two whole numbers greater than 1 that multiply to ${n}.`});
+        t.hints[i]=zh?`找 ${n} 的因数对。合数还可以继续敲开。`:`Find a factor pair of ${n}. Keep cracking composite stones.`;
+      }
+      t.hints[2]=zh?'试着用每块水晶的数除以 3，能整除的就点亮。':'Try dividing each number by 3. Light those with no remainder.';
+      const hits=WALL_NUMBERS.filter(n=>n%3===0).join(zh?'、':', ');
+      t.wallSolved=zh?`整面矿墙共振成功！${hits} 都是 3 的倍数。`:`Full-wall resonance! ${hits} are multiples of 3.`;
+    }
+  }
+  updateCopies();
   const STORAGE_KEY = 'kidslab.crystal-cave';
   const SOUND_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
@@ -199,6 +213,14 @@
   let burstAt = 0;
   let wrongWall = [];
   let state = loadState();
+  let achieved=state.completed;
+  if(rounds.active!==null&&Number(rounds.active)>=0&&Number(rounds.active)<3)state.chamber=Number(rounds.active);
+  // A toolbar retry/new round clears only the current play snapshot.
+  if(!migrateLegacy&&rounds.record(state.chamber).play===null){
+    if(state.chamber<2)state.factors[state.chamber]=freshState().factors[state.chamber];
+    else {state.resonance=[];state.resonanceSolved=false;}
+    state.completed=false;
+  }
 
   function freshState() {
     return {
@@ -248,7 +270,7 @@
 
   function saveState() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({...state,completed:state.completed||achieved}));
     } catch {
       // Storage can be unavailable without blocking the expedition.
     }
@@ -381,13 +403,15 @@
     }
     state.completed = true;
     saveState();
-    window.cool?.complete?.();
+    if(!achieved)window.cool?.complete?.();
+    achieved=true;
     playSound('finale');
     showCertificate();
   }
 
   function showCertificate() {
     state.completed = true;
+    document.querySelector('.recipes').innerHTML=TARGETS.map(n=>`<span>${n} = ${primeFactors(n).join(' × ')}</span>`).join('');
     elements.certificate.hidden = false;
     elements.course.inert = true;
     requestAnimationFrame(() => elements.playAgainBtn.focus());
@@ -400,6 +424,8 @@
 
   function playAgain() {
     hideCertificate();
+    for(let i=0;i<3;i++)chambers[i]=rounds.next(i);
+    updateCopies();
     state = freshState();
     wrongWall = [];
     saveState();
@@ -442,7 +468,7 @@
     if (factor) {
       elements.selectedValue.textContent = selected ?? TARGETS[state.chamber];
       elements.factorOptions.innerHTML = selected
-        ? (FACTOR_CHOICES[selected] || []).map(([a, b], index) =>
+        ? factorOptions(selected).map(([a, b], index) =>
             `<button class="factor-choice" type="button" data-factor="${index}" data-a="${a}" data-b="${b}">${a} × ${b}</button>`).join('')
         : '';
       const primes = factor.leaves.filter(isPrime);
@@ -768,4 +794,10 @@
       if (state.completed) showCertificate();
     },
   });
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#certificate',active:()=>state.chamber,
+    capture:()=>state,
+    restore:s=>{
+      if(s.chamber!==state.chamber||!Array.isArray(s.factors)||s.factors.length!==2||!s.factors.every((f,i)=>validFactorPlay(f,TARGETS[i]))||!Array.isArray(s.resonance)||!s.resonance.every(n=>WALL_NUMBERS.includes(n))||(s.resonanceSolved&&WALL_NUMBERS.some(n=>s.resonance.includes(n)!==(n%3===0))))throw new Error('Invalid cave snapshot');
+      state=s;render();if(state.completed)showCertificate();
+    },retry:resetChamber});
 })();

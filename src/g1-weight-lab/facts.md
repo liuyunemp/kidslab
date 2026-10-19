@@ -1,6 +1,7 @@
 # g1-weight-lab 知识断言
 
 ## 适用范围
+- 随机局仅改变本课教学范围内的任务或初始布局；经典示例保留，以下数学规律及适用条件保持不变。
 - 本课仅涵盖 轻重天平 实际出现的内容；教材归属为 g1a，科目为 math。年级依据见 docs/courseware-plan/classification-audit.md。
 
 ## 知识断言

@@ -1,3 +1,5 @@
+import { createRounds } from './random-rounds.js';
+import { alien, validAlien, alienSolution } from './random-model.js';
 (() => {
   'use strict';
 
@@ -132,7 +134,7 @@
     },
   };
 
-  const MISSIONS = [
+  const BASE_MISSIONS = [
     {
       kicker: 'act1Kicker',
       title: 'act1Title',
@@ -165,7 +167,32 @@
     },
   ];
 
+  const rounds=createRounds('alien-farm');
+  const migrateLegacy=!rounds.hasSnapshot&&rounds.explicitSeed===null;
+  const MISSIONS=rounds.prepare(BASE_MISSIONS,alien,validAlien,a=>a.target);
   const SAVE_KEY = 'kidslab.alien-farm';
+  if(migrateLegacy){try{const old=JSON.parse(localStorage.getItem(SAVE_KEY));if(Number.isInteger(old?.missionIndex)&&old.missionIndex>=0&&old.missionIndex<3){for(let i=0;i<3;i++){MISSIONS[i]=BASE_MISSIONS[i];rounds.adopt(i,BASE_MISSIONS[i],null);}}}catch{}}
+  function updateCopies(){
+    for(const lang of ['zh','en']){
+      const zh=lang==='zh',t=I18N[lang],a=MISSIONS[0].target,b=MISSIONS[1].target,c=MISSIONS[2].target,s=MISSIONS.map(alienSolution);
+      Object.assign(t,{
+        exchangeSix:zh?`一次换 ${s[1].quad} 只`:`Swap ${s[1].quad} at once`,
+        act1Title:zh?`保持 ${a.creatures} 只，调到 ${a.legs} 条腿`:`Keep ${a.creatures} creatures, reach ${a.legs} legs`,
+        act1Done:zh?`${s[0].tri} 只三脚兽 + ${s[0].quad} 只四脚兽，共 ${a.legs} 条腿。`:`${s[0].tri} tripods + ${s[0].quad} quadpods: ${a.legs} legs.`,
+        act1Hint:zh?`目标 ${a.legs} 条腿，每向右换一只增加 1 条腿。`:`Reach ${a.legs} legs. Each step right adds one leg.`,
+        act2Title:zh?`一步找到 ${b.legs} 条腿`:`Reach ${b.legs} legs in one step`,
+        act2Text:zh?`先把 ${b.creatures} 只都当成三脚兽。`:`First treat all ${b.creatures} as tripods.`,
+        act2Ready:zh?`${b.creatures} 只、${b.legs} 条腿，先按假设按钮。`:`${b.creatures} creatures, ${b.legs} legs. Start with the assumption button.`,
+        act2Assumed:zh?`先有 ${3*b.creatures} 条腿，还差 ${s[1].quad} 条。每换一只增加 1 条腿。`:`${3*b.creatures} legs, ${s[1].quad} short. Each swap adds one leg.`,
+        act2Done:zh?`换 ${s[1].quad} 只，正好 ${b.legs} 条腿！`:`${s[1].quad} swaps give exactly ${b.legs} legs!`,
+        act2Hint:zh?`先算 ${b.creatures} × 3，再比较与 ${b.legs} 的差。`:`Compare ${b.creatures} × 3 with ${b.legs}.`,
+        act3Title:zh?`只看 ${c.eyes} 只眼、${c.legs} 条腿`:`Use ${c.eyes} eyes and ${c.legs} legs`,
+        act3Ready:zh?`调到 ${c.eyes} 只眼和 ${c.legs} 条腿。`:`Match ${c.eyes} eyes and ${c.legs} legs.`,
+        act3Done:zh?`${s[2].tri} 只三脚兽和 ${s[2].quad} 只四脚兽，两条线索都对上了！`:`${s[2].tri} tripods and ${s[2].quad} quadpods match both clues!`,
+      });
+    }
+  }
+  updateCopies();
   const SOUND_KEY = 'kidslab.sound.muted';
   const $ = (selector) => document.querySelector(selector);
   const el = {
@@ -253,6 +280,17 @@
     statusMessage = defaultStatus(missionIndex);
   } catch {
     statusMessage = { key: 'act1Ready', tone: '', args: [] };
+  }
+  const achievements=new Set(completed);
+  if(!migrateLegacy){
+    missionIndex=Math.min(2,Math.max(0,Number(rounds.active)||0));
+    if(!rounds.record(missionIndex).play){
+      completed.delete(missionIndex);
+      if(missionIndex===0)trialQuad=0;
+      if(missionIndex===1){assumed=false;assumptionQuad=0;}
+      if(missionIndex===2){sensorTri=4;sensorQuad=4;}
+      statusMessage=defaultStatus(missionIndex);
+    }
   }
 
   class SoundEngine {
@@ -347,8 +385,8 @@
   }
 
   function currentHerd() {
-    if (missionIndex === 0) return { tri: 12 - trialQuad, quad: trialQuad };
-    if (missionIndex === 1) return { tri: 14 - assumptionQuad, quad: assumptionQuad };
+    if (missionIndex === 0) return { tri: MISSIONS[0].target.creatures - trialQuad, quad: trialQuad };
+    if (missionIndex === 1) return { tri: MISSIONS[1].target.creatures - assumptionQuad, quad: assumptionQuad };
     return { tri: sensorTri, quad: sensorQuad };
   }
 
@@ -369,7 +407,7 @@
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         missionIndex,
         unlocked,
-        completed: [...completed],
+        completed: [...new Set([...achievements,...completed])],
         trialQuad,
         assumed,
         assumptionQuad,
@@ -450,13 +488,14 @@
     el.mixRange.value = String(trialQuad);
     el.mixRange.disabled = completed.has(0);
     el.checkTrial.disabled = completed.has(0);
-    el.trialTriCount.textContent = 12 - trialQuad;
+    el.trialTriCount.textContent = MISSIONS[0].target.creatures - trialQuad;
     el.trialQuadCount.textContent = trialQuad;
 
     el.assume.disabled = completed.has(1);
     el.assume.hidden = assumed;
     el.exchange.hidden = !assumed || completed.has(1);
-    el.assumptionFormula.textContent = assumed ? '14 × 3 = 42  →  48 − 42 = 6' : '14 × 3 = ?';
+    const b=MISSIONS[1].target;
+    el.assumptionFormula.textContent = assumed ? `${b.creatures} × 3 = ${3*b.creatures} → ${b.legs} − ${3*b.creatures} = ${alienSolution(MISSIONS[1]).quad}` : `${b.creatures} × 3 = ?`;
     el.exchangeLabel.textContent = t('exchangeSix');
 
     el.sensorTriCount.textContent = sensorTri;
@@ -506,10 +545,12 @@
     window.cool?.stage?.(`night-${index + 1}`);
     save();
     render();
+    rounds.checkpoint();
   }
 
   function completeMission() {
     completed.add(missionIndex);
+    achievements.add(missionIndex);
     unlocked = Math.max(unlocked, Math.min(2, missionIndex + 1));
     save();
     if (missionIndex === 2) {
@@ -532,11 +573,11 @@
     const herd = currentHerd();
     const counts = totals(herd.tri, herd.quad);
     window.cool?.track?.('check-herd-manifest', { quadpods: trialQuad, legs: counts.legs });
-    if (counts.legs !== 43) {
+    if (counts.legs !== MISSIONS[0].target.legs) {
       sound.error();
       const direction = language === 'zh'
-        ? (counts.legs < 43 ? '右' : '左')
-        : (counts.legs < 43 ? 'right' : 'left');
+        ? (counts.legs < MISSIONS[0].target.legs ? '右' : '左')
+        : (counts.legs < MISSIONS[0].target.legs ? 'right' : 'left');
       setStatus('act1Wrong', 'bad', counts.legs, direction);
       return;
     }
@@ -549,7 +590,7 @@
     assumed = true;
     assumptionQuad = 0;
     sound.swap();
-    window.cool?.track?.('assume-all-tripods', { creatures: 14, assumedLegs: 42 });
+    window.cool?.track?.('assume-all-tripods', { creatures: MISSIONS[1].target.creatures, assumedLegs: 3*MISSIONS[1].target.creatures });
     setStatus('act2Assumed');
     save();
     render();
@@ -558,9 +599,9 @@
 
   function exchangeByDifference() {
     if (missionIndex !== 1 || !assumed || completed.has(1)) return;
-    assumptionQuad = 6;
+    assumptionQuad = alienSolution(MISSIONS[1]).quad;
     sound.magic();
-    window.cool?.track?.('replace-by-leg-difference', { replacements: 6 });
+    window.cool?.track?.('replace-by-leg-difference', { replacements: assumptionQuad });
     setStatus('act2Done', 'good');
     completeMission();
   }
@@ -585,7 +626,7 @@
       eyes: counts.eyes,
       legs: counts.legs,
     });
-    if (counts.eyes !== 20 || counts.legs !== 48) {
+    if (counts.eyes !== MISSIONS[2].target.eyes || counts.legs !== MISSIONS[2].target.legs) {
       sound.error();
       setStatus('act3Wrong', 'bad', counts.eyes, counts.legs);
       return;
@@ -630,7 +671,7 @@
     el.modal.hidden = true;
     el.course.inert = false;
     missionIndex = 0;
-    unlocked = 0;
+    MISSIONS[0]=rounds.next(0);updateCopies();
     completed.clear();
     trialQuad = 0;
     assumed = false;
@@ -650,11 +691,17 @@
       language = lang;
       document.title = t('doc');
       render();
-      if (completed.has(2) && el.modal.hidden) {
+      if (missionIndex===2 && completed.has(2) && el.modal.hidden) {
         el.course.inert = true;
         el.modal.hidden = false;
         el.playAgain.focus();
       }
     },
   });
+  rounds.attach({parent:'.bar__actions',compact:true,dialog:'#completeModal',active:()=>missionIndex,
+    capture:()=>({missionIndex,trialQuad,assumed,assumptionQuad,sensorTri,sensorQuad,completed:[...completed]}),
+    restore:s=>{
+      if(s.missionIndex!==missionIndex||![s.trialQuad,s.assumptionQuad,s.sensorTri,s.sensorQuad].every(n=>Number.isInteger(n)&&n>=0&&n<=20)||!Array.isArray(s.completed))throw new Error('Invalid herd');
+      ({trialQuad,assumed,assumptionQuad,sensorTri,sensorQuad}=s);completed=new Set(s.completed);statusMessage=defaultStatus(missionIndex);save();render();
+    },retry:()=>{completed.delete(missionIndex);statusMessage=defaultStatus(missionIndex);render();},beforeReload:cancelAutoNext});
 })();

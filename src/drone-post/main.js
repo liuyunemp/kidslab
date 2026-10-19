@@ -1,3 +1,5 @@
+import {createRounds} from './random-rounds.js';
+import {droneTask,droneIdentity,validDrone,dronePath,droneCopy} from './random-model.js';
 (() => {
   'use strict';
 
@@ -178,7 +180,12 @@
 
   const SAVE_KEY = 'kidslab.drone-post';
   const SOUND_KEY = 'kidslab.sound.muted';
-  const WAYPOINTS = [[3, 0], [3, 4], [6, 4], [6, 7], [9, 7], [9, 9], [6, 0], [9, 4], [3, 7]];
+  const CLASSIC=[{kind:'locate',target:[4,7],wind:[0,0],origin:[1,5],delta:[3,2]},
+    {kind:'wind',target:[6,3],wind:[1,-2]},
+    {kind:'route',target:[9,9],wind:[0,0],km:3,options:[[6,500],[4,600],[5,800]],correct:0,points:[[3,0],[3,4],[6,4],[6,7],[9,7],[9,9],[6,0],[9,4],[3,7]]}];
+  const rounds=createRounds('drone-post'),hadRounds=rounds.hasSnapshot;
+  const tasks=CLASSIC.map((base,i)=>rounds.define(i,base,droneTask,validDrone,droneIdentity));
+  let WAYPOINTS=tasks[2].points;
   const $ = (selector) => document.querySelector(selector);
   const elements = {
     course: $('#course'),
@@ -221,12 +228,18 @@
   let idleTimer = null;
   let animationFrame = null;
   let state = loadState();
+  let everComplete=state.completed,mastered=new Set();
+  try{const old=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}');mastered=new Set(old.mastered??Array.from({length:state.completed?3:state.missionIndex},(_,i)=>i));}catch{}
+  if(!hadRounds&&rounds.explicitSeed===null&&(state.x||state.y||state.selectedRoute!==null)){
+    tasks[state.missionIndex]=CLASSIC[state.missionIndex];rounds.adopt(state.missionIndex,tasks[state.missionIndex],state);WAYPOINTS=tasks[2].points;
+  }
+  state={...freshState(),missionIndex:Number(rounds.active??state.missionIndex)};
   /** 答对后自动进入下一封急件；手动点按钮会取消它，避免连跳 */
   let autoNextTimer = 0;
   function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
   function scheduleAutoNext(fn, ms = 1400) {
     cancelAutoNext();
-    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); }, ms);
+    autoNextTimer = setTimeout(() => { autoNextTimer = 0; fn(); rounds.checkpoint(); }, ms);
   }
 
   function freshState() {
@@ -267,14 +280,14 @@
 
   function saveState() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({...state,completed:everComplete,mastered:[...mastered]}));
     } catch {
       // Progress remains session-local when storage is unavailable.
     }
   }
 
   function mission() {
-    return t('missions')[state.missionIndex];
+    return droneCopy(t('missions')[state.missionIndex],tasks[state.missionIndex],lang);
   }
 
   function arrival() {
@@ -349,7 +362,7 @@
         render();
         return;
       }
-      if (state.selectedRoute !== 0) {
+      if (state.selectedRoute !== tasks[2].correct) {
         state.feedback = 'wrong';
         playSound('error');
         window.cool?.track?.('miss_delivery', { mission: 3, route: state.selectedRoute });
@@ -384,6 +397,7 @@
     }
 
     state.solved = true;
+    mastered.add(state.missionIndex);
     state.feedback = 'correct';
     saveState();
     playSound('success');
@@ -399,13 +413,17 @@
     if (!state.solved) return;
     if (state.missionIndex === 2) {
       state.completed = true;
+      if(!everComplete)window.cool?.complete?.();
+      everComplete=true;
       saveState();
-      window.cool?.complete?.();
       window.cool?.track?.('complete_night_shift', { flights: 3 });
       playSound('complete');
       render();
       return;
     }
+    rounds.checkpoint();
+    if(rounds.record(state.missionIndex+1).play)tasks[state.missionIndex+1]=rounds.next(state.missionIndex+1);
+    WAYPOINTS=tasks[2].points;
     state = { ...freshState(), missionIndex: state.missionIndex + 1 };
     saveState();
     playSound('page');
@@ -415,7 +433,7 @@
   }
 
   function resetMission() {
-    if (state.solved) return;
+    cancelAutoNext();state.completed=false;state.solved=false;
     state.x = 0;
     state.y = 0;
     state.selectedRoute = null;
@@ -438,6 +456,9 @@
   }
 
   function playAgain() {
+    cancelAutoNext();clearTimeout(idleTimer);
+    for(let i=0;i<3;i++)tasks[i]=rounds.next(i);
+    WAYPOINTS=tasks[2].points;
     state = freshState();
     saveState();
     elements.finale.hidden = true;
@@ -456,6 +477,7 @@
     idleTimer = setTimeout(() => {
       state.feedback = 'hint';
       render();
+      rounds.checkpoint();
     }, 30000);
   }
 
@@ -849,10 +871,7 @@
   elements.langBtn.addEventListener('click', () => window.cool.preferences.toggleLang());
   elements.themeBtn.addEventListener('click', () => window.cool.preferences.toggleTheme());
   document.addEventListener('keydown', (event) => {
-    if (state.completed && event.key === 'Tab') {
-      event.preventDefault();
-      elements.playAgainBtn.focus();
-    }
+    // The inert page leaves the dialog controls, including round actions, tabbable.
   });
   addEventListener('DOMContentLoaded', syncStarMapBack);
   addEventListener('resize', drawMap);
@@ -876,5 +895,12 @@
     },
   });
   window.cool?.stage?.(`flight-${state.missionIndex + 1}`);
+  rounds.attach({parent:'.topbar__actions',compact:true,dialog:'#finale',active:()=>state.missionIndex,capture:()=>state,
+    restore:s=>{
+      const a=tasks[state.missionIndex];
+      if(s.missionIndex!==state.missionIndex||![s.x,s.y].every(n=>Number.isInteger(n)&&n>=0&&n<=9)||![null,0,1,2].includes(s.selectedRoute)||typeof s.feedback!=='string'||!dronePath(tasks[2],s.waypoints)||
+        (s.routeReady&&s.selectedRoute!==tasks[2].correct)||((s.solved||s.completed)&&(a.kind==='route'?s.waypoints.length!==6||!s.routeReady:s.x+a.wind[0]!==a.target[0]||s.y+a.wind[1]!==a.target[1])))throw new Error('Invalid flight');
+      state=s;render();
+    },retry:resetMission,beforeReload:()=>{cancelAutoNext();clearTimeout(idleTimer);cancelAnimationFrame(animationFrame);}});
   scheduleIdleHint();
 })();

@@ -701,6 +701,12 @@ a:focus-visible {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
+.topbar h1 { flex: 1 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.topbar__actions { flex: 0 0 auto; }
+#biasChoices { grid-column: 1 / -1; display: flex; gap: 6px; }
+#biasChoices button { flex: 1; }
+.rule-card p, .insight p, .modal__card p, #missionText { font-size: 16px; }
+
 @media (max-width: 900px) {
   .brief {
     grid-template-columns: 56px minmax(0, 1fr);
@@ -748,4 +754,36 @@ a:focus-visible {
     font-size: 16px;
   }
   .result-chip { font-size: 14px; }
+}
+
+@media (max-width: 900px) {
+  .topbar { gap: 5px; }
+  .chip--back { flex: 0 0 44px; padding: 8px; }
+  .chip--back span { display: none; }
+  .brief { grid-template-columns: minmax(0,1fr) auto; gap: 6px; padding: 6px 8px; }
+  .brief__number, #missionKicker, .desk__head, .tray-head { display: none; }
+  .brief__copy h2 { font-size: 16px; line-height: 1.3; margin: 0; }
+  .mission-nav { grid-column: auto; flex-wrap: nowrap; gap: 3px; }
+  .mission-nav button { padding: 0 5px; }
+  .workspace { grid-template-rows: minmax(300px,1fr) minmax(144px, 29%); }
+  .deck { grid-template-rows: auto 126px minmax(60px,1fr); padding: 6px; gap: 4px; overflow: hidden; }
+  .hud { gap: 3px; }
+  #status { min-height: 0; font-size: 16px; line-height: 1.35; }
+  .meters { gap: 6px; }
+  .meter { display: flex; align-items: center; min-width: 0; padding: 2px 5px; gap: 4px; box-shadow: none; }
+  .meter--coin { display: none; }
+  .scale-stage { isolation: isolate; }
+  .beam-wrap { height: 120px; }
+  .pan__hook { height: 14px; }
+  .pan__bowl { height: 88px; min-height: 88px; padding: 4px; }
+  .pan__coins { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; min-height: 50px; }
+  .pan__coins .coin { flex: 0 0 44px; }
+  .pan__label { font-size: 16px; }
+  .tray-block { padding: 3px; overflow: hidden; }
+  .tray { height: 100%; max-height: 100%; overflow: auto; align-content: start; gap: 4px; padding: 3px; }
+  .desk { max-height: none; min-height: 0; overflow: auto; padding: 6px; gap: 6px; }
+  .side-toggle { position: sticky; top: -6px; z-index: 2; background: var(--paper); }
+  .desk__actions { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .rule-card, .insight { order: 4; }
+  .result-chip { top: 0; font-size: 16px; }
 }

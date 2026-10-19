@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { roundRecord } from './random-task-helpers.js';
 
 async function expectFitsViewport(page) {
   const layout = await page.evaluate(() => ({
@@ -35,7 +36,8 @@ test.describe('3D Huarong Dao', () => {
       localStorage.setItem('kidslab.huarong-dao.sfx', '0');
       localStorage.removeItem('kidslab.progress.huarong-dao');
     });
-    await page.goto('/courseware/huarong-dao/');
+    await page.goto('/courseware/huarong-dao/?seed=987');
+    await expect(page.locator('.random-round-menu')).toBeVisible();
   });
 
   test('recovers from an invalid direction, follows a hint, and undoes it', async ({ page }) => {
@@ -53,9 +55,11 @@ test.describe('3D Huarong Dao', () => {
     await expect(page.locator('#coachTitle')).toHaveText('退回一步');
   });
 
-  test('completes the twelve-step practice through progressive hints', async ({ page }) => {
+  test('completes the generated practice through progressive hints', async ({ page }) => {
     await page.locator('[data-level="practice"]').click();
-    await page.evaluate(async () => {
+    await expect(page.locator('[data-level="practice"]')).toHaveClass(/is-on/);
+    const steps=(await roundRecord(page,'huarong-dao')).instance.solution.length;
+    await page.evaluate(async steps => {
       const waitFor = async (predicate, message) => {
         const deadline = performance.now() + 15000;
         while (performance.now() < deadline) {
@@ -66,7 +70,7 @@ test.describe('3D Huarong Dao', () => {
         throw new Error(message);
       };
 
-      for (let step = 0; step < 12; step += 1) {
+      for (let step = 0; step < steps; step += 1) {
         const hint = document.querySelector('#hintBtn:not(:disabled)');
         if (!hint) throw new Error(`Hint unavailable at practice step ${step + 1}`);
         hint.click();
@@ -80,11 +84,11 @@ test.describe('3D Huarong Dao', () => {
           `Practice move ${step + 1} did not finish`,
         );
       }
-    });
+    },steps);
 
     await expect(page.locator('#win')).toBeVisible();
-    await expect(page.locator('#moveValue')).toHaveText('12');
-    await expect(page.locator('#winStats')).toContainText('12 格步');
+    await expect(page.locator('#moveValue')).toHaveText(String(steps));
+    await expect(page.locator('#winStats')).toContainText(`${steps} 格步`);
     await expect.poll(() => page.evaluate(() =>
       JSON.parse(localStorage.getItem('kidslab.progress.huarong-dao') || 'null')?.status)).toBe('completed');
   });

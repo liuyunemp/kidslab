@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import {roundRecord} from './random-task-helpers.js';
+const angle=async page=>{const [p,q]=(await roundRecord(page,'angle-golf')).instance.path;return Math.round(Math.atan2(p.y-q.y,q.x-p.x)*180/Math.PI);};
 
 async function setAngle(page, angle) {
   const input = page.locator('#angleInput');
@@ -60,7 +62,7 @@ test.describe('angle golf', () => {
       localStorage.removeItem('kidslab.progress.angle-golf');
       localStorage.removeItem('kidslab.sound.muted');
     });
-    await page.goto('/courseware/angle-golf/');
+    await page.goto('/courseware/angle-golf/?seed=987');
   });
 
   test('recovers from a miss and completes all three holes', async ({ page }) => {
@@ -84,26 +86,27 @@ test.describe('angle golf', () => {
     await page.locator('#shootBtn').click();
 
     await expect(page.getByRole('heading', { name: '锐角穿门' })).toBeVisible();
-    await setAngle(page, 27);
+    const acute=await angle(page);await setAngle(page,acute);
     await shootAndWait(page);
-    await expect(page.locator('#status')).toContainText('27° 是一个锐角');
+    await expect(page.locator('#status')).toContainText(`${acute}° 是一个锐角`);
     await page.locator('#shootBtn').click();
 
     await expect(page.getByRole('heading', { name: '三墙反弹' })).toBeVisible();
+    const bank=await angle(page);
     await setAngle(page, 0);
     await shootAndWait(page);
-    await expect(page.locator('#status')).toContainText('角度小了约 60°');
+    await expect(page.locator('#status')).toContainText(`角度小了约 ${bank}°`);
 
-    await setAngle(page, 59);
+    await setAngle(page,bank-1);
     await shootAndWait(page);
     await expect(page.locator('#status')).toContainText('角度小了约 1°');
 
-    await setAngle(page, 60);
+    await setAngle(page,bank);
     await page.locator('#shootBtn').click();
     await expect(page.getByRole('heading', { name: '三墙神仙球！' })).toBeVisible({ timeout: 3500 });
     await expect(page.locator('#playAgainBtn')).toBeFocused();
     await expect(page.locator('.course')).toHaveJSProperty('inert', true);
-    await expect(page.locator('#status')).toContainText('30° 入射、30° 反射');
+    await expect(page.locator('#status')).toContainText(`${90-bank}° 入射、${90-bank}° 反射`);
     await expect.poll(() => page.evaluate(() =>
       JSON.parse(localStorage.getItem('kidslab.progress.angle-golf') || 'null')?.status)).toBe('completed');
     await page.locator('#playAgainBtn').click();
