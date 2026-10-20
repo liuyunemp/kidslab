@@ -1,6 +1,6 @@
 {
   "id": "metamorph-hotel",
-  "version": "656ea737e7ad5ff8c45b2e9956cabc42c49697868b4db5f2df6592cf7b63bcd9",
+  "version": "8f341296ac9b2830cdc2bf10e4801c3e130a8b59a950ddbfd30296dd874e9e0e",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "916e5c9f190fe0bb175369753d119a0e63c7e1ab17fa2667f7bd565a845f891f"
+      "sha256": "b882dbc86697a06a7806e729adaa42f933a0dbcf0f718e72d9a0db144d1b326e"
     },
     {
       "path": "main.js",

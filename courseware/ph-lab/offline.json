@@ -1,6 +1,6 @@
 {
   "id": "ph-lab",
-  "version": "f8e8f07ee67446b57614c3753f9d09f3a35bbc06a98df096ca2faa2d42ab9d46",
+  "version": "04b13fec0f0832a639d50a1da6f8bca57b5414b145cb2c7ae4f7ff47bd0c1c58",
   "assets": [
     {
       "path": "audio.js",
@@ -17,7 +17,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "1d82924f00bdf5d3643058a9cdf4bb62a715dc3678d4a5db982229fced6672d4"
+      "sha256": "1ee034fce2347049fe9e21b4011140ba95ac1cd414789d89440f9865137dbd62"
     },
     {
       "path": "main.js",

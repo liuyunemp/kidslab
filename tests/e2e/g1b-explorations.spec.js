@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { courses, journey } from '../g1b-journeys.mjs';
 import * as THREE from 'three';
+import { captureSpeech, expectNarrationStarted } from './speech-helpers.js';
 
 async function perform(page,action){
  if(action.type==='trace'){
@@ -15,18 +16,27 @@ async function perform(page,action){
 for(const c of courses){
  test(`${c.id}: eight exploration loops, reload, bilingual themes and controls`,async({page},info)=>{
   test.setTimeout(180000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await captureSpeech(page);
   await page.addInitScript(()=>{localStorage.setItem('kidslab.lang','zh');localStorage.setItem('kidslab.theme','light');});
   await page.goto(`/courseware/${c.id}/`);await expect(page.locator('#title')).not.toBeEmpty();await expect(page.locator('#nogl')).toBeHidden();
   await expect(page.locator('#progress')).toHaveText('0/8');
   for(let i=0;i<8;i++){
    await page.locator('#activitySelect').selectOption(String(i));
+   await page.evaluate(()=>{window.__speechEvents=[];});
    const instance=await page.evaluate(({id,index})=>JSON.parse(localStorage.getItem(`kidslab.exploration-v2.${id}`)||'null')?.instances?.[index]??null,{id:c.id,index:i});
    for(const action of journey(c,instance??c.activities[i]))await perform(page,action);
    await expect(page.locator('#progress')).toHaveText(`${i+1}/8`);
+   await expectNarrationStarted(page,i===7);
    if(i===3){await page.reload();await expect(page.locator('#progress')).toHaveText('4/8');}
   }
   expect(await page.evaluate(id=>JSON.parse(localStorage.getItem(`kidslab.progress.${id}`))?.status,c.id)).toBe('completed');
+  await page.reload();await expect(page.locator('#progress')).toHaveText('8/8');
+  expect(await page.evaluate(()=>window.__speechEvents)).toEqual([]);
   await page.locator('#resetBtn').click();await expect(page.locator('#progress')).toHaveText('8/8');
+  await page.evaluate(()=>{window.__speechEvents=[];});
+  const replayInstance=await page.evaluate(id=>JSON.parse(localStorage.getItem(`kidslab.exploration-v2.${id}`)||'null')?.instances?.[7]??null,c.id);
+  for(const action of journey(c,replayInstance??c.activities[7]))await perform(page,action);
+  await expectNarrationStarted(page,false);await expect(page.locator('#progress')).toHaveText('8/8');
   await page.locator('#langBtn').click();await expect(page.locator('#panelHandle')).toContainText('Exploration');
   await page.locator('#themeBtn').click();await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
   const layout=await page.evaluate(()=>({w:document.documentElement.scrollWidth,h:document.documentElement.scrollHeight,buttons:[...document.querySelectorAll('.topbar button,.topbar a')].map(b=>{const r=b.getBoundingClientRect();return{left:r.left,right:r.right,width:r.width,height:r.height};}),canvas:{w:document.querySelector('canvas').clientWidth,h:document.querySelector('canvas').clientHeight}}));

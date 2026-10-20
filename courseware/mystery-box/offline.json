@@ -1,6 +1,6 @@
 {
   "id": "mystery-box",
-  "version": "125e6794bc1c81bed0707034f2d4b8c90ef4eb2fb670cfbb96e223095c6b36d4",
+  "version": "919ded432a712b68dbd085aa8d982e3c48b9201f4adf7eafdedd676118aa5677",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "d30462ed6eec8872b494fce1416db36293f9bc7f38421b397b7c05f1f8cf5c85"
+      "sha256": "eeb2ead411a209a0eb57013ec82f69d81e8cc6e3222d70c635cde18dc3ee0d59"
     },
     {
       "path": "main.js",

@@ -1,6 +1,6 @@
 {
   "id": "sort-olympics",
-  "version": "37c0c19d73f757367b94b5fb28f151863a1332685e776390c6c2063f562a0128",
+  "version": "e395ab70eae292e64ea8529b5489bd4f61cfb256dd5a0b3299a8bfe7adbe8074",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "138d068b5d978b60cb94869cadb1d7f4531041f8f906b7ff1271dbc0669919ac"
+      "sha256": "f386970b45204c69d0b419aaff5e7f2c44f72cb498f1147969b406b6c7982f55"
     },
     {
       "path": "main.js",

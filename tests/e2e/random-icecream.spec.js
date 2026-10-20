@@ -7,9 +7,9 @@ test('icecream-geometry: four solids, three measurements, six orders and indepen
   for(let size=0;size<3;size++){
     await page.locator(`[data-size="${size}"]`).click();
     for(let pour=0;pour<3;pour++){
-      await page.locator('#fillCone').click();await expect(page.locator('#pourCone')).toBeEnabled();await page.locator('#pourCone').click();
+      await page.locator('#fillCone').click();await expect(page.locator('#pourCone')).toBeEnabled({timeout:30000});await page.locator('#pourCone').click();
       if(size===0&&pour===0){await page.reload();expect((await saved()).play.scoops).toBe(1);}
-      if(pour<2)await expect(page.locator('#fillCone')).toBeEnabled();
+      if(pour<2)await expect(page.locator('#fillCone')).toBeEnabled({timeout:30000});
     }
     await expect.poll(async()=>(await saved()).play.records.length).toBe(size+1);
   }

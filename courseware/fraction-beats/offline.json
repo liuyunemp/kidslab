@@ -1,6 +1,6 @@
 {
   "id": "fraction-beats",
-  "version": "92b0d47e30acc00ed9477926b58b1727c6280cea418035e2350e2d3b81de949a",
+  "version": "ae197e3a2b04410ba148aeb55eb692c76252de070d1dc19a6da532682c488259",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "56defc7d26354c2d8eeeae27642faab72b079b5fb5048ac1b182ac1dcafb418d"
+      "sha256": "70ca94c9e8c6ce981a53994c4a95cabda1265ad1c876a42fc4bf09b77d31d9ed"
     },
     {
       "path": "main.js",

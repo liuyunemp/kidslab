@@ -1,6 +1,6 @@
 {
   "id": "island-water",
-  "version": "2b4e3684bdf55690e05196dc7aed334792943dfc010803c00309f24fcf3eb014",
+  "version": "c88714adeac74c9faab28716ea8d675743d09e5d1ded8841dc1516a0078a2ff4",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "3945503bfb52e71e671e78ffc59119d0b0de07d2f7e41dc170a17f996407d41c"
+      "sha256": "6cfb790d592ca7b663e1c813dba4dc58182a89d6af2b6abb89fed20ce34c705c"
     },
     {
       "path": "main.js",

@@ -157,8 +157,8 @@ const PRAISE = {
     en: ['Three in a row. Great job!', 'Three right in a row!', 'You are on a roll!'],
   },
   clear: {
-    zh: ['八题全对，你太棒了！', '全部完成，你太厉害了！', '八题全对，真了不起！'],
-    en: ['All eight right. You are amazing!', 'You finished them all. Wonderful!', 'Eight out of eight. Well done!'],
+    zh: ['八题完成，你太棒了！', '全部完成，你太厉害了！', '坚持完成，真了不起！'],
+    en: ['All eight completed. You are amazing!', 'You finished them all. Wonderful!', 'You kept going. Well done!'],
   },
 };
 

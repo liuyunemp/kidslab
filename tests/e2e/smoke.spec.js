@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import {roundRecord} from './random-task-helpers.js';
 import {orchardSplitWitness} from '../../scripts/random-rounds/math.js';
+import { explorationIds } from '../../scripts/speech/catalog.mjs';
 
 const manifest = JSON.parse(
   readFileSync(new URL('../../courseware/index.json', import.meta.url), 'utf8'),
@@ -768,6 +769,9 @@ test.describe('courseware manifest', () => {
         stage: 'function',
       });
       const themeBtn = page.locator('#themeBtn');
+      // Static toolbar markup can be visible before the exploration module has
+      // bound its events. Wait for the rendered title, not an arbitrary delay.
+      if (explorationIds.includes(course.id)) await expect(page.locator('#title')).not.toBeEmpty();
       await expect(themeBtn).toBeVisible();
       await themeBtn.click();
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');

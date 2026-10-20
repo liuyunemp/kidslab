@@ -1,0 +1,314 @@
+export const manifest = {
+  "version": 1,
+  "recipe": "kidslab-speech-v1-mp3-48k-24000-mono",
+  "voices": {
+    "zh": "Microsoft Huihui Desktop",
+    "en": "Microsoft Zira Desktop"
+  },
+  "entries": {
+    "zh": {
+      "九个十。捆一捆，拆一拆，开动百数小车。": {
+        "path": "./audio/speech/918fa8a1b8d168af3dd4662433e5ef78ea722aa2170d6f392b5ef913e1e4ef97.mp3",
+        "sha256": "6b0787710615053d9bb516aa3610d38a34e4df864e4b6303765573fa54bccfd4",
+        "bytes": 35517
+      },
+      "二十三。捆一捆，拆一拆，开动百数小车。": {
+        "path": "./audio/speech/c97c7666def260fdde21c8cf55525545b7a97103dbdf08e06b699d6f3abac9cc.mp3",
+        "sha256": "4014e761b96c2ae2e4d24db6a9ddc97db5fa7b67b5a17063a42f9dfc3333cab3",
+        "bytes": 35085
+      },
+      "从亮点出发，沿着这一笔慢慢写。": {
+        "path": "./audio/speech/1fa218521ff628378f9036bb7c791f3fe77a68385fbb25d77bc7050224f78779.mp3",
+        "sha256": "ae87542760ee5eb22c0dcd71e9c61d8423fa86a96229b31437aea54ada9a03b5",
+        "bytes": 22701
+      },
+      "你做到了，继续探索吧！": {
+        "path": "./audio/speech/afa94159d64c46e48fec6f9c9e47301db3359a61822199bbfaefbe714b54acc0.mp3",
+        "sha256": "b349180d19ac49cf82f8f1274fbb3b50b215133f5b91e7412bb5a7e9f56307d1",
+        "bytes": 15069
+      },
+      "你坚持完成了全部挑战！": {
+        "path": "./audio/speech/e0ffb597a44436627aa37b3ab0482aa0d133032c986b1f5d4882e142216087c0.mp3",
+        "sha256": "d6747b0464156d6319b40732f327207f36f26a3e805bfc9efbd36a7bc2ac2249",
+        "bytes": 15645
+      },
+      "先把物件放到台上。": {
+        "path": "./audio/speech/10e5d83b850ebd7532159d4c7f91974c2d6050147f58e19e2602bab5eee5c0a3.mp3",
+        "sha256": "bc583674345df568839119b00193f3f5c9752452d1b58fa8d4b67b6522d5165f",
+        "bytes": 12477
+      },
+      "先播放一次，再看看课文线索。": {
+        "path": "./audio/speech/6c35493a88787ce5d4890ed243aeaa529143abcaabc0008671f97d93c8c14336.mp3",
+        "sha256": "9a9a40399acb5b476e0c227e6943c4e5441415c1463c89c636590f98b6a99fb9",
+        "bytes": 22413
+      },
+      "先放好材料，再播放。": {
+        "path": "./audio/speech/ba08921f4a00febf5ff991a6799d7ab738dc0ed9f6dde919396878b066307971.mp3",
+        "sha256": "3618135d377d10872617dedfd548e0a28cae2bb124ae3d2505b2cb3b99fdf4ce",
+        "bytes": 15789
+      },
+      "先翻首字母，再找音节。": {
+        "path": "./audio/speech/ffb1915beafd4ae3ae515b2e9413af528ac3e07b8faf74ba117e465e40a9b3e4.mp3",
+        "sha256": "239029eb394b0742fc5e858fce5a060e410338d8e180b51d1df823c97527c294",
+        "bytes": 17517
+      },
+      "先让相同的数位对齐。": {
+        "path": "./audio/speech/2ff462ac0660ccd6413c06c4b3f896bd76271916716ff576904a37c8bb9ffd2b.mp3",
+        "sha256": "520dd617758d719e9ad248aabf8af5803f59ac22bc46ea67a1c58b5758ad3c6a",
+        "bytes": 14637
+      },
+      "全部完成啦，你真棒！": {
+        "path": "./audio/speech/d3ecab4b82e8b60eb83c9f636adbc26f1c8e89ec86e4a676673577b3ddaeb2c8.mp3",
+        "sha256": "05f7af8ac767b3be6a57b63316a416a46054cd85ba21ab6b6f5118e7cfe2db5d",
+        "bytes": 14205
+      },
+      "六十八。捆一捆，拆一拆，开动百数小车。": {
+        "path": "./audio/speech/2c5ada9f2163c4c5faaa967f70b5882fa6f978d236e73dea64bf15a00257e169.mp3",
+        "sha256": "a1817ac2c2ffe20d4c75fd92f81d1210a784dd86b81c0d1972a50e73d2cca838",
+        "bytes": 35085
+      },
+      "别着急，换个办法试试看。": {
+        "path": "./audio/speech/7a1304e75814ed2f18689cc8e4630bdd1df87867a044c2d5c9d03848f8097940.mp3",
+        "sha256": "a6ef060da6b9e222a89ce6e36786d693a7a6971f712b65496d1cd2a06c822853",
+        "bytes": 17949
+      },
+      "到边界啦，换一个方向试试。": {
+        "path": "./audio/speech/48feab21b3ebe67da45a9ab7de842468495825d472defc69d7794a04cef25f0f.mp3",
+        "sha256": "417b8628854b7bf784fac3c9c5e4420bd1b977e1d47a7bec75f3a3e534d5b52a",
+        "bytes": 19245
+      },
+      "加油，看看线索再试试。": {
+        "path": "./audio/speech/f6e009f8d5d304eac6a2d7538276d4928014c6510f1cd38e939b623d1dc92b24.mp3",
+        "sha256": "b52938fd549feddbf0ff1e831b3cbfb00e277a9966e17ff1a30bec1ba086d435",
+        "bytes": 17517
+      },
+      "十个一。捆一捆，拆一拆，开动百数小车。": {
+        "path": "./audio/speech/eebdd96bb6f59ff0ba8fc19d5d6bbd4981ebb71dd0726c11520a78807ac8d625.mp3",
+        "sha256": "652f4513dc8e38509d2d60410ee30e47f84d1f8e08554de1bf131f357c563acc",
+        "bytes": 35085
+      },
+      "十个十。捆一捆，拆一拆，开动百数小车。": {
+        "path": "./audio/speech/ecb96d8f4fdad68be7dee999dd5641ea7233d494bbe99c1923cabd47b5efce4e.mp3",
+        "sha256": "4c4092093286caf92e2a9f80b4d0f9f198942554eea2fb263686717dd80dc202",
+        "bytes": 35661
+      },
+      "所有探索都完成了，真了不起！": {
+        "path": "./audio/speech/1c1ee7daf8832eea957c0630bbc27cba1685b5f6729848ca88079bf89ee2d7f0.mp3",
+        "sha256": "db3ea44598e24319698987f3d25553e0dbf6f103db1ea174e1a483ff7eb79065",
+        "bytes": 20829
+      },
+      "放到桌面上试试，物件会回到原位。": {
+        "path": "./audio/speech/696f3f8a48a056655e2c19b98ef0e02fe08ed05f3dee9d0d6646409a1b4a3dd1.mp3",
+        "sha256": "244b5cb86ddb71a1c55e0ccbcff11a7f371bf965a9c97d8519478927052e0af6",
+        "bytes": 23997
+      },
+      "散开的不够拿，试试拆开一个十。": {
+        "path": "./audio/speech/24d321d08be9275dc2b65ae5c66f1af042c1a2c411e09c60c94166302b708a39.mp3",
+        "sha256": "9505e0cd2daa7e2587677f54128053e3327b3e76f505fa53253312e7e4321abb",
+        "bytes": 22269
+      },
+      "整十数。捆一捆，拆一拆，开动百数小车。": {
+        "path": "./audio/speech/69cee52fdbf789d4f50900cbc8dc93019c4bd5857536a54d72654e0b8fde01d7.mp3",
+        "sha256": "5ee27f9732a00551150e13080e16f149c66d71ef31397cec4243594a465550b1",
+        "bytes": 34941
+      },
+      "没关系，慢慢来，再试一次。": {
+        "path": "./audio/speech/3d03c3e3bfa01de2ee37b349c8a291db7c1dd13cbb53c8308197be05e89c1d9f.mp3",
+        "sha256": "312cbf73f97a62457a5d3ad1f50def4c96a3fa09d3f6d1824775031c8057c1aa",
+        "bytes": 20541
+      },
+      "看看手里的钱和托盘，还能换开或取回。": {
+        "path": "./audio/speech/b9a8fbdb9460075ba0052cade9f3ee2612394a7cf7381d0082cf01053107bdb4.mp3",
+        "sha256": "adeb442c182da689fc3513db220a94cce44631f6b90a76e713dd34bacf30fb94",
+        "bytes": 28749
+      },
+      "认真尝试的你，真了不起！": {
+        "path": "./audio/speech/431906a7ce5b399d8bc2bea814857aa1065d17e0d3bb883b131c42924beb5d7d.mp3",
+        "sha256": "a7274665ce35ff2f977b65ebe732b4259fdc500b5b8856c1f4518eee39a578ed",
+        "bytes": 17085
+      },
+      "试试台上的工具。": {
+        "path": "./audio/speech/4931de9883bd9fb1b6acfc4015776469d18d255a12a48b0bee9e6aac094c4691.mp3",
+        "sha256": "071583b43d5a377da0c105f6c540cae0fd9bf38bc1c45b633bd25369db31569b",
+        "bytes": 10461
+      },
+      "走到一百。捆一捆，拆一拆，开动百数小车。": {
+        "path": "./audio/speech/be0651475849255b8166ec2319c6032dd9f6acf633455492c93814fd47c12a50.mp3",
+        "sha256": "3aecc03f7da678359968b61589bd57ddb1d26394ebca4acfff31c9d8c8dfec5a",
+        "bytes": 35949
+      },
+      "过一个十。捆一捆，拆一拆，开动百数小车。": {
+        "path": "./audio/speech/1a9fbe5be6f868b06b4804304fc587f17749b12fd2a69080658362c91ae31898.mp3",
+        "sha256": "995d5403c541eedc16c1bcae5cc82a8f1666958f7b623f2629a4a06324220137",
+        "bytes": 36669
+      },
+      "还没有可以撤销的操作。": {
+        "path": "./audio/speech/479e74ad7e43dab8118e4f3f9ea2b9a5241d086284f2cc682b0a4c844e15139d.mp3",
+        "sha256": "74c8a35483865640f9cffceefbb6ac8d75a38548a4e7f05569a15c7b1f4944a4",
+        "bytes": 14349
+      },
+      "这一关完成啦，真棒！": {
+        "path": "./audio/speech/c34a32a4df6c3cd4820da79496dc2574ed6d797acdbb5c23f4622d156ec65ee2.mp3",
+        "sha256": "5b46aff0bcec2f9e0ed412ae70bc6c4a34cbf1e93ab87f6302e6532066c45eb7",
+        "bytes": 14205
+      },
+      "这个状态已经看过了，试着换一种摆法。": {
+        "path": "./audio/speech/969b54a1d2af4d297f7d16e55f58563f42e06ecf7f6d24f77bd4d2d201a695be.mp3",
+        "sha256": "952a01af1d4bcda9ae09c69c8cb898f202fb2536833062cc24e5af8f19628603",
+        "bytes": 25293
+      }
+    },
+    "en": {
+      "Across a ten。Bundle, unbundle and move the number train.": {
+        "path": "./audio/speech/7e9b4fdf28afcf9feaa0e1072c167e4e4c189f8da476283a08804f2026a4526c.mp3",
+        "sha256": "fa980867bae076a487e45f8608fe41cde39a5e5282bbc680d125a624b7180fbf",
+        "bytes": 28173
+      },
+      "Align equal place values first.": {
+        "path": "./audio/speech/5ece9db24dddc5f54fe223032c6c96a5c09c54afc5095650b9cee2027c70a3ba.mp3",
+        "sha256": "26b4a40e0dc35ab96d982dd89e638033c4430c9379dd06fad306f6904ba3ca27",
+        "bytes": 13629
+      },
+      "All activities completed. Great work!": {
+        "path": "./audio/speech/9c55948fcc348d5d206e5ffbc1043fc884fb7c50d62c77b20b4032122ce66583.mp3",
+        "sha256": "1b7927fe9121b9625a369a00e02e28bd462f835aa03d9df212bef36e3ba78447",
+        "bytes": 19965
+      },
+      "Arrange the pieces before playing.": {
+        "path": "./audio/speech/aa5bb1796354d943e6425ecbacd66abe79eee3edba7c5de12b796b248f996579.mp3",
+        "sha256": "42a1cca7e4d2551323b695f6bd284a39680735acce4078b6fa286d20c352010d",
+        "bytes": 12045
+      },
+      "At the boundary. Try another direction.": {
+        "path": "./audio/speech/007a6ceddddc676ce34ce9ecb77463e5d3a8abb9f6b7ad84a8b8fdff12a1b798.mp3",
+        "sha256": "25c15d2c5ac40b362d7997de1efa298452a6ba418c7c9039b3d5da551a507bf6",
+        "bytes": 19533
+      },
+      "Keep going. Look for a clue.": {
+        "path": "./audio/speech/0168541fadcd1d9457ec4b25fcb507d0a8b64d2a81c6bea002d7408eb74148e0.mp3",
+        "sha256": "ea12eda0a32e96ebee4f20b0c8128370977c2a5df86d8db7cc9d2f6bc371a6fc",
+        "bytes": 16221
+      },
+      "Look at your wallet and tray. Exchange or return a coin.": {
+        "path": "./audio/speech/3b2b7b43a4f35193265ec52d23942c7010048cc6074c87f0f55ae906b4b3b6f4.mp3",
+        "sha256": "b407eefcd7546e44eb0351dbe900f043be687f5a10875dd38e047daa1d242132",
+        "bytes": 26013
+      },
+      "Nine tens。Bundle, unbundle and move the number train.": {
+        "path": "./audio/speech/99cb3b7d54b4cc2fc3ce95462ad3894fddba9c9d05d303466195553fecd6245c.mp3",
+        "sha256": "4eb844e977c02855f27b5ce9c7037c13c563224b1fba3cf791cd4839ce55f38b",
+        "bytes": 27741
+      },
+      "No rush. Have another try.": {
+        "path": "./audio/speech/425e432eb9bae28bd454efc24f75638b90da988e3fef85b201a8d00f3467e124.mp3",
+        "sha256": "172de1d13fd81c6eb7c3b3a6563830cf5126842cc52549bfca9c52563d782c18",
+        "bytes": 16653
+      },
+      "Not enough loose blocks. Unbundle a ten.": {
+        "path": "./audio/speech/eae3120668946086437529aa073995aa49d0dbe9efd2ab67e145d1ebc1a4bd8c.mp3",
+        "sha256": "7a6f06acd911a4874c5ef6aed9d34243fb55ab0ab239a08895eb807755e0d67f",
+        "bytes": 21981
+      },
+      "Open the initial, then a syllable.": {
+        "path": "./audio/speech/d7c65d2096c6b0f59a8d9ef82ad103d2bddcb46c195d7c7b4b51cfbd8f17dbbb.mp3",
+        "sha256": "022d8930f46db45481818c7fb67eff5415730c153a0ce5a55140a734ea579740",
+        "bytes": 13773
+      },
+      "Place it on the table; the piece will return.": {
+        "path": "./audio/speech/dc64aa596be16673c3141cf5ffb7fe455bfb70ed1c27e615de1da3fbfe31fe4b.mp3",
+        "sha256": "3b05f5d945fcb8b65d3d90f78869f7d7d835bb583cc0a639229450d50b79787c",
+        "bytes": 17517
+      },
+      "Play once, then look at the source clues.": {
+        "path": "./audio/speech/47a67661a1a8f9e9d9bbd5cd4de879120d9a546e2c68e80a2f6f22140cd1656a.mp3",
+        "sha256": "ec16fe3c99082258ae1eab24abe76e5ff376d4b8c48492d21a13f6d81e86fe85",
+        "bytes": 17373
+      },
+      "Put the object on the stage first.": {
+        "path": "./audio/speech/3bc4bc714aad8e012dc52ba5efc3df86ec37b269fb165c78e8992fc46b305c08.mp3",
+        "sha256": "60bc6bc5b4411c1f7538c083bdf276b6fcf645a4e998deb8c585e0a581b3347d",
+        "bytes": 12765
+      },
+      "Reach one hundred。Bundle, unbundle and move the number train.": {
+        "path": "./audio/speech/37f4a983cce3244ca226ca15084679f9cd1bc96ab464da6118f7cfaf00386131.mp3",
+        "sha256": "81b1c091d51208797b294e91919156abe1b947d24209aef769fcc51f02f5046c",
+        "bytes": 28893
+      },
+      "Sixty-eight。Bundle, unbundle and move the number train.": {
+        "path": "./audio/speech/1f6667f355cd713a7a5d3c1b5fb9422c16a2c5a10804b2d9e921ff0358f9c190.mp3",
+        "sha256": "ed8b35ced65e92e32139dad3bb7d1dcf667a19670670257e8517dcbe431da88d",
+        "bytes": 27309
+      },
+      "Start at the dot and follow this stroke slowly.": {
+        "path": "./audio/speech/817abf251e0c56b3335f977a95018a65b8f150687040d2409c9b2b3819e3d979.mp3",
+        "sha256": "0abe63bf046d98947b63b31452949bd50745b4694332d213e2fdc1f3320fb2a8",
+        "bytes": 16077
+      },
+      "Take your time. Try another way.": {
+        "path": "./audio/speech/805fb423906000bfb20de1a5b0edf5f84106cce0811a66039cfa7eebaad66c8c.mp3",
+        "sha256": "bf0c272979bf1e3aeaa0fdcf708b945ca245ab398052ea66d37a9b0285191b2d",
+        "bytes": 17517
+      },
+      "Ten ones。Bundle, unbundle and move the number train.": {
+        "path": "./audio/speech/7ec0ad73967a83cf3a54fa2afdc966abac2f364b26d7d69030551f0f98e4067c.mp3",
+        "sha256": "570f538ad55def835df7339cb14c06693124be761827ffbe8b9e4baca3f84725",
+        "bytes": 27165
+      },
+      "Ten tens。Bundle, unbundle and move the number train.": {
+        "path": "./audio/speech/713e191084070b96e66e135b921f6dbc7b809e0b9cf76be856b8c5899ddc01bd.mp3",
+        "sha256": "753efd91f1193b1fd404343f6bcbd1ff18603d8468e12c00a45e949c15d2c70d",
+        "bytes": 27165
+      },
+      "There is nothing to undo yet.": {
+        "path": "./audio/speech/5179ff01724d03242932362f3e8f73f397cbee4e2e23fae4372acde70da77d8c.mp3",
+        "sha256": "5d0a1ce27046c08d337443e5e54cc6a7a48649e32ca0eb7732f0ade2d84ca991",
+        "bytes": 10749
+      },
+      "Try one of the tools.": {
+        "path": "./audio/speech/40db7a5a98dabdba42cf010d257e6446de34d66eebdfe0291c777c3cfb83e6cc.mp3",
+        "sha256": "1c9c98b806cdda3495b82cb993df2b15b5dfca0e15b4db4f37034481783dc58b",
+        "bytes": 8733
+      },
+      "Twenty-three。Bundle, unbundle and move the number train.": {
+        "path": "./audio/speech/afbab865bed9ac0da999f7b8bae588565a3ca26caaf0f3630199a88d058bc2e6.mp3",
+        "sha256": "5f712fdce9a2fbd945612c24711cc740fbf8243fe0df256eb16e91bea95859f6",
+        "bytes": 27597
+      },
+      "Whole tens。Bundle, unbundle and move the number train.": {
+        "path": "./audio/speech/b15ad4d4098ab7c96ac368210cfb448b63b3829144e558725ee05284d3464ca9.mp3",
+        "sha256": "944eadf8c27d4338eff8e16a6a68bb69331c42d16a515d558c13cd71525c53f7",
+        "bytes": 27597
+      },
+      "You did it. Keep exploring!": {
+        "path": "./audio/speech/4609f9b0784ee4222f02c1018cc0911dd2eca52be311788054e542675d6df975.mp3",
+        "sha256": "2c643119d2bc7d646d12bdeade81edc614a14ac403a339e930304f87565fc109",
+        "bytes": 16653
+      },
+      "You finished them all. Wonderful!": {
+        "path": "./audio/speech/24463a7d21fe7f89fadd5135785285a6db45c12e79ba5383f6877ab4c86e1278.mp3",
+        "sha256": "420c6326c919837853209cf162d6202eb0aaaa7cc2c6d3dba9372a9d6e58c07f",
+        "bytes": 17373
+      },
+      "You finished this activity. Well done!": {
+        "path": "./audio/speech/3569a3a8be7f38b322d8b7072ad68178352c539e34f57aebe3b40dc7336d2fa5.mp3",
+        "sha256": "b7a5069d68d5e2491666488f2ff16eecca38cab4813c628f779cfcc006a9fdf3",
+        "bytes": 19101
+      },
+      "You have seen this state. Try another arrangement.": {
+        "path": "./audio/speech/b27e2cd08b5e19d700bd9d95ed1655912d5ce169bf52e5e6a429cbd536580de6.mp3",
+        "sha256": "81161ead254befe7f8a4ea076d4cfe59a9b59b24c9225ca1a7210864d1823022",
+        "bytes": 21837
+      },
+      "You kept going and finished every challenge!": {
+        "path": "./audio/speech/6e001982c70e1af132874ce5cc29fb25dbd64ba3d5542498c2006a4bd4813f07.mp3",
+        "sha256": "79eaf2b91395f1a1220a9f6101274eec16bdc88c15c031d16e42d3d4c3759efc",
+        "bytes": 14781
+      },
+      "Your practice paid off. Great work!": {
+        "path": "./audio/speech/c9cb77bb6d15dcd14c9173c1f6327dfa6d27635fe18d04e8c11d9c33e962518e.mp3",
+        "sha256": "729ebbcc73f36a3ac94d99dfbdb66b72658eea4793e9e81d6dd256614028c7ff",
+        "bytes": 18669
+      }
+    }
+  }
+};

@@ -1,6 +1,6 @@
 {
   "id": "robo-pet-school",
-  "version": "d49e54c294db1a609810e89b6ed2f1478af26e471ce9506a717f0f9998084e0d",
+  "version": "2cf6fef84ff1a3bb4a1da0205d5ea9802d05ac30268543e53708ab87dd596a0f",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "0f98a68c24296b0c8e9fa48f0ca1ce288ba6ccf44314a7bdf00154889693fa09"
+      "sha256": "0bfd497552c8f4457378cbad0fd9e6b8c5970d19d213a3e815c0a09102afb7f5"
     },
     {
       "path": "main.js",

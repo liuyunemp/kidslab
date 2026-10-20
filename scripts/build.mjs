@@ -29,6 +29,7 @@ async function writeFile(file, content) {
 import { validateFactsCoverage, validateFactsDocument } from './facts.mjs';
 import { GRADE_RE } from './grades.mjs';
 import { loadCurriculum } from './curriculum.mjs';
+import { validateSpeechAssets } from './speech/validate.mjs';
 import { createBuildWorkspace, removeBuildWorkspace, publishArtifacts } from './build-workspace.mjs';
 
 const DEFAULT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -319,6 +320,10 @@ async function main() {
     courses.push(meta);
   }
   await validateKnowledgeAssertions(courses);
+  for (const course of courses) {
+    try { await validateSpeechAssets(path.join(SRC,course.id)); }
+    catch(error) { fail(`src/${course.id}: ${error.message}`); }
+  }
   if (errors.length) throw new Error(`构建前校验未通过:\n${errors.join('\n')}`);
   if (courses.filter((c) => c.pinned).length > 1) throw new Error('pinned 课件只能有一个');
   const curriculum = await loadCurriculum(ROOT, courses);

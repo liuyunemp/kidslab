@@ -1,6 +1,6 @@
 {
   "id": "fraction-lab",
-  "version": "6a2cd85057341d034de650ea0d8a93ca1ed3a8414631ab14429d742f67f88532",
+  "version": "f45dba510764acd81169d89088bd012534173df7b5f8265405a3f15232c623e2",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "f4f7f2beae757b082aa2eb696aa6a51de6cc46db0d5bf0313ccb4282e52c12be"
+      "sha256": "91ed8532c5a4ede7d5d3bfc54d9ffcf9a6059ef7a394e8eb14e993d62fe16e56"
     },
     {
       "path": "main.js",

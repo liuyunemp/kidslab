@@ -1,6 +1,6 @@
 {
   "id": "pyramid-cube",
-  "version": "8d758e39857762cc2f43f0e618e838a1f4d1862fe946ed6758b833a182bc0300",
+  "version": "6bb8e34c80327ac10e4e2739b443d660d71b6f24ba0a4006f48357c0abd0499c",
   "assets": [
     {
       "path": "audio.js",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "b44a96874f4e4641f20b90504174a7bfabfaf6b652c4ebac565e9679feecf505"
+      "sha256": "22fa506ad97e29e6209d8f75786e90a0b784922adc2352d5aa85b0d59daf9f09"
     },
     {
       "path": "main.js",

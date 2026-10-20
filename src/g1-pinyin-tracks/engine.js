@@ -1,4 +1,5 @@
 import { MILESTONE_STREAK, ROUND_COUNT, currentTask, encourageText, distanceToPath, evaluateTrace, initialState, milestoneFor, praiseText, replay, restoreState, speakText, submit } from './model.js';
+import { createNarration } from './narration.js';
 import { createRounds } from './random-rounds.js';
 import { g1Task, validG1Task, g1Identity, taskFamily } from './random-model.js';
 
@@ -46,7 +47,7 @@ const esc = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp
 const rotate = (values, shift) => values.map((_, index) => values[(index + shift) % values.length]);
 const symbol = (name) => ({ circle: '●', triangle: '▲', square: '■', rectangle: '▰', parallelogram: '▱' }[name] || '◆');
 
-export function startGame(config) {
+export function startGame(config, manifest) {
   const cool = window.cool;
   const storage = cool.storage;
   const key = `kidslab.g1game.${config.id}`;
@@ -97,6 +98,10 @@ export function startGame(config) {
   const bgm = new Audio('./audio/bgm.ogg');
   bgm.loop = true;
   bgm.volume = MUSIC_VOLUME;
+  const narration = createNarration({ manifest,
+    show: (message, success) => feedback(message, !success),
+    duck: () => { bgm.volume = DUCK_VOLUME; }, restore: restoreBgm,
+  });
 
   document.documentElement.style.setProperty('--accent', config.accent);
   document.documentElement.style.setProperty('--backdrop', config.backdrop);
@@ -136,18 +141,7 @@ export function startGame(config) {
     if (bgm.volume !== MUSIC_VOLUME) bgm.volume = MUSIC_VOLUME;
   }
   function say(text, options = {}) {
-    const spoken = options.onEnd;
-    const utterance = speech?.speak?.(text, {
-      ...options,
-      onEnd: () => { restoreBgm(); if (typeof spoken === 'function') spoken(); },
-    });
-    if (!utterance) return null;
-    /* 说话时压低 BGM；除 onend 外再加一道兜底计时，保证音乐一定会回到原音量。 */
-    bgm.volume = DUCK_VOLUME;
-    clearTimeout(duckTimer);
-    duckTimer = setTimeout(restoreBgm, Math.min(12000, 3000 + String(text).length * 200));
-    utterance.onerror = restoreBgm;
-    return utterance;
+    return narration.say(text, options);
   }
   function showPraise(message, key) {
     const node = $('#praise');
@@ -178,10 +172,9 @@ export function startGame(config) {
   /* 答错时念一句鼓励：文字与声音同时给，缺语音的设备也不会少反馈。
      同一步上连错越多，语气越往后走；答对或换一步就重新计数。 */
   function encourage() {
-    const message = encourageText(missCount, cool.preferences.lang);
-    if (!message) return;
-    feedback(message, true);
-    say(message, { interrupt: true });
+    const task = currentTask(config, state);
+    const hint = task ? speakText({ kind: config.kind, task, words: w(), phase, lang: cool.preferences.lang }) : '';
+    narration.encourage(`${state.done.length}:${phase}`, hint);
   }
   /* 朗读中的喇叭会脉动，用来告诉孩子「正在念」。token 防止被打断的旧发音误清掉新状态。 */
   function markSpeaking(node, text, token) {
@@ -205,8 +198,12 @@ export function startGame(config) {
     const text = speakText({ kind: config.kind, task, words: w(), phase, lang: cool.preferences.lang });
     if (!text) return;
     const token = ++speakToken;
-    const utterance = say(text, { interrupt: true, onEnd: () => unmarkSpeaking(node, token) });
-    if (utterance) markSpeaking(node, text, token);
+    say(text, {
+      onStart: () => markSpeaking(node, text, token),
+      onEnd: () => unmarkSpeaking(node, token),
+      onCancel: () => unmarkSpeaking(node, token),
+      onError: () => unmarkSpeaking(node, token),
+    });
   }
 
   document.addEventListener('pointerdown', () => { gestureSeen = true; playMusic(); }, { once: true });
@@ -344,6 +341,7 @@ export function startGame(config) {
       $('#stage').innerHTML = `<div class="end-scene"><div>🎉</div><h2>${esc(words.finished)}</h2><p class="praise-line" data-praise="clear">${esc(clearPraise)}</p><button id="hearAgain" class="subtle hear-again" type="button">🔊 ${esc(words.hearAgain)}</button><button id="replay" class="submit" type="button">${esc(words.restart)}</button></div>`;
       $('#hearAgain').addEventListener('click', () => say(clearPraise, { interrupt: true }));
       $('#replay').addEventListener('click', () => {
+        narration.reset();
         if(rounds){
           config.tasks=config.tasks.map(task=>rounds.next(task.id).task);
           // weight and sort keep their earned stars across runs; the other games restart at zero.
@@ -364,6 +362,7 @@ export function startGame(config) {
     const result = submit(config, state, task.id, value);
     if (!result.accepted) { streak = 0; missCount += 1; sound('wrong'); encourage(); $('#stage').classList.remove('wobble'); void $('#stage').offsetWidth; $('#stage').classList.add('wobble'); return; }
     busy = true;
+    speech.stop();
     streak += 1;
     missCount = 0;
     state = result.state; save();
@@ -387,7 +386,7 @@ export function startGame(config) {
       sound('wrong');
       const hint = task.hints?.[seqParts.length];
       /* 有针对性提示就念提示，没有才退回通用鼓励。 */
-      if (hint) { feedback(t(hint), true); say(t(hint), { interrupt: true }); }
+      if (hint) narration.encourage(`${state.done.length}:${seqParts.length}`, t(hint));
       else encourage();
       $('#stage').classList.remove('wobble');
       void $('#stage').offsetWidth;
@@ -397,6 +396,7 @@ export function startGame(config) {
     seqParts = [...seqParts, value];
     missCount = 0;
     if (seqParts.length === steps.length) return answer(seqParts.join('|'));
+    speech.stop();
     sound('good');
     render();
   }
@@ -461,8 +461,7 @@ export function startGame(config) {
       const message = result.verdict === 'offtrack' ? words.traceOff : result.verdict === 'wobbly' ? words.traceWobbly : words.traceMiss;
       missCount += 1;
       sound('wrong');
-      feedback(message, true);
-      say(message, { interrupt: true });
+      narration.encourage(`${state.done.length}:${phase}`, message);
       $('#stage').classList.remove('wobble');
       void $('#stage').offsetWidth;
       $('#stage').classList.add('wobble');

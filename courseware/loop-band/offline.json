@@ -1,6 +1,6 @@
 {
   "id": "loop-band",
-  "version": "9d3cea5e871288cb44049b2c585992acd6d83f69f9c76af9dd9986df001476d9",
+  "version": "dc4ec5adc8fc6b5438cc80b81979206b8427d73cea5738afa733ecf9735d875a",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "9d39131f7b911c1fca755ecd606f0eee5551b8c7d450005e45a8badf6df6c15a"
+      "sha256": "558fa13fb0949d0edb9931bcf7de46fa6c4af34f9e249e17a40fa1fd5f304f94"
     },
     {
       "path": "main.js",

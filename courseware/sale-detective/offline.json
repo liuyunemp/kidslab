@@ -1,6 +1,6 @@
 {
   "id": "sale-detective",
-  "version": "33ea9e4b42f9e8e828deb3841308d5eb04322c39904fe9aab4be98e1dc19d336",
+  "version": "2fa8961aa9e6a923ea61ec87f04e8d61ac69fa87f10a30079ba0f132a1bbf1fa",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "448e673c74317571d38677d37c68e61903c8d5bd84ea7e41e1030c76d77a3b9b"
+      "sha256": "c4a14db2dde3ed7c80c68b55d8663b86d67b80ec3bd7f1f98978b241c09d2c7e"
     },
     {
       "path": "main.js",

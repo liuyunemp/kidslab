@@ -9,6 +9,8 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
+    "speech:generate": "node scripts/speech/generate.mjs",
+    "speech:check": "node scripts/speech/generate.mjs --check",
     "random:sync": "node scripts/random-rounds/sync.mjs && node scripts/g1b-sync.mjs",
     "preview": "node scripts/serve.mjs",
     "report": "node scripts/report.mjs",
@@ -22,6 +24,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@playwright/test": "^1.61.1",
     "esbuild": "^0.28.1",
     "three": "^0.170.0"

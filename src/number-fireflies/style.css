@@ -181,3 +181,9 @@ html,body { height: 100%; overflow: hidden; }
   .actions { gap: 5px; }
   .actions .btn { padding: 6px; }
 }
+
+/* Narration preference stays within the existing toolbar. */
+.narration-settings{position:relative;font-size:16px;line-height:1.45;flex:0 0 auto}.narration-settings summary{min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer}.narration-settings button{position:absolute;right:0;top:100%;z-index:50;min-height:44px;min-width:140px;font-size:16px;padding:10px;background:var(--card,#fff);color:var(--ink,#172530);border:1px solid currentColor;border-radius:12px}.bar__actions{flex-wrap:wrap}
+
+.narration-settings summary{background:var(--card);border:2px solid var(--line-strong);border-radius:12px;padding:0 6px}
+@media(max-width:600px){.bar>a.pill{flex:0 0 44px;width:44px;height:44px;padding:6px;position:relative}.bar>a.pill>[data-t="back"]{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}

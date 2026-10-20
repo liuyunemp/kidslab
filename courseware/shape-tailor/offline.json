@@ -1,6 +1,6 @@
 {
   "id": "shape-tailor",
-  "version": "8ab58a9b1f7a78cf32b0bd408f6afc0afc39b3e84232916c72e831992dd3bdb2",
+  "version": "2274e56fd9bbc8e941231742ddbb3c425a5443fb5a1b30887819558f89002593",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "aa9b2e4338b1f95ef880331eb9809d76f02837766d0d1e8974191b6be6f46f89"
+      "sha256": "feafb055e69b8ee000fabe81d166fc4dcf70e597314db2400b9069e831a101d0"
     },
     {
       "path": "main.js",

@@ -1,6 +1,6 @@
 {
   "id": "density-detective-lab",
-  "version": "100bcc6b26260c94aac5db8ffa12ad749f2593e8451ac9ae8c75a38d8b5060fc",
+  "version": "1fc2ff5904806d5e6f095015066bf75c3b52d82d4b66f21ffa98f67a7ccc271e",
   "assets": [
     {
       "path": "audio.js",
@@ -22,7 +22,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "e0684c40a306b143fc75020e0c2e27b7e9aabc4ee3b6b07d958ec22a60b8fd3d"
+      "sha256": "e8cd9ac3c946092ba6ec4d9e63f5530f44e6fc0f50e3ad5e0b1b68d9a2eb4b32"
     },
     {
       "path": "main.js",

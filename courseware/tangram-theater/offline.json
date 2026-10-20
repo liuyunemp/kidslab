@@ -1,6 +1,6 @@
 {
   "id": "tangram-theater",
-  "version": "38735db62c82354f609336929619b954190f33891f28c795e9fafb06803d4aa6",
+  "version": "4735fe0803453558a1358afba8ef0e399e30f5ea7e3ccbf79aabf99b78acc3c1",
   "assets": [
     {
       "path": "audio.js",
@@ -21,7 +21,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "6503e8fac6c6098b565ef0d9609d7cf89226cf903d81224a4397bdb6b0476a51"
+      "sha256": "12e79baa142aeef15f3710c9c6a01ffa40896aa86c46b75152881f54dfd75d19"
     },
     {
       "path": "main.js",

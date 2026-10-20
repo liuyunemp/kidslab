@@ -1,6 +1,6 @@
 {
   "id": "optics-lab",
-  "version": "c11003d825833862b45b3c9f1c019b5bb95b9a42fb4ed23f736d7c0debb440ad",
+  "version": "61680172763bb833e3f9ea79a279cef99c706ee2560048863332234bd5ba5075",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "ef2d3904a3917231d2edd854ecd16e0abc4d4c0e1f94cf1da862db8b93b887c0"
+      "sha256": "5a60d2b894978146337d63c51c0fdbaef784832ac1fd8c265e75fb76879ebc00"
     },
     {
       "path": "main.js",

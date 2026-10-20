@@ -1,6 +1,6 @@
 {
   "id": "microscope-cell-lab",
-  "version": "6fe1fa378b90ecf6bb67bd042c75c981fe8fa40aed90d922d5e1a127db7406c7",
+  "version": "bde35935c9af0f6fd436fe1ea15998f40a19806fc5be390a25f710238760e115",
   "assets": [
     {
       "path": "audio.js",
@@ -21,7 +21,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "b09f0b7e743d6b1d6c7b50080ad2849e7f9450d6d3a6a39a5fad6c9e081fe74f"
+      "sha256": "61c4423e75dfcc61b9a7eb1542902e04cbc3220191cfee8a528daa09300f3a3a"
     },
     {
       "path": "lab-model.js",

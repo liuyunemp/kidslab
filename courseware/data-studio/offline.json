@@ -1,6 +1,6 @@
 {
   "id": "data-studio",
-  "version": "7c65fa92f792f9f1e40f2e754c756cf91e6d4594c371972e73cdef8f9e906d60",
+  "version": "1c41457763ef7bc5430ab0e936251463f6c41acb349920e1acf5927e1a8d532d",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "019bf186c4291de607f429b85869d071d239589d82fcb1ab31b6a7da36d3a39d"
+      "sha256": "8d022b5750182031c79e60d2186dfb65dbd4bc7e96a35a0136819b648c4536d3"
     },
     {
       "path": "main.js",

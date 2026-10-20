@@ -1,4 +1,6 @@
 import {createRounds} from './random-rounds.js';
+import {createNarration,narrationControls} from './narration.js';
+import {manifest} from './speech-manifest.js';
 import {shadowTask,shadowFamily,validShadow,shadowScore,shadowSpeech} from './random-model.js';
 import * as THREE from './vendor/three.module.min.js';
 
@@ -172,6 +174,7 @@ import * as THREE from './vendor/three.module.min.js';
   let magicShown = false,currentDone=false,puppetTimer=0;
   let actx = null;
   let soundOn = true;
+  const narration=createNarration({manifest,lang:()=>lang,show:(message,success)=>showToast(message,success?'good':'')});
   /** 答对后自动进下一幕；手动点「下一幕」会取消它，避免连跳两幕 */
   let autoNextTimer = 0;
   function cancelAutoNext() { if (autoNextTimer) { clearTimeout(autoNextTimer); autoNextTimer = 0; } }
@@ -467,6 +470,7 @@ import * as THREE from './vendor/three.module.min.js';
   }
 
   function resetLevel() {
+    narration.reset();
     cancelAutoNext();clearTimeout(puppetTimer);currentDone=false;
     clearFeedback();
     magic.hidden = true;
@@ -483,15 +487,15 @@ import * as THREE from './vendor/three.module.min.js';
     const lvl = LEVELS[current];
     if (lvl.kind === 'reverse') {
       if (selected === lvl.answer) winLevel();
-      else { showToast(t('wrong'), 'bad'); sfx.bad(); }
+      else { showToast(t('wrong'), 'bad'); sfx.bad(); narration.encourage(current,t('wrong')); }
       return;
     }
     const score = poseScore(lvl);
     if (score > Math.cos(.42)) {
       velocity.x=0;velocity.y=0;
       winLevel();
-    } else if (score > 0.55) { showToast(t('close'), ''); sfx.close(); }
-    else { showToast(selected ? t('wrong') : t('pick'), 'bad'); sfx.bad(); }
+    } else if (score > 0.55) { showToast(t('close'), ''); sfx.close(); narration.encourage(current,t('close')); }
+    else { showToast(selected ? t('wrong') : t('pick'), 'bad'); sfx.bad(); narration.encourage(current,selected?t('wrong'):t('pick')); }
   }
 
   function winLevel() {
@@ -503,6 +507,7 @@ import * as THREE from './vendor/three.module.min.js';
     puppet.hidden = false;
     showToast(t('good'), 'good');
     sfx.win();
+    narration.success(won.size===LEVELS.length);
     puppetTimer=setTimeout(() => { puppet.hidden = true; }, 2200);
     render();
     // Keep the completed scene until the child explicitly moves on.
@@ -589,7 +594,9 @@ import * as THREE from './vendor/three.module.min.js';
 
   /* ============================ 启动 ============================ */
   const magicButton=document.createElement('button');magicButton.type='button';magicButton.className='btn btn--ghost';magicButton.textContent='✨';magicButton.addEventListener('click',()=>{cancelAutoNext();drawShape(document.getElementById('magicA'),'circle');drawShape(document.getElementById('magicB'),'tri');magic.hidden=false;});document.querySelector('.bar__actions').append(magicButton);
-  const readButton=document.createElement('button');readButton.type='button';readButton.className='btn btn--ghost';readButton.textContent='🔈';readButton.addEventListener('click',()=>window.cool?.speech?.speak?.(shadowSpeech(LEVELS[current],lang),{lang}));document.querySelector('.top-card').append(readButton);
+  const readButton=document.createElement('button');readButton.type='button';readButton.className='btn btn--ghost';readButton.textContent='🔈';readButton.addEventListener('click',()=>narration.say(shadowSpeech(LEVELS[current],lang)));document.querySelector('.top-card').append(readButton);
+  const updateVoice=narrationControls(document.querySelector('.bar__actions'),()=>lang);
+  langBtn.addEventListener('click',()=>{narration.reset();updateVoice();});
   initThree();
   function restorePlay(s){
     if(!SHAPES.some(a=>a.id===s.selected)&&s.selected!==''||!Array.isArray(s.rotation)||s.rotation.length!==3||!s.rotation.every(Number.isFinite))throw new Error('Invalid shadow pose');

@@ -3,6 +3,15 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {courses,journey} from '../g1b-journeys.mjs';
 import {initialState,reduce,restore,serialize,valueOf,moneyValue,columnValues,validTrace,sentenceFor,speechText} from '../../src/g1b-character-lab/exploration-model.js';
+test('a replayed exploration reports a fresh completion without duplicating saved achievements',()=>{
+ const c=courses.find(c=>c.kind==='character');let s=initialState(c);
+ const play=()=>{let last;for(const action of journey(c,c.activities[0])){last=reduce(c,s,action);s=last.state;}return last;};
+ assert.equal(play().loopCompleted,true);assert.equal(s.done.length,1);
+ s=restore(c,serialize(s));assert.equal(s.rooms[0].finished,true);
+ const again=reduce(c,s,{type:'assemble',index:0});assert.equal(Boolean(again.loopCompleted),false);
+ s=reduce(c,s,{type:'reset'}).state;s=restore(c,serialize(s));
+ const second=play();assert.equal(second.loopCompleted,true);assert.equal(second.discovered,false);assert.equal(s.done.length,1);
+});
 for(const c of courses){
  test(`${c.id}: eight selectable discoveries, undo, reset, replay and independent save`,()=>{
   let s=initialState(c);assert.equal(new Set(c.activities.map(a=>a.id)).size,8);

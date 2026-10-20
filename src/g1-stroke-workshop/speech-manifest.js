@@ -1,0 +1,349 @@
+export const manifest = {
+  "version": 1,
+  "recipe": "kidslab-speech-v1-mp3-48k-24000-mono",
+  "voices": {
+    "zh": "Microsoft Huihui Desktop",
+    "en": "Microsoft Zira Desktop"
+  },
+  "entries": {
+    "zh": {
+      "三题全对，太棒了！": {
+        "path": "./audio/speech/43d7c9a6b7a054bb10d6b258d9398f358c959ebc0b988484b1b90ddb9b400b19.mp3",
+        "sha256": "ce2344cb57919587e1786ada9ec4b2277ea1e38ccf11e44035a2d8b6dd14cf9f",
+        "bytes": 13341
+      },
+      "从亮点出发，顺着亮线描一描，捺": {
+        "path": "./audio/speech/f7b5b819ec6efe54a49bcf5a8abf8352620abde4a7920c132d15af11d0845b1d.mp3",
+        "sha256": "1bf00346ca4bf17f78118156bca983a417c5718a4d81fed0b61dcb413b5f2410",
+        "bytes": 27885
+      },
+      "从亮点出发，顺着亮线描一描，提": {
+        "path": "./audio/speech/e96d2b71abd5276eecd823e8a1589a81d0e9230b16cf9ac62c3e692371f69907.mp3",
+        "sha256": "89b61fb760e1720ebfaf55e540316b66d27a3f95d220b68c3916769d06814faa",
+        "bytes": 28173
+      },
+      "从亮点出发，顺着亮线描一描，撇": {
+        "path": "./audio/speech/07f8f7660fdc99ad1382d5b8d36c0e8b36cf56333600a79aaa670299a2a69f1a.mp3",
+        "sha256": "289a8361c68217cedb40636147aeea33c3a4f8354e9b2e3e4fde9d9f071e3353",
+        "bytes": 28461
+      },
+      "从亮点出发，顺着亮线描一描，横": {
+        "path": "./audio/speech/86be15599c8a225d67b3e98cd13284cc9835aee0a58137cac69c2ec7f3883622.mp3",
+        "sha256": "2bc0e22eae27b41aa3708ee74696f0f08e0a25f746d4353564e1c1e8a36a3a6a",
+        "bytes": 28461
+      },
+      "从亮点出发，顺着亮线描一描，横折": {
+        "path": "./audio/speech/caece6019e3d007ca171b6a0e07eaf12a2827763b5d164033869f04463d182c1.mp3",
+        "sha256": "6e22a69262079c9936b62e5a7315d7c6bc9a2c641f23c9542cbc67cfcf17baa6",
+        "bytes": 29613
+      },
+      "从亮点出发，顺着亮线描一描，横钩": {
+        "path": "./audio/speech/4274deec06dfc20b377316c3f1d5813d492eb60a740cf3bdff2fc52c1e909d7f.mp3",
+        "sha256": "3bc994b49e3edb08de38b4947ccdb39b04218e130dbaab4764fe558996f2a22c",
+        "bytes": 29325
+      },
+      "从亮点出发，顺着亮线描一描，点": {
+        "path": "./audio/speech/47c59fb5cab6ec9b6aec495d08e1d7d361b9bbd620a0fb5eb8ebada07e563636.mp3",
+        "sha256": "57713901e37ca30de684dcfb98ec87733d89695fb2529834d1d1720b2f705e54",
+        "bytes": 27597
+      },
+      "从亮点出发，顺着亮线描一描，竖": {
+        "path": "./audio/speech/780cff0343ca462d5941400e1a949db4112b3d26b290533e2a6d763cc2c90e4d.mp3",
+        "sha256": "e6cff9c2d64440814e78da5f62ae716e3ba093fdc65b43cb485b36abd1aba9dd",
+        "bytes": 27741
+      },
+      "从亮点出发，顺着亮线描一描，竖弯钩": {
+        "path": "./audio/speech/6ab59f551baefed29b164dc157853f49079d90d3300ecfb22f55293f3f292bbd.mp3",
+        "sha256": "2e1c9472dcc97c5e87f78d58ef4a3296e08de7baaa83b9e9c6f7d82fb9253832",
+        "bytes": 30621
+      },
+      "从亮点出发，顺着亮线描一描，竖钩": {
+        "path": "./audio/speech/54c50bd86abec62b5f09d0be17880c8c85b91efcc6508ee39007a64ee9dfd4f1.mp3",
+        "sha256": "fc300891f9ef44ab0c8e77b90a89fdc6bfced0c3afa2284e10e6b9239da8dc89",
+        "bytes": 29325
+      },
+      "你做到了，继续探索吧！": {
+        "path": "./audio/speech/afa94159d64c46e48fec6f9c9e47301db3359a61822199bbfaefbe714b54acc0.mp3",
+        "sha256": "b349180d19ac49cf82f8f1274fbb3b50b215133f5b91e7412bb5a7e9f56307d1",
+        "bytes": 15069
+      },
+      "你坚持完成了全部挑战！": {
+        "path": "./audio/speech/e0ffb597a44436627aa37b3ab0482aa0d133032c986b1f5d4882e142216087c0.mp3",
+        "sha256": "d6747b0464156d6319b40732f327207f36f26a3e805bfc9efbd36a7bc2ac2249",
+        "bytes": 15645
+      },
+      "全部完成啦，你真棒！": {
+        "path": "./audio/speech/d3ecab4b82e8b60eb83c9f636adbc26f1c8e89ec86e4a676673577b3ddaeb2c8.mp3",
+        "sha256": "05f7af8ac767b3be6a57b63316a416a46054cd85ba21ab6b6f5118e7cfe2db5d",
+        "bytes": 14205
+      },
+      "全部完成，你太厉害了！": {
+        "path": "./audio/speech/f755733244db308ae1959b0f3032603e8526eb72d0d93fde8f1919994e7d5a4d.mp3",
+        "sha256": "7f8af8c9bd5ba68be7812a8e34a2e771638f9d270ea833b5a548558b1b37821c",
+        "bytes": 15789
+      },
+      "八题完成，你太棒了！": {
+        "path": "./audio/speech/1b571f7bae59ba1baa5ac7e5d90229a80705d0fcaf91f99aa2337a232c51a376.mp3",
+        "sha256": "60d1b4b41db140f7029d5ad94dde26d08fed361361a200789871fb7a07b6eaee",
+        "bytes": 14637
+      },
+      "再想一想，答案就在眼前": {
+        "path": "./audio/speech/186647b34373e1f831b21b00a7ad88477a7ec697cabef2bef4e483a389b5db36.mp3",
+        "sha256": "e7c05c9581006d731b4c055436e60238495591cc6b8aa4edd91529f943ce60d3",
+        "bytes": 18669
+      },
+      "再看一眼，你会发现线索的": {
+        "path": "./audio/speech/4e927e443c04cb476cdfb4ed110ca663ed37e65d983016952a6cf65a6ec63a62.mp3",
+        "sha256": "ecc6c748c24fe7765c229652c59825223b5c3101d9f95782331e3a5f7262e874",
+        "bytes": 19101
+      },
+      "别灰心，换个思路试试": {
+        "path": "./audio/speech/9aa8815ccd81fdb8a89355ce5feed9c9367cf596a935aa5b7aaa263bb91a2be0.mp3",
+        "sha256": "cd51fae9a79b7f54eac2d54466dfe1fa2579fc77648384aa7df0349d75697d80",
+        "bytes": 16797
+      },
+      "别着急，换个办法试试看。": {
+        "path": "./audio/speech/7a1304e75814ed2f18689cc8e4630bdd1df87867a044c2d5c9d03848f8097940.mp3",
+        "sha256": "a6ef060da6b9e222a89ce6e36786d693a7a6971f712b65496d1cd2a06c822853",
+        "bytes": 17949
+      },
+      "加油，看看线索再试试。": {
+        "path": "./audio/speech/f6e009f8d5d304eac6a2d7538276d4928014c6510f1cd38e939b623d1dc92b24.mp3",
+        "sha256": "b52938fd549feddbf0ff1e831b3cbfb00e277a9966e17ff1a30bec1ba086d435",
+        "bytes": 17517
+      },
+      "坚持完成，真了不起！": {
+        "path": "./audio/speech/f189d4d94aa56540b7c75e859154c88ced4800ea12d33e49f8cd6feb6be20fa5.mp3",
+        "sha256": "8c79b22bfe5557cdd325ee2456998de9296b06295a21ff6aa0e6cc16f0b62e1f",
+        "bytes": 15213
+      },
+      "慢慢来，我陪着你": {
+        "path": "./audio/speech/3eacf47c12dc950fd041f2cd4b6a5c127d9fffdae20d68f639adb3bfcda22700.mp3",
+        "sha256": "dd98b5325276d50cc45d8e9fce28a73944ef089e1b0a70316e596e201bc66cfc",
+        "bytes": 12909
+      },
+      "所有探索都完成了，真了不起！": {
+        "path": "./audio/speech/1c1ee7daf8832eea957c0630bbc27cba1685b5f6729848ca88079bf89ee2d7f0.mp3",
+        "sha256": "db3ea44598e24319698987f3d25553e0dbf6f103db1ea174e1a483ff7eb79065",
+        "bytes": 20829
+      },
+      "有一点点歪，再描一次": {
+        "path": "./audio/speech/371932602c99ceb3704010fbcccb1e0e13c2199fcd1477889c633e050f17e00d.mp3",
+        "sha256": "e292e6e7c375090b7abadb2f89b80129180272387897f52b95986d9ba837ed9a",
+        "bytes": 16509
+      },
+      "没关系，再试一次就好": {
+        "path": "./audio/speech/e0ed99191d209e511bd398eba58270e1e86486b9cd48f3d50f7a5119f4ccd7aa.mp3",
+        "sha256": "456b841b73b63e04bedbc29ff070b35dce6515632fa9c3e10d0ec4636a5de971",
+        "bytes": 16509
+      },
+      "没关系，慢慢来，再试一次。": {
+        "path": "./audio/speech/3d03c3e3bfa01de2ee37b349c8a291db7c1dd13cbb53c8308197be05e89c1d9f.mp3",
+        "sha256": "312cbf73f97a62457a5d3ad1f50def4c96a3fa09d3f6d1824775031c8057c1aa",
+        "bytes": 20541
+      },
+      "照着亮线描一描，写完看看你的笔画正不正。": {
+        "path": "./audio/speech/c3989dae774b944300df5cd7237a6a5df5a4b44c2faa080c407b635cf4e5b99c.mp3",
+        "sha256": "dc2023ce5b5ebb82d706be601e9d7197e179db86d7415cbf336569355cab409c",
+        "bytes": 29181
+      },
+      "要从亮点出发，写到小圆点哦": {
+        "path": "./audio/speech/56d2a930832132c60d17c60b2333a1c68c9fe9b58db4cf907d734b6c4bca8500.mp3",
+        "sha256": "b2948ce52fe8b9aa569df9ffd2fc100dbd1937e72c57e8be74526b9efaa6a3f9",
+        "bytes": 21981
+      },
+      "认真尝试的你，真了不起！": {
+        "path": "./audio/speech/431906a7ce5b399d8bc2bea814857aa1065d17e0d3bb883b131c42924beb5d7d.mp3",
+        "sha256": "a7274665ce35ff2f977b65ebe732b4259fdc500b5b8856c1f4518eee39a578ed",
+        "bytes": 17085
+      },
+      "跑出亮线啦，回到线上再描": {
+        "path": "./audio/speech/236b24462b8bf103ee2f3f9ecee34aaae1cedd56045268e53b63fa638407294f.mp3",
+        "sha256": "8eebd84d0e188cad4fb9a4ed8394652ad9fcbe2f357122f3737c35a7be97f11e",
+        "bytes": 20829
+      },
+      "这一关完成啦，真棒！": {
+        "path": "./audio/speech/c34a32a4df6c3cd4820da79496dc2574ed6d797acdbb5c23f4622d156ec65ee2.mp3",
+        "sha256": "5b46aff0bcec2f9e0ed412ae70bc6c4a34cbf1e93ab87f6302e6532066c45eb7",
+        "bytes": 14205
+      },
+      "连对三题，你真行！": {
+        "path": "./audio/speech/9c0d3bb7c5c9a52b53a90fc3573e029bef3512fe7256809360919459411adc31.mp3",
+        "sha256": "6659743a4842a5b36ef844e92af1608f6dc2709b5eeeaa121c13a2279041cb8a",
+        "bytes": 15069
+      },
+      "连对三题，真厉害！": {
+        "path": "./audio/speech/1f7427731dd9b6ca47bbbb0552db031cb2983e57d1656d683f332c0a2ced5f46.mp3",
+        "sha256": "4b0fce9a253115bc068219965f89d66b559cc59216d1e5b16bf5014e54267e83",
+        "bytes": 14349
+      }
+    },
+    "en": {
+      "A little wobbly. Trace it again": {
+        "path": "./audio/speech/11d2f738933e170e6cea8727ff6f1afc84ab0a138324b1bb45ad165fc8bdbe11.mp3",
+        "sha256": "30660616899d8c600f72e1bd8896eb12440eecf81f418c95830cc13ae265e55f",
+        "bytes": 17949
+      },
+      "All activities completed. Great work!": {
+        "path": "./audio/speech/9c55948fcc348d5d206e5ffbc1043fc884fb7c50d62c77b20b4032122ce66583.mp3",
+        "sha256": "1b7927fe9121b9625a369a00e02e28bd462f835aa03d9df212bef36e3ba78447",
+        "bytes": 19965
+      },
+      "All eight completed. You are amazing!": {
+        "path": "./audio/speech/7c0eacd6f4b18b574246e86156c7eb2df861c48ddddd5037a3b9bdfa4e2e6c1b.mp3",
+        "sha256": "aa2f1bc4fc820dc6ff53832b629f538e0418232fb0de4e480f8f54672dadbc6e",
+        "bytes": 18669
+      },
+      "Do not give up. Try another way": {
+        "path": "./audio/speech/a85daf812f8f17135fe72ad03327d2eff4080b3bbd96c3704f3f95c5b9dccac9.mp3",
+        "sha256": "71a990014d5c6322859d5e34aa63fd171d4d80150c9da6b912661a30e31ae27c",
+        "bytes": 17805
+      },
+      "It is okay. Have another go": {
+        "path": "./audio/speech/ccf1c197613aa656e26b06100ae25c927ff6032927e8ed3f8d7fc69db579bfd1.mp3",
+        "sha256": "a29832153561e687d93af107af13e945a289b2e60224e0a010e4596bdb28324b",
+        "bytes": 16221
+      },
+      "Keep going. Look for a clue.": {
+        "path": "./audio/speech/0168541fadcd1d9457ec4b25fcb507d0a8b64d2a81c6bea002d7408eb74148e0.mp3",
+        "sha256": "ea12eda0a32e96ebee4f20b0c8128370977c2a5df86d8db7cc9d2f6bc371a6fc",
+        "bytes": 16221
+      },
+      "No rush. Have another try.": {
+        "path": "./audio/speech/425e432eb9bae28bd454efc24f75638b90da988e3fef85b201a8d00f3467e124.mp3",
+        "sha256": "172de1d13fd81c6eb7c3b3a6563830cf5126842cc52549bfca9c52563d782c18",
+        "bytes": 16653
+      },
+      "One more look. You will spot the clue": {
+        "path": "./audio/speech/ddefd9ab7b492165d3ba92b9bec781f141d7ad9c32a33801c0df5dc9db78fdbb.mp3",
+        "sha256": "e68259028f0a9c79efea1bdce2e7500ada23ad546fba7eb9d92c71e79d5db03b",
+        "bytes": 18813
+      },
+      "Start at the dot and finish at the dot": {
+        "path": "./audio/speech/af06b96271da0b83fa603fea834102b03d63d08227408466acc7a2d4b4f6cd8c.mp3",
+        "sha256": "5069d0f39296fd74e1c168893b87a9227affa023f31f0de2d08f97c9a36437dd",
+        "bytes": 13341
+      },
+      "Start at the glowing dot and trace the line. curved hook": {
+        "path": "./audio/speech/6064897ddffdaa6086a54c5a9a9fe6166a69e86de751a1dbd83ad880707a97c6.mp3",
+        "sha256": "caba63fa161629c08071bba38aa39f23086f239d3604c7e2ed67e22e41c5e56e",
+        "bytes": 24861
+      },
+      "Start at the glowing dot and trace the line. dot": {
+        "path": "./audio/speech/cf4dd7756df5a182635d0ac938c3cfea14908e404bb5f256df602e76d11d1bcc.mp3",
+        "sha256": "48ee191e936828f7d5e91a533c2164d1afbad5708c6b8348771c4cef8c00d6d6",
+        "bytes": 23277
+      },
+      "Start at the glowing dot and trace the line. horizontal": {
+        "path": "./audio/speech/158938420db3c5b033c4184c364800b702b7531bf31730db40d1e5bfd606a0e0.mp3",
+        "sha256": "740240074846513711a05773a134751033e636b2f1c0164b75320e1dcfe44700",
+        "bytes": 25869
+      },
+      "Start at the glowing dot and trace the line. horizontal hook": {
+        "path": "./audio/speech/c4957d956fabc7d3c11174017710a6575759a42056a5f18ae2a23423ec7d2914.mp3",
+        "sha256": "45bfedc0c7224f8f7d0f06e248bd21f28da18fef6628b1264da813c28b0bf3ad",
+        "bytes": 27309
+      },
+      "Start at the glowing dot and trace the line. horizontal turn": {
+        "path": "./audio/speech/8f0580bb71befde93738dc4ebad07351ea384579e9649e50a1527d39c5d9989d.mp3",
+        "sha256": "3e93acc2cadfaf110011dca10e89a56d27217e34c8e7f8ef9c30db126f2c0532",
+        "bytes": 27885
+      },
+      "Start at the glowing dot and trace the line. left-falling": {
+        "path": "./audio/speech/665733047d5cdd1b53f9ba3b6ed1531371f0fd8055dc00c6acf6a5639694f75b.mp3",
+        "sha256": "21d8215d42b94024798b05268b2cc7d754d3d028113c94e7335b25d25d8b9d86",
+        "bytes": 26445
+      },
+      "Start at the glowing dot and trace the line. right-falling": {
+        "path": "./audio/speech/da855e51497bdb2d9e0383c132f2356fe596822ad67cc7bb9fb30c79aee6f057.mp3",
+        "sha256": "0ada2b6e85ff50f91384c0a432f6fd6e48f09d3d6c14f86914b3f98b1c230986",
+        "bytes": 26301
+      },
+      "Start at the glowing dot and trace the line. rising": {
+        "path": "./audio/speech/2bdadbb60ddc267bb3d32679cc5bdee9655e524b92ad48bd236061883a6f669b.mp3",
+        "sha256": "8601e47e5a8b79676027985e0066d3017e9b79fcd0ad745d76048e555b9aac2f",
+        "bytes": 24861
+      },
+      "Start at the glowing dot and trace the line. vertical": {
+        "path": "./audio/speech/1286839e722e00881d1ea44c3cea9e2a8651415011a866825b745dddd990ba91.mp3",
+        "sha256": "442a458cedea1693c10fd8c9d1e426b702d33b28fc217ae45e65fead319bb2b9",
+        "bytes": 24285
+      },
+      "Start at the glowing dot and trace the line. vertical hook": {
+        "path": "./audio/speech/c2cc856bbbd3d594322bc04634b939d814f198fae402682a9323f85eee0c5ba6.mp3",
+        "sha256": "c30271e69d801530cb3e807a816d5711cbd3dd0b5b43d3cc4ebdf9142962e4de",
+        "bytes": 25869
+      },
+      "Take your time. I am here with you": {
+        "path": "./audio/speech/f8287c571e0153710f4b197c6a0abf803cc13f5a8e3fbf278ff678d344d48c8e.mp3",
+        "sha256": "e8708aa122d92ab320496ca2b5a89487808d9ac6bc9df29434c6d0efbe7ebd3d",
+        "bytes": 18237
+      },
+      "Take your time. Try another way.": {
+        "path": "./audio/speech/805fb423906000bfb20de1a5b0edf5f84106cce0811a66039cfa7eebaad66c8c.mp3",
+        "sha256": "bf0c272979bf1e3aeaa0fdcf708b945ca245ab398052ea66d37a9b0285191b2d",
+        "bytes": 17517
+      },
+      "Think again. The answer is close": {
+        "path": "./audio/speech/7aeb5ee5a55e71e87c3cf414eb306d3b4dbbf0e1acc3b023043ab26cc2df914b.mp3",
+        "sha256": "6237fc3e0394a277ada1455c09565b3db916ea10492577932fad8d06e9b9307a",
+        "bytes": 18669
+      },
+      "Three in a row. Great job!": {
+        "path": "./audio/speech/313b4dca492e74e70b81fecd2d14f14a885e0fe18f7e4accb4ba9a4a34db556e.mp3",
+        "sha256": "07493ddc9425ab00ec8b112120a3978df0a1eea1269d1d1da8023bb3883101fe",
+        "bytes": 15213
+      },
+      "Three right in a row!": {
+        "path": "./audio/speech/de72f603f7e82a121c03576adfff363c3b32648745470224b4c8c6f492a6b2c1.mp3",
+        "sha256": "0cd8f5a9a6e8fba8ace59c70a5e7289abe5fc2029f036199ece2c6211e593b2e",
+        "bytes": 7005
+      },
+      "Trace along the glowing line, then see how straight your stroke is.": {
+        "path": "./audio/speech/47d876dcb3cdc0ccb38d081cfdbaf6ac3c094c26703e8dcb05ee0034b9b72ed2.mp3",
+        "sha256": "d78154572e263aa8d6b327cdb405c7cc380cd4d891630df23dbcda2b8407b137",
+        "bytes": 26157
+      },
+      "You are on a roll!": {
+        "path": "./audio/speech/c9770c13d5c809068e207efa9edcb2da0eed365c0f2f1cfebac8e39f5e76985d.mp3",
+        "sha256": "13bb069b095db502523842fcafdec412fcd48f1e8051180334b03a1e887686be",
+        "bytes": 6861
+      },
+      "You did it. Keep exploring!": {
+        "path": "./audio/speech/4609f9b0784ee4222f02c1018cc0911dd2eca52be311788054e542675d6df975.mp3",
+        "sha256": "2c643119d2bc7d646d12bdeade81edc614a14ac403a339e930304f87565fc109",
+        "bytes": 16653
+      },
+      "You finished them all. Wonderful!": {
+        "path": "./audio/speech/24463a7d21fe7f89fadd5135785285a6db45c12e79ba5383f6877ab4c86e1278.mp3",
+        "sha256": "420c6326c919837853209cf162d6202eb0aaaa7cc2c6d3dba9372a9d6e58c07f",
+        "bytes": 17373
+      },
+      "You finished this activity. Well done!": {
+        "path": "./audio/speech/3569a3a8be7f38b322d8b7072ad68178352c539e34f57aebe3b40dc7336d2fa5.mp3",
+        "sha256": "b7a5069d68d5e2491666488f2ff16eecca38cab4813c628f779cfcc006a9fdf3",
+        "bytes": 19101
+      },
+      "You kept going and finished every challenge!": {
+        "path": "./audio/speech/6e001982c70e1af132874ce5cc29fb25dbd64ba3d5542498c2006a4bd4813f07.mp3",
+        "sha256": "79eaf2b91395f1a1220a9f6101274eec16bdc88c15c031d16e42d3d4c3759efc",
+        "bytes": 14781
+      },
+      "You kept going. Well done!": {
+        "path": "./audio/speech/a7b4029629c33de9856d060cbb193974a074432fc18320fc739c93e43ce926e3.mp3",
+        "sha256": "d29755478efbde3faf253a31125b49e0f0371f657e36249112d209d7281b3245",
+        "bytes": 15789
+      },
+      "You left the line. Follow the glow": {
+        "path": "./audio/speech/c8c6daaac691de8d1cc4426a110bf7fb2552cdc6d3a10592980a800293cf9cda.mp3",
+        "sha256": "78991a2ad7a5c688938f65d29a2e514a31c5d1e19dafae4bdcf644018a06b094",
+        "bytes": 17373
+      },
+      "Your practice paid off. Great work!": {
+        "path": "./audio/speech/c9cb77bb6d15dcd14c9173c1f6327dfa6d27635fe18d04e8c11d9c33e962518e.mp3",
+        "sha256": "729ebbcc73f36a3ac94d99dfbdb66b72658eea4793e9e81d6dd256614028c7ff",
+        "bytes": 18669
+      }
+    }
+  }
+};

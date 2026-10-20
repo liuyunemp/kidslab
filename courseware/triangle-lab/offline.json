@@ -1,6 +1,6 @@
 {
   "id": "triangle-lab",
-  "version": "bfe7fcada99b9b9d13c7225e0e8848c97d3d83cb6c5d9a4bff7a64755bccde6e",
+  "version": "d14fa5bc8a60df0cd6cd8e08d1fd392687b1f6da24e4b7cb00b50e7d78e7e3bb",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "b2c11f08abcf21c72e17b8b7d4b12ad23510c5b17d5032b2047bc13e34312545"
+      "sha256": "f921ce09fa79e6ff183bc6f14077f95c9fe7bfb0e67db15f2b5ed39056d63fd1"
     },
     {
       "path": "main.js",

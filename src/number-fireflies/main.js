@@ -1,4 +1,6 @@
 import {createRounds} from './random-rounds.js';
+import {createNarration,narrationControls} from './narration.js';
+import {manifest} from './speech-manifest.js';
 import {random,seedFrom} from './random-core.js';
 import {fireflyTask,fireflyIdentity,validFirefly,fireflySpeech} from './random-model.js';
 /* ============================================================
@@ -153,6 +155,8 @@ import {fireflyTask,fireflyIdentity,validFirefly,fireflySpeech} from './random-m
   try{JSON.parse(localStorage.getItem(SAVE_KEY)||'{}').mastered?.forEach(i=>mastered.add(i));}catch{}
   if(rounds.active!==null)state.level=Number(rounds.active);
   let busy=false,epoch=0;
+  let voiceMessage = '', voiceUntil = 0;
+  const narration = createNarration({manifest,lang:()=>lang,show(message){voiceMessage=message;voiceUntil=performance.now()+5000;}});
   const later=(fn,ms)=>{const current=epoch;setTimeout(()=>{if(epoch!==current)return;fn();rounds.checkpoint();},ms);};
 
   let actx = null;
@@ -184,6 +188,7 @@ import {fireflyTask,fireflyIdentity,validFirefly,fireflySpeech} from './random-m
   function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
   function resetLevel() {
+    narration.reset();voiceUntil=0;
     epoch++;busy=false;state.drawing=false;
     const lv = currentLevel();
     state.running = false;
@@ -308,6 +313,7 @@ import {fireflyTask,fireflyIdentity,validFirefly,fireflySpeech} from './random-m
       state.stars = Math.max(1, state.stars - 1);
       state.message = {key:lv.type === 'sub'?'subMiss':lv.type === 'rain'?'rainMiss':'miss',args:[sum,target]};
       missSound();
+      narration.encourage(`${state.level}:${state.progress}`,lang==='zh'?'看看灯笼上的数字，再试一次。':'Look at the lantern number and try again.');
     }
     state.lasso = [];
     render();
@@ -333,7 +339,7 @@ import {fireflyTask,fireflyIdentity,validFirefly,fireflySpeech} from './random-m
       state.particles.push({ x: p.x, y: p.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: rand(0.5, hot ? 1.3 : 0.9), max: 1.3, size: rand(2, hot ? 7 : 5), hot });
     }
   }
-  function completeLevel() {
+  function completeLevel(restoring=false) {
     if (!state.running) return;
     busy=false;
     state.running = false;
@@ -343,6 +349,7 @@ import {fireflyTask,fireflyIdentity,validFirefly,fireflySpeech} from './random-m
     window.cool?.stage?.(`level-${state.level + 1}-complete`);
     if (last&&first) window.cool?.complete?.();
     win.hidden = false;
+    if(!restoring)narration.success(last);
     winEmoji.textContent = last ? '🌌' : '🌟';
     winTitle.textContent = last ? t('allTitle') : t('winTitle');
     winDesc.textContent = last ? t('allDesc') : t('winDesc')(levelName(), state.stars);
@@ -480,7 +487,7 @@ import {fireflyTask,fireflyIdentity,validFirefly,fireflySpeech} from './random-m
     else { targetText.textContent = t('addTarget')(lv.target); modeText.textContent = t('modeAdd'); }
     if (lv.type === 'rain' && state.running) timeText.textContent = t('seconds')(Math.max(0, lv.seconds - Math.floor((performance.now() - state.startedAt) / 1000)));
     else timeText.textContent = t('infinite');
-    const message=state.message;tip.textContent = message?.key?(typeof t(message.key)==='function'?t(message.key)(...message.args):t(message.key)):t('tip0');
+    const message=state.message;tip.textContent = performance.now()<voiceUntil?voiceMessage:message?.key?(typeof t(message.key)==='function'?t(message.key)(...message.args):t(message.key)):t('tip0');
     if (!ctx) return;
     drawBackground();
     state.fireflies.forEach(drawFirefly);
@@ -509,7 +516,9 @@ import {fireflyTask,fireflyIdentity,validFirefly,fireflySpeech} from './random-m
   resetLevel();
   const speak=document.createElement('button');speak.type='button';speak.className='btn';speak.textContent='🔈';
   const labelSpeech=()=>{speak.setAttribute('aria-label',lang==='zh'?'朗读任务':'Read task');};labelSpeech();
-  speak.addEventListener('click',()=>window.cool?.speech?.speak(fireflySpeech(currentLevel(),lang)));document.querySelector('.bar__actions').append(speak);
+  speak.addEventListener('click',()=>narration.say(fireflySpeech(currentLevel(),lang)));document.querySelector('.bar__actions').append(speak);
+  const updateVoice=narrationControls(document.querySelector('.bar__actions'),()=>lang);
+  langBtn.addEventListener('click',()=>{narration.reset();updateVoice();labelSpeech();});
   new MutationObserver(labelSpeech).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
   rounds.attach({parent:'.bar__actions',compact:true,dialog:'#win',active:()=>state.level,
     capture:()=>({progress:state.progress,catches:state.catches,running:state.running,stars:state.stars,message:state.message,magicSeen:state.magicSeen,elapsed:Math.max(0,performance.now()-state.startedAt),busy,won:!win.hidden,fireflies:state.fireflies.map(f=>({...f,x:f.x/state.width,y:f.y/state.height,spiral:null}))}),
@@ -517,7 +526,7 @@ import {fireflyTask,fireflyIdentity,validFirefly,fireflySpeech} from './random-m
       const lv=currentLevel(),need=lv.need??lv.lights;
       if(!Number.isInteger(s.progress)||s.progress<0||s.progress>need||!Number.isInteger(s.stars)||s.stars<1||s.stars>3||!Number.isFinite(s.elapsed)||s.elapsed<0||!Array.isArray(s.fireflies)||s.fireflies.length!==lv.nums.length||s.fireflies.some((f,i)=>f.n!==lv.nums[i]||!['x','y','vx','vy','r','phase','flap','shake'].every(k=>Number.isFinite(f[k]))))throw new Error('Invalid fireflies');
       Object.assign(state,{progress:s.progress,catches:s.catches,running:s.running,stars:s.stars,message:s.message,magicSeen:s.magicSeen,startedAt:performance.now()-s.elapsed,fireflies:s.fireflies.map(f=>({...f,x:f.x*state.width,y:f.y*state.height}))});
-      if(s.progress===need){state.running=true;completeLevel();}else if(s.busy)makeFireflies(lv.nums);render();
+      if(s.progress===need){state.running=true;completeLevel(true);}else if(s.busy)makeFireflies(lv.nums);render();
     },retry:resetLevel,beforeReload:()=>{epoch++;state.drawing=false;}});
   requestAnimationFrame(loop);
 })();

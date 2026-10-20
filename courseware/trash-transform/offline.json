@@ -1,6 +1,6 @@
 {
   "id": "trash-transform",
-  "version": "2ae1a926a30a6c7351f86af8b4e95e4cc343c3cc6df8364e721293c5ce39ea66",
+  "version": "48e5d783364e555575a19bd77cee2ff1032c206000d70a44e041b2056453e5f3",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "e032edc802a782d1dddc74c716f1653866998675ad8f35f40305c84705c39312"
+      "sha256": "b0e697e9044f433adf2ba876b6781c6e68dc9447dfe1fcdd6be914d6659d9c59"
     },
     {
       "path": "main.js",

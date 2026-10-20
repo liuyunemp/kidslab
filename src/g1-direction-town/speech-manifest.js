@@ -1,0 +1,319 @@
+export const manifest = {
+  "version": 1,
+  "recipe": "kidslab-speech-v1-mp3-48k-24000-mono",
+  "voices": {
+    "zh": "Microsoft Huihui Desktop",
+    "en": "Microsoft Zira Desktop"
+  },
+  "entries": {
+    "zh": {
+      "三题全对，太棒了！": {
+        "path": "./audio/speech/43d7c9a6b7a054bb10d6b258d9398f358c959ebc0b988484b1b90ddb9b400b19.mp3",
+        "sha256": "ce2344cb57919587e1786ada9ec4b2277ea1e38ccf11e44035a2d8b6dd14cf9f",
+        "bytes": 13341
+      },
+      "你做到了，继续探索吧！": {
+        "path": "./audio/speech/afa94159d64c46e48fec6f9c9e47301db3359a61822199bbfaefbe714b54acc0.mp3",
+        "sha256": "b349180d19ac49cf82f8f1274fbb3b50b215133f5b91e7412bb5a7e9f56307d1",
+        "bytes": 15069
+      },
+      "你坚持完成了全部挑战！": {
+        "path": "./audio/speech/e0ffb597a44436627aa37b3ab0482aa0d133032c986b1f5d4882e142216087c0.mp3",
+        "sha256": "d6747b0464156d6319b40732f327207f36f26a3e805bfc9efbd36a7bc2ac2249",
+        "bytes": 15645
+      },
+      "全部完成啦，你真棒！": {
+        "path": "./audio/speech/d3ecab4b82e8b60eb83c9f636adbc26f1c8e89ec86e4a676673577b3ddaeb2c8.mp3",
+        "sha256": "05f7af8ac767b3be6a57b63316a416a46054cd85ba21ab6b6f5118e7cfe2db5d",
+        "bytes": 14205
+      },
+      "全部完成，你太厉害了！": {
+        "path": "./audio/speech/f755733244db308ae1959b0f3032603e8526eb72d0d93fde8f1919994e7d5a4d.mp3",
+        "sha256": "7f8af8c9bd5ba68be7812a8e34a2e771638f9d270ea833b5a548558b1b37821c",
+        "bytes": 15789
+      },
+      "八题完成，你太棒了！": {
+        "path": "./audio/speech/1b571f7bae59ba1baa5ac7e5d90229a80705d0fcaf91f99aa2337a232c51a376.mp3",
+        "sha256": "60d1b4b41db140f7029d5ad94dde26d08fed361361a200789871fb7a07b6eaee",
+        "bytes": 14637
+      },
+      "再想一想，答案就在眼前": {
+        "path": "./audio/speech/186647b34373e1f831b21b00a7ad88477a7ec697cabef2bef4e483a389b5db36.mp3",
+        "sha256": "e7c05c9581006d731b4c055436e60238495591cc6b8aa4edd91529f943ce60d3",
+        "bytes": 18669
+      },
+      "再看一眼，你会发现线索的": {
+        "path": "./audio/speech/4e927e443c04cb476cdfb4ed110ca663ed37e65d983016952a6cf65a6ec63a62.mp3",
+        "sha256": "ecc6c748c24fe7765c229652c59825223b5c3101d9f95782331e3a5f7262e874",
+        "bytes": 19101
+      },
+      "别灰心，换个思路试试": {
+        "path": "./audio/speech/9aa8815ccd81fdb8a89355ce5feed9c9367cf596a935aa5b7aaa263bb91a2be0.mp3",
+        "sha256": "cd51fae9a79b7f54eac2d54466dfe1fa2579fc77648384aa7df0349d75697d80",
+        "bytes": 16797
+      },
+      "别着急，换个办法试试看。": {
+        "path": "./audio/speech/7a1304e75814ed2f18689cc8e4630bdd1df87867a044c2d5c9d03848f8097940.mp3",
+        "sha256": "a6ef060da6b9e222a89ce6e36786d693a7a6971f712b65496d1cd2a06c822853",
+        "bytes": 17949
+      },
+      "加油，看看线索再试试。": {
+        "path": "./audio/speech/f6e009f8d5d304eac6a2d7538276d4928014c6510f1cd38e939b623d1dc92b24.mp3",
+        "sha256": "b52938fd549feddbf0ff1e831b3cbfb00e277a9966e17ff1a30bec1ba086d435",
+        "bytes": 17517
+      },
+      "在小镇地图上找前后、左右、上下的位置。": {
+        "path": "./audio/speech/033b187fbe5c42d3b27cfb7e5f5d00149e49fa59690a4f1c73e8c56b3188359c.mp3",
+        "sha256": "076522dffb13e45ec3ed70d22eaca83ddc60593e286e9fb0bf5f8b8bfa12c489",
+        "bytes": 29181
+      },
+      "坚持完成，真了不起！": {
+        "path": "./audio/speech/f189d4d94aa56540b7c75e859154c88ced4800ea12d33e49f8cd6feb6be20fa5.mp3",
+        "sha256": "8c79b22bfe5557cdd325ee2456998de9296b06295a21ff6aa0e6cc16f0b62e1f",
+        "bytes": 15213
+      },
+      "慢慢来，我陪着你": {
+        "path": "./audio/speech/3eacf47c12dc950fd041f2cd4b6a5c127d9fffdae20d68f639adb3bfcda22700.mp3",
+        "sha256": "dd98b5325276d50cc45d8e9fce28a73944ef089e1b0a70316e596e201bc66cfc",
+        "bytes": 12909
+      },
+      "所有探索都完成了，真了不起！": {
+        "path": "./audio/speech/1c1ee7daf8832eea957c0630bbc27cba1685b5f6729848ca88079bf89ee2d7f0.mp3",
+        "sha256": "db3ea44598e24319698987f3d25553e0dbf6f103db1ea174e1a483ff7eb79065",
+        "bytes": 20829
+      },
+      "没关系，再试一次就好": {
+        "path": "./audio/speech/e0ed99191d209e511bd398eba58270e1e86486b9cd48f3d50f7a5119f4ccd7aa.mp3",
+        "sha256": "456b841b73b63e04bedbc29ff070b35dce6515632fa9c3e10d0ec4636a5de971",
+        "bytes": 16509
+      },
+      "没关系，慢慢来，再试一次。": {
+        "path": "./audio/speech/3d03c3e3bfa01de2ee37b349c8a291db7c1dd13cbb53c8308197be05e89c1d9f.mp3",
+        "sha256": "312cbf73f97a62457a5d3ad1f50def4c96a3fa09d3f6d1824775031c8057c1aa",
+        "bytes": 20541
+      },
+      "认真尝试的你，真了不起！": {
+        "path": "./audio/speech/431906a7ce5b399d8bc2bea814857aa1065d17e0d3bb883b131c42924beb5d7d.mp3",
+        "sha256": "a7274665ce35ff2f977b65ebe732b4259fdc500b5b8856c1f4518eee39a578ed",
+        "bytes": 17085
+      },
+      "这一关完成啦，真棒！": {
+        "path": "./audio/speech/c34a32a4df6c3cd4820da79496dc2574ed6d797acdbb5c23f4622d156ec65ee2.mp3",
+        "sha256": "5b46aff0bcec2f9e0ed412ae70bc6c4a34cbf1e93ab87f6302e6532066c45eb7",
+        "bytes": 14205
+      },
+      "连对三题，你真行！": {
+        "path": "./audio/speech/9c0d3bb7c5c9a52b53a90fc3573e029bef3512fe7256809360919459411adc31.mp3",
+        "sha256": "6659743a4842a5b36ef844e92af1608f6dc2709b5eeeaa121c13a2279041cb8a",
+        "bytes": 15069
+      },
+      "连对三题，真厉害！": {
+        "path": "./audio/speech/1f7427731dd9b6ca47bbbb0552db031cb2983e57d1656d683f332c0a2ced5f46.mp3",
+        "sha256": "4b0fce9a253115bc068219965f89d66b559cc59216d1e5b16bf5014e54267e83",
+        "bytes": 14349
+      },
+      "🍊 的前面是谁？": {
+        "path": "./audio/speech/acd5d4cdc4004243e24db4870537b4c69059dc0e02a300d8fc630336d853fbc3.mp3",
+        "sha256": "03430f08c6c1710cfb2fb615dfbabf10fcb33da58d0020122c47c00fd97cd38f",
+        "bytes": 10605
+      },
+      "🍐 的右边是谁？": {
+        "path": "./audio/speech/ed9290b8cb8996238754746379e0c4a0b53e212b2513aeaa7826984f9d853777.mp3",
+        "sha256": "61dc6f608a5c8088e1a1832882761c0ced0c1615f015e10c1842281c3880e2ed",
+        "bytes": 9309
+      },
+      "🍐 的左边是谁？": {
+        "path": "./audio/speech/3565f0b6155f5a8a27caa06e96858b9bf489190c13cb9e9a2df2fb774c529007.mp3",
+        "sha256": "ce62c13f0661f6a8072ec1f2b0e05458203469c7b6a67abf4849002a31a6c2a5",
+        "bytes": 8877
+      },
+      "🐶 的下面是谁？": {
+        "path": "./audio/speech/fa915a0c1b4e3489ab08bcb7487ab6dea2b19d4f08f20552137195c6f0ab8d48.mp3",
+        "sha256": "54729eb7ba85b26d8b5372c155f52119ab9e6a2a56b9ee512f4dd13ce962eab1",
+        "bytes": 9309
+      },
+      "🐶 的右边是谁？": {
+        "path": "./audio/speech/7606804f07a68671aec6db77c03ae523baf86d1df9c84b2f28bdf59102b7a2f4.mp3",
+        "sha256": "74b72b6675dc430d77f07655c128acf66776d1b13978f6274ab4e02d44498b00",
+        "bytes": 9309
+      },
+      "🐶 的左边是谁？": {
+        "path": "./audio/speech/3dbe2bb20cd8b79438066c8c946f1a7cf1e11daef62c037ccdb0f4eed7004844.mp3",
+        "sha256": "4dc36d39ed88950ed1d6e68b318a451869d82115e28563d12a1015b374084aaa",
+        "bytes": 8877
+      },
+      "🐸 的上面是谁？": {
+        "path": "./audio/speech/e0aac334bfd500505ccc55a73dff60b3ce9c92e8e613a2b0c2f2defe88e227c6.mp3",
+        "sha256": "ce8cca7ba90432a0e3324f10c7ae4c65442c10e82bb349d31dbf5fea47df8e92",
+        "bytes": 11037
+      },
+      "🚌 的后面是谁？": {
+        "path": "./audio/speech/d92de333f284eabdc672f46f5aa81877e4d28aaf3289d0aedc16dc951938b5c0.mp3",
+        "sha256": "75c4444e4e02549507f78541187bc10b87921a0847f4162be68a34198e433e37",
+        "bytes": 12477
+      },
+      "🚕 的前面是谁？": {
+        "path": "./audio/speech/82e13e250eceaf394a647ceec07e174c90ea6e6b5259dcb518b05e078e308ca1.mp3",
+        "sha256": "43bfe2f4cd02721e24ed9fa7a4d5df1e16100551372bdf80deef38227bd8fafd",
+        "bytes": 12333
+      },
+      "🚲 的下面是谁？": {
+        "path": "./audio/speech/f26a309cf9bb37613822b8addb909110e330edcfa665915ce4d167276f68294e.mp3",
+        "sha256": "c962230fa08e6d052c679708f2b44c26a97c102dadbdffd96b5859bc4c014332",
+        "bytes": 12045
+      }
+    },
+    "en": {
+      "All activities completed. Great work!": {
+        "path": "./audio/speech/9c55948fcc348d5d206e5ffbc1043fc884fb7c50d62c77b20b4032122ce66583.mp3",
+        "sha256": "1b7927fe9121b9625a369a00e02e28bd462f835aa03d9df212bef36e3ba78447",
+        "bytes": 19965
+      },
+      "All eight completed. You are amazing!": {
+        "path": "./audio/speech/7c0eacd6f4b18b574246e86156c7eb2df861c48ddddd5037a3b9bdfa4e2e6c1b.mp3",
+        "sha256": "aa2f1bc4fc820dc6ff53832b629f538e0418232fb0de4e480f8f54672dadbc6e",
+        "bytes": 18669
+      },
+      "Do not give up. Try another way": {
+        "path": "./audio/speech/a85daf812f8f17135fe72ad03327d2eff4080b3bbd96c3704f3f95c5b9dccac9.mp3",
+        "sha256": "71a990014d5c6322859d5e34aa63fd171d4d80150c9da6b912661a30e31ae27c",
+        "bytes": 17805
+      },
+      "Find neighbors in front, behind, left, right, above and below on a town map.": {
+        "path": "./audio/speech/75a030f68f4b5605ef124e00eecb627a3adf407371127768a547cbcab8734184.mp3",
+        "sha256": "24d5047810b6cdfafda3586c4ac4ac3398c4b8184335dc04df3a910916cfd04f",
+        "bytes": 38253
+      },
+      "It is okay. Have another go": {
+        "path": "./audio/speech/ccf1c197613aa656e26b06100ae25c927ff6032927e8ed3f8d7fc69db579bfd1.mp3",
+        "sha256": "a29832153561e687d93af107af13e945a289b2e60224e0a010e4596bdb28324b",
+        "bytes": 16221
+      },
+      "Keep going. Look for a clue.": {
+        "path": "./audio/speech/0168541fadcd1d9457ec4b25fcb507d0a8b64d2a81c6bea002d7408eb74148e0.mp3",
+        "sha256": "ea12eda0a32e96ebee4f20b0c8128370977c2a5df86d8db7cc9d2f6bc371a6fc",
+        "bytes": 16221
+      },
+      "No rush. Have another try.": {
+        "path": "./audio/speech/425e432eb9bae28bd454efc24f75638b90da988e3fef85b201a8d00f3467e124.mp3",
+        "sha256": "172de1d13fd81c6eb7c3b3a6563830cf5126842cc52549bfca9c52563d782c18",
+        "bytes": 16653
+      },
+      "One more look. You will spot the clue": {
+        "path": "./audio/speech/ddefd9ab7b492165d3ba92b9bec781f141d7ad9c32a33801c0df5dc9db78fdbb.mp3",
+        "sha256": "e68259028f0a9c79efea1bdce2e7500ada23ad546fba7eb9d92c71e79d5db03b",
+        "bytes": 18813
+      },
+      "Take your time. I am here with you": {
+        "path": "./audio/speech/f8287c571e0153710f4b197c6a0abf803cc13f5a8e3fbf278ff678d344d48c8e.mp3",
+        "sha256": "e8708aa122d92ab320496ca2b5a89487808d9ac6bc9df29434c6d0efbe7ebd3d",
+        "bytes": 18237
+      },
+      "Take your time. Try another way.": {
+        "path": "./audio/speech/805fb423906000bfb20de1a5b0edf5f84106cce0811a66039cfa7eebaad66c8c.mp3",
+        "sha256": "bf0c272979bf1e3aeaa0fdcf708b945ca245ab398052ea66d37a9b0285191b2d",
+        "bytes": 17517
+      },
+      "Think again. The answer is close": {
+        "path": "./audio/speech/7aeb5ee5a55e71e87c3cf414eb306d3b4dbbf0e1acc3b023043ab26cc2df914b.mp3",
+        "sha256": "6237fc3e0394a277ada1455c09565b3db916ea10492577932fad8d06e9b9307a",
+        "bytes": 18669
+      },
+      "Three in a row. Great job!": {
+        "path": "./audio/speech/313b4dca492e74e70b81fecd2d14f14a885e0fe18f7e4accb4ba9a4a34db556e.mp3",
+        "sha256": "07493ddc9425ab00ec8b112120a3978df0a1eea1269d1d1da8023bb3883101fe",
+        "bytes": 15213
+      },
+      "Three right in a row!": {
+        "path": "./audio/speech/de72f603f7e82a121c03576adfff363c3b32648745470224b4c8c6f492a6b2c1.mp3",
+        "sha256": "0cd8f5a9a6e8fba8ace59c70a5e7289abe5fc2029f036199ece2c6211e593b2e",
+        "bytes": 7005
+      },
+      "Who is above 🐸?": {
+        "path": "./audio/speech/45b33958dea04b03f785fef66f255820665e750480696ff876ab03a0e64d100b.mp3",
+        "sha256": "3a447d52932cbbeee7327c8f7a8949c4e89cefb16bd514bcff3ba199c0d57e57",
+        "bytes": 9453
+      },
+      "Who is behind 🚌?": {
+        "path": "./audio/speech/f089540420265c0a4c5d49fab0f435c1f7fc793e8e93fdc64dd77adfee3cfb64.mp3",
+        "sha256": "a7b26f2603660bba8be04420e41ae64866e76314b0a6b981a291e993fdbffe84",
+        "bytes": 8013
+      },
+      "Who is below 🐶?": {
+        "path": "./audio/speech/0b69e2502883f0b53fb75af5048924a62c27bc9803034ea6abb5b2e13a00dccc.mp3",
+        "sha256": "5920b7d568cc0170504a2ce47850581f02e1eb7ec9a00e343809cbcc5bc4c2c4",
+        "bytes": 9453
+      },
+      "Who is below 🚲?": {
+        "path": "./audio/speech/ec421232c189354ede6da89067ba1c280c71a560506f24e875f9a5906aad4e50.mp3",
+        "sha256": "1e64eae49e541fe9b1a55e78dcd8c41d29c23b69e4e6e6b151158069b045f4f0",
+        "bytes": 8157
+      },
+      "Who is in front of 🍊?": {
+        "path": "./audio/speech/1faf4f02ad77401192281355ce602707105c00d4f86ad1ed91c7169d3a66be36.mp3",
+        "sha256": "a711a52e3e4f392c35465466e9eb8b4310526dde52be6d3937474e37bbee3774",
+        "bytes": 10749
+      },
+      "Who is in front of 🚕?": {
+        "path": "./audio/speech/584d56bd1b7226053339460158ee60a6b8a025c210cf35d1b07c8c5891a4b281.mp3",
+        "sha256": "84dda42b27913c9d7fc58aa65946cea24b276ed82ee56007b468967cfa87e53b",
+        "bytes": 9741
+      },
+      "Who is left of 🍐?": {
+        "path": "./audio/speech/465e528d6f5f549177032db6f82e800bced51b8bea1699ab654977b3a33dcc46.mp3",
+        "sha256": "bba149dedd17aeba828c6b466705effa34ea9afc36515fda200924b9977dfa0e",
+        "bytes": 6141
+      },
+      "Who is left of 🐶?": {
+        "path": "./audio/speech/69ecdf1e11e0d472231faf5d626108213efbae837b7c1f0b3fcfa24267409970.mp3",
+        "sha256": "43ff4511fe85c54be37fc6ad715ac8106eee9e99585c71ae049f37a289f3df25",
+        "bytes": 10173
+      },
+      "Who is right of 🍐?": {
+        "path": "./audio/speech/bab5bf697154bd267aa36194f1b17f7eb1b6c5aa203a5ed4e09b1d2dd2fcdf34.mp3",
+        "sha256": "4c448891999fac9a97207217b4056c4133cbf3628699d58b01d5c3d77d9a6642",
+        "bytes": 5853
+      },
+      "Who is right of 🐶?": {
+        "path": "./audio/speech/042e9552e5dcab003393b4e64102952470ceadcd7ed2d7148734521f6ef7ee32.mp3",
+        "sha256": "90bce5b45aac63ef40cd472d2d839d8a69ec04136a32a94977dfffef683acde3",
+        "bytes": 10029
+      },
+      "You are on a roll!": {
+        "path": "./audio/speech/c9770c13d5c809068e207efa9edcb2da0eed365c0f2f1cfebac8e39f5e76985d.mp3",
+        "sha256": "13bb069b095db502523842fcafdec412fcd48f1e8051180334b03a1e887686be",
+        "bytes": 6861
+      },
+      "You did it. Keep exploring!": {
+        "path": "./audio/speech/4609f9b0784ee4222f02c1018cc0911dd2eca52be311788054e542675d6df975.mp3",
+        "sha256": "2c643119d2bc7d646d12bdeade81edc614a14ac403a339e930304f87565fc109",
+        "bytes": 16653
+      },
+      "You finished them all. Wonderful!": {
+        "path": "./audio/speech/24463a7d21fe7f89fadd5135785285a6db45c12e79ba5383f6877ab4c86e1278.mp3",
+        "sha256": "420c6326c919837853209cf162d6202eb0aaaa7cc2c6d3dba9372a9d6e58c07f",
+        "bytes": 17373
+      },
+      "You finished this activity. Well done!": {
+        "path": "./audio/speech/3569a3a8be7f38b322d8b7072ad68178352c539e34f57aebe3b40dc7336d2fa5.mp3",
+        "sha256": "b7a5069d68d5e2491666488f2ff16eecca38cab4813c628f779cfcc006a9fdf3",
+        "bytes": 19101
+      },
+      "You kept going and finished every challenge!": {
+        "path": "./audio/speech/6e001982c70e1af132874ce5cc29fb25dbd64ba3d5542498c2006a4bd4813f07.mp3",
+        "sha256": "79eaf2b91395f1a1220a9f6101274eec16bdc88c15c031d16e42d3d4c3759efc",
+        "bytes": 14781
+      },
+      "You kept going. Well done!": {
+        "path": "./audio/speech/a7b4029629c33de9856d060cbb193974a074432fc18320fc739c93e43ce926e3.mp3",
+        "sha256": "d29755478efbde3faf253a31125b49e0f0371f657e36249112d209d7281b3245",
+        "bytes": 15789
+      },
+      "Your practice paid off. Great work!": {
+        "path": "./audio/speech/c9cb77bb6d15dcd14c9173c1f6327dfa6d27635fe18d04e8c11d9c33e962518e.mp3",
+        "sha256": "729ebbcc73f36a3ac94d99dfbdb66b72658eea4793e9e81d6dd256614028c7ff",
+        "bytes": 18669
+      }
+    }
+  }
+};

@@ -1,6 +1,6 @@
 {
   "id": "g1-math",
-  "version": "6aa354c876aa20522c8dfd87fb47120890d7d8d477a6cffab177cc4485b6b59a",
+  "version": "479db0b4266439f818a038845e3bd12aa69cbecd54314fdbb19259ae84bc1a66",
   "assets": [
     {
       "path": "audio.js",
@@ -28,7 +28,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "4e41277a7c09a9677a7bfa85457512ad5a8e760b0685359096b78f51e031fc48"
+      "sha256": "3d0717a3812107f668992248c6da80b91532b5d5009889a4fd2bec3a60726372"
     },
     {
       "path": "level-model.js",

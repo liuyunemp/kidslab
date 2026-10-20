@@ -1,10 +1,12 @@
 import {test,expect} from '@playwright/test';
 import {roundRecord} from './random-task-helpers.js';
+import {captureSpeech,expectNarrationStarted} from './speech-helpers.js';
 test('shadow-theater: ten generated scenes, real rotations, resume and retained achievement',async({page})=>{
-  const errors=[];page.on('pageerror',e=>errors.push(e.stack));await page.goto('/courseware/shadow-theater/?seed=987');
+  const errors=[];page.on('pageerror',e=>errors.push(e.stack));await captureSpeech(page);await page.goto('/courseware/shadow-theater/?seed=987');
   const saved=()=>roundRecord(page,'shadow-theater');
   await page.locator('[aria-label="Explore cone shadows"], [aria-label="看看圆锥的影子"]').click();await expect(page.locator('#magic')).toBeVisible();await page.locator('#closeMagic').click();
   for(let i=0;i<10;i++){
+    await page.evaluate(()=>{window.__speechEvents=[];});
     const a=(await saved()).instance;
     if(a.kind==='reverse')await page.locator(`[data-shape="${a.answer}"]`).click();
     else{
@@ -18,6 +20,7 @@ test('shadow-theater: ten generated scenes, real rotations, resume and retained 
       await page.locator('#checkBtn').click();
     }
     await expect.poll(async()=>(await saved()).play.done).toBe(true);
+    await expectNarrationStarted(page,i===9);
     if(i<9)await page.locator('#nextBtn').click();
   }
   const old=await saved();await page.reload();expect((await saved()).play.done).toBe(true);

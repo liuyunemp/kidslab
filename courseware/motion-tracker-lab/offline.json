@@ -1,6 +1,6 @@
 {
   "id": "motion-tracker-lab",
-  "version": "9d3fb810d1af43c40cd4e84e11dbad73b21641be8f5f6f39b69b3a9f1bbcc801",
+  "version": "d3b4c10c36e54c9a35558fae32f5e743acedeaa731f07108a6e422bf1b91c926",
   "assets": [
     {
       "path": "audio.js",
@@ -17,7 +17,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "691fb32e42c6327e9f23e883e6e011f722db1bc3fe42875c3bec16ff96eff7cb"
+      "sha256": "f7dc6a01e181add0c59e8b6db15e453e6e02cefd94fbca3508872d8bfd4963ba"
     },
     {
       "path": "main.js",

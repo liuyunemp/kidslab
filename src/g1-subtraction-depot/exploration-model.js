@@ -18,7 +18,7 @@ export function coinsFor(value) {
 }
 export function roomFor(course, activity) {
   return {
-    a: activity.a ?? 0, b: activity.b ?? 0, c: activity.c ?? 0,
+    a: activity.a ?? 0, b: activity.b ?? 0, c: activity.c ?? 0, finished: false,
     tens: Math.floor((activity.a ?? 0) / 10), ones: (activity.a ?? 0) % 10,
     phase: 0, aligned: false, moved: 0, exchanged: 0, views: [], removed: 0,
     variant: 0, assembled: false, seen: [], placed: false,
@@ -209,9 +209,13 @@ export function reduce(course, before, action, { replay = false } = {}) {
     if (s.histories[s.active].length > 40) s.histories[s.active].shift();
   }
   const discovered = complete && !s.free && !s.done.includes(a.id);
+  // A new attempt can finish again without granting another persistent discovery.
+  // Replaying the action log restores this flag without emitting UI events.
+  const loopCompleted = complete && !s.free && !previousRoom.finished;
+  if (complete && !s.free) r.finished = true;
   if (discovered) s.done.push(a.id);
   if (!replay) s.log.push(clone(action));
-  return { ok: true, state: s, discovered, complete: s.done.length === 8, changed };
+  return { ok: true, state: s, discovered, loopCompleted, complete: s.done.length === 8, changed };
 }
 export function serialize(state) { return { version: state.random ? 3 : VERSION, courseId: state.courseId, done: [...state.done], log: state.log,
   ...(state.random ? {generatorVersion:1,seed:state.random.seed,classic:state.random.classic,instances:state.random.records.map(record=>record.instance)} : {}) }; }

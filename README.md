@@ -142,7 +142,9 @@ gh secret set CLOUDFLARE_ACCOUNT_ID
 
 按[逐课分类核查表](docs/courseware-plan/classification-audit.md)校准：132 个可见课件中，58 个保留明确年级，74 个仅在“全部年级”显示。学段表示适用范围；年级表示已核准的教材归属。学段、年级、上下册、科目和搜索取交集，置顶只影响排序。构建已更新产物，完整 E2E 与筛选复测结果见 [验收记录](docs/courseware-plan/verification-2026-10-16.md)。
 
-一年级下册按人教社2024年审定教材新增10款、升级7款，每款8个可任选探索活动和自由操作。语文为代表性主题探索，不表示掌握全部生字。[教材逐关覆盖表](docs/courseware-plan/g1b-textbook-coverage.md) · [验收记录](docs/courseware-plan/g1b-acceptance.md)。每课本地资源约1.5–2.2 MB，首次进入会补齐整课离线快照。
+一年级下册按人教社2024年审定教材新增10款、升级7款，每款8个可任选探索活动和自由操作。语文为代表性主题探索，不表示掌握全部生字。[教材逐关覆盖表](docs/courseware-plan/g1b-textbook-coverage.md) · [验收记录](docs/courseware-plan/g1b-acceptance.md)。加入中英文本地旁白后，这17款每课资源约2.7–3.6 MiB，首次进入会补齐整课离线快照。
+
+现有31款带朗读入口的课件采用随课保存的中英文人声音频，支持点读、完成夸奖和重试鼓励，不依赖手机系统中文语音引擎。录音合计约33 MiB，按所访问课件下载并缓存，包含各课独立保存的通用短句。声音开关可持久化，朗读失败不阻塞操作；生成维护与验收边界见[语音 SDK 文档](docs/sdk.md)。
 
 | 课件 | 分类 | 学段 · 教材年级 |
 |---|---|---|

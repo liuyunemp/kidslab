@@ -1,6 +1,6 @@
 {
   "id": "bet-party",
-  "version": "54effd6463d1e8de57125acc549f2697c94e69bbe774dbcca1da2aa082758a46",
+  "version": "f36004a52c3641591672a98d7d00b560b7fe91a2d603d107ec64c840365fd557",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "b0749afa73e4f39caa37549ef6f159a66ff16624684c1b13cc7855d2cdda8335"
+      "sha256": "db8a5aa1ca202f1709386dfa2d1fd41e408c9921803d8e64fc09b25c0cc3d0f2"
     },
     {
       "path": "main.js",

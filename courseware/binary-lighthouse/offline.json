@@ -1,6 +1,6 @@
 {
   "id": "binary-lighthouse",
-  "version": "53ac5d0ba81c98da9e4c7ad3a18a5904d6ea721b28936dc2b98acb6b58436d3a",
+  "version": "d664faef559b5abc24b8c44accea7c13ef269d7efce6bfc6cd47ba08b4e9e795",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "5e462f9678d1c4b144307153959afd46271e858dec5fd10b642d7ac59bc351ff"
+      "sha256": "9a6c202407f3c1272f3486446a67eee8aeb6928becc526a70ad11275d401d156"
     },
     {
       "path": "main.js",

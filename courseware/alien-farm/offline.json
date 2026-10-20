@@ -1,6 +1,6 @@
 {
   "id": "alien-farm",
-  "version": "d2e0f67b3736de0a4b0ea91d316c49863338cb45bffca1e3536ab7013b57b0c3",
+  "version": "da42698e882818043f177c1356509ed1e0a5368f821a75293ed28fc6a7c9426c",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "8f27e30f08e8f76a1318b22cb316911e11fb6656664f93cf8d058f1237856b32"
+      "sha256": "c623ad32b3822a056e5cd2994d17b2bf5aa4f923822b2612cc4d89e398625fee"
     },
     {
       "path": "main.js",

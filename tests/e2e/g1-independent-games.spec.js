@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { courses } from '../../scripts/g1-games/data.mjs';
+import { captureSpeech, expectNarrationStarted } from './speech-helpers.js';
 
 async function moveNumber(page, value, target) {
   let delta = target - value;
@@ -90,6 +91,7 @@ async function makeMistake(page, course, task) {
 
 for (const course of courses) {
   test(`${course.title.zh}: 八题通关，错误重试与重载续玩`, async ({ page }) => {
+    await captureSpeech(page);
     await page.addInitScript(() => {
       localStorage.setItem('kidslab.lang', 'zh');
       localStorage.setItem('kidslab.theme', 'light');
@@ -123,6 +125,7 @@ for (const course of courses) {
         await expect(page.locator('.end-scene')).toBeVisible();
         await expect(page.locator('.end-scene [data-praise="clear"]')).toBeVisible();
         await expect(page.locator('#hearAgain')).toBeVisible();
+        await expectNarrationStarted(page,true);
       }
       if (i === 2) {
         /* 答错一次后连对三题：只出现奖章，不打断出题节奏。 */

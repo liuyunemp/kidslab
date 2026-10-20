@@ -1,6 +1,6 @@
 {
   "id": "truth-island",
-  "version": "1c269db23d9424c9580b3e238fee79ac6c6c9272aa02e718c12ea00be178128e",
+  "version": "0f57856ed2cb71a7b509c8d9b9ea733e2316eaffc90420310e0e34b9a58171ce",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "6e4dfd0c0fe07c46cf15ab34edd0c8a4ebd9436f707f932befc47848e4f3c09a"
+      "sha256": "f83786a021258e64aef5217d142d956336729843f66327a6ff0b63c3c5ea911f"
     },
     {
       "path": "main.js",

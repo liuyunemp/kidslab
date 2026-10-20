@@ -1,6 +1,6 @@
 {
   "id": "hamster-fence",
-  "version": "283346990931dbe1de271bceba8ca452a1497d5f0edaa7d9fb3a70843640d597",
+  "version": "d39e96cbcaf744ff9c7402d11ca81af841372ac4391b990547956f2f35ecc791",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "6c6164e12372fd00fb9be825b6f88a5221aa77a7e2291eb61d3826fc766fdf36"
+      "sha256": "255a18a6c4c966e84600c5fcab4a7bc127b30eaa3d773866a8c74dad59e686a0"
     },
     {
       "path": "main.js",

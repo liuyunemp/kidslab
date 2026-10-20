@@ -52,6 +52,16 @@ async function outputBytes(root) {
   return result;
 }
 
+test('missing narration audio fails before publication and preserves previous snapshots',async t=>{
+  const {root,put,build}=await fixture(t);
+  const before=await outputBytes(root);
+  await put('src/demo/main.js',"import {manifest} from './speech-manifest.js';\n");
+  const clip={path:`./audio/speech/${'a'.repeat(64)}.mp3`,sha256:'b'.repeat(64),bytes:100};
+  await put('src/demo/speech-manifest.js',`export const manifest = ${JSON.stringify({version:1,entries:{zh:{'你好':clip},en:{Hello:clip}}})};\n`);
+  await assert.rejects(build(),/speech|ENOENT/);
+  assert.deepEqual(await outputBytes(root),before);
+});
+
 for (const kind of ['invalid JSON', 'missing metadata', 'missing entry', 'compression']) {
   test(`build preserves all previous outputs after ${kind} failure and can recover`, async (t) => {
     const { root, put, build } = await fixture(t);

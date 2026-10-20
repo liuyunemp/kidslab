@@ -1,6 +1,6 @@
 {
   "id": "body-rafting",
-  "version": "85aa0f56af110a70fa15064144dee523dba70f72cf2f09b0ed0dbccafcd10f2e",
+  "version": "d3bc722c84f02612735091109d406d1dcf50ad98eed741e1ed79fd2be7064f69",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "5fbb475c05f17126224422f18be329681f918c58c676f1c3b583d5237c4c390e"
+      "sha256": "43873654d88808efc0bc97d06ddc25b80ab173dce0cc382387274d83993bb30f"
     },
     {
       "path": "main.js",

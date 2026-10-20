@@ -1,6 +1,6 @@
 {
   "id": "grid-tower",
-  "version": "cf26434cd635b09b7ce6dc5868171ba14f09effa090105d2e6d5e5a092328bd8",
+  "version": "d6c351fb21977df7d65b38481d7ff5dbbb48cd2dee31ea4bfc2ba1bb188c517b",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "178006c75ec4e87fa09653db4c8a3ac26772d2ac9d61964d2ce07c83be693a2d"
+      "sha256": "001e577e70391e369a89aa3a96ea0af1cb4f3b0dea48d378596068be4219b4d0"
     },
     {
       "path": "main.js",

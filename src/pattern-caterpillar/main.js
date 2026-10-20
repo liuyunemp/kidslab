@@ -1,4 +1,6 @@
 import {createRounds} from './random-rounds.js';
+import {createNarration,narrationControls} from './narration.js';
+import {manifest} from './speech-manifest.js';
 import {CATERPILLAR_LEVELS,patternTask,validPattern,patternIdentity,patternFamily,inferPattern,patternSpeech} from './random-model.js';
 /* ============================================================
    规律毛毛虫 · KidsLab 双语/主题模板
@@ -108,6 +110,8 @@ import {CATERPILLAR_LEVELS,patternTask,validPattern,patternIdentity,patternFamil
   let eaten = [];
   let reverseSeq = [];
   let soundOn = store.get('kidslab.caterpillar.sound') !== 'off';
+  let narratedRound=false;
+  const narration=createNarration({manifest,lang:()=>lang,show:(message,success)=>speak(message,success?'🌟':'💭')});
   let actx = null;
   let noise = null;
   let scheduler = null;
@@ -246,6 +250,7 @@ import {CATERPILLAR_LEVELS,patternTask,validPattern,patternIdentity,patternFamil
       if (bites >= level().bites) { finishing = true; finishTimer = later(() => { finishTimer = null; finishLevel(); }, 500); }
     } else {
       btn?.classList.add('wrong'); speak(t('no'), '🤪'); playTone('bad'); animateCat('sad');
+      narration.encourage(`${levelIndex}:${bites}`,lang==='zh'?'看看前面的队列，再试一次。':'Look at the earlier items and try again.');
     }
   }
 
@@ -266,7 +271,7 @@ import {CATERPILLAR_LEVELS,patternTask,validPattern,patternIdentity,patternFamil
     el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
   }
 
-  function finishLevel() {
+  function finishLevel(restoring=false) {
     if (levelIndex < 8 && !basicDone.has(levelIndex)) {
       basicDone.add(levelIndex);
       try { localStorage.setItem(PROGRESS_KEY, JSON.stringify([...basicDone])); } catch { /* Storage is optional. */ }
@@ -280,9 +285,11 @@ import {CATERPILLAR_LEVELS,patternTask,validPattern,patternIdentity,patternFamil
     drawButterfly(eaten);
     $('#modalEmoji').textContent = '🦋'; $('#modalTitle').textContent = t('fullTitle'); $('#modalText').textContent = t('fullText'); $('#modalBtn').textContent = t('next'); $('#modal').hidden = false;
     confetti(); playTone('good');
+    if(!restoring&&!narratedRound){narratedRound=true;narration.success(levelIndex<8&&basicDone.size===8);}
   }
 
   function resetPlay(){
+    narration.reset();narratedRound=false;
     stopMotion();bites=0;finishing=false;eaten=[];reverseSeq=structuredClone(level().initial??[]);
     if(level().kind==='reverse'){bites=reverseSeq.length;eaten=structuredClone(reverseSeq);}
     $('#modal').hidden=true;$('#speak').textContent='';render();
@@ -299,8 +306,8 @@ import {CATERPILLAR_LEVELS,patternTask,validPattern,patternIdentity,patternFamil
     startAudio();
     const p = inferPeriod(reverseSeq);
     if (reverseSeq.length>=12)return;
-    if (p) { const next = reverseSeq[reverseSeq.length % p]; reverseSeq.push(next); eaten.push(next); bites = reverseSeq.length; speak(t('reverseGood'), '🤓'); playTone('good'); animateCat('happy');saveButterfly(); }
-    else { speak(t('reverseBad'), '😵'); playTone('bad'); animateCat('sad'); }
+    if (p) { const next = reverseSeq[reverseSeq.length % p]; reverseSeq.push(next); eaten.push(next); bites = reverseSeq.length; speak(t('reverseGood'), '🤓'); playTone('good'); animateCat('happy');saveButterfly();if(!narratedRound){narratedRound=true;narration.success();} }
+    else { speak(t('reverseBad'), '😵'); playTone('bad'); animateCat('sad');narration.encourage(levelIndex,lang==='zh'?'看看前面的队列，再试一次。':'Look at the earlier items and try again.'); }
     render();
   }
 
@@ -368,11 +375,13 @@ import {CATERPILLAR_LEVELS,patternTask,validPattern,patternIdentity,patternFamil
     if(!Number.isInteger(s.bites)||s.bites<0||s.bites>12||!Array.isArray(s.eaten)||!Array.isArray(s.reverseSeq)||!s.eaten.every(legal)||!s.reverseSeq.every(legal))throw new Error('Invalid pattern snapshot');
     if(level().kind!=='reverse'&&(s.eaten.length!==s.bites||s.eaten.some((item,i)=>!same(item,expectedAt(i+4)))))throw new Error('Invalid pattern history');
     ({bites,eaten,reverseSeq,finishing}=s);render();
-    if(finishing&&level().kind!=='reverse')finishLevel();
+    if(finishing&&level().kind!=='reverse')finishLevel(true);
   }
   const selected=LEVELS.findIndex(l=>l.key===rounds.active);if(selected>=0)levelIndex=selected;
   resetPlay();
-  const readBtn=document.createElement('button');readBtn.id='readPattern';readBtn.className='btn btn--ghost';readBtn.type='button';readBtn.textContent='🔈';readBtn.addEventListener('click',()=>window.cool?.speech?.speak?.(patternSpeech(level(),visibleSeq(),lang),{lang}));document.querySelector('.hero__buttons').append(readBtn);
+  const readBtn=document.createElement('button');readBtn.id='readPattern';readBtn.className='btn btn--ghost';readBtn.type='button';readBtn.textContent='🔈';readBtn.addEventListener('click',()=>narration.say(patternSpeech(level(),visibleSeq(),lang)));document.querySelector('.hero__buttons').append(readBtn);
+  const updateVoice=narrationControls(document.querySelector('.bar__actions'),()=>lang);
+  langBtn.addEventListener('click',()=>{narration.reset();updateVoice();});
   bind();
   applyTheme();
   applyLang();

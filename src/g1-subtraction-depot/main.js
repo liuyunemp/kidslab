@@ -1,4 +1,6 @@
 import { course } from './content.js';
+import { createNarration } from './narration.js';
+import { manifest } from './speech-manifest.js';
 import { initialState, current, reduce, restore, serialize, openActivity, text, valueOf, moneyValue, DENOMINATIONS, EXCHANGES, sentenceFor, speechText } from './exploration-model.js';
 import { createAudio } from './audio.js';
 import { createScene } from './scene.js';
@@ -17,6 +19,7 @@ const entryActivity=new URLSearchParams(location.search).get('activity');
 const entryState=openActivity(course,state,entryActivity);
 if(entryState!==state){state=entryState;try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}}
 const audio=createAudio(`kidslab.exploration-v2.${course.id}.audio`);
+const narration=createNarration({manifest,lang:()=>lang,muted:()=>audio.muted,show:notice,duck:()=>audio.duck(true),restore:()=>audio.duck(false)});
 const I18N={zh:{tools:'探索工具',choose:'选择探索关卡',free:'自由玩',undo:'撤销',reset:'重来',discover:'小发现',source:'查看出版社教材',back:'返回平台',no3d:'暂时不能打开 3D 舞台',no3dHint:'请换用支持 WebGL 的浏览器，或打开浏览器的图形加速后重试。',music:'背景音乐',effects:'操作音效',speech:'引导朗读',on:'开',off:'关',theme:'切换主题',language:'切换语言',mute:'关闭全部声音',unmute:'恢复声音',settings:'声音设置',scene:'可拖动的 3D 探索舞台',done:'发现已收藏',allDone:'八个发现都收藏好了！还可以继续探索。',practice:'自由玩：发现不计入关卡',same:'这个状态已经看过了，试着换一种摆法。',invalid:'试试台上的工具。',range:'到边界啦，换一个方向试试。',nothing:'还没有可以撤销的操作。',trace:'从亮点出发，沿着这一笔慢慢写。',place:'先把物件放到台上。',index:'先翻首字母，再找音节。',pieces:'先放好材料，再播放。',play:'先播放一次，再看看课文线索。',drop:'放到桌面上试试，物件会回到原位。',money:'看看手里的钱和托盘，还能换开或取回。',align:'先让相同的数位对齐。',unbundle:'散开的不够拿，试试拆开一个十。',bundle:'捆成一个十',split:'拆开一个十',operate:'合在一起',take:'送走这一批',depart:'再送走一批',alignButton:'对齐数位',playButton:'播放场景',replay:'回放笔顺',dismantle:'拆开看看',placeButton:'放到台上',act:'让它动起来',evidence:'看看课文线索',swap:'交换前后',rotate:'转一转',shift:'移一移',buy:'试着买下',exchangeYuan:'1元换10角',exchangeJiao:'1角换10分',exchangeTen:'10元换10张1元',wallet:'手里',tray:'托盘',price:'价格',spent:'已买下',left:'左边',right:'右边',ones:'个一',tens:'个十',current:'现在',whole:'合起来',difference:'相差',layout:'对齐比较',transfer:'移到另一组',poemAction:'移动景物',writingHint:'只描这一笔，随时可以重写。',original:'课文的先后线索',message:'消息已送到',waiting:'朋友还在等更清楚的信息',who:'主角',where:'地点',verb:'动作',setup:'摆好新的数量',freeA:'第一组',freeB:'第二组',unit:'单元',page:'页',observed:'课文关联',lookup:'本课小字典',letters:'首字母',syllables:'音节',entries:'汉字',soundRead:'朗读操作提示',wordMove:'把物件移到台上',restored:'本版探索',change:'找零后手里',numberLine:'数线',part:'两部分',col:'十位／个位',empty:'尚未操作',selectHint:'所有关卡都可以直接选择。'},
 en:{tools:'Exploration tools',choose:'Choose an activity',free:'Free play',undo:'Undo',reset:'Reset',discover:'Discoveries',source:'Publisher textbook',back:'Back to KidsLab',no3d:'The 3D stage is unavailable',no3dHint:'Try a WebGL-capable browser, or enable graphics acceleration and reload.',music:'Background music',effects:'Sound effects',speech:'Read guidance',on:'On',off:'Off',theme:'Switch theme',language:'Switch language',mute:'Mute all sounds',unmute:'Restore sound',settings:'Sound settings',scene:'Interactive 3D exploration stage',done:'Discovery collected',allDone:'All eight discoveries collected! Keep exploring.',practice:'Free play: discoveries are not counted',same:'You have seen this state. Try another arrangement.',invalid:'Try one of the tools.',range:'At the boundary. Try another direction.',nothing:'There is nothing to undo yet.',trace:'Start at the dot and follow this stroke slowly.',place:'Put the object on the stage first.',index:'Open the initial, then a syllable.',pieces:'Arrange the pieces before playing.',play:'Play once, then look at the source clues.',drop:'Place it on the table; the piece will return.',money:'Look at your wallet and tray. Exchange or return a coin.',align:'Align equal place values first.',unbundle:'Not enough loose blocks. Unbundle a ten.',bundle:'Bundle ten',split:'Unbundle a ten',operate:'Join the groups',take:'Take the group away',depart:'Drop off the next group',alignButton:'Align place values',playButton:'Play the scene',replay:'Replay strokes',dismantle:'Take apart',placeButton:'Place on stage',act:'Set it in motion',evidence:'Read source clues',swap:'Swap neighbors',rotate:'Rotate',shift:'Move',buy:'Try a purchase',exchangeYuan:'1 yuan → 10 jiao',exchangeJiao:'1 jiao → 10 fen',exchangeTen:'10 yuan → ten 1 yuan',wallet:'Wallet',tray:'Tray',price:'Price',spent:'Purchased',left:'Left bank',right:'Right bank',ones:'ones',tens:'tens',current:'Now',whole:'Together',difference:'Difference',layout:'Pair and compare',transfer:'Move to other group',poemAction:'Move the scenery',writingHint:'Follow one stroke at a time. Rewrite whenever you like.',original:'Sequence in the source story',message:'The message has arrived',waiting:'Your friend needs clearer information',who:'Who',where:'Where',verb:'Action',setup:'Set up new quantities',freeA:'First group',freeB:'Second group',unit:'Unit',page:'pages',observed:'Textbook connection',lookup:'Our mini dictionary',letters:'Initial',syllables:'Syllable',entries:'Entry',soundRead:'Read the guidance',wordMove:'Move the object onto the stage',restored:'This edition',change:'Wallet after change',numberLine:'Number line',part:'Two parts',col:'Tens / ones',empty:'Ready to explore',selectHint:'Every activity can be chosen immediately.'}};
 const t=k=>I18N[lang][k]??k;
@@ -28,17 +31,18 @@ function unlock(){audio.unlock();if(!started){started=true;cool.stage(`explore:$
 function notice(message,success=false){clearTimeout(feedbackTimer);$('feedback').hidden=false;$('feedback').textContent=message;$('feedback').classList.toggle('success',success);feedbackTimer=setTimeout(()=>$('feedback').hidden=true,success?2600:2200);}
 function act(action){
   unlock();const result=reduce(course,state,action);
-  if(!result.ok){audio.tone('error');notice(t(result.reason));if(action.type==='position')lab?.update(activity(),room(),lang);return false;}
+  if(!result.ok){audio.tone('error');notice(t(result.reason));narration.encourage(activity().id,t(result.reason));if(action.type==='position')lab?.update(activity(),room(),lang);return false;}
   state=result.state;try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}
-  if(['newRound','classic','reset','select'].includes(action.type)){
-    clearTimeout(feedbackTimer);$('feedback').hidden=true;cool.speech.stop();lab?.cancelDrag?.();
+  if(['newRound','classic','reset','select','undo','free'].includes(action.type)){
+    clearTimeout(feedbackTimer);$('feedback').hidden=true;narration.reset();lab?.cancelDrag?.();
   }
   if(action.type==='select'&&new URLSearchParams(location.search).has('activity')){
     const url=new URL(location.href);url.searchParams.set('activity',activity().id);
     try{history.replaceState(null,'',url);}catch{}
   }
   if(!['select','free','undo','reset'].includes(action.type))cool.track('explore-action',{action:action.type,activity:activity().id});
-  if(result.discovered){audio.tone(result.complete?'complete':'success');notice(t(result.complete?'allDone':'done'),true);cool.track('collect-discovery',{activity:activity().id});if(result.complete)cool.complete();}
+  if(result.discovered){cool.track('collect-discovery',{activity:activity().id});if(result.complete)cool.complete();}
+  if(result.loopCompleted){audio.tone(result.discovered&&result.complete?'complete':'success');narration.success(result.discovered&&result.complete);}
   else audio.tone('action');
   if(action.type==='free')notice(state.free?t('practice'):t('selectHint'));
   paint();
@@ -164,7 +168,7 @@ $('freeBtn').addEventListener('click',()=>act({type:'free',value:!state.free}));
 $('resetBtn').addEventListener('click',()=>act({type:'reset'}));$('undoBtn').addEventListener('click',()=>act({type:'undo'}));
 $('lessonBtn').addEventListener('click',()=>{$('lesson').hidden=!$('lesson').hidden;$('lessonBtn').setAttribute('aria-expanded',String(!$('lesson').hidden));});
 $('panelHandle').addEventListener('click',()=>{const open=$('panelBody').hidden;$('panelBody').hidden=!open;$('panel').classList.toggle('collapsed',!open);$('panelHandle').setAttribute('aria-expanded',String(open));$('panelArrow').textContent=open?'▾':'▴';});
-$('coach').addEventListener('click',()=>{unlock();if(!audio.muted)cool.speech.speak(speechText(course,state,lang),{lang:lang==='zh'?'zh-CN':'en-US'});});
+$('coach').addEventListener('click',()=>{unlock();narration.say(speechText(course,state,lang));});
 $('langBtn').addEventListener('click',()=>cool.preferences.toggleLang());$('themeBtn').addEventListener('click',()=>cool.preferences.toggleTheme());
 $('settingsBtn').addEventListener('click',()=>{$('soundMenu').hidden=!$('soundMenu').hidden;$('settingsBtn').setAttribute('aria-expanded',String(!$('soundMenu').hidden));});
 $('muteBtn').addEventListener('click',()=>{audio.set('muted',!audio.muted);if(audio.muted)cool.speech.stop();unlock();soundChrome();});

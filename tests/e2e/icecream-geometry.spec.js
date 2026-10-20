@@ -68,6 +68,36 @@ test.describe('icecream geometry', () => {
     await expect(page.locator('#latheFormula')).toContainText('÷3', { timeout: 10000 });
   });
 
+  /* 判据三：动画进行中打断（换尺寸/重来）后，面板必须回到可用状态，不能卡在动画里。
+     倒杯动画由 requestAnimationFrame 推进，并发跑重型 WebGL 课件时帧率会被压低，
+     动画因此比标称时长慢很多；这里只断言「打断后能否继续操作」，
+     用宽松超时而不是固定等待，避免变成受机器负载影响的偶发用例。 */
+  test('倒杯动画被换尺寸或重来打断后，按钮仍然可用', async ({ page }) => {
+    test.setTimeout(90000);
+    await page.goto('/courseware/icecream-geometry/?station=triple');
+    await expect(page.locator('#fillCone')).toBeEnabled({ timeout: 15000 });
+
+    /* 接满 → 倒的过程中立刻换尺寸，取消动画 */
+    await page.locator('#fillCone').click();
+    await expect(page.locator('#pourCone')).toBeEnabled({ timeout: 30000 });
+    await page.locator('#pourCone').dispatchEvent('click');
+    await page.locator('[data-size="2"]').dispatchEvent('click');
+    await expect(page.locator('#fillCone')).toBeEnabled({ timeout: 30000 });
+
+    /* 换尺寸会清空当前杯：杯空时「倒」应当禁用，而不是两个都禁用 */
+    await expect(page.locator('#pourCone')).toBeDisabled();
+
+    /* 再走一遍完整倒入，在动画中按「重来一次」 */
+    await page.locator('#fillCone').click();
+    await expect(page.locator('#pourCone')).toBeEnabled({ timeout: 30000 });
+    await page.locator('#pourCone').dispatchEvent('click');
+    await page.locator('#resetTriple').dispatchEvent('click');
+    await expect(page.locator('#fillCone')).toBeEnabled({ timeout: 30000 });
+
+    /* 面板恢复后仍能正常完成一杯一倒 */
+    await fillAndPour(page, 1);
+  });
+
   test('切换语言后记录与猜想状态都还在', async ({ page }) => {
     await page.goto('/courseware/icecream-geometry/?state=guess');
     await page.locator('#langBtn').click();

@@ -27,7 +27,7 @@ for (const [index, course] of courses.entries()) {
   const { id, kind, category, grades, tags, icon, title, description, accent, backdrop, mascot, tasks, source, fact, order } = course;
   const config = { id, kind, category, grades, tags, icon, title, description, accent, backdrop, mascot, tasks };
   await write(path.join(dir, 'config.js'), `export const config = ${JSON.stringify(config, null, 2)};\n`);
-  await write(path.join(dir, 'main.js'), "import { startGame } from './engine.js';\nimport { config } from './config.js';\nstartGame(config);\n");
+  await write(path.join(dir, 'main.js'), "import { startGame } from './engine.js';\nimport { config } from './config.js';\nimport { manifest } from './speech-manifest.js';\nstartGame(config, manifest);\n");
   await write(path.join(dir, 'course.json'), JSON.stringify({
     id, title, description, category, levels: ['primary'], grades, tags, icon,
     order: order ?? (category === 'math' ? 30 + index : 201 + index), badge: 'new',

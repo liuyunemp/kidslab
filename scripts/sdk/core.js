@@ -195,6 +195,97 @@
   /* 每发起一次朗读就自增；等待音色期间序号若变了，说明这一句已作废。 */
   let speechTokens = 0;
 
+  // Local narration has its own context: muting effects must not mute reading.
+  let voiceContext = null;
+  let playback = null;
+  const decodedClips = new Map();
+  const languageTag = value => String(value || lang).toLowerCase().startsWith('en') ? 'en-US' : 'zh-CN';
+  function invoke(callback, value) { try { callback?.(value); } catch { /* narration never owns gameplay */ } }
+  function speechEvent(state, request, reason) {
+    w.dispatchEvent(new CustomEvent('speechplayback', { detail: {
+      state, text: request.text, lang: request.lang, backend: 'local', ...(reason ? { reason } : {}),
+    } }));
+  }
+  function unlockSpeech() {
+    wireSpeech();
+    try {
+      const Context = w.AudioContext || w.webkitAudioContext;
+      if (!Context) return Promise.resolve(false);
+      if (!voiceContext || voiceContext.state === 'closed') voiceContext = new Context();
+      return Promise.resolve(voiceContext.state === 'suspended' ? voiceContext.resume() : undefined)
+        .then(() => voiceContext.state === 'running', () => false);
+    } catch { return Promise.resolve(false); }
+  }
+  function finishPlayback(request, state, reason) {
+    if (request.finished) return;
+    request.finished = true;
+    request.controller.abort();
+    clearTimeout(request.timeout); clearTimeout(request.startTimer);
+    for (const source of request.sources) {
+      source.onended = null;
+      try { source.stop(); source.disconnect(); } catch { /* already ended */ }
+    }
+    if (playback === request) playback = null;
+    speechEvent(state, request, reason);
+    invoke(request.callbacks[state === 'ended' ? 'onEnd' : state === 'cancelled' ? 'onCancel' : 'onError'], reason);
+  }
+  function playSpeech(plan, callbacks = {}) {
+    if (!speechEnabled || document.hidden) return null;
+    stopSpeech();
+    const request = { text: plan?.text || '', lang: languageTag(plan?.lang), callbacks,
+      controller: new AbortController(), sources: [], finished: false, started: false };
+    playback = request;
+    // Create/resume synchronously inside the gesture, before fetching any audio.
+    const unlocked = unlockSpeech();
+    const handle = { cancel: () => finishPlayback(request, 'cancelled') };
+    speechEvent('loading', request);
+    request.timeout = setTimeout(() => finishPlayback(request, 'error', 'timeout'), 15000);
+    (async () => {
+      if (!request.text || !Array.isArray(plan.clips) || !plan.clips.length) throw new Error('invalid-plan');
+      if (!await unlocked) throw new Error('audio-unavailable');
+      if (request.finished) return;
+      const buffers = new Array(plan.clips.length);
+      let next = 0;
+      const worker = async () => {
+        while (next < plan.clips.length && !request.finished) {
+          const index = next++, clip = plan.clips[index];
+          if (!clip || !/^\.\/audio\/speech\/[a-f0-9]+\.mp3$/.test(clip.src)
+            || !Number.isFinite(clip.pauseAfter) || clip.pauseAfter < 0 || clip.pauseAfter > 1) throw new Error('invalid-clip');
+          let buffer = decodedClips.get(clip.src);
+          if (!buffer) {
+            const response = await fetch(clip.src, { signal: request.controller.signal });
+            if (!response.ok) throw new Error('audio-download');
+            buffer = await voiceContext.decodeAudioData(await response.arrayBuffer());
+            if (!buffer.duration || !Number.isFinite(buffer.duration)) throw new Error('audio-decode');
+            if (request.finished) return;
+            decodedClips.set(clip.src, buffer);
+            if (decodedClips.size > 48) decodedClips.delete(decodedClips.keys().next().value);
+          }
+          buffers[index] = buffer;
+        }
+      };
+      await Promise.all([worker(), worker()]);
+      if (request.finished) return;
+      if (!speechEnabled || document.hidden || voiceContext.state !== 'running') throw new Error('audio-suspended');
+      clearTimeout(request.timeout);
+      let at = voiceContext.currentTime + .03;
+      buffers.forEach((buffer, index) => {
+        const source = voiceContext.createBufferSource();
+        source.buffer = buffer; source.connect(voiceContext.destination);
+        request.sources.push(source);
+        if (index === buffers.length - 1) source.onended = () => finishPlayback(request, 'ended');
+        source.start(at); at += buffer.duration + plan.clips[index].pauseAfter;
+      });
+      request.startTimer = setTimeout(() => {
+        if (request.finished) return;
+        if (voiceContext.state !== 'running') { finishPlayback(request, 'error', 'audio-suspended'); return; }
+        request.started = true; speechEvent('started', request); invoke(callbacks.onStart);
+      }, 35);
+      request.timeout = setTimeout(() => finishPlayback(request, 'error', 'timeout'), (at - voiceContext.currentTime) * 1000 + 3000);
+    })().catch(error => { if (!request.finished) finishPlayback(request, 'error', error.message || 'audio-error'); });
+    return handle;
+  }
+
   function releaseVoiceWaiters() {
     for (const waiter of [...voiceWaiters]) waiter();
     voiceWaiters.clear();
@@ -231,8 +322,9 @@
   }
 
   function stopSpeech() {
-    if (!canSpeak) return false;
     speechTokens += 1;
+    if (playback) finishPlayback(playback, 'cancelled');
+    if (!canSpeak) return true;
     try {
       w.speechSynthesis.cancel();
       return true;
@@ -242,7 +334,7 @@
   }
 
   function wireSpeech() {
-    if (speechWired || !canSpeak) return;
+    if (speechWired) return;
     speechWired = true;
     refreshVoices();
     try {
@@ -273,7 +365,7 @@
     const value = typeof text === 'string' ? text.trim() : '';
     if (!value) return null;
     wireSpeech();
-    const tag = (options.lang || lang) === 'en' ? 'en-US' : 'zh-CN';
+    const tag = languageTag(options.lang);
     try {
       if (options.interrupt !== false && (w.speechSynthesis.speaking || w.speechSynthesis.pending)) stopSpeech();
       const utterance = new w.SpeechSynthesisUtterance(value);
@@ -283,7 +375,8 @@
       utterance.rate = 0.92;
       utterance.pitch = 1;
       /* 缺中文音色、被打断或设备不支持时按静默处理，不产生控制台噪音。 */
-      utterance.onerror = () => {};
+      utterance.onerror = event => invoke(options.onError, event?.error || 'synthesis-error');
+      utterance.onstart = () => invoke(options.onStart);
       if (typeof options.onEnd === 'function') utterance.onend = () => options.onEnd();
 
       const utter = () => {
@@ -291,11 +384,12 @@
         if (!speechEnabled || token !== speechTokens) return;
         const ready = voiceFor(tag);
         if (ready) utterance.voice = ready;
-        try { w.speechSynthesis.speak(utterance); } catch { /* 设备拒绝时静默降级 */ }
+        try { w.speechSynthesis.speak(utterance); } catch { invoke(options.onError, 'synthesis-error'); }
       };
       /* 认领本次朗读的序号：之后任何新朗读或 stop() 都会让它失效。 */
       const token = ++speechTokens;
-      Promise.resolve(awaitVoices()).then(utter);
+      if (speechVoices.length) utter();
+      else Promise.resolve(awaitVoices()).then(utter);
       return utterance;
     } catch {
       return null;
@@ -304,7 +398,7 @@
 
   const speech = {
     get available() {
-      return canSpeak;
+      return canSpeak || Boolean(w.AudioContext || w.webkitAudioContext);
     },
     get enabled() {
       return speechEnabled;
@@ -323,6 +417,8 @@
       return speech.setEnabled(!speechEnabled);
     },
     speak: speakSpeech,
+    play: playSpeech,
+    unlock: unlockSpeech,
     stop: stopSpeech,
     subscribe(listener) {
       if (typeof listener !== 'function') throw new TypeError('Speech listener must be a function');
@@ -331,7 +427,8 @@
     },
   };
 
-  cool.sdkVersion = 3;
+  preferences.subscribe(({ kind }) => { if (kind === 'lang') stopSpeech(); });
+  cool.sdkVersion = 4;
   cool.courseId = courseId;
   cool.storage = storage;
   cool.preferences = preferences;

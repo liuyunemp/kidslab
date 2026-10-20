@@ -1,6 +1,6 @@
 {
   "id": "welcome",
-  "version": "d3149aee554fcb9c1c007bae5c96f4986368b868778b62f7ce522092cc979ae3",
+  "version": "f385c2bcb8569b5846e8c8ecf7e7f3d5bc979bade7e6502114f276ad97b1a568",
   "assets": [
     {
       "path": "audio/bgm-base.m4a",
@@ -20,7 +20,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "0b84aedd0a3d0132c79c0c2632ce8b186e6972c70a1e06ebc4ba64b17cba90ff"
+      "sha256": "87ff241e22e89669b1108814162382b275d844864222e49ef8d651105dec99ed"
     },
     {
       "path": "main.js",

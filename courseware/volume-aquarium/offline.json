@@ -1,6 +1,6 @@
 {
   "id": "volume-aquarium",
-  "version": "2b849d55bab147c088765a048d310993489479ded7c555ce7e1d649ecbe3a74c",
+  "version": "96276634cec8f5a3a7bde90f285a93a9d678051cad640d998f0abd30f53cce7e",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "292b357fc1fab3ef3a4af07842851a84858389cb7bb8d718a20511e5673fc018"
+      "sha256": "843badb5a522ccbd208a99ab85ee1d10fba849622d7662def3cfb76c4667d365"
     },
     {
       "path": "main.js",

@@ -1,6 +1,6 @@
 {
   "id": "magic-cube",
-  "version": "c88cfe9cb98cc6457419af1f7a68991a361efd660108bfd6f78b320d91f64634",
+  "version": "af2aa779656a53942024e215bb356e52353533aed7458ca6c5430f5d7927e2e3",
   "assets": [
     {
       "path": "audio.js",
@@ -18,7 +18,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "a185adb4927a7e1e24148c93c2e198f0dd0485f2405e7a4d9f680f968d98a98c"
+      "sha256": "70ecd65fe759b071de5dd4f9bd1488a05c345bf640f207839ddf7383adfdfdb8"
     },
     {
       "path": "main.js",
