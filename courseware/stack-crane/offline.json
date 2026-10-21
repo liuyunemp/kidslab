@@ -1,0 +1,107 @@
+{
+  "id": "stack-crane",
+  "version": "33e6dc31ba07c47cb52f26a99c697ab361c83221fc2ddf7011ab7587135e0bb1",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "bdbf553381973629b34366e80e294a4ee0a15aba817e3c9295737cbf1ebafe8c",
+      "fingerprint": "4c1c2a8c"
+    },
+    {
+      "path": "audio/lab-glow.meta.json",
+      "sha256": "0f19c1fab1e0c23085b6fdea516db47bb8ea04414919a63b1d783cb34e3bb73f"
+    },
+    {
+      "path": "audio/lab-glow.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "course.json",
+      "sha256": "4cf1d515491a828eb46339a26f13500616d3a4764383e55dab9016f068e59391"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "93876d572ef2d93f04d23c8a88419f6b4f2070cf9de4a6ad5d57a1427933e546",
+      "fingerprint": "90bdba30"
+    },
+    {
+      "path": "index.html",
+      "sha256": "cf189fc0ff924acc8509b0c2c8423febe2455cb5feef1e0e863922dede2b5797"
+    },
+    {
+      "path": "levels.js",
+      "sha256": "5373c462f9a25f38cd22b4a1ae2409711a6c5a56eee4e866f9f6c04c41ae141b",
+      "fingerprint": "67c71076"
+    },
+    {
+      "path": "main.js",
+      "sha256": "3e73182fec886d6f2f7c6b90b7adfbd22ccd5c1ad5ad966680549d13ff60aff7",
+      "fingerprint": "605c7002"
+    },
+    {
+      "path": "model-utils.js",
+      "sha256": "59007cd747a9a13bea12c7b22f8e6cfe92169d1eb16ffd0ee17fc3e74dd382ec",
+      "fingerprint": "9a812ae3"
+    },
+    {
+      "path": "model.js",
+      "sha256": "a8cb60f5341cdd916ba1e9a852e300daef6c52a954b29e66f4581f50b84ab236",
+      "fingerprint": "5916e4d7"
+    },
+    {
+      "path": "objects.js",
+      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
+      "fingerprint": "7a17a9de"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "f60ccd77779a3d4619498efee1127424368d164b8fd3d4971fafdcc01d78e981",
+      "fingerprint": "e6a55810"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
+      "fingerprint": "1b72b1c0"
+    },
+    {
+      "path": "session.js",
+      "sha256": "23fa5e2552a269a575227de0b1bb62a22b6b2d15895ee9d2ab8ee93eeeaa0abf",
+      "fingerprint": "624ec555"
+    },
+    {
+      "path": "stack-crane-model.js",
+      "sha256": "6a7a244838dd59692fe861789aacba9704779ee792086a8c8becdb73b08a7dfd",
+      "fingerprint": "7a71bca9"
+    },
+    {
+      "path": "style.css",
+      "sha256": "3e2eaa5fba8eae15a582ea856c45b1f5b3d66a299404e977e23b4ded42cceb74",
+      "fingerprint": "295307e2"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    },
+    {
+      "path": "worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    }
+  ]
+}

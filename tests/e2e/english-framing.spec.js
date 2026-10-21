@@ -1,98 +1,82 @@
-import { test, expect } from '@playwright/test';
-
-const ids = [
-  'english-color-studio', 'english-fruit-picnic', 'english-animal-park',
-  'english-number-train', 'english-body-show', 'english-school-bag',
-];
-
-/* The English stages frame themselves from the panel-free area: `fit` keeps the shelf inside
-   the visible width, `fitH` stops a standing figure from being cut off. `?e2e` exposes a
-   read-only probe so the check is numeric instead of "looks about right". */
-for (const id of ids) {
-  test(`${id}: stage fills the panel-free area without being cropped`, async ({ page }, testInfo) => {
-    const errors = [];
-    page.on('pageerror', (error) => errors.push(error.message));
-    page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
-
-    await page.goto(`/courseware/${id}/?e2e`);
-    await expect(page.locator('#scene')).toBeVisible();
-    await expect.poll(() => page.evaluate(() => Boolean(window.__englishFrame?.())), { timeout: 15000 }).toBe(true);
-    await page.waitForTimeout(400);
-
-    const snapshot = await page.evaluate(() => {
-      const rect = (node) => {
-        const box = node.getBoundingClientRect();
-        return { x: box.x, y: box.y, w: box.width, h: box.height };
-      };
-      const panel = rect(document.getElementById('panel'));
-      const canvas = document.getElementById('scene');
-      return {
-        frame: window.__englishFrame(),
-        panel,
-        canvas: { w: canvas.clientWidth, h: canvas.clientHeight },
-        overflowX: document.documentElement.scrollWidth > innerWidth + 1,
-        overflowY: document.documentElement.scrollHeight > innerHeight + 2,
-        pills: [...document.querySelectorAll('.bar .pill')]
-          .filter((node) => node.getBoundingClientRect().width > 0)
-          .map((node) => {
-            const box = node.getBoundingClientRect();
-            return { id: node.id || 'back', right: box.right, height: box.height };
-          }),
-      };
-    });
-
-    expect(errors, `console/page errors in ${id}`).toEqual([]);
-    expect(snapshot.overflowX || snapshot.overflowY, `${id} must not scroll`).toBe(false);
-    expect(snapshot.canvas.w).toBeGreaterThan(300);
-    expect(snapshot.canvas.h).toBeGreaterThan(300);
-    for (const pill of snapshot.pills) {
-      expect(pill.right, `${id}/${pill.id} leaks past the viewport`).toBeLessThanOrEqual(snapshot.canvas.w + 1);
-      expect(pill.height, `${id}/${pill.id} is too small to tap`).toBeGreaterThanOrEqual(44);
+import {test,expect} from '@playwright/test';
+import {courses} from '../../scripts/english/courses.mjs';
+const snapshot=page=>page.evaluate(()=>window.__englishState());
+async function load(page,id,seed=17){await page.addInitScript(()=>{if(!localStorage.getItem('kidslab.lang'))localStorage.setItem('kidslab.lang','zh');if(!localStorage.getItem('kidslab.theme'))localStorage.setItem('kidslab.theme','light');});await page.goto(`/courseware/${id}/?e2e&seed=${seed}`);await expect.poll(()=>page.evaluate(()=>Boolean(window.__englishState))).toBe(true);}
+async function next(page){await page.locator('#nextBtn').click();}
+async function reachQuestion(page){for(let i=0;i<4&&(await snapshot(page)).phase==='learn';i++)await next(page);await expect.poll(async()=>{const s=await snapshot(page);return s.question?.started;}).toBe(true);}
+async function fit(page){
+  const result=await page.evaluate(()=>({x:document.documentElement.scrollWidth>innerWidth+1,y:document.documentElement.scrollHeight>innerHeight+1,buttons:[...document.querySelectorAll('.bar .pill,.choice,#controls button')].filter(n=>n.getBoundingClientRect().width).map(n=>{const r=n.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,height:r.height,size:parseFloat(getComputedStyle(n).fontSize)};}),w:innerWidth,h:innerHeight,frame:window.__englishFrame()}));
+  expect(result.x||result.y).toBe(false);for(const b of result.buttons){expect(b.left).toBeGreaterThanOrEqual(0);expect(b.right).toBeLessThanOrEqual(result.w);expect(b.top).toBeGreaterThanOrEqual(0);expect(b.bottom).toBeLessThanOrEqual(result.h);expect(b.height).toBeGreaterThanOrEqual(44);expect(b.size).toBeGreaterThanOrEqual(16);}
+  expect(result.frame.canvas.w).toBe(result.w);expect(result.frame.canvas.h).toBe(result.h);expect(result.frame.free.h).toBeGreaterThan(100);
+}
+for(const course of courses){
+  test(`${course.id}: four levels, mistakes, review and a fresh random batch`,async({page})=>{
+    test.setTimeout(180000);
+    const errors=[];page.on('pageerror',e=>errors.push(e.message));await load(page,course.id);
+    const batch=(await snapshot(page)).batch;await fit(page);await reachQuestion(page);await fit(page);
+    let s=await snapshot(page);const wrong=s.question.options.find(id=>id!==s.question.target);
+    await page.locator(`[data-choice="${wrong}"]`).click();await expect(page.locator('#hearts')).toHaveText('♥♥♡');
+    const qid=s.question.id;await page.locator(`[data-choice="${s.question.target}"]`).click();await expect(page.locator('#coach')).toHaveText('找对啦！');
+    expect((await snapshot(page)).question.id).toBe(qid);
+    let visits=new Set();
+    for(let i=0;i<110;i++){
+      s=await snapshot(page);if(s.phase==='roundDone')break;
+      if(s.phase==='answer'){
+        if(!s.question.started){await expect.poll(async()=>(await snapshot(page)).question.started).toBe(true);s=await snapshot(page);}
+        if(!visits.has(s.level)){
+          visits.add(s.level);await fit(page);
+          if(s.question.mode==='listen')await expect(page.locator('#prompt')).not.toContainText(course.items.find(w=>w.id===s.question.target).en);
+          if(s.question.mode==='picture'){await expect(page.locator('#hearBtn')).toHaveCount(0);await expect(page.locator('#prompt')).not.toContainText(course.items.find(w=>w.id===s.question.target).en);}
+        }
+        await page.locator(`[data-choice="${s.question.target}"]`).click();
+      }else await next(page);
     }
-
-    const { frame } = snapshot;
-    expect(frame, `${id} exposes no framing probe`).not.toBeNull();
-    const wide = testInfo.project.name === 'desktop';
-
-    if (wide) {
-      // Wide screens must keep the hand-tuned radius view: `fit`/`fitH` are not allowed to
-      // creep the camera, or every approved desktop composition would drift.
-      expect(frame.distance).toBeCloseTo(frame.view.radius, 2);
-      expect(frame.content.w).toBeGreaterThan(120);
-    } else {
-      const widthRatio = frame.content.w / frame.free.w;
-      const heightRatio = frame.content.h / frame.free.h;
-      // A standing figure is narrow and tall, a shelf is wide and low: judge the axis the
-      // stage actually fills, otherwise body-show would be called "too small" forever.
-      expect(Math.max(widthRatio, heightRatio), `${id} stage is too small on a phone`).toBeGreaterThan(0.55);
-      expect(widthRatio, `${id} stage is cropped on a phone`).toBeLessThanOrEqual(1);
-      expect(heightRatio, `${id} stage is squashed on a phone`).toBeLessThanOrEqual(1);
-      expect(frame.content.x, `${id} stage runs off the left edge`).toBeGreaterThanOrEqual(-1);
-      expect(frame.content.x + frame.content.w, `${id} stage runs off the right edge`)
-        .toBeLessThanOrEqual(snapshot.canvas.w + 1);
-      expect(frame.content.y + frame.content.h, `${id} stage hides under the panel`)
-        .toBeLessThanOrEqual(snapshot.panel.y + 1);
-    }
+    s=await snapshot(page);expect(s.phase).toBe('roundDone');expect(s.completed).toBe(true);expect(Object.keys(s.records)).toHaveLength(8);expect(s.review).toEqual([]);
+    await fit(page);await next(page);const fresh=await snapshot(page);expect(fresh.round).toBe(2);expect(fresh.batch).not.toEqual(batch);expect(fresh.batch.filter(id=>!batch.includes(id)).length).toBe(Math.min(7,course.items.length-8));expect(errors).toEqual([]);
+  });
+  test(`${course.id}: complete word bank renders, preferences and phone controls`,async({page},info)=>{
+    test.setTimeout(90000);const errors=[];page.on('pageerror',e=>errors.push(e.message));await load(page,course.id);
+    const visuals=await page.evaluate(()=>window.__englishVisuals());expect(visuals).toHaveLength(course.items.length);for(const v of visuals){expect(v.src).toMatch(/^data:image\/png;base64,/);expect(v.src.length).toBeGreaterThan(1000);}
+    await page.locator('#themeBtn').click();await expect(page.locator('html')).toHaveAttribute('data-theme','dark');await page.locator('#langBtn').click();await expect(page.locator('html')).toHaveAttribute('lang',/^en/);await fit(page);
+    await page.locator('#panelHandle').click();await expect(page.locator('#musicBtn')).toBeVisible();await page.locator('#musicBtn').click();await expect(page.locator('#musicBtn')).toHaveAttribute('aria-pressed','false');await page.locator('#panelHandle').click();
+    await page.reload();await expect(page.locator('#pauseCover')).toBeVisible();await page.locator('#resumeBtn').click();await expect(page.locator('html')).toHaveAttribute('data-theme','dark');await fit(page);
+    await page.screenshot({path:info.outputPath('lesson.png')});
+    // A review contact sheet is a test artifact, never an extra production route.
+    await page.evaluate(visuals=>{document.body.replaceChildren();document.body.style.cssText='overflow:auto;background:#fff8e9;color:#302b42;padding:12px';const gallery=document.createElement('div');gallery.style.cssText='display:grid;grid-template-columns:repeat(4,1fr);gap:10px';for(const v of visuals){const card=document.createElement('div');const img=document.createElement('img');img.src=v.src;img.style.cssText='width:100%;display:block';const label=document.createElement('b');label.textContent=v.en;card.append(img,label);gallery.append(card);}document.body.append(gallery);},visuals);
+    await page.screenshot({path:info.outputPath('word-bank.png'),fullPage:true});expect(errors).toEqual([]);
   });
 }
 
-test('english stages keep their drop targets reachable after the framing change', async ({ page }) => {
-  const errors = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto('/courseware/english-fruit-picnic/?e2e');
-  await expect.poll(() => page.evaluate(() => Boolean(window.__englishScreens?.()))).toBe(true);
+test('English countdown, failure retry, refresh and audio fallback recover without granting hearts',async({page})=>{
+  test.setTimeout(90000);await page.clock.install();await load(page,'english-fruit-picnic');await reachQuestion(page);
+  await page.evaluate(()=>window.cool.speech.stop());await page.clock.fastForward(5000);const before=await snapshot(page);expect(before.remainingMs).toBeLessThanOrEqual(15200);
+  await page.evaluate(()=>{Object.defineProperty(document,'hidden',{value:true,configurable:true});document.dispatchEvent(new Event('visibilitychange'));});
+  const paused=await snapshot(page);await page.clock.fastForward(30000);expect((await snapshot(page)).remainingMs).toBe(paused.remainingMs);await expect(page.locator('#pauseCover')).toBeVisible();
+  await page.evaluate(()=>{Object.defineProperty(document,'hidden',{value:false,configurable:true});document.dispatchEvent(new Event('visibilitychange'));});
+  await page.reload();await expect(page.locator('#pauseCover')).toBeVisible();let saved=await snapshot(page);expect(saved.question.options).toEqual(before.question.options);expect(saved.lives).toBe(before.lives);expect(saved.remainingMs).toBeLessThanOrEqual(before.remainingMs+250);
+  await page.locator('#resumeBtn').click();await expect.poll(async()=>(await snapshot(page)).question.started).toBe(true);
+  await page.locator('#soundBtn').click();await expect(page.locator('#fallbackBtn')).toBeVisible();saved=await snapshot(page);await page.clock.fastForward(25000);expect((await snapshot(page)).remainingMs).toBe(saved.remainingMs);
+  await page.locator('#fallbackBtn').click();expect((await snapshot(page)).question.mode).toBe('read');
+  for(let i=0;i<3;i++){
+    await page.clock.fastForward(21000);
+    if(i<2){await next(page);await expect(page.locator('#fallbackBtn')).toBeVisible();await page.locator('#fallbackBtn').click();}
+  }
+  await expect(page.locator('#retryBtn')).toBeVisible();const failed=await snapshot(page);expect(failed.lives).toBe(0);await page.locator('#retryBtn').click();const retry=await snapshot(page);expect(retry.batch).toEqual(failed.batch);expect(retry.lives).toBe(3);expect(retry.level).toBe(failed.level);
+});
 
-  const screens = await page.evaluate(() => window.__englishScreens());
-  expect(screens.picks.length).toBeGreaterThan(0);
-  expect(screens.zones.length).toBeGreaterThan(0);
+test('English recording failure pauses the clock and retry or written fallback can continue',async({page})=>{
+  await page.route('**/audio/speech/*.mp3',route=>route.fulfill({status:503,body:''}));await load(page,'english-animal-park');for(let i=0;i<4;i++)await next(page);
+  await expect(page.locator('#notice')).toContainText('声音还没准备好');let s=await snapshot(page);expect(s.remainingMs).toBe(20000);expect(s.lives).toBe(3);
+  await page.unroute('**/audio/speech/*.mp3');await page.locator('#hearBtn').click();await expect.poll(async()=>(await snapshot(page)).question.started).toBe(true);s=await snapshot(page);await page.locator(`[data-choice="${s.question.target}"]`).click();await expect(page.locator('#coach')).toHaveText('找对啦！');
+});
 
-  const from = screens.picks[0];
-  const to = screens.zones[0];
-  await page.mouse.move(from.x, from.y);
-  await page.mouse.down();
-  await page.mouse.move(to.x, to.y, { steps: 8 });
-  await page.mouse.up();
-
-  await expect(page.locator('#progressVal')).toHaveText('1/3');
-  expect(errors).toEqual([]);
+test('English words play from a complete offline snapshot',async({page,context})=>{
+  test.setTimeout(90000);
+  await page.addInitScript(()=>{localStorage.setItem('kidslab.lang','zh');window.__wordAudio=[];window.addEventListener('speechplayback',e=>window.__wordAudio.push(e.detail));});
+  await page.goto('/');await page.evaluate(async()=>{await navigator.serviceWorker.ready;if(!navigator.serviceWorker.controller)await new Promise(resolve=>navigator.serviceWorker.addEventListener('controllerchange',resolve,{once:true}));});
+  await load(page,'english-fruit-picnic');
+  await expect.poll(()=>page.evaluate(async()=>{const cache=await caches.open('kidslab-offline-state-v2');return Boolean(await cache.match(new URL('/__offline__/courses/english-fruit-picnic',location.origin).href));}),{timeout:40000}).toBe(true);
+  await context.setOffline(true);await page.reload();await expect(page.locator('#resumeBtn')).toBeVisible();await page.locator('#resumeBtn').click();await page.locator('#hearBtn').click();
+  await expect.poll(()=>page.evaluate(()=>window.__wordAudio.some(e=>e.state==='started'&&e.lang==='en-US'))).toBe(true);
+  await reachQuestion(page);const s=await snapshot(page);await page.locator(`[data-choice="${s.question.target}"]`).click();await expect(page.locator('#coach')).toHaveText('找对啦！');
 });

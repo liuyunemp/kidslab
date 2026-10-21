@@ -1,0 +1,28 @@
+{
+  "id": "river-sandbox",
+  "title": {
+    "zh": "河流造景沙盘",
+    "en": "River Sandbox"
+  },
+  "description": {
+    "zh": "挖通河道，再放水看看。三章九关，支持撤销、提示和随机新局。",
+    "en": "Dig a channel, then let the water flow. Nine levels with undo, hints and new puzzles."
+  },
+  "category": "science",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g3",
+    "g4",
+    "g5",
+    "g6"
+  ],
+  "tags": [
+    "河流",
+    "水循环"
+  ],
+  "icon": "🏞️",
+  "badge": "new",
+  "order": 204
+}

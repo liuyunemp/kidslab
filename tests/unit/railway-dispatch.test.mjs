@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import * as m from '../../src/railway-dispatch/railway-dispatch-model.js';import {adventureSuite} from './adventure-suite.mjs';
+adventureSuite('railway-dispatch',m);
+test('railway head-on swaps and stationary occupancy do not commit either train',()=>{const l=m.makeLevel(3),s=m.initial(l);s.positions=['X','Y'];s.enabled=[true,true];assert.equal(m.apply(l,s,{type:'step'}).reason,'track-occupied');s.enabled[1]=false;assert.equal(m.apply(l,s,{type:'step'}).reason,'track-occupied');const stopped=m.apply(l,s,{type:'signal',train:0});assert.equal(stopped.ok,true);});

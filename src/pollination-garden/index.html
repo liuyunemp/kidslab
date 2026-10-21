@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>KidsLab · Adventure</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="../../scripts/sdk/core.js" data-kidslab-sdk></script>
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body>
+  <canvas id="scene" aria-label="3D play space"></canvas>
+  <p id="nogl" hidden data-t="nogl">暂时无法显示 3D，请换一个支持 WebGL 的浏览器。</p>
+  <header class="bar">
+    <a class="icon-button" href="../../index.html" data-t-aria-label="back" aria-label="返回">←</a>
+    <h1 id="title"></h1>
+    <button id="musicBtn" class="icon-button" aria-pressed="true">♫</button>
+    <button id="soundBtn" class="icon-button" aria-pressed="true">♪</button>
+    <button id="themeBtn" class="icon-button">◐</button>
+    <button id="langBtn" class="icon-button">EN</button>
+  </header>
+  <section class="mission"><p id="chapter"></p><h2 id="levelTitle"></h2><p id="coach" role="status"></p></section>
+  <div id="stageArea" aria-hidden="true"></div>
+  <div id="stageLabels"></div>
+  <div id="stats" class="stats"></div>
+  <aside id="panel" class="panel">
+    <div class="panel-top"><strong id="panelTitle" data-t="controls">操作台</strong><button id="panelBtn" class="icon-button" aria-expanded="true" aria-controls="panelBody">⌄</button></div>
+    <div id="panelBody">
+      <nav class="tabs" aria-label="Panels"><button data-tab="play" class="active" data-t="play">动手</button><button data-tab="levels" data-t="levels">关卡</button><button data-tab="help" data-t="help">发现</button></nav>
+      <section id="playTab">
+        <div id="botTabs" class="tabs" hidden><button data-bot="0">A</button><button data-bot="1">B</button></div>
+        <div id="controls" class="controls"></div>
+        <div id="program" class="program" hidden></div>
+        <div id="runControls" class="actions" hidden><button id="runBtn" data-t="run">▶ 运行</button><button id="stepBtn" data-t="step">单步</button><button id="stopBtn" data-t="stop">停止</button></div>
+        <div class="actions"><button id="undoBtn" data-t="undo">↶ 撤销</button><button id="retryBtn" data-t="retry">重试</button><button id="hintBtn" data-t="hint">💡 提示</button></div>
+      </section>
+      <section id="levelsTab" hidden><div id="levelList"></div><div class="actions"><button id="newBtn" data-t="new">换一局</button><button id="classicBtn" data-t="classic">经典场景</button></div><p id="seedLabel" class="muted"></p></section>
+      <section id="helpTab" hidden><p id="hintText"></p><button id="moreHintBtn" data-t="hint">💡 提示</button><button id="demoBtn" hidden data-t="demo">演示一步</button><details><summary data-t="help">发现</summary><p id="lesson"></p></details></section>
+    </div>
+  </aside>
+  <div id="success" class="success" hidden><strong id="successText"></strong><button id="nextBtn" data-t="next">下一关 →</button></div>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

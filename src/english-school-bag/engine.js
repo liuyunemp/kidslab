@@ -1,433 +1,139 @@
 import { createAudio } from './audio.js';
 import { createEnglishStage } from './scene.js';
 import { createNarration } from './narration.js';
-import {
-  currentWord, initialState, progress, reduce, restore, serialize,
-} from './english-model.js';
+import { initialState,reduce,restore,serialize,currentWord,practisedCount } from './english-model.js';
 
-const GOALS = { color: 3, fruit: 3, animal: 3, number: 10, body: 3, school: 3 };
-const PROGRESS_KEY = { color: 'painted', number: 'count', body: 'observed' };
-const TRACK = {
-  select: 'pick-word', paint: 'paint-toy', place: 'place-word', add: 'load-block',
-  body: 'move-body', present: 'show', undo: 'undo', remove: 'take-out',
-};
-
-export function startEnglish(course, UI, manifest) {
-  const $ = (id) => document.getElementById(id);
-  const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  const lang = () => ((document.documentElement.lang || 'zh').startsWith('zh') ? 'zh' : 'en');
-  const goal = GOALS[course.kind] ?? 3;
-  const saveKey = `kidslab.english.${course.id}.state`;
-
-  const I18N = {
-    zh: {
-      ...UI.zh,
-      title: course.title.zh,
-      invitation: course.invitation.zh,
-      action: course.action.zh,
-      finish: course.finish.zh,
-      hint: course.hint.zh,
-      wordList: '单词',
-      footTip: course.kind === 'body' ? '点一点小朋友的身体，看它会动' : '点一点 3D 里的东西，再听它怎么说',
-      target: '涂色位置',
-    },
-    en: {
-      ...UI.en,
-      title: course.title.en,
-      invitation: course.invitation.en,
-      action: course.action.en,
-      finish: course.finish.en,
-      hint: course.hint.en,
-      wordList: 'Words',
-      footTip: course.kind === 'body' ? 'Tap a part of your friend and watch it move' : 'Tap something in the room and hear it',
-      target: 'Painted spot',
-    },
-  };
-
-  let t = (key) => I18N.zh[key] ?? key;
-  let state = loadState();
-  let unlocked = false;
-  let stage = null;
-  let coachTimer = 0;
-
-  const audio = createAudio(course.id);
-  const narration = createNarration({
-    manifest,
-    lang,
-    show: (text) => flash(text),
-    duck: () => audio.duck(),
-    restore: () => audio.restore(),
-  });
-
-  /* ------------------------------------------------------------ persistence */
-
-  function loadState() {
-    try {
-      const raw = localStorage.getItem(saveKey);
-      if (!raw) return initialState(course);
-      return restore(course, raw);
-    } catch {
-      return initialState(course);
+export function startEnglish(course,UI,manifest) {
+  const $=id=>document.getElementById(id),lang=()=>document.documentElement.lang.startsWith('en')?'en':'zh',t=key=>UI[lang()][key]??key;
+  const key=`kidslab.english.${course.id}.state`,muteKey=`kidslab.english.${course.id}.muted`;
+  const read=(key)=>{try{return localStorage.getItem(key);}catch{return null;}};
+  const write=(key,value)=>{try{localStorage.setItem(key,value);}catch{/* private storage does not stop play */}};
+  const query=new URLSearchParams(location.search),requested=Number(query.get('seed'));
+  const seed=Number.isInteger(requested)&&requested>0&&requested<=0xffffffff?requested:(crypto.getRandomValues(new Uint32Array(1))[0]||1);
+  let state=read(key)?restore(course,read(key),seed):initialState(course,seed);
+  if(read(key))state={...state,paused:true};
+  let masterMuted=read(muteKey)==='1',unlocked=false,settingsOpen=false,autoId=null,voiceGeneration=0,lastTick=performance.now(),rendering=false;
+  const audio=createAudio(course.id);audio.setMuted(masterMuted);
+  const narration=createNarration({manifest,lang,muted:()=>masterMuted,duck:audio.duck,restore:audio.restore,show:message=>{if(state.phase!=='answer')notice(message);}});
+  const stage=createEnglishStage({canvas:$('scene'),course});
+  if(!stage){$('nogl').hidden=false;state.paused=true;}
+  const save=()=>write(key,JSON.stringify(serialize(state)));
+  function unlock(){if(unlocked)return;unlocked=true;audio.unlock().catch(()=>{});audio.setMuted(masterMuted);window.cool?.stage?.('english-round');}
+  function stopVoice(){voiceGeneration++;narration.reset();}
+  function notice(text){$('notice').textContent=text||'';$('notice').hidden=!text;}
+  function button(label,fn,kind='secondary',id){const b=document.createElement('button');b.type='button';b.className=kind;b.textContent=label;if(id)b.id=id;b.addEventListener('click',()=>{unlock();fn();});return b;}
+  function picture(id,className='prompt-picture'){
+    const img=document.createElement('img');img.className=className;img.alt='';img.draggable=false;img.width=240;img.height=240;img.src=stage?.thumbnail(id)||'';return img;
+  }
+  function wordCard(word){const card=document.createElement('div');card.className='learn-card';card.append(picture(word.id));const text=document.createElement('div'),en=document.createElement('b'),zh=document.createElement('span');en.textContent=word.en;en.lang='en';zh.textContent=lang()==='zh'?word.zh:'';text.append(en,zh);card.append(text);return card;}
+  function hear(text,challenge=false){
+    if(masterMuted||window.cool?.speech?.enabled===false){if(challenge)apply({type:'audio-error',questionId:state.question.id});return;}
+    const generation=++voiceGeneration,qid=state.question?.id;
+    const handle=narration.say(text,{lang:'en',onStart(){if(challenge&&generation===voiceGeneration)apply({type:'audio-start',questionId:qid});},onError(){if(challenge&&generation===voiceGeneration)apply({type:'audio-error',questionId:qid});}});
+    if(challenge&&!handle)apply({type:'audio-error',questionId:qid});
+  }
+  function maybeHear(){
+    if(state.paused||settingsOpen||!stage)return;
+    if(state.phase==='answer'&&state.question.mode==='listen'&&autoId!==state.question.id){autoId=state.question.id;hear(currentWord(course,state).en,true);}
+  }
+  function updateClock(){
+    const active=state.phase==='answer';$('timer').textContent=active?`${Math.ceil(state.remainingMs/1000)}s`:'—';$('timer').classList.toggle('urgent',active&&state.remainingMs<=5000);$('timer').setAttribute('aria-label',`${Math.ceil(state.remainingMs/1000)} ${t('seconds')}`);
+    $('timeFill').style.transform=`scaleX(${active?state.remainingMs/20000:0})`;
+  }
+  function tick(){
+    const now=performance.now(),elapsedMs=now-lastTick;lastTick=now;
+    if(rendering||document.hidden||!stage)return;
+    const previousPhase=state.phase,result=reduce(course,state,{type:'tick',elapsedMs,questionId:state.question?.id});
+    if(result.changed){state=result.state;save();updateClock();if(state.phase!==previousPhase){stopVoice();audio.error();window.cool?.track?.('word-timeout',{word:state.question.target});render();}}
+  }
+  function apply(action){
+    if(action.type!=='tick'&&action.type!=='audio-start')tick();
+    const before=state,result=reduce(course,state,action);if(!result.changed)return result;
+    state=result.state;save();
+    if(['next','learn-next','retry','new-round','pause','fallback'].includes(action.type))stopVoice();
+    if(action.type==='answer'){
+      stopVoice();
+      const correct=action.id===before.question.target;
+      if(correct){audio.success();hear(currentWord(course,state).en);}else audio.error();
+      window.cool?.track?.('recognise-word',{word:before.question.target,mode:before.question.mode,correct,review:before.question.review});
     }
+    if(state.phase==='roundDone'&&before.phase!=='roundDone'){audio.present();window.cool?.track?.('finish-word-round',{round:state.round,fallbacks:state.fallbacks});}
+    if(state.phase==='levelDone'&&before.phase!=='levelDone')audio.present();
+    if(result.completedNow)window.cool?.complete?.();
+    if(action.type==='fallback')window.cool?.track?.('use-written-word',{word:state.question.target});
+    if(action.type==='retry')window.cool?.track?.('retry-word-level',{level:state.level+1});
+    if(action.type==='new-round')window.cool?.stage?.('english-round');
+    render();return result;
   }
-
-  function save() {
-    try { localStorage.setItem(saveKey, JSON.stringify(serialize(state))); } catch { /* private mode */ }
+  function settings(){
+    $('langBtn').textContent=lang()==='zh'?'EN':'中';$('langBtn').setAttribute('aria-label',t('language'));
+    $('themeBtn').textContent=document.documentElement.dataset.theme==='dark'?'☀':'☾';$('themeBtn').setAttribute('aria-label',t('theme'));
+    $('soundBtn').textContent=masterMuted?'🔇':'🔊';$('soundBtn').setAttribute('aria-label',t(masterMuted?'unmute':'mute'));$('soundBtn').setAttribute('aria-pressed',String(!masterMuted));
+    for(const [id,on,label] of [['musicBtn',audio.musicOn,'music'],['effectsBtn',audio.sfxOn,'effects'],['speechBtn',window.cool?.speech?.enabled!==false,'speech']]){const b=$(id);b.textContent=`${t(label)} · ${t(on?'on':'off')}`;b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-label',t(label));}
+    $('panelHandle').setAttribute('aria-expanded',String(settingsOpen));$('panelBody').hidden=!settingsOpen;
   }
-
-  /* ------------------------------------------------------------ chrome */
-
-  function flash(text, busy = false) {
-    const coach = $('coach');
-    coach.textContent = text;
-    clearTimeout(coachTimer);
-    if (!busy) coachTimer = setTimeout(() => { coach.textContent = t('invitation'); }, 4200);
-  }
-
-  function note(text) {
-    const node = $('statusNote');
-    if (!text) { node.hidden = true; return; }
-    node.hidden = false;
-    node.textContent = text;
-  }
-
-  function renderWords() {
-    const list = $('wordList');
-    list.textContent = '';
-    for (const item of course.items) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'word';
-      button.dataset.id = item.id;
-      if (item.color) {
-        const swatch = document.createElement('span');
-        swatch.className = 'word__swatch';
-        swatch.style.background = item.color;
-        button.append(swatch);
-      } else {
-        const icon = document.createElement('span');
-        icon.className = 'word__icon';
-        icon.setAttribute('aria-hidden', 'true');
-        icon.textContent = item.icon;
-        button.append(icon);
+  function render(){
+    if(rendering)return;rendering=true;
+    try{
+      const word=currentWord(course,state),q=state.question;
+      document.title=`${course.icon} ${course.title[lang()]} · KidsLab`;$('title').textContent=`${course.icon} ${course.title[lang()]}`;
+      $('roundLabel').textContent=`${lang()==='zh'?'第 ':t('round')+' '}${state.round}${lang()==='zh'?' 轮':''} · ${t('batch')}`;
+      $('coverage').textContent=`${t('learned')} ${practisedCount(state)}/${course.items.length}`;
+      $('levelSteps').replaceChildren(...UI[lang()].stages.map((label,i)=>{const li=document.createElement('li');li.textContent=`${i+1} ${label}`;li.className=i===state.level?'active':i<state.level?'done':'';return li;}));
+      $('hearts').textContent='♥'.repeat(state.lives)+'♡'.repeat(3-state.lives);$('hearts').setAttribute('aria-label',`${t('hearts')} ${state.lives}`);
+      $('progressVal').textContent=state.phase==='learn'?`${state.learnIndex+1}/8`:q?.review&&state.phase==='answer'?t('review'):`${state.baseIndex}/8`;updateClock();settings();
+      $('pauseCover').hidden=!state.paused||settingsOpen;$('pauseText').textContent=t('paused');$('playArea').setAttribute('aria-hidden',String(state.paused));
+      $('prompt').replaceChildren();$('choices').replaceChildren();$('controls').replaceChildren();notice('');
+      const controls=$('controls');
+      if(state.phase==='learn'){
+        $('coach').textContent=t('learn');$('prompt').append(wordCard(word));
+        controls.append(button('🔈 '+t('hear'),()=>hear(word.en),'secondary','hearBtn'),button((state.learnIndex===3||state.learnIndex===7)?t('begin'):t('next'),()=>{apply({type:'learn-next'});if(state.phase==='learn')hear(currentWord(course,state).en);},'primary','nextBtn'));
+      }else if(state.phase==='answer'){
+        $('coach').textContent=t(q.mode);
+        if(q.mode==='picture')$('prompt').append(picture(word.id));
+        else if(q.mode==='read'){const label=document.createElement('strong');label.className='prompt-word';label.lang='en';label.textContent=word.en;$('prompt').append(label);}
+        else $('prompt').append(button('🔈 '+t('hear'),()=>{tick();if(state.phase==='answer')hear(word.en,true);},'secondary','hearBtn'));
+        q.options.forEach((id,i)=>{const choice=course.items.find(w=>w.id===id),b=button('',()=>apply({type:'answer',id,questionId:q.id}),'choice');b.dataset.choice=id;b.setAttribute('aria-label',q.mode==='picture'?choice.en:`${lang()==='zh'?'选项':'Option'} ${i+1}`);
+          if(q.mode==='picture'){b.textContent=choice.en;b.lang='en';}else{b.append(picture(id));const n=document.createElement('span');n.className='number';n.textContent=String(i+1);n.setAttribute('aria-hidden','true');b.append(n);}
+          b.disabled=state.paused||q.wrong.includes(id)||!q.started||q.audioBlocked;b.classList.toggle('wrong',q.wrong.includes(id));$('choices').append(b);
+        });
+        if(q.mode==='listen'&&(q.audioBlocked||!q.started)){
+          notice(t(q.audioBlocked?'audioBlocked':'loading'));controls.append(button(t('fallback'),()=>apply({type:'fallback'}),'secondary','fallbackBtn'));
+        }else if(state.result==='wrong')notice(t('wrong'));
+        else if(q.mode!==q.originalMode)notice(t('visualOnly'));
+      }else if(state.phase==='feedback'){
+        $('coach').textContent=t(state.result);$('prompt').append(wordCard(word));controls.append(button('🔈 '+t('hear'),()=>hear(word.en),'secondary','hearBtn'),button(t('next'),()=>apply({type:'next'}),'primary','nextBtn'));
+      }else if(state.phase==='failed'){
+        $('coach').textContent=t('failed');const list=document.createElement('div');list.className='review-list';
+        state.roundMisses.forEach(id=>{const item=course.items.find(w=>w.id===id),b=button('',()=>hear(item.en),'review-word');b.append(picture(id));const label=document.createElement('span');label.textContent=item.en+(lang()==='zh'?` · ${item.zh}`:'');b.append(label);list.append(b);});$('prompt').append(list);controls.append(button(t('retry'),()=>apply({type:'retry'}),'primary','retryBtn'));
+      }else{
+        $('coach').textContent=t(state.phase);const badge=document.createElement('span');badge.className='celebrate';badge.textContent=state.phase==='roundDone'?'🏆':'⭐';$('prompt').append(badge);
+        if(state.phase==='roundDone')notice(`${t('learned')} ${practisedCount(state)}/${course.items.length}`);
+        controls.append(button(t(state.phase==='roundDone'?'newRound':'next'),()=>apply({type:state.phase==='roundDone'?'new-round':'next'}),'primary','nextBtn'));
       }
-      const text = document.createElement('span');
-      text.className = 'word__text';
-      const en = document.createElement('b');
-      en.textContent = item.en;
-      text.append(en);
-      if (lang() === 'zh') {
-        const zh = document.createElement('small');
-        zh.textContent = item.zh;
-        text.append(zh);
-      }
-      button.append(text);
-      button.addEventListener('click', () => {
-        unlockAll();
-        choose(item.id);
-      });
-      list.append(button);
-    }
+      stage?.update(state);
+    }finally{rendering=false;lastTick=performance.now();}
+    maybeHear();
   }
-
-  function refresh() {
-    const word = currentWord(course, state);
-    const shown = Math.min(progress(course, state), goal);
-    $('progressVal').textContent = `${shown}/${goal}`;
-    $('progressLabel').textContent = `${shown}/${goal}`;
-    $('wordVal').textContent = word.en;
-    $('wordZh').textContent = lang() === 'zh' ? word.zh : '';
-    $('hudLabel').textContent = t(PROGRESS_KEY[course.kind] ?? 'progress');
-    $('actionBtn').textContent = `${course.kind === 'color' ? '🎨' : course.kind === 'number' ? '🧱' : course.kind === 'body' ? '🙋' : '➕'} ${course.action[lang()] ?? t('action')}`;
-    $('presentBtn').textContent = `✨ ${course.finish[lang()] ?? t('finish')}`;
-    $('removeBtn').hidden = course.kind === 'color' || course.kind === 'body';
-    for (const button of $('wordList').querySelectorAll('.word')) {
-      const active = button.dataset.id === state.selected;
-      button.classList.toggle('is-active', active);
-      button.setAttribute('aria-pressed', String(active));
-      const entry = course.items.find((item) => item.id === button.dataset.id);
-      if (entry && lang() === 'zh') {
-        const small = button.querySelector('small');
-        if (small) small.textContent = entry.zh;
-      }
-    }
-    $('wordList').setAttribute('aria-label', t('wordList'));
-    stage?.update(state);
+  $('soundBtn').addEventListener('click',()=>{unlock();masterMuted=!masterMuted;write(muteKey,masterMuted?'1':'0');audio.setMuted(masterMuted);stopVoice();if(masterMuted&&state.phase==='answer'&&state.question.mode==='listen')apply({type:'audio-error',questionId:state.question.id});else render();});
+  $('musicBtn').addEventListener('click',()=>{unlock();audio.setMusic(!audio.musicOn);settings();});
+  $('effectsBtn').addEventListener('click',()=>{unlock();audio.setSfx(!audio.sfxOn);settings();});
+  $('speechBtn').addEventListener('click',()=>{unlock();window.cool?.speech?.toggle();settings();});
+  window.cool?.speech?.subscribe(()=>{if(state.phase==='answer'&&state.question.mode==='listen'&&window.cool.speech.enabled===false&&!state.paused)apply({type:'audio-error',questionId:state.question.id});settings();});
+  $('langBtn').addEventListener('click',()=>window.cool?.preferences?.toggleLang());
+  $('themeBtn').addEventListener('click',()=>window.cool?.preferences?.toggleTheme());
+  $('panelHandle').addEventListener('click',()=>{unlock();settingsOpen=!settingsOpen;if(settingsOpen)apply({type:'pause'});else{autoId=null;apply({type:'resume'});}render();});
+  $('hintBtn').addEventListener('click',()=>{unlock();narration.say(course.hint[lang()]);});
+  $('resumeBtn').addEventListener('click',()=>{unlock();autoId=null;apply({type:'resume'});});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){tick();stopVoice();apply({type:'pause'});}lastTick=performance.now();});
+  addEventListener('pagehide',()=>{tick();save();stopVoice();});
+  addEventListener('themechange',()=>{stage?.applyTheme();render();});
+  addEventListener('langchange',()=>{stopVoice();autoId=null;render();});
+  window.cool?.bindI18n(UI,{onChange:()=>render()});
+  if(query.has('e2e')) {
+    window.__englishState=()=>serialize(state);
+    window.__englishVisuals=()=>course.items.map(item=>({id:item.id,en:item.en,src:stage?.thumbnail(item.id)}));
   }
-
-  function renderChrome() {
-    document.title = `${course.icon} ${course.title[lang()]} · KidsLab`;
-    $('langBtn').textContent = lang() === 'zh' ? 'EN' : '中';
-    for (const id of ['themeBtn', 'themeBtnPanel']) {
-      const button = $(id);
-      if (!button) continue;
-      const moon = document.documentElement.dataset.theme === 'light';
-      button.textContent = id === 'themeBtn' ? (moon ? '🌙' : '☀️') : `${moon ? '🌙' : '☀️'} ${t('theme')}`;
-      button.setAttribute('aria-label', t('theme'));
-    }
-    $('musicBtn').textContent = audio.musicOn ? '♫' : '♪';
-    $('musicBtn').setAttribute('aria-pressed', String(audio.musicOn));
-    $('musicBtn').setAttribute('aria-label', t('music'));
-    $('musicBtnPanel').setAttribute('aria-pressed', String(audio.musicOn));
-    $('musicBtnPanel').setAttribute('aria-label', t('music'));
-    $('musicBtnPanel').style.opacity = audio.musicOn ? '' : '0.6';
-    $('soundBtn').textContent = audio.sfxOn ? '🔊' : '🔇';
-    $('soundBtn').setAttribute('aria-pressed', String(audio.sfxOn));
-    $('soundBtn').setAttribute('aria-label', t(audio.sfxOn ? 'mute' : 'unmute'));
-    const speechOn = window.cool?.speech?.enabled !== false;
-    $('speechBtn').setAttribute('aria-pressed', String(speechOn));
-    $('speechBtn').setAttribute('aria-label', t('speech'));
-    $('speechBtn').style.opacity = speechOn ? '' : '0.55';
-    $('hintText').textContent = course.hint[lang()];
-  }
-
-  /* ------------------------------------------------------------ actions */
-
-  function unlockAll() {
-    if (unlocked) return;
-    unlocked = true;
-    audio.unlock().catch(() => {});
-    window.cool?.stage?.('level2');
-  }
-
-  function reject(reason) {
-    const key = I18N.zh[reason] ? reason : 'invalid';
-    if (key === 'hint') {
-      const text = course.hint[lang()];
-      flash(text);
-      audio.error();
-      narration.say(text);
-      return;
-    }
-    const text = t(key);
-    flash(text);
-    note(text);
-    audio.error();
-    narration.say(text);
-    window.cool?.track?.('blocked', { reason: key });
-  }
-
-  function speakWord(id) {
-    const word = course.items.find((item) => item.id === id);
-    if (word) narration.say(word.en, { lang: 'en' });
-  }
-
-  function apply(action) {
-    const result = reduce(course, state, action);
-    if (!result.changed) {
-      reject(result.error ?? 'invalid');
-      return result;
-    }
-    // Commit before any animation so a double tap cannot count twice.
-    state = result.state;
-    save();
-    if (result.actedWord) speakWord(result.actedWord);
-    if (action.type === 'paint') audio.paint();
-    else if (action.type === 'place' || action.type === 'add') audio.place();
-    else if (action.type === 'undo') audio.pick();
-    else audio.pick();
-    note('');
-    if (TRACK[action.type]) window.cool?.track?.(TRACK[action.type], { word: result.actedWord ?? null });
-    if (action.type === 'present') {
-      stage?.present();
-      audio.present();
-      if (result.completedNow) {
-        window.cool?.complete?.();
-        narration.success(true);
-        flash(t('done'), true);
-        window.cool?.track?.('finish-show');
-      } else {
-        narration.success(false);
-        flash(t('done'), true);
-      }
-    } else if (result.actedWord && action.type !== 'body') {
-      const word = course.items.find((item) => item.id === result.actedWord);
-      if (word) flash(lang() === 'zh' ? `${word.en} · ${word.zh}` : word.en, true);
-    }
-    refresh();
-    return result;
-  }
-
-  function choose(id) {
-    if (course.kind === 'color') {
-      apply({ type: 'paint', index: state.target, id });
-      return;
-    }
-    if (course.kind === 'body') {
-      const result = apply({ type: 'body', id });
-      if (result.changed) stage?.playPart(id);
-      return;
-    }
-    apply({ type: 'select', id });
-  }
-
-  /* ------------------------------------------------------------ wiring */
-
-  const stageApi = createEnglishStage({
-    canvas: $('scene'),
-    cssVar,
-    onFirstInteract: unlockAll,
-    onSelect: (id) => {
-      unlockAll();
-      choose(id);
-    },
-    onTarget: (index) => {
-      unlockAll();
-      apply({ type: 'target', index });
-      const slot = course.targets?.[index];
-      if (slot) flash(lang() === 'zh' ? `给${slot.zh}涂色` : `Paint the ${slot.en.toLowerCase()}`, true);
-    },
-    onDrop: (id) => {
-      unlockAll();
-      apply(course.kind === 'color' ? { type: 'paint', index: state.target, id } : { type: 'place', id });
-    },
-    onZone: () => {
-      unlockAll();
-      if (course.kind === 'number') speakWord(currentWord(course, state).id);
-      else if (course.kind === 'color') apply({ type: 'paint', index: state.target, id: state.selected });
-      else apply({ type: 'place', id: state.selected });
-    },
-    onAdd: () => {
-      unlockAll();
-      apply({ type: 'add' });
-    },
-    onNotice: (reason) => {
-      unlockAll();
-      reject(reason);
-    },
-  });
-
-  if (!stageApi) {
-    $('nogl').hidden = false;
-    $('scene').hidden = true;
-  } else {
-    stage = stageApi;
-    stage.mount(course);
-    stage.onCue((id, index) => {
-      audio.countNote(index);
-      speakWord(id);
-    });
-  }
-
-  $('actionBtn').addEventListener('click', () => {
-    unlockAll();
-    if (course.kind === 'color') apply({ type: 'paint', index: state.target, id: state.selected });
-    else if (course.kind === 'number') apply({ type: 'add' });
-    else     if (course.kind === 'body') {
-      // Keep tapping useful: the button always moves to a part the child has not tried yet.
-      const next = course.items.find((item) => !state.visited.includes(item.id)) ?? currentWord(course, state);
-      const result = apply({ type: 'body', id: next.id });
-      if (result.changed) stage?.playPart(next.id);
-    } else apply({ type: 'place', id: state.selected });
-  });
-
-  $('removeBtn').addEventListener('click', () => {
-    unlockAll();
-    apply({ type: 'remove' });
-  });
-
-  $('undoBtn').addEventListener('click', () => {
-    unlockAll();
-    apply({ type: 'undo' });
-  });
-
-  $('resetBtn').addEventListener('click', () => {
-    unlockAll();
-    narration.reset();
-    const result = apply({ type: 'reset' });
-    if (result.changed) {
-      flash(t('ready'), true);
-      note('');
-      window.cool?.track?.('restart');
-    }
-  });
-
-  $('presentBtn').addEventListener('click', () => {
-    unlockAll();
-    apply({ type: 'present' });
-  });
-
-  $('sentenceBtn').addEventListener('click', () => {
-    unlockAll();
-    const word = currentWord(course, state);
-    narration.say(word.sentence, { lang: 'en' });
-    flash(word.sentence, true);
-    window.cool?.track?.('hear-sentence', { word: word.id });
-  });
-
-  $('hintBtn').addEventListener('click', () => {
-    unlockAll();
-    const body = $('hintBody');
-    body.hidden = !body.hidden;
-    $('hintArrow').textContent = body.hidden ? '▸' : '▾';
-    // Always read the instructions aloud: this is the one "read it to me" control, so a
-    // second tap must replay instead of only closing the text.
-    narration.say(course.hint[lang()]);
-  });
-
-  for (const id of ['musicBtn', 'musicBtnPanel']) {
-    $(id).addEventListener('click', () => {
-      unlockAll();
-      audio.setMusic(!audio.musicOn);
-      renderChrome();
-    });
-  }
-  $('soundBtn').addEventListener('click', () => {
-    unlockAll();
-    const on = !audio.sfxOn;
-    // One visible switch silences everything; music keeps its own finer control.
-    audio.setSfx(on);
-    audio.setMusic(on);
-    renderChrome();
-  });
-  $('speechBtn').addEventListener('click', () => {
-    unlockAll();
-    const speech = window.cool?.speech;
-    if (!speech) return;
-    speech.toggle();
-    window.cool?.track?.('toggle-voice', { on: speech.enabled });
-    renderChrome();
-  });
-  $('langBtn').addEventListener('click', () => window.cool?.preferences?.toggleLang());
-  for (const id of ['themeBtn', 'themeBtnPanel']) {
-    $(id).addEventListener('click', () => window.cool?.preferences?.toggleTheme());
-  }
-
-  let panelOpen = matchMedia('(min-width: 861px)').matches;
-  function applyPanel() {
-    $('panel').classList.toggle('is-collapsed', !panelOpen);
-    $('panelBody').hidden = !panelOpen;
-    $('panelArrow').textContent = panelOpen ? '▾' : '▸';
-    $('panelHandle').setAttribute('aria-expanded', String(panelOpen));
-  }
-  $('panelHandle').addEventListener('click', () => {
-    unlockAll();
-    panelOpen = !panelOpen;
-    applyPanel();
-    stage?.refreshView?.();
-  });
-  applyPanel();
-  stage?.refreshView?.();
-
-  addEventListener('themechange', () => stage?.applyTheme());
-  addEventListener('langchange', () => {
-    renderWords();
-    renderChrome();
-    refresh();
-  });
-
-  window.cool?.bindI18n(I18N, {
-    onChange({ t: translate }) {
-      t = translate;
-      renderWords();
-      renderChrome();
-      refresh();
-    },
-  });
-
-  renderWords();
-  renderChrome();
-  refresh();
-  if (state.completed) note(t('done'));
-  return { apply, get state() { return state; } };
+  render();save();const timer=setInterval(tick,200);
+  return {get state(){return state;},dispose(){clearInterval(timer);stopVoice();stage?.dispose();}};
 }

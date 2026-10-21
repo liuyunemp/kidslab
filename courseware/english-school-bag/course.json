@@ -5,15 +5,6 @@
     "en": "My School Bag"
   },
   "icon": "🎒",
-  "tags": [
-    "英语启蒙",
-    "学习用品",
-    "3D"
-  ],
-  "description": {
-    "zh": "整理自己的小书包，把学习用品的英文带回家。",
-    "en": "Pack your school bag and learn the names of your school things."
-  },
   "category": "english",
   "levels": [
     "primary"
@@ -23,6 +14,15 @@
     "g2",
     "g3"
   ],
+  "tags": [
+    "英语启蒙",
+    "学习用品",
+    "3D"
+  ],
   "order": 245,
-  "badge": "new"
+  "badge": "new",
+  "description": {
+    "zh": "从 16 个词中随机学 8 个，听音、认词、看图闯四关。",
+    "en": "Learn eight of 16 words through listening, pictures and four challenges."
+  }
 }

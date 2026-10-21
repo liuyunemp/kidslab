@@ -1,1 +1,1 @@
-import{startEnglish as r}from"./engine.js?v=4dee2e9c";import{course as m,UI as o}from"./content.js?v=85bb7833";import{manifest as t}from"./speech-manifest.js?v=94f8522f";r(m,o,t);
+import{startEnglish as r}from"./engine.js?v=855cf1c5";import{course as m,UI as o}from"./content.js?v=0a0eb196";import{manifest as t}from"./speech-manifest.js?v=5386f718";r(m,o,t);

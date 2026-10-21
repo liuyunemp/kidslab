@@ -773,7 +773,18 @@ test.describe('courseware manifest', () => {
       // bound its events. Wait for the rendered title, not an arbitrary delay.
       if (explorationIds.includes(course.id)) await expect(page.locator('#title')).not.toBeEmpty();
       await expect(themeBtn).toBeVisible();
-      await themeBtn.click();
+      if (course.id === 'mass-conservation-lab') {
+        // The first gesture starts a background fetch. Finish checking its body
+        // before our deliberate reload can abort the old document's request.
+        const [bgm] = await Promise.all([
+          page.waitForResponse('**/mass-conservation-lab/audio/bgm-process-flow-01.ogg'),
+          themeBtn.click(),
+        ]);
+        expect(bgm.ok(), 'background music must load successfully').toBe(true);
+        expect(await bgm.finished(), 'background music body must finish loading').toBeNull();
+      } else {
+        await themeBtn.click();
+      }
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
       await expect.poll(() => storedValue(page, 'kidslab.theme')).toBe('light');
       await expectHealthyPage(page, failures);

@@ -71,14 +71,14 @@ function put(mesh, x, y, z) {
   return mesh;
 }
 
-function eyes(group, radius, gap, y, z, dark) {
+function eyes(group, radius, gap, y, z, dark, x = 0) {
   const white = material(0xfffdf8, { roughness: 0.3 });
   for (const sign of [-1, 1]) {
     const eye = ball(radius, white, [1, 1, 0.7], 16);
-    eye.position.set(sign * gap, y, z);
+    eye.position.set(x + sign * gap, y, z);
     group.add(eye);
     const pupil = ball(radius * 0.55, dark, [1, 1, 0.6], 14);
-    pupil.position.set(sign * gap, y, z + radius * 0.6);
+    pupil.position.set(x + sign * gap, y, z + radius * 0.6);
     group.add(pupil);
   }
 }
@@ -239,10 +239,10 @@ export function createFruit(id) {
     group.add(stem);
   } else if (id === 'grape') {
     const grapeMat = material(0x7b3fa0, { roughness: 0.35, metalness: 0.05 });
-    const spots = [[0, 0.1, 0], [-0.06, 0.14, 0.02], [0.06, 0.14, 0.02], [0, 0.19, 0.03], [-0.05, 0.22, 0], [0.05, 0.22, 0], [0, 0.27, 0.01]];
+    const spots = [[0, 0.1, 0]]; // singular grape, never a bunch paired with "a grape"
     for (const [x, y, z] of spots) group.add(put(ball(0.047, grapeMat, [1, 1, 1], 18), x, y, z));
     const stem = tube(0.008, 0.008, 0.05, stemMat, 10);
-    stem.position.y = 0.31;
+    stem.position.y = 0.165;
     group.add(stem);
   } else if (id === 'strawberry') {
     group.add(put(ball(0.1, material(0xd7263d, { roughness: 0.42 }), [1, 1.18, 1]), 0, 0.12, 0));
@@ -348,7 +348,7 @@ export function createAnimal(id) {
         ear.rotation.z = -0.2;
         group.add(ear);
       }
-      eyes(group, 0.013, 0.03, 0.31, 0.062, eye);
+      eyes(group, 0.013, 0.03, 0.31, 0.062, eye, 0.07);
       const tail = rounded(0.028, 0.11, 0.028, 0.014, fur);
       tail.position.set(-0.1, 0.19, 0);
       tail.rotation.z = 0.5;
@@ -397,7 +397,7 @@ export function createAnimal(id) {
       beak.rotation.z = -Math.PI / 2;
       beak.position.set(0.17, 0.26, 0);
       group.add(beak);
-      eyes(group, 0.011, 0.026, 0.29, 0.052, eye);
+      eyes(group, 0.011, 0.026, 0.29, 0.07, eye, 0.09);
       const wing = ball(0.06, material(0xf2c53d, { roughness: 0.6 }), [1, 0.5, 0.35], 16);
       wing.position.set(-0.02, 0.14, 0.09);
       group.add(wing);
@@ -420,7 +420,7 @@ export function createAnimal(id) {
       beak.rotation.z = -Math.PI / 2;
       beak.position.set(0.115, 0.235, 0);
       group.add(beak);
-      eyes(group, 0.01, 0.024, 0.255, 0.042, eye);
+      eyes(group, 0.01, 0.024, 0.255, 0.06, eye, 0.05);
       const wing = ball(0.07, material(0x2f81b8, { roughness: 0.55 }), [0.7, 0.35, 1], 16);
       wing.position.set(-0.02, 0.16, 0.075);
       group.add(wing);
@@ -471,6 +471,7 @@ export function createAnimal(id) {
       const snout = rounded(0.05, 0.07, 0.09, 0.025, material(0xf3c7c0));
       snout.position.set(0.23, 0.23, 0);
       group.add(snout);
+      eyes(group, 0.012, 0.03, 0.28, 0.05, eye, 0.16);
       for (const sign of [-1, 1]) {
         const horn = cone(0.018, 0.05, material(0xe8dcc0), 10);
         horn.position.set(0.16, 0.335, sign * 0.045);
@@ -520,13 +521,14 @@ export function createAnimal(id) {
         parent.add(seg);
         parent = seg;
       }
-      eyes(group, 0.012, 0.035, 0.345, 0.082, eye);
+      eyes(group, 0.012, 0.035, 0.345, 0.082, eye, 0.11);
       group.userData.anim = (t) => { trunk.rotation.z = Math.sin(t * 1.8) * 0.22; };
       group.userData.sound = 0.6;
     },
   };
 
-  (build[id] ?? build.rabbit)();
+  if (!build[id]) throw new RangeError(`Unknown animal: ${id}`);
+  build[id]();
   return group;
 }
 

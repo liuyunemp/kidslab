@@ -1,92 +1,46 @@
 <!doctype html>
 <html lang="zh-CN" data-theme="light">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>🐘 动物欢乐园 · KidsLab</title>
-  <!--
-    THESIS: An English play room, not a quiz. Kids touch toys, fruit, animals and hear the English word.
-    OWN-WORLD: KidsLab chunky pills, warm paper/ink tokens, fullscreen Three.js stage, right-hand play rail.
-    STORY: Tap a thing, hear it, then paint it / pack it / count it. The word arrives with the action.
-    FIRST VIEWPORT: Full-bleed 3D room left, one-sentence invitation, word chips and actions on the right.
-    FORM: Inherit the KidsLab lab chrome. Replace specimen + laws with words + play actions.
-  -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
   <script src="../../scripts/sdk/core.js" data-kidslab-sdk></script>
-  <script>
-    (() => {
-      try {
-        const theme = localStorage.getItem('kidslab.theme')
-          || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        const lang = localStorage.getItem('kidslab.lang')
-          || (navigator.language && navigator.language.startsWith('zh') ? 'zh' : 'en');
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-      } catch { /* private mode */ }
-    })();
-  </script>
-  <script type="importmap">
-    { "imports": { "three": "./vendor/three.module.min.js" } }
-  </script>
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
 </head>
 <body>
-  <canvas id="scene" width="100%" height="100%" aria-label="3D English play stage"></canvas>
-  <p class="nogl" id="nogl" hidden data-t="nogl">暂时打不开 3D 舞台，请启用浏览器图形加速后重试。</p>
-
+  <canvas id="scene" aria-hidden="true"></canvas>
   <header class="bar">
-    <a class="pill bar__back" href="../../index.html"><span aria-hidden="true">←</span> <span data-t="back">返回平台</span></a>
-    <h1 class="bar__title"><span aria-hidden="true">🐘</span> <span data-t="title">动物欢乐园</span></h1>
-    <div class="bar__actions">
-      <button class="pill pill--icon" id="musicBtn" type="button" aria-pressed="true" aria-label="背景音乐">♫</button>
-      <button class="pill pill--icon" id="soundBtn" type="button" aria-pressed="true" aria-label="操作音效">🔊</button>
-      <button class="pill pill--icon" id="speechBtn" type="button" aria-pressed="true" aria-label="朗读">🗣</button>
-      <button class="pill pill--icon" id="themeBtn" type="button" aria-label="切换主题">🌙</button>
-      <button class="pill pill--lang" id="langBtn" type="button">EN</button>
-    </div>
+    <a class="pill" href="../../" data-t-aria-label="back" aria-label="返回平台">←</a>
+    <h1 id="title">🐘 动物欢乐园</h1>
+    <button class="pill" id="soundBtn" type="button" aria-label="关闭全部声音">🔊</button>
+    <button class="pill" id="themeBtn" type="button" aria-label="切换主题">☀</button>
+    <button class="pill" id="langBtn" type="button" aria-label="切换语言">EN</button>
   </header>
-
-  <section class="hud" aria-label="play progress">
-    <div class="hud__chip"><span class="hud__label" id="hudLabel" data-t="progress">已摆好</span><b id="progressVal">0</b></div>
-    <div class="hud__chip hud__chip--word"><span class="hud__label" data-t="selected">当前单词</span><b id="wordVal">—</b><small id="wordZh"></small></div>
+  <section class="journey" id="journey" aria-label="学习进度">
+    <div class="journey__top"><strong id="roundLabel"></strong><span id="coverage"></span></div>
+    <ol id="levelSteps"></ol>
   </section>
-
-  <p class="coach" id="coach" data-t="invitation">选个颜色，给玩具涂一涂。</p>
-
-  <aside class="panel" id="panel">
-    <div class="panel__quick">
-      <button class="btn btn--big" id="actionBtn" type="button"></button>
-      <button class="btn btn--show" id="presentBtn" type="button"></button>
-      <div class="btnrow">
-        <button class="btn btn--ghost btn--sm" id="sentenceBtn" type="button"><span aria-hidden="true">🔈</span> <span data-t="sentence">听一句英语</span></button>
-        <button class="btn btn--ghost btn--sm" id="removeBtn" type="button"><span aria-hidden="true">↩</span> <span data-t="remove">取出最后一件</span></button>
-      </div>
-    </div>
-    <button class="panel__handle" id="panelHandle" type="button" aria-expanded="true">
-      <span data-t="tools">探索工具</span><i id="panelArrow">▾</i>
-    </button>
-    <div class="panel__body" id="panelBody">
-      <div class="toolgrid">
-        <button class="btn btn--ghost btn--sm" id="undoBtn" type="button" data-t="undo">撤销</button>
-        <button class="btn btn--ghost btn--sm" id="resetBtn" type="button" data-t="reset">重新玩</button>
-        <button class="btn btn--ghost btn--sm panel-toggles" id="musicBtnPanel" type="button" aria-pressed="true" aria-label="背景音乐">♫ <span data-t="music">背景音乐</span></button>
-        <button class="btn btn--ghost btn--sm panel-toggles" id="themeBtnPanel" type="button" aria-label="切换主题">🌙 <span data-t="theme">切换主题</span></button>
-      </div>
-      <section class="panel__group">
-        <p class="panel__label"><span data-t="wordList">单词</span><b class="panel__val" id="progressLabel"></b></p>
-        <div class="words" id="wordList"></div>
-      </section>
-      <section class="panel__group">
-        <button class="lesson__toggle" id="hintBtn" type="button">
-          <span data-t="hint">听听怎么玩</span><i id="hintArrow">▸</i>
-        </button>
-        <div class="lesson" id="hintBody" hidden><p class="lesson__intro" id="hintText"></p></div>
-      </section>
-      <p class="panel__note" id="statusNote" hidden></p>
-    </div>
-  </aside>
-
-  <p class="foot-tip" id="footTip" data-t="footTip">点一点 3D 里的东西，再听它怎么说</p>
-
+  <main class="panel" id="panel">
+    <div class="score"><span id="hearts"></span><span id="progressVal"></span><b id="timer"></b></div>
+    <div class="time-track" aria-hidden="true"><i id="timeFill"></i></div>
+    <section id="playArea">
+      <p class="coach" id="coach" aria-live="polite"></p>
+      <div id="prompt"></div>
+      <div class="choices" id="choices"></div>
+      <p id="notice" role="status" hidden></p>
+      <div class="controls" id="controls"></div>
+    </section>
+    <button id="panelHandle" class="settings-handle" type="button" aria-expanded="false"><span data-t="tools">设置与帮助</span><span aria-hidden="true">⚙</span></button>
+    <section id="panelBody" class="settings" hidden>
+      <button id="musicBtn" type="button" class="setting"></button>
+      <button id="effectsBtn" type="button" class="setting"></button>
+      <button id="speechBtn" type="button" class="setting"></button>
+      <button id="hintBtn" type="button" class="setting" data-t="hint">听听怎么玩</button>
+      <p data-t="help">每题 20 秒，每关 3 颗心。选错可以重试，错词会再出现。</p>
+    </section>
+  </main>
+  <div class="pause-cover" id="pauseCover" hidden><div><p id="pauseText"></p><button id="resumeBtn" type="button" class="primary" data-t="resume">继续挑战</button></div></div>
+  <p id="nogl" class="nogl" hidden data-t="nogl">暂时打不开 3D 舞台，请启用浏览器图形加速后重试。</p>
   <script type="module" src="main.js"></script>
 </body>
 </html>

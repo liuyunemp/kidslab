@@ -1,0 +1,28 @@
+{
+  "id": "stack-crane",
+  "title": {
+    "zh": "积木调度站",
+    "en": "Stack Crane"
+  },
+  "description": {
+    "zh": "排好吊车指令，按订单送出积木。三章九关，支持撤销、提示和随机新局。",
+    "en": "Program the crane to deliver the order in sequence. Nine levels with undo, hints and new puzzles."
+  },
+  "category": "programming",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g3",
+    "g4",
+    "g5",
+    "g6"
+  ],
+  "tags": [
+    "栈与队列",
+    "编程启蒙"
+  ],
+  "icon": "🏗️",
+  "badge": "new",
+  "order": 208
+}

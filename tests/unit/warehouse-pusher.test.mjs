@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import * as m from '../../src/warehouse-pusher/warehouse-pusher-model.js';import {adventureSuite} from './adventure-suite.mjs';
+adventureSuite('warehouse-pusher',m);
+test('warehouse cannot push two boxes, pull a box, or walk through a wall',()=>{const l={w:4,h:4,walls:[[0,1]],goals:[[3,2],[3,3]]},s={player:[1,1],boxes:[[2,1],[3,1]],moves:0};assert.equal(m.apply(l,s,{type:'move',dir:'right'}).ok,false);assert.equal(m.apply(l,s,{type:'move',dir:'left'}).ok,false);const r=m.apply(l,s,{type:'move',dir:'up'});assert.deepEqual(r.state.boxes,s.boxes);});

@@ -1,0 +1,107 @@
+{
+  "id": "recursive-forest",
+  "version": "739dc487dc30345fc02f6bcc3d5bc66740398e8b3403a97d1562fd41bc4b8760",
+  "assets": [
+    {
+      "path": "audio.js",
+      "sha256": "bdbf553381973629b34366e80e294a4ee0a15aba817e3c9295737cbf1ebafe8c",
+      "fingerprint": "4c1c2a8c"
+    },
+    {
+      "path": "audio/lab-glow.meta.json",
+      "sha256": "0f19c1fab1e0c23085b6fdea516db47bb8ea04414919a63b1d783cb34e3bb73f"
+    },
+    {
+      "path": "audio/lab-glow.ogg",
+      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
+    },
+    {
+      "path": "course.json",
+      "sha256": "1d094eafc302be207a1c3ec60c86d817ececbc18ce664bc3035a0c5008397918"
+    },
+    {
+      "path": "engine.js",
+      "sha256": "d2b1d3bfc9db8c6101c466b829c99e3d568a3e24a39356e182ec9a71d96327d1",
+      "fingerprint": "4f04af57"
+    },
+    {
+      "path": "index.html",
+      "sha256": "0368557ecf7bd87a4478cc98c7876ed60b3ae738a0cecb335f2bd84dd208f0c1"
+    },
+    {
+      "path": "levels.js",
+      "sha256": "8c2abbb2e24bba0bd4890c659055e579a3da708937af7e428deb95ca4f60f900",
+      "fingerprint": "61bd5b6c"
+    },
+    {
+      "path": "main.js",
+      "sha256": "67c75db8aae028f1c0be7c65c7278df4dbfd8c082a3a99507eebff64d007ddb6",
+      "fingerprint": "a707be61"
+    },
+    {
+      "path": "model-utils.js",
+      "sha256": "59007cd747a9a13bea12c7b22f8e6cfe92169d1eb16ffd0ee17fc3e74dd382ec",
+      "fingerprint": "9a812ae3"
+    },
+    {
+      "path": "model.js",
+      "sha256": "98bbdab579e53c4e1c08a613ff92ba549d8b3aac794cbde9b70e28cb0be0b91f",
+      "fingerprint": "3f331018"
+    },
+    {
+      "path": "objects.js",
+      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
+      "fingerprint": "7a17a9de"
+    },
+    {
+      "path": "random-core.js",
+      "sha256": "5b7fbe9d3ac22555f8c20f237c1f7b97ed770ebdf6c6c28e96bd41fe01dd7ee9",
+      "fingerprint": "a4800b1f"
+    },
+    {
+      "path": "random-worker.js",
+      "sha256": "933fb50a71e584e6fd70caea7b7b3e0b5f7df8203866844c8b2c82e471ddbccf",
+      "fingerprint": "ec199a3c"
+    },
+    {
+      "path": "recursive-forest-model.js",
+      "sha256": "4bf8d980dd145ae477ea4d6d38691acdb0df64a88e0cb965d08e64443ec1e16e",
+      "fingerprint": "1a9d3537"
+    },
+    {
+      "path": "scene.js",
+      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
+      "fingerprint": "1b72b1c0"
+    },
+    {
+      "path": "session.js",
+      "sha256": "23fa5e2552a269a575227de0b1bb62a22b6b2d15895ee9d2ab8ee93eeeaa0abf",
+      "fingerprint": "624ec555"
+    },
+    {
+      "path": "style.css",
+      "sha256": "3e2eaa5fba8eae15a582ea856c45b1f5b3d66a299404e977e23b4ded42cceb74",
+      "fingerprint": "295307e2"
+    },
+    {
+      "path": "vendor/RoomEnvironment.js",
+      "sha256": "8883c1f2421aa3e7afe065b20d22b88ff0437660d323c7e3c8d529c96435fda6",
+      "fingerprint": "4d57beb2"
+    },
+    {
+      "path": "vendor/RoundedBoxGeometry.js",
+      "sha256": "ec58a44277cf3349bccd4e2d0ea518d6df4486d6f2070f2c1e31797658c9753f",
+      "fingerprint": "f6861d20"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "sha256": "08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7",
+      "fingerprint": "954c1c22"
+    },
+    {
+      "path": "worker-client.js",
+      "sha256": "c16c72c3957b64fe6e01e71c98949b6b71a3340edbecce5724dd9d001e7a2bc3",
+      "fingerprint": "6fd1ad80"
+    }
+  ]
+}

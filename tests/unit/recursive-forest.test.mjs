@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import * as m from '../../src/recursive-forest/recursive-forest-model.js';import {adventureSuite} from './adventure-suite.mjs';
+adventureSuite('recursive-forest',m);
+test('binary recursive tree has 2^depth - 1 branches and bounded growth recovers after editing',()=>{for(let depth=1;depth<=6;depth++)assert.equal(m.expand({depth,stop:true,branches:2,shrink:.65,angle:30,length:1.5},[0]).length,2**depth-1);const l=m.makeLevel(3);let s=m.initial(l),failure;for(let i=0;i<150;i++){const r=m.apply(l,s,{type:'step'});if(!r.ok){failure=r;break;}s=r.state;}assert.equal(failure.reason,'depth-limit');assert.equal(failure.state,s);for(const a of m.solve(l,s))s=m.apply(l,s,a).state;assert.ok(m.won(l,s));});

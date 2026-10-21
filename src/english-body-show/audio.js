@@ -30,6 +30,7 @@ export function createAudio(courseId) {
   let musicOn = store.get('music', true);
   let sfxOn = store.get('sfx', true);
   let ducked = false;
+  let muted = false;
 
   function ensureContext() {
     if (ctx) return true;
@@ -124,7 +125,7 @@ export function createAudio(courseId) {
   }
 
   function ready() {
-    return Boolean(ctx && unlocked && sfxOn && ctx.state === 'running');
+    return Boolean(ctx && unlocked && sfxOn && !muted && ctx.state === 'running');
   }
 
   function pick() {
@@ -213,6 +214,7 @@ export function createAudio(courseId) {
 
   return {
     unlock,
+    setMuted(value) { muted=Boolean(value); if(master) ramp(master,muted?0.0001:MASTER_LEVEL,.04); },
     pick, place, paint, success, present, error, countNote,
     duck, restore, setMusic, setSfx,
     get musicOn() { return musicOn; },

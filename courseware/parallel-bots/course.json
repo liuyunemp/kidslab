@@ -1,0 +1,28 @@
+{
+  "id": "parallel-bots",
+  "title": {
+    "zh": "双机搬运队",
+    "en": "Parallel Bots"
+  },
+  "description": {
+    "zh": "给两位伙伴排好指令，再一起运行。三章九关，支持撤销、提示和随机新局。",
+    "en": "Program both teammates, then run them together. Nine levels with undo, hints and new puzzles."
+  },
+  "category": "programming",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g3",
+    "g4",
+    "g5",
+    "g6"
+  ],
+  "tags": [
+    "并行协作",
+    "编程启蒙"
+  ],
+  "icon": "🤖",
+  "badge": "new",
+  "order": 207
+}

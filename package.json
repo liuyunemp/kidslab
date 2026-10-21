@@ -22,7 +22,9 @@
     "test:e2e:timing": "playwright test --reporter=json --output=test-results-timing",
     "icons": "node scripts/icons.mjs",
     "vendor": "node scripts/vendor.mjs",
-    "vendor:check": "node scripts/vendor.mjs --check"
+    "vendor:check": "node scripts/vendor.mjs --check",
+    "adventure:sync": "node scripts/adventure/sync.mjs",
+    "adventure:check": "node scripts/adventure/sync.mjs --check"
   },
   "license": "MIT",
   "devDependencies": {

@@ -1,0 +1,77 @@
+import * as model from './model.js';
+import {course} from './levels.js';
+import {createSession,perform,undo,selectLevel,snapshot,restore,verifiedLevel} from './session.js';
+import {fingerprint,seedFrom} from './model-utils.js';
+import {runRoundWorker} from './worker-client.js';
+import {createScene} from './scene.js';
+import {createAudio} from './audio.js';
+
+const messages={
+  zh:{back:'返回平台',nogl:'暂时无法显示 3D，请换一个支持 WebGL 的浏览器。',controls:'操作台',play:'动手',levels:'关卡',help:'发现',undo:'↶ 撤销',retry:'重试',hint:'💡 提示',new:'换一局',classic:'经典场景',demo:'演示一步',next:'下一关 →',run:'▶ 运行',pause:'Ⅱ 暂停',step:'单步',stop:'停止',complete:'九关完成！',won:'这一关完成啦！',chapterWin:'拿到一枚章节勋章！',music:'背景音乐',sound:'操作音效',theme:'切换深浅主题',panel:'展开或收起操作台',saved:'已恢复上次的现场',loading:'正在准备新场景…',observe:'继续改一改，再试试。',hintReady:'可以看一次单步演示。',empty:'从上面的指令开始搭建',program:'程序',seed:'场景种子',all:'再玩一局',recovery:'这个现场可以撤销或重试。'},
+  en:{back:'Back to KidsLab',nogl:'3D is unavailable. Try a browser that supports WebGL.',controls:'Workbench',play:'Play',levels:'Levels',help:'Discover',undo:'↶ Undo',retry:'Retry',hint:'💡 Hint',new:'New puzzle',classic:'Classic',demo:'Show one step',next:'Next level →',run:'▶ Run',pause:'Ⅱ Pause',step:'Step',stop:'Stop',complete:'All nine complete!',won:'Level complete!',chapterWin:'Chapter medal earned!',music:'Background music',sound:'Sound effects',theme:'Toggle theme',panel:'Expand or collapse the workbench',saved:'Your previous scene is restored',loading:'Preparing a new scene…',observe:'Adjust the scene and try again.',hintReady:'You can watch one step now.',empty:'Build a program using the commands above',program:'Program',seed:'Scene seed',all:'Play again',recovery:'You can undo or retry this scene.'}
+};
+const errors={
+  'no-sediment':['这里没有淤沙，看看堵住的河格。','There is no deposit here. Look at the blocked cell.'],
+  invalid:['这一步不能这样做。','That action is not available.'],blocked:['前面挡住了，换一侧试试。','The way is blocked. Try another side.'],'locked-switch':['这只开关锁住了。','This switch is locked.'],'broken-track':['道岔通向断轨，调好后再发车。','The points lead to a broken track. Adjust them first.'],'track-occupied':['共用轨道有车，先停下一辆。','The shared track is occupied. Stop one train first.'],'signals-red':['先给一辆车放行。','Give a train a green signal first.'],'missing-gear':['有齿轮没咬上，检查齿数和空轴。','A gear is not meshing. Check tooth counts and empty shafts.'],'gear-conflict':['传动方向冲突，请调整连接。','The gear directions conflict. Adjust the connection.'],village:['这里是村庄，河道要绕开。','This is the village. Route the channel around it.'],hedge:['树篱挡住了，从旁边飞过去。','A hedge blocks the way. Fly around it.'],'no-flower':['先飞到一朵花上。','Fly to a flower first.'],'no-pollen':['先去雄花的花药取花粉。','Visit a male anther to collect pollen first.'],'already-pollinated':['这朵花已收到花粉，看看其他花。','This flower has pollen. Look at another flower.'],'depth-limit':['长到第 6 层啦，补上停止条件再运行。','Depth 6 reached. Repair the stopping rule and restart.'],'tree-obstacle':['枝条碰到障碍，试着改小角度。','A branch hits the obstacle. Try a smaller angle.'],'program-ended':['指令走完了，还可以接着修改。','The program has ended. You can edit it.'],'step-limit':['到达 1024 步上限，修改后重新运行。','1024-step limit reached. Edit and restart.'],'program-limit':['指令最多 64 条，先删去一条。','A program holds 64 commands. Remove one first.'],'empty-store':['这里已经空了，先放入货物。','This store is empty. Put something in first.'],'full-store':['货架满了，先取走一些。','This store is full. Take something out first.'],'wrong-order':['这块货物不是订单的下一块。','This is not the next parcel in the order.'],'tool-conflict':['两位都在抢工具，安排一个先等。','Both want the tool. Let one wait first.'],'need-tool':['先拿到共用工具。','Take the shared tool first.'],'no-parcel':['脚下没有可以拿的货物。','There is no parcel to pick up here.'],'wrong-dock':['还没到这件货物的目的地。','This parcel has not reached its destination.'],'partner-too-far':['先靠近空手的同伴再交接。','Move next to an empty-handed partner first.'],'bot-collision':['两位会撞在一起，改改等待顺序。','The robots would collide. Adjust the waits.'],wall:['已经到边缘，换个方向。','This is the edge. Choose another direction.'],deadlock:['同伴也在等，安排一位先发信号。','Both are waiting. Let one send a signal first.'],'history-limit':['操作记录已满，重试这局就能继续。','The action log is full. Retry this puzzle.']
+};
+export function start(){
+  const $=id=>document.getElementById(id),preferences=window.cool.preferences,lang=()=>preferences.lang,pair=v=>Array.isArray(v)?v[lang()==='en'?1:0]:String(v),t=k=>messages[lang()][k]||k,programming=course.category==='programming';
+  const urlSeed=new URLSearchParams(location.search).get('seed'),key=`kidslab.${course.id}.adventure.v1${urlSeed===null?'':'.seed-'+seedFrom(urlSeed)}`;
+  let raw=null;try{raw=localStorage.getItem(key);}catch{}
+  let session=raw?restore(model,raw):createSession(model,0,urlSeed===null?0:seedFrom(urlSeed)),running=false,timer=null,operation=0,abort=null,hints=0,hintAction=null,activeTab='play',bot=0,tool='dig',notice=null;
+  const audio=createAudio('kidslab.'+course.id),scene=createScene({canvas:$('scene'),area:$('stageArea'),labels:$('stageLabels'),onAction:act,language:lang});if(!scene)$('nogl').hidden=false;
+  function persist(){try{localStorage.setItem(key,snapshot(session));}catch{}}
+  function cancel(){running=false;clearTimeout(timer);operation++;abort?.abort();abort=null;}
+  function tab(name){activeTab=name;for(const n of ['play','levels','help'])$(n+'Tab').hidden=n!==name;document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));}
+  function panel(open){$('panel').classList.toggle('closed',!open);document.body.classList.toggle('panel-closed',!open);$('panelBtn').setAttribute('aria-expanded',String(open));$('panelBtn').textContent=open?'⌄':'⌃';scene?.resize();}
+  function makeButton(label,action,disabled=false){const b=document.createElement('button');b.type='button';b.textContent=pair(label);b.dataset.action=JSON.stringify(action);b.disabled=disabled;b.addEventListener('click',()=>act(action));return b;}
+  function renderControls(){
+    const root=$('controls');root.replaceChildren();for(const control of model.controls(session.level,session.state,bot)){
+      if(control.tool){const row=document.createElement('div');row.className='tools';for(const [value,zh,en] of control.options){const b=document.createElement('button');b.textContent=pair([zh,en]);b.dataset.tool=value;b.setAttribute('aria-pressed',String(tool===value));b.addEventListener('click',()=>{tool=value;audio.unlock();renderControls();if(innerWidth<=900)panel(false);});row.append(b);}root.append(row);}
+      else if(control.select){const label=document.createElement('label'),text=document.createElement('span'),select=document.createElement('select');text.textContent=pair(control.label);select.setAttribute('aria-label',text.textContent);for(const [i,opt] of control.options.entries()){const node=document.createElement('option');node.value=String(i);node.textContent=pair(opt.label);node.selected=(opt.action.value??opt.action.teeth)===control.value;select.append(node);}select.addEventListener('change',()=>act(control.options[Number(select.value)].action));label.append(text,select);root.append(label);}
+      else root.append(makeButton(control.label,control.action,control.disabled));
+    }
+  }
+  function render(){
+    const view=model.view(session.level,session.state),index=session.index,isWon=model.won(session.level,session.state);document.title=`${pair(course.title)} · KidsLab`;$('title').textContent=course.icon+' '+pair(course.title);
+    $('chapter').textContent=`${Math.floor(index/3)+1} / 3 · ${pair(course.chapters[Math.floor(index/3)].split('|'))}`;
+    $('levelTitle').textContent=`${index+1}. ${pair(course.levels[index].split('|'))}`;
+    $('coach').textContent=notice?pair(notice):pair(model.invite?.(session.level,session.state)||course.invite);$('lesson').textContent=pair(model.lesson);$('hintText').textContent=hints?pair(hints===1?course.observe:hints===2?course.direction:[messages.zh.hintReady,messages.en.hintReady]):'';
+    document.querySelector('.bar a').setAttribute('aria-label',t('back'));$('scene').setAttribute('aria-label',lang()==='en'?'3D play space':'三维互动舞台');document.querySelector('nav.tabs').setAttribute('aria-label',lang()==='en'?'Workbench panels':'操作台分页');
+    $('seedLabel').textContent=t('seed')+' · '+session.seed;$('musicBtn').setAttribute('aria-label',t('music'));$('musicBtn').setAttribute('aria-pressed',String(audio.musicOn));$('soundBtn').setAttribute('aria-label',t('sound'));$('soundBtn').setAttribute('aria-pressed',String(audio.sfxOn));$('themeBtn').setAttribute('aria-label',t('theme'));$('panelBtn').setAttribute('aria-label',t('panel'));$('langBtn').textContent=lang()==='zh'?'EN':'中';$('langBtn').setAttribute('aria-label',lang()==='zh'?'Switch to English':'切换中文');
+    $('undoBtn').disabled=!session.actions.length;$('runControls').hidden=!programming;$('runBtn').textContent=t(running?'pause':'run');$('success').hidden=!isWon;
+    $('successText').textContent=t(index===8?'complete':index%3===2?'chapterWin':'won');$('nextBtn').textContent=t(index===8?'all':'next');
+    $('stats').replaceChildren(...view.stats.map(([value,zh,en])=>{const el=document.createElement('div');el.className='stat';const v=document.createElement('strong'),label=document.createElement('span');v.textContent=String(value);label.textContent=pair([zh,en]);el.append(v,label);return el;}));
+    renderControls();$('botTabs').hidden=!view.programs||session.level.active===1;document.querySelectorAll('[data-bot]').forEach(b=>b.classList.toggle('active',Number(b.dataset.bot)===bot));
+    const program=view.programs?.[bot]||view.program;$('program').hidden=!program;const programRoot=$('program');programRoot.replaceChildren();
+    if(program){if(!program.length){const p=document.createElement('span');p.textContent=t('empty');programRoot.append(p);}program.forEach((label,at)=>{const editable=course.id!=='recursive-forest',node=editable?makeButton(`${at+1}. ${pair(label)} ×`,view.programs?{type:'remove',bot,at}:{type:'remove',at}):document.createElement('span');if(!editable)node.textContent=pair(label);node.classList.toggle('current',at===(view.programs?view.pc[bot]:view.pc));programRoot.append(node);});}
+    $('levelList').replaceChildren();for(let i=0;i<9;i++){if(i%3===0){const title=document.createElement('strong');title.textContent=(session.completed.slice(i,i+3).every(Boolean)?'🏅 ':'')+pair(course.chapters[Math.floor(i/3)].split('|'));$('levelList').append(title);}const b=document.createElement('button');b.textContent=(session.completed[i]?'✓ ':i>=session.unlocked?'🔒 ':'')+(i+1)+'. '+pair(course.levels[i].split('|'));b.disabled=i>=session.unlocked;b.dataset.level=String(i);b.addEventListener('click',()=>go(i));$('levelList').append(b);}
+    $('demoBtn').hidden=hints<3||!hintAction;scene?.update(view);tab(activeTab);persist();
+  }
+  function act(action){
+    audio.unlock();if(action.type==='tool')action={type:tool,cell:action.cell};
+    if(action.type==='undo'){cancel();session=undo(model,session);notice=null;render();return;}
+    if(action.type==='retry'){go(session.index,session.seed);return;}
+    if(action.type!=='step')cancel();
+    const result=perform(model,session,action);if(!result.ok){cancel();notice=errors[result.reason]||[messages.zh.recovery,messages.en.recovery];audio.effect('error');render();return false;}
+    session=result.session;notice=null;hintAction=null;hints=0;
+    window.cool?.stage(`level${session.index+1}`);window.cool?.track(result.event||'experiment');
+    if(result.newlyWon){cancel();if(result.courseCompleted)window.cool?.complete?.();audio.effect('win');}
+    else audio.effect(['deliver','arrive','pollinate'].includes(result.event)?'success':'click');if(course.id==='river-sandbox'&&innerWidth<=900)panel(false);render();return true;
+  }
+  function go(index,seed=0){cancel();session=selectLevel(model,session,index,seed);notice=null;hints=0;hintAction=null;bot=0;activeTab='play';render();}
+  function run(){if(running){cancel();render();return;}audio.unlock();running=true;render();const token=operation;const tick=()=>{if(!running||token!==operation||document.hidden)return;if(act({type:'step'})&&running)timer=setTimeout(tick,350);};tick();}
+  $('runBtn').addEventListener('click',run);$('stepBtn').addEventListener('click',()=>{cancel();act({type:'step'});});$('stopBtn').addEventListener('click',()=>{cancel();act({type:'restart'});});$('undoBtn').addEventListener('click',()=>act({type:'undo'}));$('retryBtn').addEventListener('click',()=>go(session.index,session.seed));
+  $('nextBtn').addEventListener('click',()=>{if(!model.won(session.level,session.state))return;go(session.index===8?0:session.index+1);});
+  const requestHint=async()=>{cancel();hints=Math.min(3,hints+1);activeTab='help';panel(true);render();if(hints<3)return;const token=operation;abort=new AbortController();try{const record=await runRoundWorker({payload:{type:'hint',level:session.level,state:session.state},signal:abort.signal,fallback:()=>({action:{type:'undo'}}),validate:r=>r&&Object.hasOwn(r,'action')});if(token!==operation)return;hintAction=record.action;render();}catch{}};
+  $('hintBtn').addEventListener('click',requestHint);$('moreHintBtn').addEventListener('click',requestHint);
+  $('demoBtn').addEventListener('click',()=>{if(!hintAction)return;const action=hintAction;activeTab='play';act(action);window.cool?.track('hint-step');});
+  $('newBtn').addEventListener('click',async()=>{cancel();const token=operation;abort=new AbortController();notice=[messages.zh.loading,messages.en.loading];render();try{const seed=seedFrom(`${Date.now()}/${session.seed}/${Math.random()}`),record=await runRoundWorker({payload:{type:'generate',index:session.index,seed,recent:session.recent},signal:abort.signal,fallback:()=>({seed:0,level:verifiedLevel(model,session.index,0)}),validate:r=>Number.isInteger(r?.seed)&&fingerprint(r.level)===fingerprint(model.makeLevel(session.index,r.seed))});if(token!==operation)return;go(session.index,record.seed);window.cool?.track('new-puzzle');}catch{if(token===operation){notice=[messages.zh.recovery,messages.en.recovery];render();}}});
+  $('classicBtn').addEventListener('click',()=>go(session.index));$('musicBtn').addEventListener('click',()=>{audio.setMusic(!audio.musicOn);audio.unlock();render();});$('soundBtn').addEventListener('click',()=>{audio.setSfx(!audio.sfxOn);audio.unlock();render();});$('themeBtn').addEventListener('click',()=>preferences.toggleTheme());$('langBtn').addEventListener('click',()=>preferences.setLang(lang()==='zh'?'en':'zh'));
+  $('panelBtn').addEventListener('click',()=>panel($('panel').classList.contains('closed')));document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>tab(b.dataset.tab)));document.querySelectorAll('[data-bot]').forEach(b=>b.addEventListener('click',()=>{bot=Number(b.dataset.bot);render();}));
+  window.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName))return;const dir={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'}[e.key];if(dir&&['warehouse-pusher','pollination-garden'].includes(course.id)){e.preventDefault();act({type:'move',dir});}});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancel();render();}});window.addEventListener('pagehide',event=>{cancel();persist();if(!event.persisted)scene?.destroy();});
+  window.cool.bindI18n(messages);preferences.subscribe(()=>render());
+  panel(!['light-chain-house','river-sandbox'].includes(course.id));render();
+  setTimeout(()=>{if(!session.actions.length){$('hintBtn').classList.add('active');}},30000);
+}

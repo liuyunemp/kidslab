@@ -1,0 +1,28 @@
+{
+  "id": "light-chain-house",
+  "title": {
+    "zh": "灯光连锁屋",
+    "en": "Light Chain House"
+  },
+  "description": {
+    "zh": "点开关，让灯光与小圆点一样。三章九关，支持撤销、提示和随机新局。",
+    "en": "Tap switches to match the small target dots. Nine levels with undo, hints and new puzzles."
+  },
+  "category": "logic",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g3",
+    "g4",
+    "g5",
+    "g6"
+  ],
+  "tags": [
+    "布尔逻辑",
+    "逻辑"
+  ],
+  "icon": "💡",
+  "badge": "new",
+  "order": 202
+}

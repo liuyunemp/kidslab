@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T00:39:01.020Z",
+  "generatedAt": "2026-10-21T07:41:15.256Z",
   "tags": {
     "3D": {
       "en": "3D",
@@ -35,6 +35,10 @@
     },
     "人民币": {
       "en": "Currency (RMB)",
+      "kind": "knowledge"
+    },
+    "传粉": {
+      "en": "Pollination",
       "kind": "knowledge"
     },
     "估算": {
@@ -157,12 +161,20 @@
       "en": "Decimals",
       "kind": "knowledge"
     },
+    "布尔逻辑": {
+      "en": "Boolean logic",
+      "kind": "knowledge"
+    },
     "平方根": {
       "en": "Square Roots",
       "kind": "knowledge"
     },
     "平面图形": {
       "en": "2D Shapes",
+      "kind": "knowledge"
+    },
+    "并行协作": {
+      "en": "Parallel coordination",
       "kind": "knowledge"
     },
     "循环": {
@@ -233,6 +245,10 @@
       "en": "Conditionals",
       "kind": "knowledge"
     },
+    "栈与队列": {
+      "en": "Stacks and queues",
+      "kind": "knowledge"
+    },
     "植物": {
       "en": "Plants",
       "kind": "knowledge"
@@ -255,6 +271,10 @@
     },
     "水果": {
       "en": "Fruit",
+      "kind": "knowledge"
+    },
+    "河流": {
+      "en": "Rivers",
       "kind": "knowledge"
     },
     "海龟绘图": {
@@ -301,6 +321,10 @@
       "en": "Spatial Reasoning",
       "kind": "knowledge"
     },
+    "空间推理": {
+      "en": "Spatial reasoning",
+      "kind": "knowledge"
+    },
     "立体图形": {
       "en": "3D Shapes",
       "kind": "knowledge"
@@ -311,6 +335,10 @@
     },
     "策略": {
       "en": "Strategy",
+      "kind": "knowledge"
+    },
+    "简单机械": {
+      "en": "Simple machines",
       "kind": "knowledge"
     },
     "算法": {
@@ -357,6 +385,10 @@
       "en": "Character Recognition",
       "kind": "knowledge"
     },
+    "调度": {
+      "en": "Scheduling",
+      "kind": "knowledge"
+    },
     "调试": {
       "en": "Debugging",
       "kind": "knowledge"
@@ -397,6 +429,10 @@
       "en": "Velocity",
       "kind": "knowledge"
     },
+    "逻辑": {
+      "en": "Logic",
+      "kind": "knowledge"
+    },
     "遗传": {
       "en": "Heredity",
       "kind": "knowledge"
@@ -431,6 +467,10 @@
     },
     "魔方": {
       "en": "Rubik's Cube",
+      "kind": "knowledge"
+    },
+    "齿轮": {
+      "en": "Gears",
       "kind": "knowledge"
     }
   },
@@ -9404,6 +9444,311 @@
       "path": "courseware/microscope-cell-lab/index.html"
     },
     {
+      "id": "railway-dispatch",
+      "title": {
+        "zh": "铁道调度站",
+        "en": "Railway Dispatch"
+      },
+      "description": {
+        "zh": "扳好道岔，再让小火车出发。三章九关，支持撤销、提示和随机新局。",
+        "en": "Set the points, then send the trains home. Nine levels with undo, hints and new puzzles."
+      },
+      "category": "logic",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "tags": [
+        "调度",
+        "逻辑"
+      ],
+      "icon": "🚂",
+      "badge": "new",
+      "order": 200,
+      "keywords": [
+        "Scheduling",
+        "轨道占用",
+        "rail dispatch",
+        "Logic",
+        "logical reasoning"
+      ],
+      "path": "courseware/railway-dispatch/index.html"
+    },
+    {
+      "id": "warehouse-pusher",
+      "title": {
+        "zh": "仓库推箱员",
+        "en": "Warehouse Pusher"
+      },
+      "description": {
+        "zh": "把货箱推上带圈的泊位。三章九关，支持撤销、提示和随机新局。",
+        "en": "Push every crate onto a marked dock. Nine levels with undo, hints and new puzzles."
+      },
+      "category": "logic",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "tags": [
+        "空间推理",
+        "逻辑"
+      ],
+      "icon": "📦",
+      "badge": "new",
+      "order": 201,
+      "keywords": [
+        "Spatial reasoning",
+        "推箱子",
+        "sokoban",
+        "Logic",
+        "logical reasoning"
+      ],
+      "path": "courseware/warehouse-pusher/index.html"
+    },
+    {
+      "id": "light-chain-house",
+      "title": {
+        "zh": "灯光连锁屋",
+        "en": "Light Chain House"
+      },
+      "description": {
+        "zh": "点开关，让灯光与小圆点一样。三章九关，支持撤销、提示和随机新局。",
+        "en": "Tap switches to match the small target dots. Nine levels with undo, hints and new puzzles."
+      },
+      "category": "logic",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "tags": [
+        "布尔逻辑",
+        "逻辑"
+      ],
+      "icon": "💡",
+      "badge": "new",
+      "order": 202,
+      "keywords": [
+        "Boolean logic",
+        "XOR",
+        "异或",
+        "lights out",
+        "Logic",
+        "logical reasoning"
+      ],
+      "path": "courseware/light-chain-house/index.html"
+    },
+    {
+      "id": "gear-playground",
+      "title": {
+        "zh": "齿轮游乐场",
+        "en": "Gear Playground"
+      },
+      "description": {
+        "zh": "装上齿轮，让游乐设施按目标转动。三章九关，支持撤销、提示和随机新局。",
+        "en": "Fit gears to turn the ride at its target speed. Nine levels with undo, hints and new puzzles."
+      },
+      "category": "science",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "tags": [
+        "齿轮",
+        "简单机械"
+      ],
+      "icon": "⚙️",
+      "badge": "new",
+      "order": 203,
+      "keywords": [
+        "Gears",
+        "gear ratio",
+        "惰轮",
+        "同轴",
+        "Simple machines",
+        "mechanical transmission"
+      ],
+      "path": "courseware/gear-playground/index.html"
+    },
+    {
+      "id": "river-sandbox",
+      "title": {
+        "zh": "河流造景沙盘",
+        "en": "River Sandbox"
+      },
+      "description": {
+        "zh": "挖通河道，再放水看看。三章九关，支持撤销、提示和随机新局。",
+        "en": "Dig a channel, then let the water flow. Nine levels with undo, hints and new puzzles."
+      },
+      "category": "science",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "tags": [
+        "河流",
+        "水循环"
+      ],
+      "icon": "🏞️",
+      "badge": "new",
+      "order": 204,
+      "keywords": [
+        "Rivers",
+        "河道",
+        "侵蚀",
+        "泥沙",
+        "erosion",
+        "sediment",
+        "Water Cycle",
+        "water cycle",
+        "蒸发",
+        "evaporation",
+        "凝结",
+        "condensation",
+        "降水"
+      ],
+      "path": "courseware/river-sandbox/index.html"
+    },
+    {
+      "id": "pollination-garden",
+      "title": {
+        "zh": "蜜蜂传粉花园",
+        "en": "Pollination Garden"
+      },
+      "description": {
+        "zh": "带蜜蜂拜访南瓜花。三章九关，支持撤销、提示和随机新局。",
+        "en": "Guide the bee between pumpkin flowers. Nine levels with undo, hints and new puzzles."
+      },
+      "category": "science",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "tags": [
+        "传粉",
+        "植物"
+      ],
+      "icon": "🐝",
+      "badge": "new",
+      "order": 205,
+      "keywords": [
+        "Pollination",
+        "花粉",
+        "柱头",
+        "pollination",
+        "Plants",
+        "plants",
+        "生长",
+        "growth"
+      ],
+      "path": "courseware/pollination-garden/index.html"
+    },
+    {
+      "id": "recursive-forest",
+      "title": {
+        "zh": "递归森林",
+        "en": "Recursive Forest"
+      },
+      "description": {
+        "zh": "改改分枝规则，运行一棵几何树。三章九关，支持撤销、提示和随机新局。",
+        "en": "Edit the branch rule and grow a geometric tree. Nine levels with undo, hints and new puzzles."
+      },
+      "category": "programming",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "tags": [
+        "递归",
+        "编程启蒙"
+      ],
+      "icon": "🌳",
+      "badge": "new",
+      "order": 206,
+      "keywords": [
+        "Recursion",
+        "recursion",
+        "Coding Basics",
+        "coding basics",
+        "coding",
+        "编程"
+      ],
+      "path": "courseware/recursive-forest/index.html"
+    },
+    {
+      "id": "parallel-bots",
+      "title": {
+        "zh": "双机搬运队",
+        "en": "Parallel Bots"
+      },
+      "description": {
+        "zh": "给两位伙伴排好指令，再一起运行。三章九关，支持撤销、提示和随机新局。",
+        "en": "Program both teammates, then run them together. Nine levels with undo, hints and new puzzles."
+      },
+      "category": "programming",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "tags": [
+        "并行协作",
+        "编程启蒙"
+      ],
+      "icon": "🤖",
+      "badge": "new",
+      "order": 207,
+      "keywords": [
+        "Parallel coordination",
+        "并发",
+        "deadlock",
+        "同步",
+        "Coding Basics",
+        "coding basics",
+        "coding",
+        "编程"
+      ],
+      "path": "courseware/parallel-bots/index.html"
+    },
+    {
       "id": "g1-character-garden",
       "title": {
         "zh": "汉字寻宝",
@@ -9460,6 +9805,46 @@
         "chinese characters"
       ],
       "path": "courseware/g1-character-garden/index.html"
+    },
+    {
+      "id": "stack-crane",
+      "title": {
+        "zh": "积木调度站",
+        "en": "Stack Crane"
+      },
+      "description": {
+        "zh": "排好吊车指令，按订单送出积木。三章九关，支持撤销、提示和随机新局。",
+        "en": "Program the crane to deliver the order in sequence. Nine levels with undo, hints and new puzzles."
+      },
+      "category": "programming",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g3",
+        "g4",
+        "g5",
+        "g6"
+      ],
+      "tags": [
+        "栈与队列",
+        "编程启蒙"
+      ],
+      "icon": "🏗️",
+      "badge": "new",
+      "order": 208,
+      "keywords": [
+        "Stacks and queues",
+        "LIFO",
+        "FIFO",
+        "stack",
+        "queue",
+        "Coding Basics",
+        "coding basics",
+        "coding",
+        "编程"
+      ],
+      "path": "courseware/stack-crane/index.html"
     },
     {
       "id": "g1-pinyin-tracks",
@@ -12236,15 +12621,6 @@
         "en": "Color Toy Studio"
       },
       "icon": "🎨",
-      "tags": [
-        "英语启蒙",
-        "颜色",
-        "3D"
-      ],
-      "description": {
-        "zh": "给玩具换件彩色衣裳，听听颜色的英文。",
-        "en": "Paint your toys and hear the names of their colors."
-      },
       "category": "english",
       "levels": [
         "primary"
@@ -12254,8 +12630,17 @@
         "g2",
         "g3"
       ],
+      "tags": [
+        "英语启蒙",
+        "颜色",
+        "3D"
+      ],
       "order": 240,
       "badge": "new",
+      "description": {
+        "zh": "从 11 个词中随机学 8 个，听音、认词、看图闯四关。",
+        "en": "Learn eight of 11 words through listening, pictures and four challenges."
+      },
       "keywords": [
         "English for Beginners",
         "english",
@@ -12285,15 +12670,6 @@
         "en": "Fruit Picnic"
       },
       "icon": "🧺",
-      "tags": [
-        "英语启蒙",
-        "水果",
-        "3D"
-      ],
-      "description": {
-        "zh": "摘三件水果去野餐，点一下听听英文名字。",
-        "en": "Pick three fruits for a picnic and tap to hear their names."
-      },
       "category": "english",
       "levels": [
         "primary"
@@ -12303,8 +12679,17 @@
         "g2",
         "g3"
       ],
+      "tags": [
+        "英语启蒙",
+        "水果",
+        "3D"
+      ],
       "order": 241,
       "badge": "new",
+      "description": {
+        "zh": "从 16 个词中随机学 8 个，听音、认词、看图闯四关。",
+        "en": "Learn eight of 16 words through listening, pictures and four challenges."
+      },
       "keywords": [
         "English for Beginners",
         "english",
@@ -12331,15 +12716,6 @@
         "en": "Animal Play Park"
       },
       "icon": "🐘",
-      "tags": [
-        "英语启蒙",
-        "动物",
-        "3D"
-      ],
-      "description": {
-        "zh": "布置你的小乐园，和会动的动物朋友认识一下。",
-        "en": "Build a little park and meet your moving animal friends."
-      },
       "category": "english",
       "levels": [
         "primary"
@@ -12349,8 +12725,17 @@
         "g2",
         "g3"
       ],
+      "tags": [
+        "英语启蒙",
+        "动物",
+        "3D"
+      ],
       "order": 242,
       "badge": "new",
+      "description": {
+        "zh": "从 20 个词中随机学 8 个，听音、认词、看图闯四关。",
+        "en": "Learn eight of 20 words through listening, pictures and four challenges."
+      },
       "keywords": [
         "English for Beginners",
         "english",
@@ -12382,15 +12767,6 @@
         "en": "Number Train"
       },
       "icon": "🚂",
-      "tags": [
-        "英语启蒙",
-        "英语数字",
-        "3D"
-      ],
-      "description": {
-        "zh": "给小火车装积木，听着英文一起数到十。",
-        "en": "Load blocks onto a little train and count to ten in English."
-      },
       "category": "english",
       "levels": [
         "primary"
@@ -12400,8 +12776,17 @@
         "g2",
         "g3"
       ],
+      "tags": [
+        "英语启蒙",
+        "英语数字",
+        "3D"
+      ],
       "order": 243,
       "badge": "new",
+      "description": {
+        "zh": "从 21 个词中随机学 8 个，听音、认词、看图闯四关。",
+        "en": "Learn eight of 21 words through listening, pictures and four challenges."
+      },
       "keywords": [
         "English for Beginners",
         "english",
@@ -12430,15 +12815,6 @@
         "en": "Body Action Show"
       },
       "icon": "👋",
-      "tags": [
-        "英语启蒙",
-        "人体",
-        "3D"
-      ],
-      "description": {
-        "zh": "点一点身体部位，让小伙伴和你一起动起来。",
-        "en": "Tap a body part and make your little friend move."
-      },
       "category": "english",
       "levels": [
         "primary"
@@ -12448,8 +12824,17 @@
         "g2",
         "g3"
       ],
+      "tags": [
+        "英语启蒙",
+        "人体",
+        "3D"
+      ],
       "order": 244,
       "badge": "new",
+      "description": {
+        "zh": "从 16 个词中随机学 8 个，听音、认词、看图闯四关。",
+        "en": "Learn eight of 16 words through listening, pictures and four challenges."
+      },
       "keywords": [
         "English for Beginners",
         "english",
@@ -12477,15 +12862,6 @@
         "en": "My School Bag"
       },
       "icon": "🎒",
-      "tags": [
-        "英语启蒙",
-        "学习用品",
-        "3D"
-      ],
-      "description": {
-        "zh": "整理自己的小书包，把学习用品的英文带回家。",
-        "en": "Pack your school bag and learn the names of your school things."
-      },
       "category": "english",
       "levels": [
         "primary"
@@ -12495,8 +12871,17 @@
         "g2",
         "g3"
       ],
+      "tags": [
+        "英语启蒙",
+        "学习用品",
+        "3D"
+      ],
       "order": 245,
       "badge": "new",
+      "description": {
+        "zh": "从 16 个词中随机学 8 个，听音、认词、看图闯四关。",
+        "en": "Learn eight of 16 words through listening, pictures and four challenges."
+      },
       "keywords": [
         "English for Beginners",
         "english",

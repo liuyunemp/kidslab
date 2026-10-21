@@ -1,0 +1,42 @@
+// Titles and invitations for the nine authored levels.
+export const course = {
+  "id": "pollination-garden",
+  "title": [
+    "蜜蜂传粉花园",
+    "Pollination Garden"
+  ],
+  "icon": "🐝",
+  "category": "science",
+  "tags": [
+    "传粉",
+    "植物"
+  ],
+  "chapters": [
+    "花粉旅行|A pollen journey",
+    "花间接力|Flower relay",
+    "花园管理员|Garden keeper"
+  ],
+  "levels": [
+    "花药取粉|Collect pollen",
+    "柱头送粉|Deliver pollen",
+    "观察结果|Watch development",
+    "多花接力|Visit more flowers",
+    "避开障碍|Around the hedge",
+    "安排顺序|Plan the visits",
+    "分区传粉|Two flower beds",
+    "调整布局|Move a flower pot",
+    "花园任务|A garden harvest"
+  ],
+  "invite": [
+    "带蜜蜂拜访南瓜花。",
+    "Guide the bee between pumpkin flowers."
+  ],
+  "observe": [
+    "找找雄花的花药和雌花的柱头。",
+    "Find the male anther and female stigma."
+  ],
+  "direction": [
+    "先取同种花粉，再送到雌花；结果还需要时间。",
+    "Collect matching pollen, deliver it, then allow time to develop."
+  ]
+};

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { courses, UI, factsFor } from './courses.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const files = ['index.html', 'style.css', 'engine.js', 'english-model.js', 'scene.js', 'objects.js', 'audio.js'];
+const files = ['index.html', 'style.css', 'engine.js', 'english-model.js', 'scene.js', 'objects.js', 'vocabulary-objects.js', 'audio.js'];
 const check = process.argv.includes('--check');
 let count = 0;
 for (const course of courses) {

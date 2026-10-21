@@ -1,0 +1,28 @@
+{
+  "id": "recursive-forest",
+  "title": {
+    "zh": "递归森林",
+    "en": "Recursive Forest"
+  },
+  "description": {
+    "zh": "改改分枝规则，运行一棵几何树。三章九关，支持撤销、提示和随机新局。",
+    "en": "Edit the branch rule and grow a geometric tree. Nine levels with undo, hints and new puzzles."
+  },
+  "category": "programming",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g3",
+    "g4",
+    "g5",
+    "g6"
+  ],
+  "tags": [
+    "递归",
+    "编程启蒙"
+  ],
+  "icon": "🌳",
+  "badge": "new",
+  "order": 206
+}

@@ -1,269 +1,95 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { courses, UI } from '../../scripts/english/courses.mjs';
-import {
-  canPresent, currentWord, initialState, progress, reduce, restore, sentenceFor, serialize,
-} from '../../scripts/english/english-model.js';
-import { speechPlan } from '../../scripts/speech/model.js';
-import { validateFactsDocument } from '../../scripts/facts.mjs';
-
-const byKind = (kind) => courses.find((course) => course.kind === kind);
-const run = (course, state, action) => reduce(course, state, action);
-
-function act(course, state, actions) {
-  let next = state;
-  for (const action of actions) next = run(course, next, action).state;
-  return next;
+import {readFile} from 'node:fs/promises';
+import {courses,UI,factsFor} from '../../scripts/english/courses.mjs';
+import {initialState,reduce,restore,serialize,compatible,practisedCount} from '../../scripts/english/english-model.js';
+import {speechPlan} from '../../scripts/speech/model.js';
+import {validateFactsDocument} from '../../scripts/facts.mjs';
+const step=(c,s,a)=>{const r=reduce(c,s,a);assert.equal(r.changed,true,JSON.stringify(a));return r.state;};
+function prepare(c,s){while(s.phase==='learn')s=step(c,s,{type:'learn-next'});if(s.phase==='answer'&&!s.question.started)s=step(c,s,{type:'audio-start',questionId:s.question.id});return s;}
+function solve(c,s,end='roundDone'){
+  for(let i=0;i<200&&s.phase!==end;i++){
+    s=prepare(c,s);
+    if(s.phase===end)break;
+    s=step(c,s,s.phase==='answer'?{type:'answer',questionId:s.question.id,id:s.question.target}:{type:'next'});
+  }
+  assert.equal(s.phase,end);return s;
 }
-
-test('authoring catalog ships six primary English games with bilingual metadata', () => {
-  assert.equal(courses.length, 6);
-  assert.deepEqual(courses.map((course) => course.kind).sort(), ['animal', 'body', 'color', 'fruit', 'number', 'school']);
-  for (const course of courses) {
-    assert.equal(course.category, 'english');
-    assert.deepEqual(course.levels, ['primary']);
-    assert.deepEqual(course.grades, ['g1', 'g2', 'g3']);
-    assert.ok(course.title.zh && course.title.en);
-    assert.ok(course.invitation.zh && course.invitation.en);
-    assert.ok(course.items.length >= 8, `${course.id} needs at least eight words`);
-    const ids = new Set(course.items.map((item) => item.id));
-    assert.equal(ids.size, course.items.length, `${course.id} has duplicate words`);
-    for (const item of course.items) {
-      assert.ok(item.en && item.zh && item.sentence, `${course.id}/${item.id} is incomplete`);
-      assert.ok(
-        item.sentence.toLowerCase().includes(item.en.toLowerCase()),
-        `${course.id}/${item.id} sentence must contain the word`,
-      );
-    }
-  }
+test('six expandable catalogs total 100 reviewed, illustrated vocabulary entries',()=>{
+  assert.deepEqual(courses.map(c=>c.items.length),[11,16,20,21,16,16]);
+  assert.equal(courses.reduce((n,c)=>n+c.items.length,0),100);
+  for(const c of courses){assert.deepEqual(validateFactsDocument(c.id,factsFor(c)),[]);assert.equal(new Set(c.items.map(w=>w.id)).size,c.items.length);assert.equal(c.category,'english');assert.deepEqual(c.grades,['g1','g2','g3']);for(const w of c.items){assert.ok(w.visual&&w.audio&&w.zh&&w.sentence);assert.equal(w.audio,w.en);for(const other of w.excludes)assert.ok(c.items.find(v=>v.id===other)?.excludes.includes(w.id));}}
+  const school=courses.find(c=>c.kind==='school');assert.equal(school.items.find(w=>w.id==='scissors').sentence,'I have a pair of scissors.');assert.equal(school.items.find(w=>w.id==='paper').sentence,'I have some paper.');
+  assert.equal(courses.find(c=>c.kind==='number').items[0].value,0);
 });
-
-test('colour studio paints three toys, rejects repeats and shows only when ready', () => {
-  const course = byKind('color');
-  let state = initialState(course);
-  assert.deepEqual(state.paints, [null, null, null]);
-  assert.equal(progress(course, state), 0);
-  assert.equal(canPresent(course, state), false);
-
-  const early = run(course, state, { type: 'present' });
-  assert.equal(early.changed, false);
-  assert.equal(early.error, 'hint');
-
-  state = act(course, state, [{ type: 'paint', index: 0, id: 'red' }]);
-  assert.equal(state.paints[0], 'red');
-  // The brush hops to the next blank toy, so one more tap keeps making progress.
-  assert.equal(state.target, 1);
-  const repeat = run(course, state, { type: 'paint', index: 0, id: 'red' });
-  assert.equal(repeat.changed, false);
-  assert.equal(repeat.error, 'same');
-  assert.equal(run(course, state, { type: 'paint', index: 3, id: 'red' }).error, 'invalid');
-  assert.equal(run(course, state, { type: 'paint', index: 0, id: 'nope' }).error, 'invalid');
-  assert.equal(run(course, state, { type: 'target', index: 3 }).error, 'invalid');
-
-  state = act(course, state, [{ type: 'target', index: 1 }, { type: 'paint', index: 1, id: 'blue' }]);
-  state = act(course, state, [{ type: 'target', index: 2 }, { type: 'paint', index: 2, id: 'green' }]);
-  assert.equal(progress(course, state), 3);
-  assert.equal(canPresent(course, state), true);
-
-  const shown = run(course, state, { type: 'present' });
-  assert.equal(shown.changed, true);
-  assert.equal(shown.completedNow, true);
-  assert.equal(shown.state.completed, true);
-  assert.equal(shown.state.presented, shown.state.revision);
-
-  const again = run(course, shown.state, { type: 'present' });
-  assert.equal(again.changed, false);
-  assert.equal(again.error, 'same');
-  assert.equal(again.completedNow ?? false, false);
-});
-
-test('fruit basket holds three picks, refuses a fourth, and recovers through remove/undo', () => {
-  const course = byKind('fruit');
-  let state = initialState(course);
-  assert.equal(run(course, state, { type: 'remove' }).error, 'empty');
-  assert.equal(run(course, state, { type: 'place', id: 'rocket' }).error, 'invalid');
-
-  state = act(course, state, [
-    { type: 'place', id: 'apple' },
-    { type: 'place', id: 'banana' },
-    { type: 'place', id: 'grape' },
-  ]);
-  assert.deepEqual(state.placed, ['apple', 'banana', 'grape']);
-  assert.equal(progress(course, state), 3);
-  const full = run(course, state, { type: 'place', id: 'pear' });
-  assert.equal(full.error, 'full');
-  assert.deepEqual(full.state.placed, state.placed);
-
-  const removed = run(course, state, { type: 'remove' });
-  assert.deepEqual(removed.state.placed, ['apple', 'banana']);
-  assert.equal(removed.state.revision, state.revision + 1);
-
-  const undone = run(course, removed.state, { type: 'undo' });
-  assert.deepEqual(undone.state.placed, ['apple', 'banana', 'grape']);
-  const drained = act(course, removed.state, [{ type: 'undo' }, { type: 'undo' }, { type: 'undo' }, { type: 'undo' }]);
-  assert.deepEqual(drained.placed, []);
-  assert.equal(run(course, drained, { type: 'undo' }).error, 'nothing');
-});
-
-test('animal park and school bag share the same slot rules without losing selection', () => {
-  for (const kind of ['animal', 'school']) {
-    const course = byKind(kind);
-    let state = initialState(course);
-    if (kind === 'school') {
-      assert.notEqual(state.selected, 'bag', 'the bag is a container, not a pick');
-      assert.equal(run(course, state, { type: 'place', id: 'bag' }).error, 'bag');
-    }
-    const picks = course.items.filter((item) => item.id !== 'bag').slice(0, 3);
-    state = act(course, state, picks.map((item) => ({ type: 'place', id: item.id })));
-    assert.equal(state.placed.length, 3);
-    // Selection moves on to whatever is still on the shelf, so repeated taps never
-    // pick the same already-placed item over and over.
-    const nextUp = course.items.find((item) => !state.placed.includes(item.id) && item.id !== 'bag');
-    assert.equal(state.selected, nextUp.id);
-    assert.equal(progress(course, state), 3);
-    assert.equal(run(course, state, { type: 'present' }).completedNow, true);
-  }
-});
-
-test('number train counts 0-10, swaps singular/plural and never overfills', () => {
-  const course = byKind('number');
-  let state = initialState(course);
-  assert.equal(state.count, 0);
-  assert.equal(run(course, state, { type: 'remove' }).error, 'empty');
-  assert.equal(canPresent(course, state), false);
-
-  const first = run(course, state, { type: 'add' });
-  assert.equal(first.state.count, 1);
-  assert.equal(first.state.selected, 'one');
-  assert.equal(canPresent(course, first.state), true);
-
-  state = act(course, state, Array.from({ length: 10 }, () => ({ type: 'add' })));
-  assert.equal(state.count, 10);
-  assert.equal(state.selected, 'ten');
-  assert.equal(run(course, state, { type: 'add' }).error, 'full');
-
-  const back = run(course, state, { type: 'remove' });
-  assert.equal(back.state.count, 9);
-  assert.equal(back.state.selected, 'nine');
-
-  assert.equal(course.items[0].sentence, 'One block.');
-  assert.equal(course.items[1].sentence, 'Two blocks.');
-  assert.equal(new Set(course.items.map((item) => item.sentence)).size, 10);
-});
-
-test('body show records unique parts and needs three before the action show', () => {
-  const course = byKind('body');
-  let state = initialState(course);
-  assert.equal(run(course, state, { type: 'body', id: 'tail' }).error, 'invalid');
-  state = act(course, state, [{ type: 'body', id: 'nose' }, { type: 'body', id: 'nose' }]);
-  assert.deepEqual(state.visited, ['nose']);
-  assert.equal(progress(course, state), 1);
-  assert.equal(run(course, state, { type: 'present' }).error, 'hint');
-  state = act(course, state, [{ type: 'body', id: 'hand' }, { type: 'body', id: 'foot' }]);
-  assert.deepEqual(state.visited, ['nose', 'hand', 'foot']);
-  assert.equal(run(course, state, { type: 'present' }).completedNow, true);
-});
-
-test('unknown activity and malformed actions are rejected without touching state', () => {
-  const course = byKind('fruit');
-  const state = initialState(course);
-  assert.throws(() => initialState({ ...course, kind: 'quiz' }), TypeError);
-  assert.throws(() => initialState({ ...course, items: [] }), TypeError);
-  for (const action of [null, 42, 'place', {}, { type: 'dance' }]) {
-    const result = run(course, state, action);
-    assert.equal(result.changed, false);
-    assert.equal(result.error, 'invalid');
-    assert.equal(result.state, state);
-  }
-  assert.equal(run(course, state, { type: 'paint', index: 0, id: 'apple' }).error, 'invalid');
-  assert.equal(run(course, state, { type: 'add' }).error, 'invalid');
-  assert.equal(run(course, state, { type: 'body', id: 'apple' }).error, 'invalid');
-});
-
-test('saved games restore exactly, tolerate damage, and never execute stored strings', () => {
-  for (const course of courses) {
-    let state = initialState(course);
-    if (course.kind === 'color') state = act(course, state, [{ type: 'paint', index: 0, id: course.items[1].id }]);
-    else if (course.kind === 'number') state = act(course, state, [{ type: 'add' }, { type: 'add' }]);
-    else if (course.kind === 'body') state = act(course, state, [{ type: 'body', id: course.items[2].id }]);
-    else state = act(course, state, [{ type: 'place', id: course.items[1].id }]);
-    const saved = serialize(state);
-    const restored = restore(course, JSON.stringify(saved));
-    assert.deepEqual(restored, saved, `${course.id} must round-trip`);
-    assert.deepEqual(restore(course, 'not json'), initialState(course));
-    assert.deepEqual(restore(course, '{}'), initialState(course));
-    assert.deepEqual(restore(course, { ...saved, courseId: 'another-course' }), initialState(course));
-    assert.deepEqual(restore(course, { ...saved, painted: '<img onerror=alert(1)>' }), saved);
-    const badHistory = { ...saved, history: [{ ...saved, revision: -1 }] };
-    assert.deepEqual(restore(course, badHistory), initialState(course));
-  }
-});
-
-test('reset clears the round but keeps the finished badge', () => {
-  const course = byKind('fruit');
-  let state = act(course, initialState(course), [
-    { type: 'place', id: 'apple' }, { type: 'place', id: 'pear' }, { type: 'place', id: 'grape' }, { type: 'present' },
-  ]);
-  assert.equal(state.completed, true);
-  const reset = run(course, state, { type: 'reset' });
-  assert.equal(reset.changed, true);
-  assert.deepEqual(reset.state.placed, []);
-  assert.equal(reset.state.completed, true);
-  assert.equal(reset.state.revision, 0);
-  assert.equal(progress(course, reset.state), 0);
-});
-
-test('current word and sentence follow the latest pick', () => {
-  const course = byKind('school');
-  const state = act(course, initialState(course), [{ type: 'select', id: 'ruler' }]);
-  assert.equal(currentWord(course, state).id, 'ruler');
-  assert.equal(sentenceFor(course, state), 'I have a ruler.');
-  assert.equal(sentenceFor(course, { ...state, selected: 'missing' }), course.items[0].sentence);
-});
-
-test('every English course ships a runnable model copy, facts and metadata', async () => {
-  const shared = await readFile(new URL('../../scripts/english/english-model.js', import.meta.url), 'utf8');
-  for (const course of courses) {
-    const dir = new URL(`../../src/${course.id}/`, import.meta.url);
-    const model = await readFile(new URL('english-model.js', dir), 'utf8');
-    assert.equal(model, shared, `${course.id}/english-model.js drifted; run npm run english:sync`);
-    for (const file of ['index.html', 'style.css', 'engine.js', 'scene.js', 'objects.js', 'audio.js', 'content.js', 'main.js']) {
-      assert.ok((await readFile(new URL(file, dir), 'utf8')).length > 100, `${course.id}/${file} is missing`);
-    }
-    assert.ok((await readFile(new URL('vendor/three.module.min.js', dir))).length > 500000, `${course.id} needs a local three.js copy`);
-    assert.ok((await readFile(new URL('audio/lab-glow.ogg', dir))).length > 100000, `${course.id} needs local BGM`);
-
-    const meta = JSON.parse(await readFile(new URL('course.json', dir), 'utf8'));
-    assert.equal(meta.id, course.id);
-    assert.equal(meta.category, 'english');
-    assert.deepEqual(meta.grades, ['g1', 'g2', 'g3']);
-    assert.equal(meta.badge, 'new');
-    assert.ok(meta.tags.includes('英语启蒙'));
-
-    const facts = await readFile(new URL('facts.md', dir), 'utf8');
-    assert.deepEqual(validateFactsDocument(course.id, facts.replaceAll('\r\n', '\n')), [], `${course.id}/facts.md`);
-  }
-});
-
-test('every spoken English word, sentence and prompt has a local recording', async () => {
-  const retry = { zh: '暂时没能播放，点一下再试。', en: 'Could not play. Tap to try again.' };
-  for (const course of courses) {
-    const { manifest } = await import(`../../src/${course.id}/speech-manifest.js`);
-    const entries = manifest.entries;
-    for (const item of course.items) {
-      assert.ok(entries.en[item.en], `${course.id}: no clip for "${item.en}"`);
-      assert.ok(entries.en[item.sentence], `${course.id}: no clip for "${item.sentence}"`);
-      assert.equal(speechPlan(item.sentence, 'en', manifest).text, item.sentence);
-    }
-    for (const lang of ['zh', 'en']) {
-      for (const text of [course.invitation[lang], course.hint[lang], retry[lang]]) {
-        assert.ok(entries[lang][text], `${course.id}: no ${lang} clip for "${text}"`);
-        assert.equal(speechPlan(text, lang, manifest).text, text);
+for(const c of courses){
+  test(`${c.id}: seeded batches, questions and full bank coverage`,()=>{
+    for(let seed=1;seed<=16;seed++){
+      let s=initialState(c,seed);assert.deepEqual(s,initialState(c,seed));
+      for(let round=0;round<4;round++){
+        assert.equal(new Set(s.batch).size,8);const batch=[...s.batch];
+        s=solve(c,s);assert.deepEqual(s.batch,batch);assert.equal(s.completed,true);
+        const restored=restore(c,JSON.stringify(serialize(s)));assert.deepEqual(restored,s);
+        if(round<3)s=step(c,s,{type:'new-round'});
       }
-      for (const key of ['done', 'full', 'empty', 'invalid', 'nothing', 'same', 'bag']) {
-        assert.ok(entries[lang][UI[lang][key]], `${course.id}: no ${lang} clip for UI.${key}`);
-      }
+      assert.equal(practisedCount(s),c.items.length);
     }
-  }
+  });
+  test(`${c.id}: each level covers eight targets with unique non-overlapping answers`,()=>{
+    let s=initialState(c,81);const seen=Array.from({length:4},()=>new Set()),kinds={listen:0,read:0,picture:0};
+    while(s.phase!=='roundDone'){
+      s=prepare(c,s);
+      if(s.phase==='answer'){
+        const q=s.question;seen[s.level].add(q.target);assert.equal(q.options.length,[2,3,4,4][s.level]);assert.equal(new Set(q.options).size,q.options.length);assert.equal(q.options.filter(id=>id===q.target).length,1);for(const id of q.options){assert.ok(s.batch.slice(0,s.introduced).includes(id));assert.ok(id===q.target||compatible(c,q.target,id));}if(s.level===3)kinds[q.mode]++;
+        s=step(c,s,{type:'answer',questionId:q.id,id:q.target});
+      }else if(s.phase!=='roundDone')s=step(c,s,{type:'next'});
+    }
+    assert.deepEqual(seen.map(x=>x.size),[8,8,8,8]);assert.deepEqual(Object.values(kinds).sort(),[2,3,3]);
+  });
+  test(`${c.id}: current words and each dynamic prompt have local MP3s`,async()=>{
+    const {manifest}=await import(`../../src/${c.id}/speech-manifest.js`);
+    for(const w of c.items){assert.equal(speechPlan(w.en,'en',manifest).text,w.en);assert.equal(speechPlan(w.sentence,'en',manifest).text,w.sentence);}
+    for(const lang of ['zh','en'])speechPlan(c.hint[lang],lang,manifest);
+    for(const file of ['english-model.js','engine.js','vocabulary-objects.js','scene.js','style.css'])assert.equal((await readFile(new URL(`../../src/${c.id}/${file}`,import.meta.url),'utf8')).replaceAll('\r\n','\n'),(await readFile(new URL(`../../scripts/english/${file}`,import.meta.url),'utf8')).replaceAll('\r\n','\n'));
+    assert.equal((await readFile(new URL(`../../src/${c.id}/facts.md`,import.meta.url),'utf8')).replaceAll('\r\n','\n'),factsFor(c));
+  });
+}
+const c=courses[1];
+test('learning is untimed; listening waits for sound, then wrong answers retain the clock',()=>{
+  let s=initialState(c,1);assert.equal(reduce(c,s,{type:'tick',elapsedMs:50000}).changed,false);
+  while(s.phase==='learn')s=step(c,s,{type:'learn-next'});
+  assert.equal(s.question.started,false);assert.equal(reduce(c,s,{type:'answer',id:s.question.target,questionId:s.question.id}).changed,false);
+  assert.equal(reduce(c,s,{type:'tick',questionId:s.question.id,elapsedMs:20000}).changed,false);
+  s=prepare(c,s);const q=s.question;
+  s=step(c,s,{type:'tick',questionId:q.id,elapsedMs:3200});
+  s=step(c,s,{type:'answer',questionId:q.id,id:q.options.find(id=>id!==q.target)});assert.equal(s.lives,2);assert.equal(s.remainingMs,16800);assert.equal(s.review.length,1);
+  assert.equal(reduce(c,s,{type:'answer',questionId:q.id,id:s.question.wrong[0]}).changed,false);
+  s=step(c,s,{type:'answer',questionId:q.id,id:q.target});assert.equal(s.phase,'feedback');assert.equal(s.baseIndex,1);
+  assert.equal(reduce(c,s,{type:'answer',questionId:q.id,id:q.target}).changed,false);
+  s=solve(c,s,'levelDone');assert.equal(s.review.length,0);assert.equal(s.lives,2);
+});
+test('three timeouts fail; retry keeps the batch and level, resets hearts and reorders',()=>{
+  let s=prepare(c,initialState(c,7));const batch=[...s.batch],order=serialize(s.order);
+  for(let i=0;i<3;i++){s=prepare(c,s);s=step(c,s,{type:'tick',questionId:s.question.id,elapsedMs:20001});if(i<2)s=step(c,s,{type:'next'});}
+  assert.equal(s.phase,'failed');assert.equal(s.lives,0);assert.equal(s.roundMisses.length,3);
+  s=step(c,s,{type:'retry'});assert.deepEqual(s.batch,batch);assert.equal(s.level,0);assert.equal(s.lives,3);assert.notDeepEqual(s.order,order);assert.equal(s.roundMisses.length,3);
+});
+test('audio failure, fallback, pauses, stale callbacks and reload never grant time or hearts',()=>{
+  let s=prepare(c,initialState(c,19));const id=s.question.id;
+  s=step(c,s,{type:'tick',questionId:id,elapsedMs:7000});s=step(c,s,{type:'audio-error',questionId:id});
+  assert.equal(reduce(c,s,{type:'tick',questionId:id,elapsedMs:20000}).changed,false);
+  s=step(c,s,{type:'fallback'});assert.equal(s.question.mode,'read');assert.equal(s.fallbacks,1);assert.equal(s.remainingMs,13000);
+  s=step(c,s,{type:'pause'});assert.equal(reduce(c,s,{type:'answer',questionId:id,id:s.question.target}).changed,false);assert.deepEqual(restore(c,serialize(s)),s);
+  s=step(c,s,{type:'resume'});assert.equal(s.remainingMs,13000);assert.equal(reduce(c,s,{type:'audio-start',questionId:id+1}).changed,false);
+  s=step(c,s,{type:'answer',questionId:id,id:s.question.target});s=step(c,s,{type:'next'});assert.equal(reduce(c,s,{type:'tick',questionId:id,elapsedMs:20000}).changed,false);
+});
+test('a missed review answer stays queued and clean four-level replay clears cross-round weakness',()=>{
+  let s=prepare(c,initialState(c,11));const target=s.question.target;
+  s=step(c,s,{type:'answer',questionId:s.question.id,id:s.question.options.find(id=>id!==target)});s=solve(c,s);
+  assert.equal(s.records[target].weak,true);const oldRound=s.round;s=step(c,s,{type:'new-round'});assert.ok(s.batch.includes(target));assert.ok(s.batch.filter(id=>!s.records[id]).length>=6);
+  s=solve(c,s);assert.equal(s.records[target].weak,false);assert.equal(s.records[target].lastRound,oldRound+1);
+});
+test('invalid and legacy saves reset without carrying over free-play completion',()=>{
+  const base=initialState(c,1);for(const raw of ['{',null,{version:1,completed:true},{...base,lives:99},{...base,seed:0},{...base,batch:Array(8).fill('apple')},{...base,records:{bad:{practised:true}}}])assert.deepEqual(restore(c,raw),base);
+  let s=prepare(c,base);for(const a of [null,{type:'answer',id:'missing',questionId:s.question.id},{type:'tick',questionId:s.question.id,elapsedMs:-1},{type:'tick',questionId:s.question.id,elapsedMs:NaN},{type:'new-round'},{type:'retry'},{type:'paint'}])assert.equal(reduce(c,s,a).changed,false);
 });

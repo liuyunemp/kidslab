@@ -1,0 +1,28 @@
+{
+  "id": "pollination-garden",
+  "title": {
+    "zh": "蜜蜂传粉花园",
+    "en": "Pollination Garden"
+  },
+  "description": {
+    "zh": "带蜜蜂拜访南瓜花。三章九关，支持撤销、提示和随机新局。",
+    "en": "Guide the bee between pumpkin flowers. Nine levels with undo, hints and new puzzles."
+  },
+  "category": "science",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g3",
+    "g4",
+    "g5",
+    "g6"
+  ],
+  "tags": [
+    "传粉",
+    "植物"
+  ],
+  "icon": "🐝",
+  "badge": "new",
+  "order": 205
+}

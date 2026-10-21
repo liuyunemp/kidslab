@@ -110,6 +110,16 @@
     "颜色": { "en": "Colors", "kind": "knowledge", "aliases": ["color", "colors", "colour", "colours", "颜色词"] },
     "水果": { "en": "Fruit", "kind": "knowledge", "aliases": ["fruit", "fruits"] },
     "英语数字": { "en": "Number Words", "kind": "knowledge", "aliases": ["number words", "english numbers", "one to ten", "英文数字"] },
-    "学习用品": { "en": "School Supplies", "kind": "knowledge", "aliases": ["school supplies", "school things", "school items", "文具", "stationery"] }
+    "学习用品": { "en": "School Supplies", "kind": "knowledge", "aliases": ["school supplies", "school things", "school items", "文具", "stationery"] },
+    "调度": {"en":"Scheduling","kind":"knowledge","aliases":["轨道占用","rail dispatch"]},
+    "逻辑": {"en":"Logic","kind":"knowledge","aliases":["logical reasoning"]},
+    "空间推理": {"en":"Spatial reasoning","kind":"knowledge","aliases":["推箱子","sokoban"]},
+    "简单机械": {"en":"Simple machines","kind":"knowledge","aliases":["mechanical transmission"]},
+    "布尔逻辑": {"en":"Boolean logic","kind":"knowledge","aliases":["XOR","异或","lights out"]},
+    "齿轮": {"en":"Gears","kind":"knowledge","aliases":["gear ratio","惰轮","同轴"]},
+    "河流": {"en":"Rivers","kind":"knowledge","aliases":["河道","侵蚀","泥沙","erosion","sediment"]},
+    "传粉": {"en":"Pollination","kind":"knowledge","aliases":["花粉","柱头","pollination"]},
+    "并行协作": {"en":"Parallel coordination","kind":"knowledge","aliases":["并发","deadlock","同步"]},
+    "栈与队列": {"en":"Stacks and queues","kind":"knowledge","aliases":["LIFO","FIFO","stack","queue"]}
   }
 }

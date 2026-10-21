@@ -5,15 +5,6 @@
     "en": "Fruit Picnic"
   },
   "icon": "🧺",
-  "tags": [
-    "英语启蒙",
-    "水果",
-    "3D"
-  ],
-  "description": {
-    "zh": "摘三件水果去野餐，点一下听听英文名字。",
-    "en": "Pick three fruits for a picnic and tap to hear their names."
-  },
   "category": "english",
   "levels": [
     "primary"
@@ -23,6 +14,15 @@
     "g2",
     "g3"
   ],
+  "tags": [
+    "英语启蒙",
+    "水果",
+    "3D"
+  ],
   "order": 241,
-  "badge": "new"
+  "badge": "new",
+  "description": {
+    "zh": "从 16 个词中随机学 8 个，听音、认词、看图闯四关。",
+    "en": "Learn eight of 16 words through listening, pictures and four challenges."
+  }
 }

@@ -4,6 +4,14 @@
 
 文件名必须是 `AGENTS.md`（不是 `AGENT.md`）。改课件前先读本文件和 `docs/courseware-plan/status.md`。
 
+## 项目记忆：暂时跳过 E2E（2026-10-21）
+
+用户明确约定：**暂时所有任务都跳过 E2E，由用户统一执行。** 在用户明确恢复自动 E2E 前，代理不要启动 `npm run test:e2e`、分片、耗时报表或定向 Playwright E2E；已经运行中的 E2E 应停止。保留并维护测试代码，继续执行同步检查、资源检查、单测与构建。交付时如实记录「E2E 按用户要求跳过，待用户统一执行」，不得将跳过或中断写成通过。此临时约定优先于本文件下方所有「必须本地跑 E2E」及提交前 E2E 检查要求；无需反复向用户确认。
+
+本次例外（2026-10-21）：用户明确要求“现在统一做一次 E2E”，授权当前任务执行全量 E2E，以及失败修复后的必要复测。本次授权不自动恢复其他任务的常规 E2E；本轮结果须单独记录，不能再标为跳过。
+
+本次统一执行已完成：首轮1208通过、7失败、5跳过；修复后受影响文件401通过、0失败、1跳过（退出码0），合并1215通过、5个既有跳过、无未解决失败。详见 `docs/courseware-plan/verification-2026-10-21.md`；后续任务仍遵循上方临时跳过约定。
+
 ## 常用命令
 
 ```bash
@@ -158,6 +166,14 @@ cloudflare/analytics/  # 埋点接收 Worker(push 时经 deploy-analytics.yml �
 当前 smoke 层覆盖主站搜索/分类筛选，以及清单中全部课件在桌面与手机视口下的零报错加载、资源失败、可见横向溢出和语言/主题偏好重载。玩法逻辑、知识正确性、拖拽手感、视觉质量与纵向首屏布局仍需人工验收，不能写成已由 E2E 验证。
 
 ## 课件编写约定
+
+### 三科操作闯关扩展（2026-10-21）
+
+用户确认 `railway-dispatch`、`warehouse-pusher`、`light-chain-house`、`gear-playground`、`river-sandbox`、`pollination-garden`、`recursive-forest`、`parallel-bots`、`stack-crane` 采用三章九关、逐关解锁的实际操作任务。科学课仍不做选择题或填空评分。共享作者源在 `scripts/adventure/`；修改后运行 `npm run adventure:sync` 和 `npm run adventure:check`，各课模型在 `src/<id>/<id>-model.js`。完整关卡及验收边界见 `docs/courseware-plan/adventure-verification-2026-10-21.md`。
+
+### 英语认词闯关例外（2026-10-21）
+
+用户明确要求 `english-color-studio`、`english-fruit-picnic`、`english-animal-park`、`english-number-train`、`english-body-show`、`english-school-bag` 采用选择式认词闯关。仅这六款允许听词选图、看词选图、看图选词、倒计时及生命规则，替代自由探索通关。听力目标词本身是题面，可以播放；作答前不得通过中文释义、正确选项高亮或看图题点读泄露答案。其余课件的观测/实验要求不变。英语共享作者源在 `scripts/english/`，修改后运行 `npm run english:sync`，勿只改会被同步覆盖的 `src/english-*/` 副本。规划见 `docs/courseware-plan/english.md`。
 
 - **完全独立**:每个课件自带全部资源,只用相对路径,不引用其他课件或主站 assets
 - **无构建依赖**:源码即浏览器可运行的原生 HTML/CSS/JS(ES Module 可用);第三方库以本地 vendor 文件引入(参考 `src/magic-cube/vendor/`),不用 CDN

@@ -1,6 +1,6 @@
 # 年级与科目归属核查（2026-10-16）
 
-覆盖当前138个可见课件；另两张旧导航页保持 listed:false。逐课结论以核查时源码为准，不是玩法质量或知识正确性的完整认证。
+覆盖当前147个可见课件；另两张旧导航页保持 listed:false。逐课结论以核查时源码为准，不是玩法质量或知识正确性的完整认证。
 
 ## 采用的口径
 
@@ -56,12 +56,12 @@
 | 故事放映屋（g1b-story-studio） | chinese → chinese | g1b | g1b | 2024年审定《语文 一年级下册》：吃水不忘挖井人（18–19页）；小公鸡和小鸭子（26–28页）；树和喜鹊（29–30页）；端午粽（42–43页）；要下雨了（69–72页）；语文园地七·听故事，讲故事（95页）；动物王国开大会（84–89页）；咕咚（102–104页）。8个代表性探索及自由操作与既有逐关覆盖表一致。 [源码](../../src/g1b-story-studio/content.js) · [断言](../../src/g1b-story-studio/facts.md) · [教材](https://book.pep.com.cn/1211001102241/mobile/index.html) |
 | 词语生活馆（g1b-word-world） | chinese → chinese | g1b | g1b | 2024年审定《语文 一年级下册》：春夏秋冬／语文园地一（2–3，10–14页）；怎么都快乐（31–33页）；语文园地四（44页）；端午粽（42–43页）；古对今（50–51页）；动物儿歌（48–49页）；荷叶圆圆（66–68页）；语文园地七（93页）。8个代表性探索及自由操作与既有逐关覆盖表一致。 [源码](../../src/g1b-word-world/content.js) · [断言](../../src/g1b-word-world/facts.md) · [教材](https://book.pep.com.cn/1211001102241/mobile/index.html) |
 | 写字小工坊（g1b-writing-workshop） | chinese → chinese | g1b | g1b | 2024年审定《语文 一年级下册》：棉花姑娘／写字表（101，119页）；语文园地三（35页）；姓氏歌／写字表（5，117页）；动物王国开大会／写字表（89，119页）；树和喜鹊／写字表（30，117页）。8个代表性探索及自由操作与既有逐关覆盖表一致。 [源码](../../src/g1b-writing-workshop/content.js) · [断言](../../src/g1b-writing-workshop/facts.md) · [教材](https://book.pep.com.cn/1211001102241/mobile/index.html) |
-| 彩色玩具屋（english-color-studio） | english → english | g1, g2, g3 | [] | 英语启蒙：给小车、房子、风车三件玩具挑颜色涂色，每涂一件念出 red/blue 等颜色词。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-color-studio/main.js) · [断言](../../src/english-color-studio/facts.md) |
-| 水果野餐篮（english-fruit-picnic） | english → english | g1, g2, g3 | [] | 英语启蒙：把苹果、香蕉、葡萄等水果放进野餐篮，边放边听并跟读水果词。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-fruit-picnic/main.js) · [断言](../../src/english-fruit-picnic/facts.md) |
-| 动物欢乐园（english-animal-park） | english → english | g1, g2, g3 | [] | 英语启蒙：把鸭子、猫、兔子等动物请进乐园，边放边听并跟读动物词。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-animal-park/main.js) · [断言](../../src/english-animal-park/facts.md) |
-| 数字小火车（english-number-train） | english → english | g1, g2, g3 | [] | 英语启蒙：一节一节往车厢装积木，数零到十并听 one–ten 的英文读法。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-number-train/main.js) · [断言](../../src/english-number-train/facts.md) |
-| 身体动作秀（english-body-show） | english → english | g1, g2, g3 | [] | 英语启蒙：点小人身上的 head/eye/nose/mouth/hand/foot 等部位，部位会动并念出英文。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-body-show/main.js) · [断言](../../src/english-body-show/facts.md) |
-| 我的小书包（english-school-bag） | english → english | g1, g2, g3 | [] | 英语启蒙：把 ruler、pencil、book 等文具装进书包，边装边听并跟读文具词。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-school-bag/main.js) · [断言](../../src/english-school-bag/facts.md) |
+| 彩色玩具屋（english-color-studio） | english → english | g1, g2, g3 | [] | 英语启蒙：11 色词库随机抽 8 词，听词选图、看词选图、看图选词及综合四关；认词后玩具登台。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-color-studio/engine.js) · [断言](../../src/english-color-studio/facts.md) |
+| 水果野餐篮（english-fruit-picnic） | english → english | g1, g2, g3 | [] | 英语启蒙：16 种水果随机抽 8 词闯四关，认词后水果入篮；单颗葡萄对应 grape。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-fruit-picnic/engine.js) · [断言](../../src/english-fruit-picnic/facts.md) |
+| 动物欢乐园（english-animal-park） | english → english | g1, g2, g3 | [] | 英语启蒙：20 种动物随机抽 8 词闯四关，认词后动物入园；过滤 bird/duck 等歧义干扰项。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-animal-park/engine.js) · [断言](../../src/english-animal-park/facts.md) |
+| 数字小火车（english-number-train） | english → english | g1, g2, g3 | [] | 英语启蒙：zero–twenty 共 21 词随机抽 8 词闯四关，数量图每五个一组，zero 表示零块；答对后火车前进。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-number-train/engine.js) · [断言](../../src/english-number-train/facts.md) |
+| 身体动作秀（english-body-show） | english → english | g1, g2, g3 | [] | 英语启蒙：16 个身体部位随机抽 8 词闯四关，近景明确标记部位，认词后小人做动作。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-body-show/engine.js) · [断言](../../src/english-body-show/facts.md) |
+| 我的小书包（english-school-bag） | english → english | g1, g2, g3 | [] | 英语启蒙：16 种学习用品随机抽 8 词闯四关，认词后用品装包；bag 辨认书包本身。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-school-bag/engine.js) · [断言](../../src/english-school-bag/facts.md) |
 | 欢迎来到KidsLab · 从一盏灯到宇宙（welcome） | featured → featured | [] | [] | 平台欢迎与宇宙拉远展示没有具体教材年级，保持空年级；置顶只用于排序。 [源码](../../src/welcome/main.js) |
 | 打赌派对（bet-party） | logic → math | g5, g6 | g6b | 生日月份、袜子等离散分类保证性推理，对应“数学广角——鸽巢问题”67–70页；改归数学。 [源码](../../src/bet-party/main.js) · [断言](../../src/bet-party/facts.md) · [m6b](https://book.pep.com.cn/1221001602141/mobile/index.html) |
 | 侦探线索板（detective-board） | logic → logic | g4, g5, g6 | [] | 逻辑拓展：谁偷吃了蛋糕？读线索、在网格上钉下 ❌ 和 ✅，看排除法像多米诺一样连锁倒下，红线在软木板上织出真相之网——经典逻辑网格谜题的侦探社版本。 现有依据不能把完整规则/策略归入具体教材年级，保留逻辑分类。 [源码](../../src/detective-board/main.js) |
@@ -177,6 +177,20 @@
 | 月相狼历（wolf-calendar） | science → science | g3, g4, g5, g6 | g4b | 持续观察月相并用日地月位置解释圆缺，对应“月相的变化”45–48页；移除三至六年级泛范围。 [源码](../../src/wolf-calendar/main.js) · [s4b](https://book.pep.com.cn/1244001402201/mobile/index.html) |
 
 ## 后续复核
+
+2026-10-21 新增三科闯关拓展：按用户确认使用 g3–g6 适龄筛选，教材页码映射尚未建立，不计入58个明确教材归属课件。
+
+| 课件 | 科目 | 适龄年级 | 教材核准 | 依据 |
+| --- | --- | --- | --- | --- |
+| 铁道调度站（railway-dispatch） | logic → logic | g3, g4, g5, g6 | [] | 离散轨道占用、道岔与发车顺序；用户确认的8–12岁逻辑拓展。[源码](../../src/railway-dispatch/railway-dispatch-model.js) · [断言](../../src/railway-dispatch/facts.md) |
+| 仓库推箱员（warehouse-pusher） | logic → logic | g3, g4, g5, g6 | [] | 只能推不能拉的空间规划；适龄标记不构成教材映射。[源码](../../src/warehouse-pusher/warehouse-pusher-model.js) · [断言](../../src/warehouse-pusher/facts.md) |
+| 灯光连锁屋（light-chain-house） | logic → logic | g3, g4, g5, g6 | [] | 布尔翻转、重叠与抵消；逻辑拓展。[源码](../../src/light-chain-house/light-chain-house-model.js) · [断言](../../src/light-chain-house/facts.md) |
+| 齿轮游乐场（gear-playground） | science → science | g3, g4, g5, g6 | [] | 理想齿轮啮合、转速比与同轴传动；工程拓展。[源码](../../src/gear-playground/gear-playground-model.js) · [断言](../../src/gear-playground/facts.md) |
+| 河流造景沙盘（river-sandbox） | science → science | g3, g4, g5, g6 | [] | 简化流水侵蚀、沉积和清淤；相对量模型，不预测洪水。[源码](../../src/river-sandbox/river-sandbox-model.js) · [断言](../../src/river-sandbox/facts.md) |
+| 蜜蜂传粉花园（pollination-garden） | science → science | g3, g4, g5, g6 | [] | 南瓜传粉、受精与幼果阶段；不外推到所有植物。[源码](../../src/pollination-garden/pollination-garden-model.js) · [断言](../../src/pollination-garden/facts.md) |
+| 递归森林（recursive-forest） | programming → programming | g3, g4, g5, g6 | [] | 几何树的自调用、缩放与停止条件；有限解释器拓展。[源码](../../src/recursive-forest/recursive-forest-model.js) · [断言](../../src/recursive-forest/facts.md) |
+| 双机搬运队（parallel-bots） | programming → programming | g3, g4, g5, g6 | [] | 并行计划、信号、工具互斥与死锁；不模拟真实线程内存模型。[源码](../../src/parallel-bots/parallel-bots-model.js) · [断言](../../src/parallel-bots/facts.md) |
+| 积木调度站（stack-crane） | programming → programming | g3, g4, g5, g6 | [] | 有限容量栈、队列及指令调试。[源码](../../src/stack-crane/stack-crane-model.js) · [断言](../../src/stack-crane/facts.md) |
 
 - 教材单元细分已另行补充：具体年级下按单元、章节与教材页码排列，支持已有活动直达。详见 [单元映射与验收说明](curriculum-units.md)，不改变本表核准的年级与科目。
 - 为待核准项找到完整内容对应的官方版本和章节后，再补 grades；不通过扩大适龄范围填满年级入口。若需要保留多个年级，应先做真正独立的内容入口。

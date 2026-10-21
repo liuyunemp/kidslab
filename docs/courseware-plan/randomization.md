@@ -1,5 +1,21 @@
 # 数学与逻辑默认随机化
 
+2026-10-21 补充：三科九款操作闯关采用“首次经典场景、主动换一局”的随机策略，与下方62款默认随机口径独立。新入口共81关，每关100个种子由模型回放验证可解；不宣称无限不同题目，小题族去重尝试耗尽可返回已验证基准局。后续统一执行的桌面/手机54项E2E全部通过，见[本轮记录](adventure-verification-2026-10-21.md)。下方保留实施过程中的中间验证记录，最新结果以[统一验收记录](verification-2026-10-21.md)为准。
+
+| ID | 实际变化 | 生成与校验 |
+| --- | --- | --- |
+| railway-dispatch | 进站区段长度、道岔选路位置 | 离散占用模型回放调度方案 |
+| warehouse-pusher | 搬运车和箱子位置、绕行路线 | 从完成态合法反推，正向回放 |
+| light-chain-house | 起始灯态与翻转组合 | 从目标反向翻转，布尔消元求解 |
+| gear-playground | 驱动转速、齿数组合与相应轴距 | 几何啮合、符号转速与目标回放 |
+| river-sandbox | 水源行、路线、田塘位置、入水量与目标量 | 引水、护岸、沉沙、清淤解法回放 |
+| pollination-garden | 花朵所在行、拜访路径 | 可达路径及传粉发育阶段回放 |
+| recursive-forest | 树干长度、缩放比、分枝角 | 显式调用栈展开并验证目标几何树 |
+| parallel-bots | 镜像布局、方向指令与等待步数 | 同步解释器验证交货和工具释放 |
+| stack-crane | 输入积木排列和相应出货订单 | 栈队列解释器逐条回放 |
+
+作者源为 `scripts/adventure/`，随机工具来自 `scripts/random-rounds/core.js` 和 `worker-client.js` 的本地同步副本；Worker先验证再发回场景，失败使用模型验证过的种子0。存档按课件隔离保存种子和操作日志，刷新重建同一局并回放；重试保留种子，经典入口回到种子0。重开通过 AbortController 与操作代次取消旧Worker和运行回调；最近十局指纹用于题面去重。
+
 当前状态：实施中，62/62 款已接入；生成器与存档单测已补齐，全量回归与体验验收仍在进行。
 
 范围为 47 款数学和 15 款逻辑。新局随机、刷新续玩、重试原局、经典示例可选；种子可复现，问题内容而非外观去重。
@@ -142,7 +158,9 @@
 - 顶层 `await` 生成题目的课件，其控件绑定晚于页面 load，测试须先等 UI 就绪再操作。
 - 涉及课件：`ice-bridges`、`lantern-lane`、`shape-tailor`、`punch-origami`、`triangle-lab`、`four-color-kingdom`、`laser-mirrors`、`grid-tower`、`tangram-theater`、`smoke`（fraction-lab / orchard-orders / zoom-ten / SDK 源码页）、`g1-legacy-rounds`、`truth-island`、`venn-port`、`ferry-tales`、`fox-stones`、`carnival-truth`、`pancake-boss`、`sale-detective`、`rolling-park`、`statistics-sampling-lab`、`curriculum`、`random-rounds`。
 
-### 仍未通过（记录缺口，不视为已验证）
+### 历史失败与后续统一验收
+
+2026-10-21 补记：下方7个失败属于此前中间回归。最新统一E2E中 `venn-port.spec.js` 12项、`random-venn.spec.js` 2项均通过；全仓首轮与必要复测合并1215通过、5个既有跳过、无未解决失败。此前失败不再作为当前待修项，命令、退出码及人工验收边界见[统一验收记录](verification-2026-10-21.md)。
 
 - 本轮全量 E2E 修复后：1008 通过 / 7 失败 / 5 跳过（基线 924 / 85 / 5）。剩余失败集中在 `venn-port`（首次引导与错误泊位反馈）、`random-venn`（并发下的点击超时）。`g1-independent-games` 的星星计数已修复（见下）。
 - `g1-independent-games` 星星计数：`progress()` 原先取「当前题库与历史掌握 id 的交集」。`roundTasks(config, variant)` 按 `variant*2` 轮换题库，重玩后本局题目与上一局有重叠，交集只有 6，显示 `⭐ 6`。改为累计掌握数并与本局进度取较大值 `max(count, min(ROUND_COUNT, mastered.size))`，`weight`/`sort` 保留成就是 8，其余游戏重玩归零。

@@ -1,0 +1,42 @@
+// Titles and invitations for the nine authored levels.
+export const course = {
+  "id": "river-sandbox",
+  "title": [
+    "河流造景沙盘",
+    "River Sandbox"
+  ],
+  "icon": "🏞️",
+  "category": "science",
+  "tags": [
+    "河流",
+    "水循环"
+  ],
+  "chapters": [
+    "水往哪里走|Follow the water",
+    "照顾河岸|Care for the banks",
+    "小小治水师|River engineer"
+  ],
+  "levels": [
+    "疏通水路|Open a channel",
+    "引水入塘|Fill the pond",
+    "坡度对照|Compare slopes",
+    "保护河岸|Protect the banks",
+    "泥沙沉降|Catch the sediment",
+    "绕开村庄|Around the village",
+    "分流灌溉|Water two fields",
+    "清理淤堵|Clear a blockage",
+    "综合治水|Manage the river"
+  ],
+  "invite": [
+    "挖通河道，再放水看看。",
+    "Dig a channel, then let the water flow."
+  ],
+  "observe": [
+    "看水面、泥沙和下游的田塘。",
+    "Watch the water, sediment and downstream fields."
+  ],
+  "direction": [
+    "水沿低处走；护岸和沉沙池各有用处。",
+    "Water flows downhill. Banks and settling pools do different jobs."
+  ]
+};

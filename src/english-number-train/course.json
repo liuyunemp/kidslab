@@ -5,15 +5,6 @@
     "en": "Number Train"
   },
   "icon": "🚂",
-  "tags": [
-    "英语启蒙",
-    "英语数字",
-    "3D"
-  ],
-  "description": {
-    "zh": "给小火车装积木，听着英文一起数到十。",
-    "en": "Load blocks onto a little train and count to ten in English."
-  },
   "category": "english",
   "levels": [
     "primary"
@@ -23,6 +14,15 @@
     "g2",
     "g3"
   ],
+  "tags": [
+    "英语启蒙",
+    "英语数字",
+    "3D"
+  ],
   "order": 243,
-  "badge": "new"
+  "badge": "new",
+  "description": {
+    "zh": "从 21 个词中随机学 8 个，听音、认词、看图闯四关。",
+    "en": "Learn eight of 21 words through listening, pictures and four challenges."
+  }
 }

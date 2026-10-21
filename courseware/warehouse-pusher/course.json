@@ -1,0 +1,28 @@
+{
+  "id": "warehouse-pusher",
+  "title": {
+    "zh": "仓库推箱员",
+    "en": "Warehouse Pusher"
+  },
+  "description": {
+    "zh": "把货箱推上带圈的泊位。三章九关，支持撤销、提示和随机新局。",
+    "en": "Push every crate onto a marked dock. Nine levels with undo, hints and new puzzles."
+  },
+  "category": "logic",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g3",
+    "g4",
+    "g5",
+    "g6"
+  ],
+  "tags": [
+    "空间推理",
+    "逻辑"
+  ],
+  "icon": "📦",
+  "badge": "new",
+  "order": 201
+}

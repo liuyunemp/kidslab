@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import * as m from '../../src/light-chain-house/light-chain-house-model.js';import {adventureSuite} from './adventure-suite.mjs';
+adventureSuite('light-chain-house',m);
+test('light flips are self-inverse and commute, including overlapping neighborhoods',()=>{for(let i=0;i<9;i++){const l=m.makeLevel(i),s=m.initial(l),a={type:'flip',cell:l.allowed[0]},b={type:'flip',cell:l.allowed.at(-1)},run=actions=>actions.reduce((s,a)=>m.apply(l,s,a).state,s);assert.deepEqual(run([a,a]).lights,s.lights);assert.deepEqual(run([a,b]).lights,run([b,a]).lights);}});
