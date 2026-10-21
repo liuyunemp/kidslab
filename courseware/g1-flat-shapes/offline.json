@@ -1,6 +1,6 @@
 {
   "id": "g1-flat-shapes",
-  "version": "5c8a58db8126dfcaf5196844f52c635597c6165a40cbef3ffd2220268362bf3a",
+  "version": "7e9a4675dd8c79295631fc646224cc003de00380eab8eed7fc281d6931e484b7",
   "assets": [
     {
       "path": "audio.js",
@@ -285,12 +285,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "c9a422897cd1b3deea9ffb6ab30d85b9fb4422b5906ba21210e5bf4b1ba6570f"
+      "sha256": "36b554ae0825abc17beaec82215721447c1371e8a737d8e45af5da62139adcaa"
     },
     {
       "path": "main.js",
-      "sha256": "9e53531126b02a79889e3dd5485dc20449eac1243ca89eac3888d49c781dcd61",
-      "fingerprint": "66724386"
+      "sha256": "730c852bec2ccf0f4403c8838969b0f7eebff69434bade92cdc0fa26daa38cf5",
+      "fingerprint": "9422eb58"
     },
     {
       "path": "model.js",
@@ -299,8 +299,8 @@
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

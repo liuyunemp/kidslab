@@ -1,6 +1,6 @@
 {
   "id": "g1-pinyin-tracks",
-  "version": "aaf9dd869aba2e810d6db7b8ccc9942f8dca0cf10f4647749c571a669cacdde2",
+  "version": "45d54c5a7a9e20a87d2abffab49c369020fad83c1c129336d72adf69b8972e19",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -261,17 +261,17 @@
     },
     {
       "path": "engine.js",
-      "sha256": "600343ba964072aa5cc5f26d5600899b6ae9a579751bb46dabd214eab57c366d",
-      "fingerprint": "629b5449"
+      "sha256": "00b2d245da9eab91335e4156f858b900ea289c884a0c2ae3637118e006827644",
+      "fingerprint": "c7f26b45"
     },
     {
       "path": "index.html",
-      "sha256": "15162c5f3726fdfc43b77ae34b40145a7dcd6c2533948f54a34dd2ff5f1b715d"
+      "sha256": "47c13c81ccae64813e6ab62975bbee84fc923c21f0b63729c545f4e48524ad4d"
     },
     {
       "path": "main.js",
-      "sha256": "8a6602ad510344e442b43ac48030d64e7419106d0f941013aea15da5c2a77953",
-      "fingerprint": "739843fc"
+      "sha256": "2e36652f9dbf9439ba57bbbe48bf769a68919b89eaf1049b8fc3d7ac6c1fadaa",
+      "fingerprint": "14f440a3"
     },
     {
       "path": "model.js",
@@ -280,8 +280,8 @@
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

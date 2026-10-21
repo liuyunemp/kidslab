@@ -8,7 +8,7 @@ export function createNarration({ manifest, lang = () => window.cool.preferences
   function say(text, callbacks = {}) {
     if (muted() || !speech.enabled) return null;
     try {
-      return speech.play(speechPlan(text, lang(), manifest), {
+      return speech.play(speechPlan(text, callbacks.lang ?? lang(), manifest), {
         onStart() { duck(); callbacks.onStart?.(); },
         onEnd() { restore(); callbacks.onEnd?.(); },
         onCancel() { restore(); callbacks.onCancel?.(); },

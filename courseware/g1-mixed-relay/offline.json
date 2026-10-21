@@ -1,6 +1,6 @@
 {
   "id": "g1-mixed-relay",
-  "version": "fe7c2e2631e6791ad7280ace72500a6a93835fe6b3070018609be30168d5a0f7",
+  "version": "7e9ea54145fe91f071e48bd84c4511cb9bde078c38263ff9c982f1b7b9fe6649",
   "assets": [
     {
       "path": "audio.js",
@@ -285,12 +285,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "d5f175f5d47165cd2dc36897beaaf30d784ab668c495d5d78e6a2f386aae8a92"
+      "sha256": "b4945476b92dc734c08ec28b1c00b6f6982069caa60e14ff4056f0f870aea322"
     },
     {
       "path": "main.js",
-      "sha256": "c2dd66feb04c95babc879d8d4e108793f2c65684bbf2176cdee338381c89ef76",
-      "fingerprint": "6489e4f4"
+      "sha256": "428c390b0134fe7fe1648ff54a9f6c1d4ada1c67ec9011be0e6c9b8851951ae5",
+      "fingerprint": "c48fe750"
     },
     {
       "path": "model.js",
@@ -299,8 +299,8 @@
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

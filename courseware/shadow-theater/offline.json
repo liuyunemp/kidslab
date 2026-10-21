@@ -1,6 +1,6 @@
 {
   "id": "shadow-theater",
-  "version": "399997ea4691f8e1d34e45a6cfbe47a78f763aa23328311ff5184f04e145a767",
+  "version": "cf6440a0218c21fbce37cee170fc3196337cf57089e1bd9f8f8bb5572b17e693",
   "assets": [
     {
       "path": "audio/speech/0055759a7acba22cb6e900ef8a0a1a77b4648c27ea466d0e94b8b37dee69b2cc.mp3",
@@ -164,17 +164,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "791c8d8b46d911d2577e4a7fad517a9132818cc3ceb05aad83b8987a4227434f"
+      "sha256": "a2a54b30a4e166a50429e99530e42c5feee62141aa3351e971a13de692617776"
     },
     {
       "path": "main.js",
-      "sha256": "118daec8b602a75b63a43fd67e2d9a7e004793372074e9cb732033fe7f536f77",
-      "fingerprint": "4def8d6f"
+      "sha256": "93296ffc961ca4945fbd06a914ab2c60367d036bef19476aca07cbe25eefe2ee",
+      "fingerprint": "95f91c12"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

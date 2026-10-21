@@ -1,6 +1,6 @@
 {
   "id": "g1b-story-studio",
-  "version": "42f37ef9c0cb6b0d0f6fc798f8301e193fb2e9435450a272eb6fe36a17056439",
+  "version": "cada7ad8860e9f42934f5118e8d86996970dd6a7a6b8cedd8b92a46b84747bc6",
   "assets": [
     {
       "path": "audio.js",
@@ -271,17 +271,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "474f557085e1e28670a1880e689ee0f2c5aa8b12d317ee3df5a2c4d4e294b0ae"
+      "sha256": "049318c2c202481f50f9dc4cfd6063fcb1bb7537a2c16dbb5e0b9d12a8d4c147"
     },
     {
       "path": "main.js",
-      "sha256": "905d75a0b612796803614ba06656ce03221d540580d1ba3e1569bb685a4b4b9b",
-      "fingerprint": "d979a442"
+      "sha256": "8cb33bfcea164a1cdddf3718fb6694112baa567bcec00fa9a07aff4decee1a00",
+      "fingerprint": "0c0eaffd"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

@@ -1,6 +1,6 @@
 {
   "id": "g1b-sentence-studio",
-  "version": "5627d60be693b50f2921e9dbac1cfbf4f2254caf06c45338705a761bc40bdfdd",
+  "version": "a8f1e8452b507ff1263eb1452bf57772953678e72d192e45a06e36f00876a30c",
   "assets": [
     {
       "path": "audio.js",
@@ -271,17 +271,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "97f310ab38b22a7d752003b2c5ede0ee88091abfc95271cacc24eae05a239005"
+      "sha256": "5984455203f2f0b8b5c34bc609f18229cd8dbec19d8c0d3d0bde3674f2752394"
     },
     {
       "path": "main.js",
-      "sha256": "fcbfd3ddcee822485b95833c71c933e096d324a93a654dc4b3d2f03326decd56",
-      "fingerprint": "68aaad15"
+      "sha256": "4a540327e3bcda1127103e86902584bf28bb7704b8b832b6f0952c382daff6c7",
+      "fingerprint": "6e8002a4"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

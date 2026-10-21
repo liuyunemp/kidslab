@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T02:16:12.642Z",
+  "generatedAt": "2026-10-21T00:39:01.020Z",
   "tags": {
     "3D": {
       "en": "3D",
@@ -133,6 +133,10 @@
       "en": "Solar System",
       "kind": "knowledge"
     },
+    "学习用品": {
+      "en": "School Supplies",
+      "kind": "knowledge"
+    },
     "宇宙": {
       "en": "Space & Cosmos",
       "kind": "knowledge"
@@ -249,6 +253,10 @@
       "en": "Water Cycle",
       "kind": "knowledge"
     },
+    "水果": {
+      "en": "Fruit",
+      "kind": "knowledge"
+    },
     "海龟绘图": {
       "en": "Turtle Graphics",
       "kind": "knowledge"
@@ -319,6 +327,14 @@
     },
     "编程启蒙": {
       "en": "Coding Basics",
+      "kind": "knowledge"
+    },
+    "英语启蒙": {
+      "en": "English for Beginners",
+      "kind": "knowledge"
+    },
+    "英语数字": {
+      "en": "Number Words",
       "kind": "knowledge"
     },
     "营养": {
@@ -407,6 +423,10 @@
     },
     "顺序执行": {
       "en": "Sequencing",
+      "kind": "knowledge"
+    },
+    "颜色": {
+      "en": "Colors",
       "kind": "knowledge"
     },
     "魔方": {
@@ -12208,6 +12228,296 @@
         "先横后竖"
       ],
       "path": "courseware/g1-stroke-order/index.html"
+    },
+    {
+      "id": "english-color-studio",
+      "title": {
+        "zh": "彩色玩具屋",
+        "en": "Color Toy Studio"
+      },
+      "icon": "🎨",
+      "tags": [
+        "英语启蒙",
+        "颜色",
+        "3D"
+      ],
+      "description": {
+        "zh": "给玩具换件彩色衣裳，听听颜色的英文。",
+        "en": "Paint your toys and hear the names of their colors."
+      },
+      "category": "english",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1",
+        "g2",
+        "g3"
+      ],
+      "order": 240,
+      "badge": "new",
+      "keywords": [
+        "English for Beginners",
+        "english",
+        "英语",
+        "英语单词",
+        "english words",
+        "english for kids",
+        "启蒙英语",
+        "beginner english",
+        "Colors",
+        "color",
+        "colors",
+        "colour",
+        "colours",
+        "颜色词",
+        "3D",
+        "3d",
+        "三维",
+        "three.js"
+      ],
+      "path": "courseware/english-color-studio/index.html"
+    },
+    {
+      "id": "english-fruit-picnic",
+      "title": {
+        "zh": "水果野餐篮",
+        "en": "Fruit Picnic"
+      },
+      "icon": "🧺",
+      "tags": [
+        "英语启蒙",
+        "水果",
+        "3D"
+      ],
+      "description": {
+        "zh": "摘三件水果去野餐，点一下听听英文名字。",
+        "en": "Pick three fruits for a picnic and tap to hear their names."
+      },
+      "category": "english",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1",
+        "g2",
+        "g3"
+      ],
+      "order": 241,
+      "badge": "new",
+      "keywords": [
+        "English for Beginners",
+        "english",
+        "英语",
+        "英语单词",
+        "english words",
+        "english for kids",
+        "启蒙英语",
+        "beginner english",
+        "Fruit",
+        "fruit",
+        "fruits",
+        "3D",
+        "3d",
+        "三维",
+        "three.js"
+      ],
+      "path": "courseware/english-fruit-picnic/index.html"
+    },
+    {
+      "id": "english-animal-park",
+      "title": {
+        "zh": "动物欢乐园",
+        "en": "Animal Play Park"
+      },
+      "icon": "🐘",
+      "tags": [
+        "英语启蒙",
+        "动物",
+        "3D"
+      ],
+      "description": {
+        "zh": "布置你的小乐园，和会动的动物朋友认识一下。",
+        "en": "Build a little park and meet your moving animal friends."
+      },
+      "category": "english",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1",
+        "g2",
+        "g3"
+      ],
+      "order": 242,
+      "badge": "new",
+      "keywords": [
+        "English for Beginners",
+        "english",
+        "英语",
+        "英语单词",
+        "english words",
+        "english for kids",
+        "启蒙英语",
+        "beginner english",
+        "Animals",
+        "animals",
+        "animal",
+        "野兽",
+        "creature",
+        "栖息地",
+        "habitat",
+        "habitats",
+        "3D",
+        "3d",
+        "三维",
+        "three.js"
+      ],
+      "path": "courseware/english-animal-park/index.html"
+    },
+    {
+      "id": "english-number-train",
+      "title": {
+        "zh": "数字小火车",
+        "en": "Number Train"
+      },
+      "icon": "🚂",
+      "tags": [
+        "英语启蒙",
+        "英语数字",
+        "3D"
+      ],
+      "description": {
+        "zh": "给小火车装积木，听着英文一起数到十。",
+        "en": "Load blocks onto a little train and count to ten in English."
+      },
+      "category": "english",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1",
+        "g2",
+        "g3"
+      ],
+      "order": 243,
+      "badge": "new",
+      "keywords": [
+        "English for Beginners",
+        "english",
+        "英语",
+        "英语单词",
+        "english words",
+        "english for kids",
+        "启蒙英语",
+        "beginner english",
+        "Number Words",
+        "number words",
+        "english numbers",
+        "one to ten",
+        "英文数字",
+        "3D",
+        "3d",
+        "三维",
+        "three.js"
+      ],
+      "path": "courseware/english-number-train/index.html"
+    },
+    {
+      "id": "english-body-show",
+      "title": {
+        "zh": "身体动作秀",
+        "en": "Body Action Show"
+      },
+      "icon": "👋",
+      "tags": [
+        "英语启蒙",
+        "人体",
+        "3D"
+      ],
+      "description": {
+        "zh": "点一点身体部位，让小伙伴和你一起动起来。",
+        "en": "Tap a body part and make your little friend move."
+      },
+      "category": "english",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1",
+        "g2",
+        "g3"
+      ],
+      "order": 244,
+      "badge": "new",
+      "keywords": [
+        "English for Beginners",
+        "english",
+        "英语",
+        "英语单词",
+        "english words",
+        "english for kids",
+        "启蒙英语",
+        "beginner english",
+        "Human Body",
+        "human body",
+        "器官",
+        "organs",
+        "3D",
+        "3d",
+        "三维",
+        "three.js"
+      ],
+      "path": "courseware/english-body-show/index.html"
+    },
+    {
+      "id": "english-school-bag",
+      "title": {
+        "zh": "我的小书包",
+        "en": "My School Bag"
+      },
+      "icon": "🎒",
+      "tags": [
+        "英语启蒙",
+        "学习用品",
+        "3D"
+      ],
+      "description": {
+        "zh": "整理自己的小书包，把学习用品的英文带回家。",
+        "en": "Pack your school bag and learn the names of your school things."
+      },
+      "category": "english",
+      "levels": [
+        "primary"
+      ],
+      "grades": [
+        "g1",
+        "g2",
+        "g3"
+      ],
+      "order": 245,
+      "badge": "new",
+      "keywords": [
+        "English for Beginners",
+        "english",
+        "英语",
+        "英语单词",
+        "english words",
+        "english for kids",
+        "启蒙英语",
+        "beginner english",
+        "School Supplies",
+        "school supplies",
+        "school things",
+        "school items",
+        "文具",
+        "stationery",
+        "3D",
+        "3d",
+        "三维",
+        "three.js"
+      ],
+      "path": "courseware/english-school-bag/index.html"
     }
   ]
 }

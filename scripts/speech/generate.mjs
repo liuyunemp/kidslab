@@ -55,7 +55,13 @@ for (const [id, table] of courses) {
   for (const lang of ['zh','en']) for (const text of [...table[lang]].sort()) {
     const key = textHash(text, lang), relative = `./audio/speech/${key}.mp3`;
     const file = path.join(dir,relative);
-    if (!check) await cp(path.join(cache,`${key}.mp3`),file);
+    if (!check) {
+      // Idempotent copy: an unchanged clip is left untouched so re-runs stay cheap
+      // and never trigger a delete-then-copy on the destination.
+      const source = await readFile(path.join(cache,`${key}.mp3`));
+      const existing = await readFile(file).catch(() => null);
+      if (!existing || !existing.equals(source)) await writeFile(file, source);
+    }
     const bytes = await readFile(file).catch(() => { throw new Error(`${id}: missing recording for ${lang}: ${text}`); });
     if (bytes.length < 200 || !(bytes.subarray(0,3).toString() === 'ID3' || bytes[0] === 0xff)) throw new Error(`${id}: invalid MP3: ${text}`);
     manifest.entries[lang][text] = { path: relative, sha256: hash(bytes), bytes: bytes.length };

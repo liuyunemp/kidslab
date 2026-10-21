@@ -1,0 +1,28 @@
+{
+  "id": "english-body-show",
+  "title": {
+    "zh": "身体动作秀",
+    "en": "Body Action Show"
+  },
+  "icon": "👋",
+  "tags": [
+    "英语启蒙",
+    "人体",
+    "3D"
+  ],
+  "description": {
+    "zh": "点一点身体部位，让小伙伴和你一起动起来。",
+    "en": "Tap a body part and make your little friend move."
+  },
+  "category": "english",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1",
+    "g2",
+    "g3"
+  ],
+  "order": 244,
+  "badge": "new"
+}

@@ -1,6 +1,6 @@
 {
   "id": "g1-direction-town",
-  "version": "7a9dd298b4149df5645a9d4f1db4bd2a6f90b9cf0b85c7c24ec6ece98debd2ec",
+  "version": "e50e226697fe3256714bfb33b11905cf8a117f8ebfd348299e6972c936b75828",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -261,17 +261,17 @@
     },
     {
       "path": "engine.js",
-      "sha256": "600343ba964072aa5cc5f26d5600899b6ae9a579751bb46dabd214eab57c366d",
-      "fingerprint": "629b5449"
+      "sha256": "00b2d245da9eab91335e4156f858b900ea289c884a0c2ae3637118e006827644",
+      "fingerprint": "c7f26b45"
     },
     {
       "path": "index.html",
-      "sha256": "014408dd8283682db51e77ab77e4aa2ec740adffaf56bc072ababcfd1ed8c909"
+      "sha256": "be2c6865f24c61a5464792d5d728529894246f4053d7bd957e9ea2cc77544f91"
     },
     {
       "path": "main.js",
-      "sha256": "13d8d2ce13fad0aec95dd88aa086991e9c2f61acadba686b343bbe79290b5a55",
-      "fingerprint": "614270fc"
+      "sha256": "4abc0330728b3be902194a092d71013eb68fde926b7f1bd21834a59acb2e48b4",
+      "fingerprint": "6554e09a"
     },
     {
       "path": "model.js",
@@ -280,8 +280,8 @@
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

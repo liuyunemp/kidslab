@@ -1,6 +1,6 @@
 {
   "id": "g1b-quantity-theater",
-  "version": "2b8a941d203150e2ce4e56bbcca3b4ce14bd0d9b68e5d363179f0cd3c914e163",
+  "version": "db814d7081ade55b71e9b2d6f9ea8b506d8e1c93f13837ed4e4dfebb88339a61",
   "assets": [
     {
       "path": "audio.js",
@@ -271,17 +271,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "e85f2d82f4385cb05b8e40e20bcdef4ed3b0e7a309c6ba11848367ae1d1a58e7"
+      "sha256": "fb9a8642e58221a7c691b9998610468b8d9d1fd0fd40a91f7d45a4e3977b34c6"
     },
     {
       "path": "main.js",
-      "sha256": "03ec12b48276dd45aba38d622bb11afa64a164e04e52199e065b0b667461dd7b",
-      "fingerprint": "f089399e"
+      "sha256": "41c9663f48b3e1f50e1a67a2356f504b399f4a092889ae1eadbf6181f214a66a",
+      "fingerprint": "6f6e6235"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

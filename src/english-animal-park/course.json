@@ -1,0 +1,28 @@
+{
+  "id": "english-animal-park",
+  "title": {
+    "zh": "动物欢乐园",
+    "en": "Animal Play Park"
+  },
+  "icon": "🐘",
+  "tags": [
+    "英语启蒙",
+    "动物",
+    "3D"
+  ],
+  "description": {
+    "zh": "布置你的小乐园，和会动的动物朋友认识一下。",
+    "en": "Build a little park and meet your moving animal friends."
+  },
+  "category": "english",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1",
+    "g2",
+    "g3"
+  ],
+  "order": 242,
+  "badge": "new"
+}

@@ -47,7 +47,7 @@ const CourseCatalog = (() => {
         groups.get(key).items.push({ course, entry });
       }
     }
-    const subjects = ['math', 'chinese', 'science', 'physics', 'chemistry', 'programming', 'logic'];
+    const subjects = ['math', 'chinese', 'english', 'science', 'physics', 'chemistry', 'programming', 'logic'];
     const semester = token => token.endsWith('a') ? 0 : token.endsWith('b') ? 1 : 2;
     const result = [...groups.values()].sort((a, b) => subjects.indexOf(a.category) - subjects.indexOf(b.category)
       || semester(a.grade) - semester(b.grade) || a.bookId.localeCompare(b.bookId)
@@ -134,9 +134,10 @@ const CourseCatalog = (() => {
     { id: 'science',     icon: '🔬', color: 'var(--c-science)' },
     { id: 'logic',       icon: '🧩', color: 'var(--c-logic)' },
     { id: 'chinese',     icon: '📚', color: 'var(--c-chinese)' },
+    { id: 'english',     icon: '🔤', color: 'var(--c-english)' },
   ];
   /* 小学只显示这些分类（含两个特殊快捷项） */
-  const PRIMARY_CATS = new Set(['all', 'recent', 'newest', 'math', 'chinese', 'programming', 'science', 'logic']);
+  const PRIMARY_CATS = new Set(['all', 'recent', 'newest', 'math', 'chinese', 'english', 'programming', 'science', 'logic']);
   const CAT_IDS = new Set(CATS.map((c) => c.id));
 
   const ACCENTS = [
@@ -203,7 +204,7 @@ const CourseCatalog = (() => {
       cats: {
         all: '全部', recent: '最近探索的', newest: '最新创建的',
         math: '数学', physics: '物理', chemistry: '化学',
-        programming: '编程', science: '科学', logic: '逻辑', chinese: '语文', featured: '精选',
+        programming: '编程', science: '科学', logic: '逻辑', chinese: '语文', english: '英语', featured: '精选',
       },
     },
     en: {
@@ -260,7 +261,7 @@ const CourseCatalog = (() => {
       cats: {
         all: 'All', recent: 'Recently explored', newest: 'Newly created',
         math: 'Math', physics: 'Physics', chemistry: 'Chemistry',
-        programming: 'Coding', science: 'Science', logic: 'Logic', chinese: 'Chinese', featured: 'Featured',
+        programming: 'Coding', science: 'Science', logic: 'Logic', chinese: 'Chinese', english: 'English', featured: 'Featured',
       },
     },
   };

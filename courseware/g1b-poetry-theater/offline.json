@@ -1,6 +1,6 @@
 {
   "id": "g1b-poetry-theater",
-  "version": "7edeb9ffb9a2b74c395dba6748a08c4c9494a6d211de181637f3160990f48d68",
+  "version": "0a73b5c2cf914ab2f83664ce27029a5d146a157866eb331b0b4b2ee146a0d04e",
   "assets": [
     {
       "path": "audio.js",
@@ -271,17 +271,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "4976cd3e5300479309fb7449c8dfaeb4e2c44ff5383025f663512c8a5f9a3eca"
+      "sha256": "3331f78d8e929c62f3765cfd7096344642a8fae54d6d9e750655550a7183f134"
     },
     {
       "path": "main.js",
-      "sha256": "50ac9f30cbf9e4bf7f88a24ebf3e565ad62116c1890be67fd3afdac91b6a0162",
-      "fingerprint": "5dd2ad32"
+      "sha256": "08016167d6de2a3bc652c4da45d5587f7fdc11cb8d15fcbe11129322b0305716",
+      "fingerprint": "f6bf4722"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

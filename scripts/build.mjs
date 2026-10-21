@@ -42,7 +42,7 @@ const SRC = path.join(ROOT, 'src');
 let OUT, STAGE, workspace;
 const errors = [];
 
-const CATEGORIES = ['featured', 'math', 'physics', 'chemistry', 'programming', 'science', 'logic', 'chinese'];
+const CATEGORIES = ['featured', 'math', 'physics', 'chemistry', 'programming', 'science', 'logic', 'chinese', 'english'];
 const LEVELS = ['primary', 'junior', 'senior'];
 
 const fail = (msg) => { errors.push(msg); };

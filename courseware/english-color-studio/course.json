@@ -1,0 +1,28 @@
+{
+  "id": "english-color-studio",
+  "title": {
+    "zh": "彩色玩具屋",
+    "en": "Color Toy Studio"
+  },
+  "icon": "🎨",
+  "tags": [
+    "英语启蒙",
+    "颜色",
+    "3D"
+  ],
+  "description": {
+    "zh": "给玩具换件彩色衣裳，听听颜色的英文。",
+    "en": "Paint your toys and hear the names of their colors."
+  },
+  "category": "english",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1",
+    "g2",
+    "g3"
+  ],
+  "order": 240,
+  "badge": "new"
+}

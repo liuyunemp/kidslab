@@ -1,6 +1,6 @@
 {
   "id": "change-vending",
-  "version": "19e30a29db551d3b67992b13b6bb336879cd1121f55141bf71b17ba5be95c7cd",
+  "version": "7ef14d937b7ac91cc5ff13f0c154ea0276880ac4e27d3397c480ef1c66e1aad7",
   "assets": [
     {
       "path": "audio.js",
@@ -271,17 +271,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "f7475e02555c213127c1e297662dd9e5d13e61424e3954e063cfdb65c20566bf"
+      "sha256": "3f6e677618ea6671d99062240cee0c834127b1051e44d489c01f62d18837bbcf"
     },
     {
       "path": "main.js",
-      "sha256": "0887e97e56c29bec7a4ee7c79ac824f6933ec4fffec08bdc690afc76e8ba6ebe",
-      "fingerprint": "628c200f"
+      "sha256": "3fbeef1cb5f9547ff2c2d0688e702bd89941f4a474d2cfa77c0e69c74849cb73",
+      "fingerprint": "28165323"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

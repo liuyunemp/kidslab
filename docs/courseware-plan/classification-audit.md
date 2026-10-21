@@ -1,6 +1,6 @@
 # 年级与科目归属核查（2026-10-16）
 
-覆盖当前132个可见课件；另两张旧导航页保持 listed:false。逐课结论以核查时源码为准，不是玩法质量或知识正确性的完整认证。
+覆盖当前138个可见课件；另两张旧导航页保持 listed:false。逐课结论以核查时源码为准，不是玩法质量或知识正确性的完整认证。
 
 ## 采用的口径
 
@@ -13,7 +13,7 @@
 
 ## 结果
 
-58个课件有明确年级归属，74个仅在全部年级显示。方位小镇按当前科学教材归为 science，打赌派对按鸽巢问题归为 math；其余科目保持。课程ID和玩法不变，规划完成数不变。
+58个课件有明确年级归属，80个仅在全部年级显示。方位小镇按当前科学教材归为 science，打赌派对按鸽巢问题归为 math；其余科目保持，六款英语启蒙课件按适龄 g1–g3 保留、暂无教材册次锚点。课程ID和玩法不变，规划完成数不变。
 
 源码数据已调整；**本轮按用户要求不构建、不执行E2E、不更新 courseware/、index.html、sw.js**。因此现有构建清单在用户统一构建前仍是旧数据，不能以其判断本次源码是否生效。
 
@@ -56,6 +56,12 @@
 | 故事放映屋（g1b-story-studio） | chinese → chinese | g1b | g1b | 2024年审定《语文 一年级下册》：吃水不忘挖井人（18–19页）；小公鸡和小鸭子（26–28页）；树和喜鹊（29–30页）；端午粽（42–43页）；要下雨了（69–72页）；语文园地七·听故事，讲故事（95页）；动物王国开大会（84–89页）；咕咚（102–104页）。8个代表性探索及自由操作与既有逐关覆盖表一致。 [源码](../../src/g1b-story-studio/content.js) · [断言](../../src/g1b-story-studio/facts.md) · [教材](https://book.pep.com.cn/1211001102241/mobile/index.html) |
 | 词语生活馆（g1b-word-world） | chinese → chinese | g1b | g1b | 2024年审定《语文 一年级下册》：春夏秋冬／语文园地一（2–3，10–14页）；怎么都快乐（31–33页）；语文园地四（44页）；端午粽（42–43页）；古对今（50–51页）；动物儿歌（48–49页）；荷叶圆圆（66–68页）；语文园地七（93页）。8个代表性探索及自由操作与既有逐关覆盖表一致。 [源码](../../src/g1b-word-world/content.js) · [断言](../../src/g1b-word-world/facts.md) · [教材](https://book.pep.com.cn/1211001102241/mobile/index.html) |
 | 写字小工坊（g1b-writing-workshop） | chinese → chinese | g1b | g1b | 2024年审定《语文 一年级下册》：棉花姑娘／写字表（101，119页）；语文园地三（35页）；姓氏歌／写字表（5，117页）；动物王国开大会／写字表（89，119页）；树和喜鹊／写字表（30，117页）。8个代表性探索及自由操作与既有逐关覆盖表一致。 [源码](../../src/g1b-writing-workshop/content.js) · [断言](../../src/g1b-writing-workshop/facts.md) · [教材](https://book.pep.com.cn/1211001102241/mobile/index.html) |
+| 彩色玩具屋（english-color-studio） | english → english | g1, g2, g3 | [] | 英语启蒙：给小车、房子、风车三件玩具挑颜色涂色，每涂一件念出 red/blue 等颜色词。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-color-studio/main.js) · [断言](../../src/english-color-studio/facts.md) |
+| 水果野餐篮（english-fruit-picnic） | english → english | g1, g2, g3 | [] | 英语启蒙：把苹果、香蕉、葡萄等水果放进野餐篮，边放边听并跟读水果词。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-fruit-picnic/main.js) · [断言](../../src/english-fruit-picnic/facts.md) |
+| 动物欢乐园（english-animal-park） | english → english | g1, g2, g3 | [] | 英语启蒙：把鸭子、猫、兔子等动物请进乐园，边放边听并跟读动物词。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-animal-park/main.js) · [断言](../../src/english-animal-park/facts.md) |
+| 数字小火车（english-number-train） | english → english | g1, g2, g3 | [] | 英语启蒙：一节一节往车厢装积木，数零到十并听 one–ten 的英文读法。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-number-train/main.js) · [断言](../../src/english-number-train/facts.md) |
+| 身体动作秀（english-body-show） | english → english | g1, g2, g3 | [] | 英语启蒙：点小人身上的 head/eye/nose/mouth/hand/foot 等部位，部位会动并念出英文。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-body-show/main.js) · [断言](../../src/english-body-show/facts.md) |
+| 我的小书包（english-school-bag） | english → english | g1, g2, g3 | [] | 英语启蒙：把 ruler、pencil、book 等文具装进书包，边装边听并跟读文具词。人教版英语为三年级起点，本课按适龄 g1–g3 保留，具体册次待逐课核准，暂不锚定。 [源码](../../src/english-school-bag/main.js) · [断言](../../src/english-school-bag/facts.md) |
 | 欢迎来到KidsLab · 从一盏灯到宇宙（welcome） | featured → featured | [] | [] | 平台欢迎与宇宙拉远展示没有具体教材年级，保持空年级；置顶只用于排序。 [源码](../../src/welcome/main.js) |
 | 打赌派对（bet-party） | logic → math | g5, g6 | g6b | 生日月份、袜子等离散分类保证性推理，对应“数学广角——鸽巢问题”67–70页；改归数学。 [源码](../../src/bet-party/main.js) · [断言](../../src/bet-party/facts.md) · [m6b](https://book.pep.com.cn/1221001602141/mobile/index.html) |
 | 侦探线索板（detective-board） | logic → logic | g4, g5, g6 | [] | 逻辑拓展：谁偷吃了蛋糕？读线索、在网格上钉下 ❌ 和 ✅，看排除法像多米诺一样连锁倒下，红线在软木板上织出真相之网——经典逻辑网格谜题的侦探社版本。 现有依据不能把完整规则/策略归入具体教材年级，保留逻辑分类。 [源码](../../src/detective-board/main.js) |

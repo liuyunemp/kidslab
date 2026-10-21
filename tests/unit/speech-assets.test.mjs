@@ -7,8 +7,8 @@ import { fireflySpeech } from '../../src/number-fireflies/random-model.js';
 import { patternSpeech,CATERPILLAR_LEVELS,patternFamily } from '../../src/pattern-caterpillar/random-model.js';
 import { shadowSpeech } from '../../src/shadow-theater/random-model.js';
 
-test('all 31 catalogs, recording hashes and shared runtime copies are current',()=>{
-  assert.equal(ids.length,31);
+test('all 37 catalogs, recording hashes and shared runtime copies are current',()=>{
+  assert.equal(ids.length,37);
   execFileSync(process.execPath,['scripts/speech/generate.mjs','--check'],{stdio:'pipe'});
 });
 test('every fixed prompt and every dynamic token has matching bilingual recordings',async()=>{

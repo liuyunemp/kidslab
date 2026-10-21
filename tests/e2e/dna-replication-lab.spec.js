@@ -43,7 +43,9 @@ test.describe('dna replication lab', () => {
       sessionStorage.setItem(initializedKey, 'true');
     });
     await page.goto('/courseware/dna-replication-lab/');
-    await expect(page.locator('#seqTemplate')).toHaveText(TEMPLATE);
+    // Mobile WebGL init can outrun the default 5s expectation when several heavy labs
+    // render in parallel, so give the first paint room before any behaviour is asserted.
+    await expect(page.locator('#seqTemplate')).toHaveText(TEMPLATE, { timeout: 15000 });
   });
 
   test('pairs the whole template and reads out mRNA and the protein', async ({ page }) => {

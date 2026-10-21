@@ -1,6 +1,6 @@
 {
   "id": "g1-compare-bridge",
-  "version": "6c22fc42e2044d57bcc28179300d7e56ff1d326dd624abc8fac27faddb929e0b",
+  "version": "0dadb5495ba111a206b7e5b2ffb66cf2e38d21427f908c598a3f8cdf8aea9166",
   "assets": [
     {
       "path": "audio.js",
@@ -285,12 +285,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "eb928997bcc008f1534c881b0243a191c094a55b4091aed3194e47ad0870f880"
+      "sha256": "baf76550c2c3aae6e71e371c549e5af063cb21ea12fa593c5850aa1a359ff841"
     },
     {
       "path": "main.js",
-      "sha256": "c6896385d66969a5e185dda4c617a6bf7fb6b4ad1fecf56e471dc3f29fac68db",
-      "fingerprint": "eb46d5da"
+      "sha256": "ad7447a227d9c25a1772601d33eb99984482c1f39ebf8ff0b7d664fd1c623c4c",
+      "fingerprint": "ad401827"
     },
     {
       "path": "model.js",
@@ -299,8 +299,8 @@
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

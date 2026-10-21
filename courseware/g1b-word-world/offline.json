@@ -1,6 +1,6 @@
 {
   "id": "g1b-word-world",
-  "version": "e9c3355e530f95cf0f911c1c46c728655e978cd441d487fe70d2889aac874e13",
+  "version": "9c45fdb897b7acfdbc5c31c0f616447ed47ccd782c56a0666e34f24afccf32a4",
   "assets": [
     {
       "path": "audio.js",
@@ -271,17 +271,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "4f265f7835a1a172b8925602cdc6c1c6c1262d3dfc257c67325fcf089e1eb642"
+      "sha256": "b923143c2684be9e55927e44f6c140dc8cbd23e6b7e4219154208aca80bdc8d7"
     },
     {
       "path": "main.js",
-      "sha256": "81e94f0a3a9023cb0feb38789d7719d34e6f27928ae21eedee0662ba6a503aa5",
-      "fingerprint": "e7784928"
+      "sha256": "383b2b99acf4a985c656faedb5b2f56fb01ec7ba5587373ed21b39838e27524e",
+      "fingerprint": "a568b96b"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

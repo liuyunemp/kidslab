@@ -1,6 +1,6 @@
 {
   "id": "g1-character-garden",
-  "version": "9b213c5a1b28ba7bbab13c1d9221452dadb007efc99572ac472f7cc493ee5e0a",
+  "version": "bf90abdeefdab7e7c4f6f514a2392033d989368c691e426e34038365c27607ee",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -261,17 +261,17 @@
     },
     {
       "path": "engine.js",
-      "sha256": "600343ba964072aa5cc5f26d5600899b6ae9a579751bb46dabd214eab57c366d",
-      "fingerprint": "629b5449"
+      "sha256": "00b2d245da9eab91335e4156f858b900ea289c884a0c2ae3637118e006827644",
+      "fingerprint": "c7f26b45"
     },
     {
       "path": "index.html",
-      "sha256": "17ef259bdb4e334b0c2c8d15ff70e0456cf9808a49ea3825342eb15dcd2fcefd"
+      "sha256": "08eda429e24ce83054f32d621de9795614e2af30bfedc0f6341e781aaadb16a6"
     },
     {
       "path": "main.js",
-      "sha256": "874188e13563449704d54f6b87eedf26b49f359389d8c3af60986e1eab18b38e",
-      "fingerprint": "45f2ff41"
+      "sha256": "3e09be216f8099d6843d0d8220f3478a54257a8ab9e3dd8a0786dfcb078f414c",
+      "fingerprint": "e6609e46"
     },
     {
       "path": "model.js",
@@ -280,8 +280,8 @@
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

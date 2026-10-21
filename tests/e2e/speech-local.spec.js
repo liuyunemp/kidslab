@@ -4,6 +4,8 @@ import { captureSpeech, expectNarrationStarted } from './speech-helpers.js';
 
 function readSelector(id) {
   if (legacyIds.includes(id)) return 'button.prompt[data-speak]';
+  // English courses keep "listen how to play" in the collapsible panel.
+  if(id.startsWith('english-')) return '#hintBtn';
   if (explorationIds.includes(id)) return '#coach';
   if(id==='pattern-caterpillar') return '#readPattern';
   return id==='number-fireflies' ? '[aria-label="朗读任务"], [aria-label="Read task"]' : '[aria-label="朗读引导"], [aria-label="Read instructions"]';
@@ -13,7 +15,10 @@ for (const id of ids) test(`${id}: local narration starts and ends without syste
   await captureSpeech(page);
   await page.addInitScript(()=>localStorage.setItem('kidslab.lang','zh'));
   await page.goto(`/courseware/${id}/?seed=987`);
-  const read=page.locator(readSelector(id));await read.click();
+  const read=page.locator(readSelector(id));
+  // The panel starts collapsed on a phone, so reveal the hint button before reading it.
+  if(!await read.isVisible())await page.locator('#panelHandle').click();
+  await read.click();
   await expectNarrationStarted(page);
   await expect.poll(()=>page.evaluate(()=>window.__speechEvents.some(e=>e.state==='ended')),{timeout:30000}).toBe(true);
   const loaded=await page.evaluate(()=>window.__speechEvents.find(e=>e.state==='loading'));

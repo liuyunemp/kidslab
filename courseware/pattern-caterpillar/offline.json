@@ -1,6 +1,6 @@
 {
   "id": "pattern-caterpillar",
-  "version": "ed89a500dc646fa28bb9a1794d4876af9ac87c728f80eb9a1ae7366f20e68d88",
+  "version": "d6552256bf7aabf907cae6e1b99819fdc27f492c4c3cd9496985fbd60364e170",
   "assets": [
     {
       "path": "audio/speech/0168541fadcd1d9457ec4b25fcb507d0a8b64d2a81c6bea002d7408eb74148e0.mp3",
@@ -312,17 +312,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "771f44e2f0f9da97a744e199ef5bcc04c3de447e0ad9c614292dcacd41eb3491"
+      "sha256": "41f18b4a0a5a00be772a2f988d31d9c7af23892b8038ff18930b14f208a10617"
     },
     {
       "path": "main.js",
-      "sha256": "4361aadfd4d0df013ea48677d3231981f738b0da30262e91dad458742e7d2c11",
-      "fingerprint": "6870df61"
+      "sha256": "3f39e89bdc912ab7b15b2494fac63b5ae3ef070fa78fff23294aca823bb3e63f",
+      "fingerprint": "651c6d81"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

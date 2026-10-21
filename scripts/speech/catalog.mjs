@@ -3,10 +3,12 @@ import { courses } from '../g1-games/data.mjs';
 import { speakText, praiseText, encourageText } from '../g1-games/model.js';
 import { ids as explorationIds } from '../g1b-sync.mjs';
 import { MESSAGES, normalizeSpeech } from './model.js';
+import { courses as englishCourses, UI as englishUI } from '../english/courses.mjs';
 
 export const legacyIds = courses.map(c => c.id);
 export const extraIds = ['number-fireflies', 'shadow-theater', 'pattern-caterpillar'];
-export const ids = [...legacyIds, ...explorationIds, ...extraIds];
+export const englishIds = englishCourses.map(course => course.id);
+export const ids = [...legacyIds, ...explorationIds, ...extraIds, ...englishIds];
 export { explorationIds };
 // Only visible retry guidance; never harvest arbitrary lesson/result fields.
 export const retryKeys = ['invalid','range','nothing','trace','place','index','pieces','play','drop','money','align','unbundle','same'];
@@ -15,6 +17,14 @@ export async function catalog() {
   const WORDS = Function(`"use strict";return (${engine.match(/export const WORDS = (\{[\s\S]*?\n\});/)[1]});`)();
   const result = new Map(ids.map(id => [id, { zh: new Set(), en: new Set() }]));
   const add = (id, lang, text) => { const value = normalizeSpeech(text); if (value) result.get(id)[lang].add(value); };
+  const RETRY = { zh: '暂时没能播放，点一下再试。', en: 'Could not play. Tap to try again.' };
+  for (const course of englishCourses) {
+    for (const lang of ['zh','en']) {
+      add(course.id,lang,course.invitation[lang]); add(course.id,lang,course.hint[lang]); add(course.id,lang,RETRY[lang]);
+      for (const key of ['done','full','empty','invalid','nothing','same','bag']) add(course.id,lang,englishUI[lang][key]);
+    }
+    for(const item of course.items){add(course.id,'en',item.en);add(course.id,'en',item.sentence);}
+  }
   for (const id of ids) for (const lang of ['zh', 'en']) {
     for (const table of Object.values(MESSAGES)) for (const line of table[lang]) add(id, lang, line);
   }

@@ -1,6 +1,6 @@
 {
   "id": "g1b-column-workshop",
-  "version": "3016d18f6fabbb4f4c54a579315da2f88abe305bfa94eeb693163be6f117019d",
+  "version": "bfbe7174a919c29201fb0d0c1dd984db5f5aa0b6a200846a114465bf74ff7745",
   "assets": [
     {
       "path": "audio.js",
@@ -271,17 +271,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "e7e2245e27849d4c4ce9356f6b6dcb4c6546d6570ad7de603e7388e1ab2e4a17"
+      "sha256": "e56c589563bac1a07a52e395d4ab45137f18f7652f4f4fadc7bf22d0cb928418"
     },
     {
       "path": "main.js",
-      "sha256": "4a70b1dce6f981bd0d9c7868042107cfb6b8da0b3adfd38a7de93131b20b3d9f",
-      "fingerprint": "96820881"
+      "sha256": "14d6ff66f52b2dc75a8163ff3ef94c0f1773d1d104ce105f74beaa7c3a97973f",
+      "fingerprint": "69c61375"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

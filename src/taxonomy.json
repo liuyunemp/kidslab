@@ -105,6 +105,11 @@
     "人民币": { "en": "Currency (RMB)", "kind": "knowledge", "aliases": ["人民币", "元角分", "钱币", "钱", "money", "coins", "yuan", "jiao", "fen"] },
     "七巧板": { "en": "Tangram", "kind": "knowledge", "aliases": ["七巧板", "tangram", "拼图"] },
     "古诗": { "en": "Ancient Poems", "kind": "knowledge", "aliases": ["古诗", "poem", "poems", "poetry", "诗句", "咏鹅", "静夜思", "ancient poems"] },
-    "笔顺": { "en": "Stroke Order", "kind": "knowledge", "aliases": ["笔顺", "stroke order", "笔顺规则", "writing order", "先横后竖"] }
+    "笔顺": { "en": "Stroke Order", "kind": "knowledge", "aliases": ["笔顺", "stroke order", "笔顺规则", "writing order", "先横后竖"] },
+    "英语启蒙": { "en": "English for Beginners", "kind": "knowledge", "aliases": ["english", "英语", "英语单词", "english words", "english for kids", "启蒙英语", "beginner english"] },
+    "颜色": { "en": "Colors", "kind": "knowledge", "aliases": ["color", "colors", "colour", "colours", "颜色词"] },
+    "水果": { "en": "Fruit", "kind": "knowledge", "aliases": ["fruit", "fruits"] },
+    "英语数字": { "en": "Number Words", "kind": "knowledge", "aliases": ["number words", "english numbers", "one to ten", "英文数字"] },
+    "学习用品": { "en": "School Supplies", "kind": "knowledge", "aliases": ["school supplies", "school things", "school items", "文具", "stationery"] }
   }
 }

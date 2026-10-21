@@ -1,0 +1,28 @@
+{
+  "id": "english-number-train",
+  "title": {
+    "zh": "数字小火车",
+    "en": "Number Train"
+  },
+  "icon": "🚂",
+  "tags": [
+    "英语启蒙",
+    "英语数字",
+    "3D"
+  ],
+  "description": {
+    "zh": "给小火车装积木，听着英文一起数到十。",
+    "en": "Load blocks onto a little train and count to ten in English."
+  },
+  "category": "english",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1",
+    "g2",
+    "g3"
+  ],
+  "order": 243,
+  "badge": "new"
+}

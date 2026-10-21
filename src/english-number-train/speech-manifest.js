@@ -1,0 +1,304 @@
+export const manifest = {
+  "version": 1,
+  "recipe": "kidslab-speech-v1-mp3-48k-24000-mono",
+  "voices": {
+    "zh": "Microsoft Huihui Desktop",
+    "en": "Microsoft Zira Desktop"
+  },
+  "entries": {
+    "zh": {
+      "你做到了，继续探索吧！": {
+        "path": "./audio/speech/afa94159d64c46e48fec6f9c9e47301db3359a61822199bbfaefbe714b54acc0.mp3",
+        "sha256": "b349180d19ac49cf82f8f1274fbb3b50b215133f5b91e7412bb5a7e9f56307d1",
+        "bytes": 15069
+      },
+      "你坚持完成了全部挑战！": {
+        "path": "./audio/speech/e0ffb597a44436627aa37b3ab0482aa0d133032c986b1f5d4882e142216087c0.mp3",
+        "sha256": "d6747b0464156d6319b40732f327207f36f26a3e805bfc9efbd36a7bc2ac2249",
+        "bytes": 15645
+      },
+      "先装一块积木，再让小火车出发。": {
+        "path": "./audio/speech/ca4bb7504acd11c8d7242767611144db7c4758a9cdc54f65b7075b62afe82a19.mp3",
+        "sha256": "73d3ca48e279c9e1e8d2f303f51bf21c908718dc550121a51049030bc8b82c96",
+        "bytes": 23997
+      },
+      "全部完成啦，你真棒！": {
+        "path": "./audio/speech/d3ecab4b82e8b60eb83c9f636adbc26f1c8e89ec86e4a676673577b3ddaeb2c8.mp3",
+        "sha256": "05f7af8ac767b3be6a57b63316a416a46054cd85ba21ab6b6f5118e7cfe2db5d",
+        "bytes": 14205
+      },
+      "别着急，换个办法试试看。": {
+        "path": "./audio/speech/7a1304e75814ed2f18689cc8e4630bdd1df87867a044c2d5c9d03848f8097940.mp3",
+        "sha256": "a6ef060da6b9e222a89ce6e36786d693a7a6971f712b65496d1cd2a06c822853",
+        "bytes": 17949
+      },
+      "加油，看看线索再试试。": {
+        "path": "./audio/speech/f6e009f8d5d304eac6a2d7538276d4928014c6510f1cd38e939b623d1dc92b24.mp3",
+        "sha256": "b52938fd549feddbf0ff1e831b3cbfb00e277a9966e17ff1a30bec1ba086d435",
+        "bytes": 17517
+      },
+      "完成了一次探索，还可以继续玩！": {
+        "path": "./audio/speech/e294bdcb492c314f5166439f69b7e20725679f37d1fe9674e4958ce5c2773a3f.mp3",
+        "sha256": "cebf4ced27abf249b0a79b5c2964fefb50f5b84d39cb11c8660404971b72f916",
+        "bytes": 22989
+      },
+      "所有探索都完成了，真了不起！": {
+        "path": "./audio/speech/1c1ee7daf8832eea957c0630bbc27cba1685b5f6729848ca88079bf89ee2d7f0.mp3",
+        "sha256": "db3ea44598e24319698987f3d25553e0dbf6f103db1ea174e1a483ff7eb79065",
+        "bytes": 20829
+      },
+      "放到亮起来的位置试试。": {
+        "path": "./audio/speech/39a26c902bf25c4be3e0bb4677526da703a1949f1713bd1c7901d65c5a854e2c.mp3",
+        "sha256": "f4d9abc51de6c84200111a760d96ca6ded7a28a97be505fa636ab9a4954db539",
+        "bytes": 13773
+      },
+      "暂时没能播放，点一下再试。": {
+        "path": "./audio/speech/557ccf20e5e50f21952cbd285254a2d61a3ff1b2c57bc14034df092d114a9c42.mp3",
+        "sha256": "7cf3b847899e55988bb460f787911aa84767413aba99a7abfe2f1160bb0206a7",
+        "bytes": 19965
+      },
+      "没关系，慢慢来，再试一次。": {
+        "path": "./audio/speech/3d03c3e3bfa01de2ee37b349c8a291db7c1dd13cbb53c8308197be05e89c1d9f.mp3",
+        "sha256": "312cbf73f97a62457a5d3ad1f50def4c96a3fa09d3f6d1824775031c8057c1aa",
+        "bytes": 20541
+      },
+      "给小火车装一块积木吧。": {
+        "path": "./audio/speech/c2d782bba64d2234445b78c8c2b860d6d2025d1c2e939e8d42a880bdd91e2463.mp3",
+        "sha256": "8a7252228be00708c9656149aa21c9b3b7523f9049cba1a93163cb194d6e997a",
+        "bytes": 15069
+      },
+      "装满啦！可以先取出一件。": {
+        "path": "./audio/speech/ce5a758f28026b95a56e337356baf77c4b220ad2129b91474f942bf426c9e7d0.mp3",
+        "sha256": "9c9e41f0711c5257a5f17eb51458908e6497e34f181c2b810a45627cdf8231fc",
+        "bytes": 20109
+      },
+      "认真尝试的你，真了不起！": {
+        "path": "./audio/speech/431906a7ce5b399d8bc2bea814857aa1065d17e0d3bb883b131c42924beb5d7d.mp3",
+        "sha256": "a7274665ce35ff2f977b65ebe732b4259fdc500b5b8856c1f4518eee39a578ed",
+        "bytes": 17085
+      },
+      "试试另一个部位或换个颜色吧。": {
+        "path": "./audio/speech/a91b4283c9db264ea79c2fc93ae0586f934552bd8a297d25daaed1c6839c7e89.mp3",
+        "sha256": "ebee419367e4d71554b7c680b082de18acccd58bbd108dfd835a73d01a9b2946",
+        "bytes": 18525
+      },
+      "还没有可以撤销的操作。": {
+        "path": "./audio/speech/479e74ad7e43dab8118e4f3f9ea2b9a5241d086284f2cc682b0a4c844e15139d.mp3",
+        "sha256": "74c8a35483865640f9cffceefbb6ac8d75a38548a4e7f05569a15c7b1f4944a4",
+        "bytes": 14349
+      },
+      "这一关完成啦，真棒！": {
+        "path": "./audio/speech/c34a32a4df6c3cd4820da79496dc2574ed6d797acdbb5c23f4622d156ec65ee2.mp3",
+        "sha256": "5b46aff0bcec2f9e0ed412ae70bc6c4a34cbf1e93ab87f6302e6532066c45eb7",
+        "bytes": 14205
+      },
+      "这是书包，点其他用品装进去吧。": {
+        "path": "./audio/speech/ec80f003b054cc4f677e295f16514f5d3bcd584a71104f4ee50bd012983370b1.mp3",
+        "sha256": "d26bfa740a9aa1fef2e08606f50009bd37b993c52b48e9ec3d57327aa39a6ce8",
+        "bytes": 22845
+      },
+      "这里还没有东西，先放一件吧。": {
+        "path": "./audio/speech/4c0709e9c231c0469c61369283af507cc45ecc751b56d75a742409c063bd4380.mp3",
+        "sha256": "8fafb4f221787454724ba3ee9f96d248536d56527b874f4937058fe3052658b1",
+        "bytes": 20109
+      }
+    },
+    "en": {
+      "All activities completed. Great work!": {
+        "path": "./audio/speech/9c55948fcc348d5d206e5ffbc1043fc884fb7c50d62c77b20b4032122ce66583.mp3",
+        "sha256": "1b7927fe9121b9625a369a00e02e28bd462f835aa03d9df212bef36e3ba78447",
+        "bytes": 19965
+      },
+      "Could not play. Tap to try again.": {
+        "path": "./audio/speech/9c55836c1f316f3fee51c48330b193dab1b903d67df61d6d852bf53839823913.mp3",
+        "sha256": "69e67623ee95f7622f07a8a48c2495ba816c8debac71c9e4f634a453adfc8965",
+        "bytes": 18813
+      },
+      "Eight blocks.": {
+        "path": "./audio/speech/b9e023fd726c27061d54301c61991128642827f446905a722d312436969a8b79.mp3",
+        "sha256": "125b9d9af967bca03392bee1ab2ea071a79d9f1487dbd09b9f58943dd006c42b",
+        "bytes": 5853
+      },
+      "Five blocks.": {
+        "path": "./audio/speech/51cdf60c8eb3973f95b5564b09a92a51f06a3fd1ae9ad8a376352edca37489ac.mp3",
+        "sha256": "4917e1ff18625804d84d86423d87ee15986bdb33f899ab6a6f74cf81b8fe3652",
+        "bytes": 6573
+      },
+      "Four blocks.": {
+        "path": "./audio/speech/cb9c1546f355be3527eb6dbc3b9d35ababa6bb78291bd82085a81096fa483b54.mp3",
+        "sha256": "a2a33b736bea8b612ffb9c7101fca298a21f381ba6550f04f1d4c12d42cb96e7",
+        "bytes": 5997
+      },
+      "It is full! Take one out first.": {
+        "path": "./audio/speech/027ec288a96d8dc2667e5bb22c987bc847861d149dbd6ea9914fcabcc172f843.mp3",
+        "sha256": "69cda4fcd7f4146ca9aa7fcaec496ccf4aa25ba2cbe44b16676c4158d1ec88cb",
+        "bytes": 18381
+      },
+      "Keep going. Look for a clue.": {
+        "path": "./audio/speech/0168541fadcd1d9457ec4b25fcb507d0a8b64d2a81c6bea002d7408eb74148e0.mp3",
+        "sha256": "ea12eda0a32e96ebee4f20b0c8128370977c2a5df86d8db7cc9d2f6bc371a6fc",
+        "bytes": 16221
+      },
+      "Load a block before the train leaves.": {
+        "path": "./audio/speech/e33efda478345804ad9d55b9b25388eba065557444b3b9f650c9f69bb9435840.mp3",
+        "sha256": "ed40193a2ce33822e730d99bfd3f3b86873d03b1366eeafd4f08ddf5d40350cc",
+        "bytes": 13341
+      },
+      "Nine blocks.": {
+        "path": "./audio/speech/69ad396edc0de38ca1f21cae347b8b07b1b959c8ffdf9260dca4c8cfeba04dfd.mp3",
+        "sha256": "c755ed101f8accaeae01b4515a0e6cf8e56a36e5ba3495523124027b427218fe",
+        "bytes": 6285
+      },
+      "No rush. Have another try.": {
+        "path": "./audio/speech/425e432eb9bae28bd454efc24f75638b90da988e3fef85b201a8d00f3467e124.mp3",
+        "sha256": "172de1d13fd81c6eb7c3b3a6563830cf5126842cc52549bfca9c52563d782c18",
+        "bytes": 16653
+      },
+      "Nothing here yet. Add something first.": {
+        "path": "./audio/speech/437327ada0e84bb06bb41e0508e89761a04ea3f105db5b15a6cc011b9bd00154.mp3",
+        "sha256": "78fb2beca952619740f4bdb5eac8747e548430542be29a0b65c54a62702be307",
+        "bytes": 20253
+      },
+      "Nothing to undo yet.": {
+        "path": "./audio/speech/0ce0399a2f2f27ad70e20f126d2708b97c67925aed9635ef93f6bef062d1cbcd.mp3",
+        "sha256": "9584103a3f63ce1d1a49679de4dd36a6c6d6641e70f4281cd5e2ef9adf88f458",
+        "bytes": 8877
+      },
+      "One block.": {
+        "path": "./audio/speech/de13b3978222110cf6f026b2301bc22ceee123e87941313957aa41829afa8220.mp3",
+        "sha256": "a673a29c1af05b000759c29ae28083d74f1f2346e5fdd757becf545d2e7c6a7b",
+        "bytes": 4845
+      },
+      "Put a block on the train.": {
+        "path": "./audio/speech/eaeb73821af51b8affec9716585cfa04955ac5459600a09a51d009ea83c193a2.mp3",
+        "sha256": "e5c40b85657e647672f615cd9974a4cdafa431f223fbe297c44c44890352ced1",
+        "bytes": 8877
+      },
+      "Seven blocks.": {
+        "path": "./audio/speech/6c65b9ce896c33cbda83f817c660ea96e8c76899202440e8a4bea820283ed8a8.mp3",
+        "sha256": "94aad4e8ec042efb164efb9a651d9227f1a6558b361685910c4d566bcc4ac765",
+        "bytes": 6861
+      },
+      "Six blocks.": {
+        "path": "./audio/speech/5618805784c5ff519285d8a903458472cff50c3390429c5c8587b1513304d3bb.mp3",
+        "sha256": "ed7780af38317d9ee70e6b7c2cd251c1fb568c5eadb348ee59f874df8a4af89c",
+        "bytes": 6717
+      },
+      "Take your time. Try another way.": {
+        "path": "./audio/speech/805fb423906000bfb20de1a5b0edf5f84106cce0811a66039cfa7eebaad66c8c.mp3",
+        "sha256": "bf0c272979bf1e3aeaa0fdcf708b945ca245ab398052ea66d37a9b0285191b2d",
+        "bytes": 17517
+      },
+      "Ten blocks.": {
+        "path": "./audio/speech/282cc14bfa4a6fdabd1eb7bb4e7d17a564447b6ac5400b715323bd2ad41b3f8a.mp3",
+        "sha256": "c9b3b479359bbc9441f813cb9f3bed29e43c06bc689a354ec2d8c80af0290605",
+        "bytes": 5709
+      },
+      "This is the bag. Pick something else to put inside.": {
+        "path": "./audio/speech/4c65ad51024a5e822307218a42152aff9f08bead561600c07b047f30afa73dd8.mp3",
+        "sha256": "8acd6894399fc7691b030fc2e7ec1d488adba18a4446e092007d0b9c2e95b6d6",
+        "bytes": 22701
+      },
+      "Three blocks.": {
+        "path": "./audio/speech/347e923ad808a8831cc944ee68b4eba3a2dafc676a6d24047a326bfd13d541ca.mp3",
+        "sha256": "33ecef27542da8289d45a5ac254b7abfee03cd9eb5f16e517665611d4f15255a",
+        "bytes": 5853
+      },
+      "Try another part or change the color.": {
+        "path": "./audio/speech/64c36b1f772cc4a9451af1eeb8cf0d54175bb576e2a0d074b3b4ebad396404d5.mp3",
+        "sha256": "63cdce086263e1117b79d5262210d3818bb69e62819f9cc2a259dd722487301c",
+        "bytes": 13485
+      },
+      "Try the glowing spot.": {
+        "path": "./audio/speech/7cea81f4d840d405720d10041f9f0702238ea4adbe87a1cf840c370831134acf.mp3",
+        "sha256": "46ed6b81ceb4478d9f0dc59719d88cbef4940261ef9509d3c7cfc973d098fe26",
+        "bytes": 8733
+      },
+      "Two blocks.": {
+        "path": "./audio/speech/485d5c4303e573606526780c326ab1d2fdac88d2dec96760a20a46a37a461bfa.mp3",
+        "sha256": "faea3019fc191461497dc405b3c16c10e19a20a0029ee539f384dfd764a5d6cb",
+        "bytes": 5853
+      },
+      "You did it. Keep exploring!": {
+        "path": "./audio/speech/4609f9b0784ee4222f02c1018cc0911dd2eca52be311788054e542675d6df975.mp3",
+        "sha256": "2c643119d2bc7d646d12bdeade81edc614a14ac403a339e930304f87565fc109",
+        "bytes": 16653
+      },
+      "You finished them all. Wonderful!": {
+        "path": "./audio/speech/24463a7d21fe7f89fadd5135785285a6db45c12e79ba5383f6877ab4c86e1278.mp3",
+        "sha256": "420c6326c919837853209cf162d6202eb0aaaa7cc2c6d3dba9372a9d6e58c07f",
+        "bytes": 17373
+      },
+      "You finished this activity. Well done!": {
+        "path": "./audio/speech/3569a3a8be7f38b322d8b7072ad68178352c539e34f57aebe3b40dc7336d2fa5.mp3",
+        "sha256": "b7a5069d68d5e2491666488f2ff16eecca38cab4813c628f779cfcc006a9fdf3",
+        "bytes": 19101
+      },
+      "You kept going and finished every challenge!": {
+        "path": "./audio/speech/6e001982c70e1af132874ce5cc29fb25dbd64ba3d5542498c2006a4bd4813f07.mp3",
+        "sha256": "79eaf2b91395f1a1220a9f6101274eec16bdc88c15c031d16e42d3d4c3759efc",
+        "bytes": 14781
+      },
+      "You made it! Keep exploring.": {
+        "path": "./audio/speech/baec296cb861f0df8fdb24481841349a35d172b9beb5f0e986d62441230881b9.mp3",
+        "sha256": "5e2d512d84085166bc8b46c7e1c116453eb4d53777508f9c70e7542c6de13bbd",
+        "bytes": 16509
+      },
+      "Your practice paid off. Great work!": {
+        "path": "./audio/speech/c9cb77bb6d15dcd14c9173c1f6327dfa6d27635fe18d04e8c11d9c33e962518e.mp3",
+        "sha256": "729ebbcc73f36a3ac94d99dfbdb66b72658eea4793e9e81d6dd256614028c7ff",
+        "bytes": 18669
+      },
+      "eight": {
+        "path": "./audio/speech/38be732f3bb269761b51af60d0226af52ad05401926248112dfdd071d668119c.mp3",
+        "sha256": "8d49c6edc1d46295d2369f133d0dc1f7867463eeeb43df3f233161ff2c230324",
+        "bytes": 2685
+      },
+      "five": {
+        "path": "./audio/speech/4c4a5d17211e1543f8ca4d9d11e32e39e7008e28a25db65dafb2a76ccde0f3ad.mp3",
+        "sha256": "7f68f7c4d38a3671fe0c06ee8813e6f19e2de4edd2c557c4495b78cfe5bc3532",
+        "bytes": 3981
+      },
+      "four": {
+        "path": "./audio/speech/b41a0619778562c92b93d536d6c6c83ba292ad4858ca21f3b21579529431e153.mp3",
+        "sha256": "eec0e989befe75d828aa090ceb188e63ee814c031a300125ee7306bbc306489c",
+        "bytes": 3981
+      },
+      "nine": {
+        "path": "./audio/speech/8bd159b6d4d122b0c3aa757b4d26203cc65b58f4a4534853193b44ecbb645ff4.mp3",
+        "sha256": "d690b7dcac984bcb2d2a57fe9c3e3265b5e67294db8376977b37963297e6b5d9",
+        "bytes": 3405
+      },
+      "one": {
+        "path": "./audio/speech/76092e47ce62be0886271a27bfe627045807046c53e6d3c93964695a42da32a5.mp3",
+        "sha256": "e681c900ce7ab703960e33668d61ca6c99bae6572dedfbf81646fd644c58462d",
+        "bytes": 3549
+      },
+      "seven": {
+        "path": "./audio/speech/60232ee12ff95542db2e30244556037c33f5692e73c1de3b4cfd352e037d321e.mp3",
+        "sha256": "9a1420fca082037544884ae1f076f3a3b985bbb635c9cca9746def31c8dc3334",
+        "bytes": 4557
+      },
+      "six": {
+        "path": "./audio/speech/5c73e050a3aa4c63c313eafc78a1802ee1fd73a280e95e08c46bd5679356e0fd.mp3",
+        "sha256": "3b8e8cc886b00b8f978cdce8582c57ff5f7818e4ba89afc671a2e400efe1a0b9",
+        "bytes": 4557
+      },
+      "ten": {
+        "path": "./audio/speech/085587cd189536bc883425174c9086594bce2733162e1e93569d60327b239ad9.mp3",
+        "sha256": "399b07cd74dbaad465312e1c0b2224f6ddafeba6ceda43cd19e665cb44c7b6d4",
+        "bytes": 3549
+      },
+      "three": {
+        "path": "./audio/speech/82c0f83b342bbeb0c36b62aceadc57b0201fb3a13e10277f347317393045825d.mp3",
+        "sha256": "491005fae0dc4b8fbede2727dd07cdd9e7dce38ab68ac7c4ffff344751c13ab2",
+        "bytes": 3117
+      },
+      "two": {
+        "path": "./audio/speech/bd860106d8fb50abc226f1eb1087a4a43ba3477b7bf290d0adc50523ee66b67b.mp3",
+        "sha256": "c6eb1b9b98bc3e6a6b2d5cf38087d413ea239fba4c091f8b21f5e667821f2328",
+        "bytes": 2541
+      }
+    }
+  }
+};

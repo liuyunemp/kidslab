@@ -96,8 +96,12 @@ test.describe('3D Huarong Dao', () => {
   test('offers a pausable solution timeline and keeps bilingual layouts in view', async ({ page }) => {
     await page.locator('[data-level="practice"]').click();
     await page.locator('#demoBtn').click();
-    await page.locator('#demoPlayBtn').click();
-    await expect(page.locator('#demoPlayBtn')).toHaveAttribute('aria-label', '继续演示');
+    // The demo bar only shows up once the solver worker answers, which is slow on a loaded
+    // machine: wait for it instead of assuming it exists within the default 5s.
+    const demoPlay = page.locator('#demoPlayBtn');
+    await expect(demoPlay).toBeVisible({ timeout: 20000 });
+    await demoPlay.click();
+    await expect(demoPlay).toHaveAttribute('aria-label', '继续演示');
 
     const before = Number(await page.locator('#demoRange').inputValue());
     await page.locator('#demoNextBtn').click();

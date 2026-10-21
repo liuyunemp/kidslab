@@ -1,6 +1,6 @@
 {
   "id": "number-fireflies",
-  "version": "217e212cf58f9775e4fbbaf39f861a2a0aaa92bd0220767b1c583ca6e01af6aa",
+  "version": "23c52afcd6e11975be7b2f61cfb3e25bd52ffae8955034ef1b8df9cfdda11cc3",
   "assets": [
     {
       "path": "audio/speech/0168541fadcd1d9457ec4b25fcb507d0a8b64d2a81c6bea002d7408eb74148e0.mp3",
@@ -288,17 +288,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "31aed368cdcadce7e6ad66faaf402887cf046f24fc176286efed49a42ecdb5fa"
+      "sha256": "1327ffcd3f9ce5cf2b5fd2b58aaaac97d49c2dcd12e6c2b4c681ef9457dc4ebf"
     },
     {
       "path": "main.js",
-      "sha256": "1d8292891ccafa22e160fd042427f1c028172ac9a45076a7603b477d638b63f8",
-      "fingerprint": "f941db27"
+      "sha256": "cc27791990f3024030e3b140f80409ab8a2d135544a12ed8e2ae32c3119e692b",
+      "fingerprint": "5cb7eb15"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

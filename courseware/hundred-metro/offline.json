@@ -1,6 +1,6 @@
 {
   "id": "hundred-metro",
-  "version": "5abd3670c52e6399462eafe1583e24a347243cc9b66e34e32c894994b3a6081f",
+  "version": "32e4df5ce882672064da197e71474d07d8d0c477d8ffc3942b2dca98af6bde8c",
   "assets": [
     {
       "path": "audio.js",
@@ -271,17 +271,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "a59525e1efb2f7f5434ea409b50ce4ef0aca608291d88014f2678e47aff47f9a"
+      "sha256": "83ff9ba59777b09a987652f549d310acaab2dd2ef0723e785a0df580c667686d"
     },
     {
       "path": "main.js",
-      "sha256": "3d08b2beab2ee53bd1ef4767344800b1ed5b5219fcad4516d30dbf330ea9d54f",
-      "fingerprint": "f248be47"
+      "sha256": "a0fc211b681883b873d7f9d9ff8df341bfc5189789f45015db6a29d919f1af5c",
+      "fingerprint": "b1bd930b"
     },
     {
       "path": "narration.js",
-      "sha256": "aaedf692ba6beb82cd3d1990b5a12e41f88d5465ef869279da0b11381f6f31ba",
-      "fingerprint": "221fb63c"
+      "sha256": "46f9b9c0063add039b5943fef9d2dc66a0cbb17e59656d2a4977fed895e0da83",
+      "fingerprint": "ff63302c"
     },
     {
       "path": "random-core.js",

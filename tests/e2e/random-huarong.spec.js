@@ -4,8 +4,13 @@ test('huarong: current-board hints, demo restores play, reload, retry and new la
   test.setTimeout(90000);await page.emulateMedia({reducedMotion:'reduce'});
   await page.addInitScript(()=>{localStorage.setItem('kidslab.huarong-dao.guided','1');localStorage.setItem('kidslab.huarong-dao.music','0');});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('/courseware/huarong-dao/?seed=987');await page.locator('[data-level="practice"]').click();await expect(page.locator('[data-level="practice"]')).toHaveClass(/is-on/);
-  const saved=()=>roundRecord(page,'huarong-dao'),a=await saved();
+  await page.goto('/courseware/huarong-dao/?seed=987');
+  const saved=()=>roundRecord(page,'huarong-dao');
+  // The level switch is ignored while the board is still generating its first round, so
+  // wait for the published snapshot and retry the click instead of assuming one shot.
+  await saved();
+  await expect(async()=>{await page.locator('[data-level="practice"]').click();await expect(page.locator('[data-level="practice"]')).toHaveClass(/is-on/,{timeout:1000});}).toPass({timeout:15000});
+  const a=await saved();
   async function hint(){await page.locator('#hintBtn').click();const button=page.locator('#movePad button.is-hint:not(:disabled)');await expect(button).toHaveCount(1);await button.click();await expect.poll(()=>page.evaluate(()=>!document.querySelector('#undoBtn').disabled||!document.querySelector('#win').hidden)).toBe(true);}
   await hint();const moved=(await saved()).play.state;await page.reload();await expect(page.locator('#moveValue')).toHaveText('1');expect((await saved()).play.state).toEqual(moved);
   await page.locator('#demoBtn').click();await expect(page.locator('#demoBar')).toBeVisible();await page.locator('#demoExitBtn').click();expect((await saved()).play.state).toEqual(moved);

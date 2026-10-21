@@ -1,0 +1,28 @@
+{
+  "id": "english-school-bag",
+  "title": {
+    "zh": "我的小书包",
+    "en": "My School Bag"
+  },
+  "icon": "🎒",
+  "tags": [
+    "英语启蒙",
+    "学习用品",
+    "3D"
+  ],
+  "description": {
+    "zh": "整理自己的小书包，把学习用品的英文带回家。",
+    "en": "Pack your school bag and learn the names of your school things."
+  },
+  "category": "english",
+  "levels": [
+    "primary"
+  ],
+  "grades": [
+    "g1",
+    "g2",
+    "g3"
+  ],
+  "order": 245,
+  "badge": "new"
+}

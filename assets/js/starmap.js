@@ -55,7 +55,7 @@
       bhInsideHint: '黑洞内部预览 · 点击中心回到外侧',
       bhEnter: '点击进入黑洞内部 →',
       bhExit: '点击中心离开黑洞 →',
-      cats: { featured: '精选', math: '数学', physics: '物理', chemistry: '化学', programming: '编程', science: '科学', logic: '逻辑' },
+      cats: { featured: '精选', math: '数学', physics: '物理', chemistry: '化学', programming: '编程', science: '科学', logic: '逻辑', chinese: '语文', english: '英语' },
     },
     en: {
       title: 'Knowledge Star Map',
@@ -82,13 +82,13 @@
       bhInsideHint: 'Inside the black hole · click the center to return',
       bhEnter: 'Click to enter the black hole →',
       bhExit: 'Click the center to leave →',
-      cats: { featured: 'Featured', math: 'Math', physics: 'Physics', chemistry: 'Chemistry', programming: 'Coding', science: 'Science', logic: 'Logic' },
+      cats: { featured: 'Featured', math: 'Math', physics: 'Physics', chemistry: 'Chemistry', programming: 'Coding', science: 'Science', logic: 'Logic', chinese: 'Chinese', english: 'English' },
     },
   };
   const lang = () => ((document.documentElement.lang || 'zh').startsWith('zh') ? 'zh' : 'en');
   const t = () => I18N[lang()];
 
-  const CAT_ORDER = ['math', 'programming', 'logic', 'featured', 'chemistry', 'physics', 'science'];
+  const CAT_ORDER = ['math', 'chinese', 'english', 'programming', 'logic', 'featured', 'chemistry', 'physics', 'science'];
   const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const catColor = (cat) => cssVar(`--c-${cat}`) || '#ffd166';
 
