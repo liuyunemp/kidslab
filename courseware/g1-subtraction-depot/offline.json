@@ -1,15 +1,11 @@
 {
   "id": "g1-subtraction-depot",
-  "version": "c2d1ebe7e55de9c382f2c32005916295e8c238f0f10c576085fab3298312bdf4",
+  "version": "e666949aeac23f0a5db5572cfe080ba4c0b594e528acf6d632366f6483c2729a",
   "assets": [
     {
       "path": "audio.js",
       "sha256": "8060abcb164396ad47fb9f964e810d13969540158cfbe2c13be5f341149274a0",
       "fingerprint": "8dc72d29"
-    },
-    {
-      "path": "audio/bgm.ogg",
-      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
     },
     {
       "path": "audio/lab-glow.meta.json",
@@ -260,11 +256,6 @@
       "sha256": "239029eb394b0742fc5e858fce5a060e410338d8e180b51d1df823c97527c294"
     },
     {
-      "path": "config.js",
-      "sha256": "cedede571ecac8227c90e96843184c40b65f97d6cea2522174042f1d6a79019a",
-      "fingerprint": "812819ce"
-    },
-    {
       "path": "content.js",
       "sha256": "ae8f01438081521a65dda85e150c2954341288a719a519f3706e69345c872cfc",
       "fingerprint": "6bf98096"
@@ -272,11 +263,6 @@
     {
       "path": "course.json",
       "sha256": "75bfb1a237ec0fa0deece109fdfd902abfe5a52f5a37d7e2502d3f9b7b48cc41"
-    },
-    {
-      "path": "engine.js",
-      "sha256": "047e1b10601fd12ee10207eb6476aeb58c9cab765acccfad810cefe02ad16a56",
-      "fingerprint": "fb0d9d15"
     },
     {
       "path": "exploration-model.js",
@@ -291,11 +277,6 @@
       "path": "main.js",
       "sha256": "28ab406fbbbdbd5823bcec1c5911a48465966ad45bfdcc3f91e9a3b92447453a",
       "fingerprint": "c95e64dd"
-    },
-    {
-      "path": "model.js",
-      "sha256": "55d5cbf4067be07e3b767a0cbd540a2794151f18618aeeb216a87c2a6d81aa61",
-      "fingerprint": "8777b077"
     },
     {
       "path": "narration.js",

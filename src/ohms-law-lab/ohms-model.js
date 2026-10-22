@@ -94,6 +94,7 @@ export function restoreObservations(saved) {
   const source = saved?.trials ?? saved?.lab?.trials;
   if (!Array.isArray(source)) return [];
   return source.filter((trial) => {
+    if (!trial || typeof trial !== 'object' || Array.isArray(trial)) return false;
     const reading = measureCircuit({
       voltageV: trial.voltageV,
       resistanceOhm: trial.resistanceOhm,

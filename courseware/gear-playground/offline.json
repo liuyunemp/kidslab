@@ -1,6 +1,6 @@
 {
   "id": "gear-playground",
-  "version": "3e7d74b3df7bd87c59b06746820c3a059b2e221f819806ff544807a775e1ed35",
+  "version": "8ed30348e0e292891bc32d2b6ec21ab233b603779c89ef2006c0458d2df4854d",
   "assets": [
     {
       "path": "audio.js",
@@ -21,8 +21,8 @@
     },
     {
       "path": "engine.js",
-      "sha256": "0aabea4e9397a21f0eb297d78f1f335b777a2710e4531e5e1eae0901a5a45db7",
-      "fingerprint": "d1135b83"
+      "sha256": "d6643938e4a839391655475da41d8fe47953799019b4a6c13d45b842d6071f17",
+      "fingerprint": "9954eb03"
     },
     {
       "path": "gear-playground-model.js",
@@ -31,7 +31,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "51679549c21077e2762c92f9d7bb599a6e6aec884d6f52d965b1416e4672b0cb"
+      "sha256": "8cb099e4e9107496fa51276c8948f986249ca1d874d35b277f8cb120bfc50b37"
     },
     {
       "path": "levels.js",
@@ -40,8 +40,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "1454814757110dc93c08cb1875cc0142afefea9ea68a294976c4985fc6866084",
-      "fingerprint": "7bdc9f67"
+      "sha256": "9c8fe68d01b172341a9233ec9c2fc496900b527dea2cc36cdd68fcf6205b430d",
+      "fingerprint": "ee846d74"
     },
     {
       "path": "model-utils.js",
@@ -55,8 +55,8 @@
     },
     {
       "path": "objects.js",
-      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
-      "fingerprint": "7a17a9de"
+      "sha256": "9b5938b07585d2b417ca8460051e4e021b7054b11cfeaa5cc9ecc9a2387f3a5b",
+      "fingerprint": "73e671d0"
     },
     {
       "path": "random-core.js",
@@ -70,8 +70,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
-      "fingerprint": "1b72b1c0"
+      "sha256": "5a460bc88d370b1c3c3a282beaa86260c8d36b839645fe0f3dccbc200e70352a",
+      "fingerprint": "3fbb86e7"
     },
     {
       "path": "session.js",

@@ -1,6 +1,6 @@
 {
   "id": "english-school-bag",
-  "version": "e8cbb7be3aaf30bbdedbd96061b29ce33b91f660e204a2e6d23adc267878879a",
+  "version": "5d6a31e0e39f0547ea2be23f91262920609119f20225cdb39f8d139bb1b60d11",
   "assets": [
     {
       "path": "audio.js",
@@ -361,8 +361,8 @@
     },
     {
       "path": "content.js",
-      "sha256": "e0efe3f375c76f4d410dee0f315742b8576c7002e626fb03c00acf688c428f7c",
-      "fingerprint": "e251476c"
+      "sha256": "a3428fc2b6ee03ccedc8e98dd67cc1a9b49d7b5b947db61e33c57359461a196b",
+      "fingerprint": "c212ed89"
     },
     {
       "path": "course.json",
@@ -370,8 +370,8 @@
     },
     {
       "path": "engine.js",
-      "sha256": "92959a82a625f50266ab675c42e078f771400c49028f665c7a1d6dd8e2bc4be6",
-      "fingerprint": "855cf1c5"
+      "sha256": "b9cb2d676d0af9d19cda607937d75655511d553580704ff827bfa8bfff6c3ebb",
+      "fingerprint": "414e8687"
     },
     {
       "path": "english-model.js",
@@ -380,12 +380,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "0e16588a90a765329b974eaef63035b86d31236efa3a0e7c053a6349277c93e3"
+      "sha256": "f3e3d168cebc29ca9eee5671774efeb4216890e8b20fcdb279c7cccc040d01cc"
     },
     {
       "path": "main.js",
-      "sha256": "8664aed2b488bcf317f69fa3d03b6d031f648bfaafaf526ff3db0b0d44590fdd",
-      "fingerprint": "50059548"
+      "sha256": "9d046a71faa321c45c5ced73e48bd70cb36bcf009971cef9c3377b44e08f7d15",
+      "fingerprint": "90e56e6a"
     },
     {
       "path": "narration.js",

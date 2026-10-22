@@ -1,6 +1,6 @@
 {
   "id": "english-number-train",
-  "version": "559a08e13fa5c8246c902764188f0282eb3b1eed53654842cb31dac6a3f4d323",
+  "version": "9caf2af91cc9855abf84af66eb2e835757bc6db7d62f99db2463d8158bfda382",
   "assets": [
     {
       "path": "audio.js",
@@ -401,8 +401,8 @@
     },
     {
       "path": "content.js",
-      "sha256": "a3c7b86d516625e8827edf67f01c4a6ba684ce129e49faeca15545ec5d64ba7a",
-      "fingerprint": "78936a9c"
+      "sha256": "790e953b500792f31e040ac2fc79293f1f31409b504848f90fe038bb5e90e5ba",
+      "fingerprint": "e8b07c35"
     },
     {
       "path": "course.json",
@@ -410,8 +410,8 @@
     },
     {
       "path": "engine.js",
-      "sha256": "92959a82a625f50266ab675c42e078f771400c49028f665c7a1d6dd8e2bc4be6",
-      "fingerprint": "855cf1c5"
+      "sha256": "b9cb2d676d0af9d19cda607937d75655511d553580704ff827bfa8bfff6c3ebb",
+      "fingerprint": "414e8687"
     },
     {
       "path": "english-model.js",
@@ -420,12 +420,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "a8a5ef2d30b08deeb2fdca7c830f858ef93a6e7ba02ff149a9b6c7cea110a7ac"
+      "sha256": "a3c4a58b3dc090515d9ee774b6526199b941c14348320bfdae3ac2506153bb7e"
     },
     {
       "path": "main.js",
-      "sha256": "5dee1454b303da7c670dbbfe8f5de64d79a6a8754ce8de6fe8124185a0838e70",
-      "fingerprint": "97c33ef6"
+      "sha256": "23083305514996fccf9e3011a70de2cb55e4242639cfb1367ba65c399b433919",
+      "fingerprint": "4ff5710e"
     },
     {
       "path": "narration.js",

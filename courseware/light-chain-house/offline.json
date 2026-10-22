@@ -1,6 +1,6 @@
 {
   "id": "light-chain-house",
-  "version": "658f13480636f00ff31751ed02ed23bf5c255a197bc9d00de466e64782d7d163",
+  "version": "861ad1ae2ff6135cc17b59d0714f13c41e013b39c4c5c775b6b2592571aebf4a",
   "assets": [
     {
       "path": "audio.js",
@@ -21,12 +21,12 @@
     },
     {
       "path": "engine.js",
-      "sha256": "93cbd93bbe0eed1b87704dba00e3d71dcb30fb244de12b980867618929c687d9",
-      "fingerprint": "d18bede2"
+      "sha256": "8c72f2854c66c776874385c13733acdaa6cb2ed8092f6f67db453c5d69924faa",
+      "fingerprint": "1b112239"
     },
     {
       "path": "index.html",
-      "sha256": "748ab20473f8d2d276fd314e28017273f2c0efd23a6f44bb625e58ba8564959c"
+      "sha256": "7d61811c6ae117084d609cf51ebd11bfdc4b76af393cc260f8d39a3ad6b01fa7"
     },
     {
       "path": "levels.js",
@@ -40,8 +40,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "90380d412662e51bd495addcfee7e2d2c77bfc4c420e65ae4e547ee1cdb218c1",
-      "fingerprint": "27434de8"
+      "sha256": "6ea7c4bd150b76391216ba060fce02b97c6fe404e391a79732e65fb39719bd64",
+      "fingerprint": "1cf6a136"
     },
     {
       "path": "model-utils.js",
@@ -55,8 +55,8 @@
     },
     {
       "path": "objects.js",
-      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
-      "fingerprint": "7a17a9de"
+      "sha256": "9b5938b07585d2b417ca8460051e4e021b7054b11cfeaa5cc9ecc9a2387f3a5b",
+      "fingerprint": "73e671d0"
     },
     {
       "path": "random-core.js",
@@ -70,8 +70,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
-      "fingerprint": "1b72b1c0"
+      "sha256": "5a460bc88d370b1c3c3a282beaa86260c8d36b839645fe0f3dccbc200e70352a",
+      "fingerprint": "3fbb86e7"
     },
     {
       "path": "session.js",

@@ -1,9 +1,83 @@
 import * as T from 'three';
 import {RoundedBoxGeometry} from './vendor/RoundedBoxGeometry.js';
 
+function materialColor(o,key,p){
+  if(key==='primary')key=['blue','red','green','yellow'][Math.abs(o.color||0)%4];
+  if(key==='status')key=o.type==='lamp'?(o.on?'yellow':'metal'):o.on?'green':o.type==='dock'?'yellow':o.type==='crate'?'wood':'red';
+  if(key==='target')key=o.target?'yellow':'dark';
+  return p[key]||key;
+}
+
+export function updateObject(g,o,p){
+  g.userData.update?.(o);
+  g.traverse(node=>{
+    for(const m of Array.isArray(node.material)?node.material:node.material?[node.material]:[]){
+      if(m.userData.paletteKey)m.color.set(materialColor(o,m.userData.paletteKey,p));
+      if(m.userData.emissiveKey){m.emissive.set(p[m.userData.emissiveKey]);m.emissiveIntensity=o.on?.65:0;}
+    }
+  });
+  if(o.type==='train')g.rotation.y=o.heading||0;
+  g.userData.descriptor=o;
+}
+
+export function disposeObject(g){
+  g.traverse(o=>{o.geometry?.dispose();if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material?.dispose();});
+}
+
+// Presentation metadata, transforms and values handled by updateObject do not
+// change geometry. Keep unknown fields in the key so new shapes fail safely.
+function shapeKey(o){
+  const ignored=new Set(['id','label','action','draggable','spin','color','heading']);
+  if(o.type!=='rail')for(const key of ['x','y','z'])ignored.add(key);
+  if(['dock','crate','lamp','train'].includes(o.type))ignored.add('on');
+  if(o.type==='lamp')ignored.add('target');
+  if(o.type==='land'){ignored.add('water');ignored.add('silt');}
+  return JSON.stringify(Object.keys(o).sort().filter(k=>!ignored.has(k)).map(k=>{
+    const value=k==='pollen'&&o.type==='bee'?Boolean(o[k]):k==='phase'&&o.type==='flower'?(o[k]===3?3:o[k]>=1?1:0):o[k];
+    return [k,value];
+  }));
+}
+
+export function createObjectPool(group){
+  const byId=new Map();
+  return {
+    sync(objects,palette,now){
+      const keep=new Set(),entries=[],paletteKey=JSON.stringify(palette);
+      for(const o of objects){
+        keep.add(o.id);
+        const shape=shapeKey(o),appearance=JSON.stringify([paletteKey,o.color,o.on,o.target,o.heading,o.water,o.silt]);
+        let entry=byId.get(o.id);
+        const replaced=entry&&entry.shape!==shape;
+        if(!entry||replaced){
+          const from=entry?.mesh.position.clone(),rotation=entry?.mesh.userData.rotor?.rotation.y||0;
+          if(entry){group.remove(entry.mesh);disposeObject(entry.mesh);}
+          const mesh=makeObject(o,palette),target=mesh.position.clone();
+          if(mesh.userData.rotor)mesh.userData.rotor.rotation.y=rotation;
+          group.add(mesh);
+          // Keep the entry identity too: pointer capture may still refer to it.
+          entry=Object.assign(entry||{},{mesh,target,from:from||target.clone(),start:now,shape,appearance});
+          mesh.position.copy(entry.from);byId.set(o.id,entry);
+        }else{
+          const target=entry.target.clone().set(o.x||0,o.y||0,o.z||0);
+          if(!target.equals(entry.target)){
+            entry.from.copy(entry.mesh.position);entry.target.copy(target);entry.start=now;
+          }
+          if(entry.appearance!==appearance){updateObject(entry.mesh,o,palette);entry.appearance=appearance;}
+        }
+        entry.o=o;entry.mesh.userData.descriptor=o;entries.push(entry);
+      }
+      for(const [id,entry] of byId)if(!keep.has(id)){
+        group.remove(entry.mesh);disposeObject(entry.mesh);entry.label?.remove();byId.delete(id);
+      }
+      return entries;
+    },
+    dispose(){for(const entry of byId.values()){group.remove(entry.mesh);disposeObject(entry.mesh);entry.label?.remove();}byId.clear();},
+  };
+}
+
 export function makeObject(o,p){
-  const g=new T.Group(),mat=(key,metal=0,rough=.6)=>new T.MeshStandardMaterial({color:p[key]||key,metalness:metal,roughness:rough});
-  const color=['blue','red','green','yellow'][Math.abs(o.color||0)%4];
+  const g=new T.Group(),mat=(key,metal=0,rough=.6)=>{const material=new T.MeshStandardMaterial({color:materialColor(o,key,p),metalness:metal,roughness:rough});material.userData.paletteKey=key;return material;};
+  const color='primary';
   const add=(geo,m,x=0,y=0,z=0)=>{const mesh=new T.Mesh(geo,m);mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);return mesh;};
   const box=(w,h,d,key,x=0,y=h/2,z=0)=>add(new RoundedBoxGeometry(w,h,d,2,Math.min(w,h,d)*.12),mat(key),x,y,z);
   const sphere=(r,key,x=0,y=0,z=0)=>add(new T.SphereGeometry(r,16,12),mat(key),x,y,z);
@@ -17,15 +91,15 @@ export function makeObject(o,p){
     case 'grass':box(.96,.1,.96,'green',0,-.05);break;
     case 'wall':box(.94,.5,.94,'wood');box(.97,.06,.97,'paper',0,.53);break;
     case 'hedge':box(.9,.5,.9,'green');for(const x of [-.23,.2])sphere(.3,'green',x,.5,0);break;
-    case 'dock':{box(.88,.06,.88,o.on?'green':'yellow');const ring=add(new T.TorusGeometry(.32,.025,6,40),mat('paper'),0,.08,0);ring.rotation.x=-Math.PI/2;break;}
+    case 'dock':{box(.88,.06,.88,'status');const ring=add(new T.TorusGeometry(.32,.025,6,40),mat('paper'),0,.08,0);ring.rotation.x=-Math.PI/2;break;}
     case 'crate':{
-      box(.62,.54,.62,o.on?'green':'wood');for(const x of [-.25,.25])box(.05,.58,.66,'yellow',x,.29);for(const z of [-.25,.25])box(.65,.58,.05,'wood',0,.29,z);box(.62,.05,.12,'yellow',0,.56);break;
+      box(.62,.54,.62,'status');for(const x of [-.25,.25])box(.05,.58,.66,'yellow',x,.29);for(const z of [-.25,.25])box(.65,.58,.05,'wood',0,.29,z);box(.62,.05,.12,'yellow',0,.56);break;
     }
     case 'robot':{
       box(.66,.25,.58,color,0,.24);box(.42,.35,.36,'metal',0,.51);box(.34,.15,.025,'dark',0,.57,-.195);sphere(.034,'yellow',-.085,.59,-.22);sphere(.034,'yellow',.085,.59,-.22);cylinder(.03,.17,'metal',0,.76);sphere(.06,color,0,.88);wheels();if(o.cargo)box(.38,.35,.38,'wood',0,.85,.12);break;
     }
     case 'lamp':{
-      cylinder(.42,.12,'dark');cylinder(.34,.05,'metal',0,.14);const bulb=sphere(.29,o.on?'yellow':'metal',0,.4);bulb.material.emissive=new T.Color(p.yellow);bulb.material.emissiveIntensity=o.on?.65:0;box(.12,.05,.12,o.target?'yellow':'dark',.32,.12,.32);break;
+      cylinder(.42,.12,'dark');cylinder(.34,.05,'metal',0,.14);const bulb=sphere(.29,'status',0,.4);bulb.material.userData.emissiveKey='yellow';box(.12,.05,.12,'target',.32,.12,.32);break;
     }
     case 'rail':{
       const dx=o.to[0]-o.x,dz=o.to[1]-o.z,len=Math.hypot(dx,dz),angle=Math.atan2(dx,dz);g.rotation.y=angle;
@@ -39,7 +113,7 @@ export function makeObject(o,p){
       box(1,.12,.85,'paper');for(const x of [-.38,.38])box(.06,.65,.06,'wood',x,.42,.25);box(1.12,.12,.86,color,0,.8);box(.4,.28,.08,'paper',0,.56,.2);break;
     }
     case 'lever':{
-      cylinder(.21,.1,'dark',0,.12,.43);const stem=beam([0,.17,.43],[o.on?.15:-.15,.64,.43],.04,'metal');sphere(.095,o.on?'green':'red',o.on?.15:-.15,.64,.43);break;
+      cylinder(.21,.1,'dark',0,.12,.43);const stem=beam([0,.17,.43],[o.on?.15:-.15,.64,.43],.04,'metal');sphere(.095,'status',o.on?.15:-.15,.64,.43);break;
     }
     case 'gear':{
       cylinder(.12,.55,'metal',0,.2);cylinder(.28,.09,'dark',0,.045);if(!o.teeth)break;
@@ -53,10 +127,16 @@ export function makeObject(o,p){
       const canopy=new T.Mesh(new T.ConeGeometry(.75,.5,24),mat('red'));canopy.position.y=.48;top.add(canopy);for(let i=0;i<4;i++){const a=i*Math.PI/2,seat=new T.Mesh(new RoundedBoxGeometry(.24,.19,.28,2,.035),mat(['yellow','blue','green','paper'][i]));seat.position.set(Math.cos(a)*.48,-.27,Math.sin(a)*.48);top.add(seat);}break;
     }
     case 'land':{
-      box(.97,o.depth?.08:.3,.97,o.depth?'wood':'green',0,o.depth?-.06:.05);if(o.water>.01){const w=box(.84,.03+Math.min(o.water,.5)*.25,.84,'water',0,.07+Math.min(o.water,.5)*.06);w.material.transparent=true;w.material.opacity=.8;w.material.roughness=.15;}
+      box(.97,o.depth?.08:.3,.97,o.depth?'wood':'green',0,o.depth?-.06:.05);
+      let water=null;const sediment=[];
+      g.userData.update=next=>{
+        if(next.water>.01&&!water){water=box(.84,.03,.84,'water');water.material.transparent=true;water.material.opacity=.8;water.material.roughness=.15;}
+        if(water){water.visible=next.water>.01;water.scale.y=(.03+Math.min(next.water||0,.5)*.25)/.03;water.position.y=.07+Math.min(next.water||0,.5)*.06;}
+        if(next.silt>.01&&!sediment.length)for(let i=0;i<5;i++)sediment.push(sphere(.045,'wood',Math.sin(i*3)*.23,.11,Math.cos(i*4)*.23));
+        for(const grain of sediment)grain.visible=next.silt>.01;
+      };
       if(o.bank)for(const z of [-.44,.44])box(.92,.19,.1,'metal',0,.12,z);
       if(o.pool){const ring=add(new T.TorusGeometry(.3,.045,8,24),mat('yellow'),0,.1,0);ring.rotation.x=-Math.PI/2;}
-      if(o.silt>.01)for(let i=0;i<5;i++)sphere(.045,'wood',Math.sin(i*3)*.23,.11,Math.cos(i*4)*.23);
       if(o.on)box(.85,.06,.13,'yellow',0,.05,.41);if(o.source)beam([-.22,.3,0],[.22,.3,0],.04,'blue');break;
     }
     case 'house':{
@@ -91,5 +171,5 @@ export function makeObject(o,p){
     }
     default:box(.5,.5,.5,color);
   }
-  g.position.set(o.x||0,o.y||0,o.z||0);g.userData.descriptor=o;return g;
+  g.position.set(o.x||0,o.y||0,o.z||0);updateObject(g,o,p);return g;
 }

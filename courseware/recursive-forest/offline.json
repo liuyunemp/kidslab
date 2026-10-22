@@ -1,6 +1,6 @@
 {
   "id": "recursive-forest",
-  "version": "739dc487dc30345fc02f6bcc3d5bc66740398e8b3403a97d1562fd41bc4b8760",
+  "version": "3db0bbe47099fdf72abc09c84004ef03d863d4dceab614e2af848ac921eb57cb",
   "assets": [
     {
       "path": "audio.js",
@@ -21,12 +21,12 @@
     },
     {
       "path": "engine.js",
-      "sha256": "d2b1d3bfc9db8c6101c466b829c99e3d568a3e24a39356e182ec9a71d96327d1",
-      "fingerprint": "4f04af57"
+      "sha256": "a103f6e93d34511e2b759e5510ed14e4386470e6c4636ad82435aa79f367fc34",
+      "fingerprint": "d3d02a15"
     },
     {
       "path": "index.html",
-      "sha256": "0368557ecf7bd87a4478cc98c7876ed60b3ae738a0cecb335f2bd84dd208f0c1"
+      "sha256": "fa931f320b9f12f81dfc1eae12699eb365219bb645e201973138929ce235bc0a"
     },
     {
       "path": "levels.js",
@@ -35,8 +35,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "67c75db8aae028f1c0be7c65c7278df4dbfd8c082a3a99507eebff64d007ddb6",
-      "fingerprint": "a707be61"
+      "sha256": "4b825b83872c6aa367fe354c9bb9f6d249af31cf77f8e31d6193784715bff59c",
+      "fingerprint": "3699db13"
     },
     {
       "path": "model-utils.js",
@@ -50,8 +50,8 @@
     },
     {
       "path": "objects.js",
-      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
-      "fingerprint": "7a17a9de"
+      "sha256": "9b5938b07585d2b417ca8460051e4e021b7054b11cfeaa5cc9ecc9a2387f3a5b",
+      "fingerprint": "73e671d0"
     },
     {
       "path": "random-core.js",
@@ -70,8 +70,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
-      "fingerprint": "1b72b1c0"
+      "sha256": "5a460bc88d370b1c3c3a282beaa86260c8d36b839645fe0f3dccbc200e70352a",
+      "fingerprint": "3fbb86e7"
     },
     {
       "path": "session.js",

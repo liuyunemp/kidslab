@@ -1,6 +1,6 @@
 {
   "id": "river-sandbox",
-  "version": "2d251cdc62764294be311593ba5156ec31abff73f80ad45c09965c2ed8ed0d89",
+  "version": "43fd15095d7fd5b2fde09d7857b4ec0492109b717a968e65a9e9f1092c0d7263",
   "assets": [
     {
       "path": "audio.js",
@@ -21,12 +21,12 @@
     },
     {
       "path": "engine.js",
-      "sha256": "019a99b40ff0c8529f9bd934216ec6101fb831d7ab56df375ff50d17d2804442",
-      "fingerprint": "1713ea76"
+      "sha256": "d6f9667e5f6c9a9e6afaeb5c1933bd3df5f09f697e07a02f963b5829a62b82ce",
+      "fingerprint": "d104785b"
     },
     {
       "path": "index.html",
-      "sha256": "8e96c6a24ee360bd0030071ea7848bdd37ec7e02849c8733cf9af3c9a6f1bef0"
+      "sha256": "63f823b6a44a1d0e6b9eb179f1654b3b67743b00ede831c96f905922f89205e1"
     },
     {
       "path": "levels.js",
@@ -35,8 +35,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "59340e0122075f19c24edc923b0496cd27451cb13dd80fcefb2d089eef63fda2",
-      "fingerprint": "e2f432cd"
+      "sha256": "762e0595390ef327da9f3d5ed6e7a0b57ee418c867a3fa7ec517a2659103b66e",
+      "fingerprint": "d2a4d417"
     },
     {
       "path": "model-utils.js",
@@ -50,8 +50,8 @@
     },
     {
       "path": "objects.js",
-      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
-      "fingerprint": "7a17a9de"
+      "sha256": "9b5938b07585d2b417ca8460051e4e021b7054b11cfeaa5cc9ecc9a2387f3a5b",
+      "fingerprint": "73e671d0"
     },
     {
       "path": "random-core.js",
@@ -70,8 +70,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
-      "fingerprint": "1b72b1c0"
+      "sha256": "5a460bc88d370b1c3c3a282beaa86260c8d36b839645fe0f3dccbc200e70352a",
+      "fingerprint": "3fbb86e7"
     },
     {
       "path": "session.js",

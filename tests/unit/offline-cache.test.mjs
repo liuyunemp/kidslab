@@ -9,7 +9,7 @@ const base = `${origin}courseware/demo/`;
 const sha = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 function harness() {
-  const buckets = new Map(), handlers = {}, clients = new Map();
+  const buckets = new Map(), handlers = {}, clients = new Map(), deadlines = new Map();
   const control = { offline: false, status: 200, failPath: '', tamper: '', quota: false, failState: false, count: 0, max: 0, fetches: 0, connection: undefined, estimate: null };
   let files, manifest;
   function version(value) {
@@ -45,7 +45,12 @@ function harness() {
     storage: { estimate: async () => control.estimate?.(control) },
   };
   const sandbox = vm.createContext({
-    URL, Request, Response, Headers, AbortController, TextEncoder, crypto: webcrypto, setTimeout, clearTimeout, caches,
+    URL, Request, Response, Headers, AbortController, TextEncoder, crypto: webcrypto, caches,
+    setTimeout(fn, ms) {
+      if (control.manualDeadlines && ms === 15000) { const token = {}; deadlines.set(token, fn); return token; }
+      return setTimeout(fn, ms);
+    },
+    clearTimeout(token) { if (!deadlines.delete(token)) clearTimeout(token); },
     navigator: network,
     self: { registration: { scope: origin }, addEventListener: (name, fn) => { handlers[name] = fn; },
       navigator: network,
@@ -57,6 +62,13 @@ function harness() {
       const url = new URL(key(request));
       const name = url.pathname.slice('/courseware/demo/'.length);
       if (control.status !== 200) return new Response('server error', { status: control.status });
+      if (name === control.stallBody) {
+        const response = new Response(new ReadableStream({start(controller) {
+          signal.addEventListener('abort', () => { control.bodyAborted = true; controller.error(new Error('body timeout')); }, {once: true});
+        }}));
+        control.onStall?.();
+        return response;
+      }
       if (name === 'offline.json') return new Response(JSON.stringify(manifest));
       control.count++; control.max = Math.max(control.max, control.count);
       await new Promise((resolve) => setTimeout(resolve, 2));
@@ -66,7 +78,7 @@ function harness() {
       return new Response(name === control.tamper ? 'mismatch' : files.get(name));
     },
   });
-  vm.runInContext(`${source}\nglobalThis.api = { prepareCourse, completeSnapshot, rangeResponse, courseRequest, cleanupSnapshots, teardownLegacyCache, evictSnapshotsUnderPressure, shouldDeferDownload };`, sandbox);
+  vm.runInContext(`${source}\nglobalThis.api = { prepareCourse, completeSnapshot, rangeResponse, courseRequest, cleanupSnapshots, teardownLegacyCache, evictSnapshotsUnderPressure, shouldDeferDownload, clientSnapshots };`, sandbox);
   const api = sandbox.api;
   async function request(file, { navigate = false, clientId = '', range } = {}) {
     const request = new Request(base + file, { headers: range ? { range } : {} });
@@ -82,7 +94,36 @@ function harness() {
     await state.put(`${origin}__offline__/courses/${id}`, new Response(JSON.stringify({ id, version: 'v', cache, completedAt })));
     return cache;
   }
-  return { api, caches, buckets, control, clients, version, request, handlers, seedCourse };
+  return { api, caches, buckets, control, clients, version, request, handlers, seedCourse,
+    expireDownloads() { for (const fn of [...deadlines.values()]) fn(); },
+  };
+}
+
+for (const stallBody of ['offline.json', 'main.js']) {
+  test(`snapshot timeout covers stalled ${stallBody} bodies and permits a fresh retry`, {timeout: 3000}, async () => {
+    const h = harness();
+    await h.api.prepareCourse('demo');
+    const previous = await h.api.completeSnapshot('demo');
+    h.version('new');
+    h.control.manualDeadlines = true;
+    h.control.stallBody = stallBody;
+    const stalled = new Promise(resolve => { h.control.onStall = resolve; });
+    const pending = h.api.prepareCourse('demo');
+    await stalled;
+    // Let fetch resolve its headers before firing the download deadline.
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(h.api.prepareCourse('demo'), pending);
+    h.expireDownloads();
+    await pending;
+    assert.equal(h.control.bodyAborted, true);
+    assert.equal((await h.api.completeSnapshot('demo')).version, previous.version);
+    assert.equal((await h.caches.keys()).filter(k => k.startsWith('kidslab-course-v2-')).length, 1);
+    h.control.stallBody = '';
+    await h.api.prepareCourse('demo');
+    assert.notEqual((await h.api.completeSnapshot('demo')).version, previous.version);
+    h.control.offline = true;
+    assert.equal(await (await h.request('main.js')).text(), 'script-new');
+  });
 }
 
 test('only full verified downloads publish, deduplicate jobs, and limit concurrency to two', async () => {
@@ -244,6 +285,38 @@ test('no eviction happens when storage is healthy', async () => {
   h.control.estimate = () => ({ usage: 100, quota: 1000 });
   await h.api.evictSnapshotsUnderPressure('demo');
   assert.equal((await h.caches.keys()).includes('kidslab-course-v2-%2F-keep-v100'), true);
+});
+
+for (const live of [false, true]) {
+  for (const memory of [false, true]) {
+    test(`quota eviction checks ${memory ? 'memory and persisted' : 'persisted'} client liveness (${live})`, async () => {
+      const h = harness();
+      const oldest = await h.seedCourse('oldest', {completedAt: 100});
+      const middle = await h.seedCourse('middle', {completedAt: 200});
+      const newest = await h.seedCourse('newest', {completedAt: 300});
+      const state = await h.caches.open('kidslab-offline-state-v2');
+      const clientURL = `${origin}__offline__/clients/child`;
+      const binding = {id: 'oldest', cache: oldest, clientId: 'child'};
+      await state.put(clientURL, new Response(JSON.stringify(binding)));
+      if (memory) h.api.clientSnapshots.set('child', binding);
+      if (live) h.clients.set('child', {postMessage() {}});
+      h.control.estimate = () => ({usage: [...h.buckets.keys()].filter(k => k.startsWith('kidslab-course-v2-')).length * 300, quota: 1000});
+      await h.api.evictSnapshotsUnderPressure('newest');
+      assert.equal(h.buckets.has(oldest), live);
+      assert.equal(h.buckets.has(middle), !live);
+      assert.equal(h.buckets.has(newest), true);
+      assert.equal(Boolean(await state.match(clientURL)), live);
+      assert.equal(h.api.clientSnapshots.has('child'), memory && live);
+    });
+  }
+}
+
+test('unreadable client bindings are removed without blocking cache cleanup', async () => {
+  const h = harness(), state = await h.caches.open('kidslab-offline-state-v2');
+  const url = `${origin}__offline__/clients/corrupt`;
+  await state.put(url, new Response('{'));
+  await h.api.cleanupSnapshots('demo', 'current');
+  assert.equal(await state.match(url), undefined);
 });
 
 test('background download is deferred on metered and 2G connections only', async () => {

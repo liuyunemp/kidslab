@@ -189,6 +189,16 @@ test('corrupt storage falls back to a safe default bench', () => {
   assert.equal(restoreExperiment({ setup: { voltageV: -3, resistanceOhm: 10 } }).setup.voltageV, DEFAULT_SETUP.voltageV);
 });
 
+test('bad observation rows do not discard valid readings or the saved instrument setup', () => {
+  const valid = { voltageV: 1.5, resistanceOhm: 10, currentA: 0.15 };
+  const setup = { ...DEFAULT_SETUP, voltageV: 3, resistanceOhm: 20 };
+  const restored = restoreExperiment({ setup, trials: [null, valid, false, 'bad', [], {}, 7,
+    { voltageV: 3, resistanceOhm: 10, currentA: 999 }] });
+  assert.deepEqual(restored.history, [valid]);
+  assert.deepEqual(restored.setup, setup);
+  assert.deepEqual(restoreObservations({ lab: { trials: [null, valid] } }), [valid]);
+});
+
 test('U-I graph maps voltage to x and current to y with a fixed lab scale', () => {
   const origin = graphPoint(0, 0);
   const top = graphPoint(6, 1.2);

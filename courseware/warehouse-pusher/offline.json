@@ -1,6 +1,6 @@
 {
   "id": "warehouse-pusher",
-  "version": "4080754280a511795fa87ece7381218e545ac0a4186ec3fa9030bd0d6166ec1d",
+  "version": "457892502ffe9cc6d05f4b48e36f8146986bf8c0fb0f27197b231db6242e9258",
   "assets": [
     {
       "path": "audio.js",
@@ -21,12 +21,12 @@
     },
     {
       "path": "engine.js",
-      "sha256": "bf3aad10ecad291d78066f98cf147c0f7044301c5a5d7355aad6d439421d7f36",
-      "fingerprint": "9f8e3530"
+      "sha256": "9c8056d87bf38fbfe4e90a98a8cb3f1d860ca32461b4750d96dd8873ed552734",
+      "fingerprint": "4b9fda4b"
     },
     {
       "path": "index.html",
-      "sha256": "c3c4ff9b41e142671b3707a5c22eb01e3df781dcac7b97ba21d81807434d0736"
+      "sha256": "35ddda7be8720ff9cd35689cdb2d23dbc40b97d4669cc6fabeeb47904340b371"
     },
     {
       "path": "levels.js",
@@ -35,8 +35,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "67c28d5c2b21fc741164d8cf0789c50bab89e53f40ce05b82f1fd507517bf146",
-      "fingerprint": "742eb57b"
+      "sha256": "b5cb0acde8bceba7950109f14b43b7e237f1231bca4a2bdecc00cf19decf3209",
+      "fingerprint": "e1858c94"
     },
     {
       "path": "model-utils.js",
@@ -50,8 +50,8 @@
     },
     {
       "path": "objects.js",
-      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
-      "fingerprint": "7a17a9de"
+      "sha256": "9b5938b07585d2b417ca8460051e4e021b7054b11cfeaa5cc9ecc9a2387f3a5b",
+      "fingerprint": "73e671d0"
     },
     {
       "path": "random-core.js",
@@ -65,8 +65,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
-      "fingerprint": "1b72b1c0"
+      "sha256": "5a460bc88d370b1c3c3a282beaa86260c8d36b839645fe0f3dccbc200e70352a",
+      "fingerprint": "3fbb86e7"
     },
     {
       "path": "session.js",

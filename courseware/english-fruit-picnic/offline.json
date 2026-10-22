@@ -1,6 +1,6 @@
 {
   "id": "english-fruit-picnic",
-  "version": "4c692ae1608d7729c6ddfab2d8a569cfe9775ccd9a31969c1da04bb9e0ff472e",
+  "version": "8c42979656162cbe7b279c8d89a77ccc12a93de8fb9bde39ad6703ed665ead96",
   "assets": [
     {
       "path": "audio.js",
@@ -361,8 +361,8 @@
     },
     {
       "path": "content.js",
-      "sha256": "edba411974897182d380a8fc0391f88c40be739009af4548e06c82f17e852fa1",
-      "fingerprint": "2512d3e3"
+      "sha256": "633b96ac7f3ccb533745f16ac0a1f01bc0ba6d8dfb14804f6e5f3851093f4af7",
+      "fingerprint": "4cbcbdc0"
     },
     {
       "path": "course.json",
@@ -370,8 +370,8 @@
     },
     {
       "path": "engine.js",
-      "sha256": "92959a82a625f50266ab675c42e078f771400c49028f665c7a1d6dd8e2bc4be6",
-      "fingerprint": "855cf1c5"
+      "sha256": "b9cb2d676d0af9d19cda607937d75655511d553580704ff827bfa8bfff6c3ebb",
+      "fingerprint": "414e8687"
     },
     {
       "path": "english-model.js",
@@ -380,12 +380,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "fc7843809c43e0793fa07070c0094b5d6fc8ea63bc4c91c1c479e0beb69a6677"
+      "sha256": "90d70ce56a841d6c9cf2e43d237728e66cf190d07f2a6224480a2fededbaf156"
     },
     {
       "path": "main.js",
-      "sha256": "2e061d8f4683e583809f3a3858c258f6e89082086a879ac28eb9a991ed72f784",
-      "fingerprint": "13237470"
+      "sha256": "4601efd03e2d626c75f4c912a3774646e73a94619204e1be003f5e2a4eab8c03",
+      "fingerprint": "c372874d"
     },
     {
       "path": "narration.js",

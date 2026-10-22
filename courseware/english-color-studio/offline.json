@@ -1,6 +1,6 @@
 {
   "id": "english-color-studio",
-  "version": "917601116eb61fb8b30ee397396747029d425e5c8c6918a11f1f668e4c9d967b",
+  "version": "c07c997ad9ba94dc0afb6e22df650726280b7f38408a847b62b489aa830b25ad",
   "assets": [
     {
       "path": "audio.js",
@@ -321,8 +321,8 @@
     },
     {
       "path": "content.js",
-      "sha256": "d1aa39275d2a3151b54057d8833eb1c731036d7852ce2274607954ec4304faa0",
-      "fingerprint": "0a0eb196"
+      "sha256": "84d76ae91c7fdf116b5826a5fcfe32213cade9bfc8c25920cab33d322c243cfe",
+      "fingerprint": "0d3a0707"
     },
     {
       "path": "course.json",
@@ -330,8 +330,8 @@
     },
     {
       "path": "engine.js",
-      "sha256": "92959a82a625f50266ab675c42e078f771400c49028f665c7a1d6dd8e2bc4be6",
-      "fingerprint": "855cf1c5"
+      "sha256": "b9cb2d676d0af9d19cda607937d75655511d553580704ff827bfa8bfff6c3ebb",
+      "fingerprint": "414e8687"
     },
     {
       "path": "english-model.js",
@@ -340,12 +340,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "31a9976c439beab48f8cc2f58a80328fdd150b17713097f7b1ff326a58c090bf"
+      "sha256": "876bcf1b5dc8138f258efb6c0694401c8dd514193a73551f350d015661bb296d"
     },
     {
       "path": "main.js",
-      "sha256": "e18c29c6a971d285e8ce005d44101d5fce2be9d7be6eed37c3ebf2d36609bce4",
-      "fingerprint": "eb47c1a4"
+      "sha256": "69cbae9691c6d69c4334257aa1f0fe959badc39dfac6156c0cd9c9456d8edd1f",
+      "fingerprint": "a3e1fe44"
     },
     {
       "path": "narration.js",

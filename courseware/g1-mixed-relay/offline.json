@@ -1,15 +1,11 @@
 {
   "id": "g1-mixed-relay",
-  "version": "7e9ea54145fe91f071e48bd84c4511cb9bde078c38263ff9c982f1b7b9fe6649",
+  "version": "5eab8582b5cf02a9c115b0348dbe7129c69bf278125cf5c6b804c97c2a64825c",
   "assets": [
     {
       "path": "audio.js",
       "sha256": "8060abcb164396ad47fb9f964e810d13969540158cfbe2c13be5f341149274a0",
       "fingerprint": "8dc72d29"
-    },
-    {
-      "path": "audio/bgm.ogg",
-      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
     },
     {
       "path": "audio/lab-glow.meta.json",
@@ -260,11 +256,6 @@
       "sha256": "239029eb394b0742fc5e858fce5a060e410338d8e180b51d1df823c97527c294"
     },
     {
-      "path": "config.js",
-      "sha256": "1ff2deb13b8eb336afc3afdb656c22f186b0b685c6fb2fe9fd592234d1119de2",
-      "fingerprint": "cc7bb3fa"
-    },
-    {
       "path": "content.js",
       "sha256": "464c7a9aaf9fa837370c5fa460e5fde94fc73c01b374e4137a7a52a675c38e9f",
       "fingerprint": "dabe6231"
@@ -272,11 +263,6 @@
     {
       "path": "course.json",
       "sha256": "37a1103d80d674c4d5deb75b93c6b2d07cc85fc02e8b0268cbd67e708d83b74c"
-    },
-    {
-      "path": "engine.js",
-      "sha256": "047e1b10601fd12ee10207eb6476aeb58c9cab765acccfad810cefe02ad16a56",
-      "fingerprint": "fb0d9d15"
     },
     {
       "path": "exploration-model.js",
@@ -291,11 +277,6 @@
       "path": "main.js",
       "sha256": "428c390b0134fe7fe1648ff54a9f6c1d4ada1c67ec9011be0e6c9b8851951ae5",
       "fingerprint": "c48fe750"
-    },
-    {
-      "path": "model.js",
-      "sha256": "55d5cbf4067be07e3b767a0cbd540a2794151f18618aeeb216a87c2a6d81aa61",
-      "fingerprint": "8777b077"
     },
     {
       "path": "narration.js",

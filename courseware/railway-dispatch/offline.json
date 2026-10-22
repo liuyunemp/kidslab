@@ -1,6 +1,6 @@
 {
   "id": "railway-dispatch",
-  "version": "a63e98bfc8836e196f3fd2188f99de9ebcb2d5f4d21c6da13670e30148aa8a07",
+  "version": "a35ddc66cf8172023e1910162699a33ef24630e3e2a4b8ba66937630033baac8",
   "assets": [
     {
       "path": "audio.js",
@@ -21,12 +21,12 @@
     },
     {
       "path": "engine.js",
-      "sha256": "cc29860f3d4817229cb29ec1d763ae0d2b7b92874a7020ea1ffb28933d0178cb",
-      "fingerprint": "a9e330fd"
+      "sha256": "16a95bc1d1b7fcee6507a60210dcf9034ab91ba109c8b2ed848d112ae9204c7b",
+      "fingerprint": "f7f78d7d"
     },
     {
       "path": "index.html",
-      "sha256": "86f789892887048306c8adbb9f73cea22b90e5fea41c7cedeaec37f472f4bd4c"
+      "sha256": "c804566cd58bacf9b756a038dbd1a722c89109b5b2b6da4947198ce2cd0c8bf3"
     },
     {
       "path": "levels.js",
@@ -35,8 +35,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "5c57e5a172d2f16868103dc67edf0da5fcc56a2b46d844f9bde19775c84f3e84",
-      "fingerprint": "b051fa3a"
+      "sha256": "92f87ec8efa7e3e1f8b80e58fd218d50cf18cd6289f9dc96ca810b5e2ed098dc",
+      "fingerprint": "7ccc5f3c"
     },
     {
       "path": "model-utils.js",
@@ -50,8 +50,8 @@
     },
     {
       "path": "objects.js",
-      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
-      "fingerprint": "7a17a9de"
+      "sha256": "9b5938b07585d2b417ca8460051e4e021b7054b11cfeaa5cc9ecc9a2387f3a5b",
+      "fingerprint": "73e671d0"
     },
     {
       "path": "railway-dispatch-model.js",
@@ -70,8 +70,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
-      "fingerprint": "1b72b1c0"
+      "sha256": "5a460bc88d370b1c3c3a282beaa86260c8d36b839645fe0f3dccbc200e70352a",
+      "fingerprint": "3fbb86e7"
     },
     {
       "path": "session.js",

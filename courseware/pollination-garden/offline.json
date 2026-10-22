@@ -1,6 +1,6 @@
 {
   "id": "pollination-garden",
-  "version": "a190586918c358a004004ec16d55c58b9b47198755de01c129a689d9d2daf03b",
+  "version": "78b07e7ce644f6737caddb90b00ce0dab9fc730af23a33c081d299739cd75807",
   "assets": [
     {
       "path": "audio.js",
@@ -21,12 +21,12 @@
     },
     {
       "path": "engine.js",
-      "sha256": "d5cedcaecbfe3ddbd2f5b99b53144ea47243d2344f73c9b8647dc617b21fbdd8",
-      "fingerprint": "4fdbd390"
+      "sha256": "8ad3dc51f60788b0caae8bbfb2edc5489e8b3b2c2553916b30d73326bca52ff4",
+      "fingerprint": "9e08eb2a"
     },
     {
       "path": "index.html",
-      "sha256": "bbcba2be3f5adf13b7ea9f30e17829ad3c5324ecee4e6e396e9e2e5216da9035"
+      "sha256": "6a44a04ed5632aca3743762c4ad1075518c181a00bd8533f11b1c740808bf3b2"
     },
     {
       "path": "levels.js",
@@ -35,8 +35,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "0daa9b6906806c0c5d90d2be30f000ba067ab77320c1a7f83164093855318226",
-      "fingerprint": "8ea9abee"
+      "sha256": "0f0ced02ba35cf333a23f56ceb5ea5d8911cb88f2ca4ee7287e6ce0dea936554",
+      "fingerprint": "f0f7a5da"
     },
     {
       "path": "model-utils.js",
@@ -50,8 +50,8 @@
     },
     {
       "path": "objects.js",
-      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
-      "fingerprint": "7a17a9de"
+      "sha256": "9b5938b07585d2b417ca8460051e4e021b7054b11cfeaa5cc9ecc9a2387f3a5b",
+      "fingerprint": "73e671d0"
     },
     {
       "path": "pollination-garden-model.js",
@@ -70,8 +70,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
-      "fingerprint": "1b72b1c0"
+      "sha256": "5a460bc88d370b1c3c3a282beaa86260c8d36b839645fe0f3dccbc200e70352a",
+      "fingerprint": "3fbb86e7"
     },
     {
       "path": "session.js",

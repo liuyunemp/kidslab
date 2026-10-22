@@ -1,6 +1,6 @@
 {
   "id": "ohms-law-lab",
-  "version": "848484e4479929a9b6d8ecbd043e9bcd934757913d34741438e439e1eea1d8ca",
+  "version": "fa4aee65031d5eb0c04e4f876cb84d613cc24409c6237316d06fdc8d44cdcd66",
   "assets": [
     {
       "path": "audio.js",
@@ -17,17 +17,17 @@
     },
     {
       "path": "index.html",
-      "sha256": "40f08a129bad27b1b934b745cc01d28f79aebc823d88927282a633be7da6d593"
+      "sha256": "76d73f0139a550ff5145bfd62645b8503fcf7dd84194466369bd5d174bbe9506"
     },
     {
       "path": "main.js",
-      "sha256": "3452b044ce98a0f2b96c71e500d5ce05e0256fb6208e3a791822e1bbb3163314",
-      "fingerprint": "8d99122f"
+      "sha256": "9cd036c991b92d5b7a48a447c29e2930a529775c3f5a4afaa80ac19144e4ee49",
+      "fingerprint": "5e9d8a38"
     },
     {
       "path": "ohms-model.js",
-      "sha256": "009672ae45d3077cc51f9db82f62146c1ab5492fe9310e8fcee4c005af8ff2cd",
-      "fingerprint": "41e2f790"
+      "sha256": "0381f08efd6a7da9a4cfb2e2f81491efea5c47bf72440d3710b4ed7cdc51759d",
+      "fingerprint": "a352e192"
     },
     {
       "path": "scene.js",

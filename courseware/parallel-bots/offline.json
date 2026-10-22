@@ -1,6 +1,6 @@
 {
   "id": "parallel-bots",
-  "version": "48edc02a83cd60e84f4a249c4fa5864f29802090bd97e61c98d894bd0b16c5a0",
+  "version": "266f61a325b6e6cfe492fcd0811247c32bb7d0fe36cab836c61abe6caa644ada",
   "assets": [
     {
       "path": "audio.js",
@@ -21,12 +21,12 @@
     },
     {
       "path": "engine.js",
-      "sha256": "9aebddcc3522622e86f0a90b5bb888f788275d137cc4615c0804addff5ed7797",
-      "fingerprint": "d8e60f00"
+      "sha256": "1cb5934cc6b04ee01ecb7cf9f9b4879221c167c9c89b695a5aa354df3603a978",
+      "fingerprint": "fb1176b9"
     },
     {
       "path": "index.html",
-      "sha256": "f3d0e26b9ae6b3236ae70c0982a9df87738168f2b47b68f87cf7d81f857a5ffa"
+      "sha256": "a997920df7ec80737d214c20c1b50e91b958baeda1cd19addaaed2001408086f"
     },
     {
       "path": "levels.js",
@@ -35,8 +35,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "a911a981bf8e81a195b4014ab39583ab4af3b000c02b042492f37ba506c212a8",
-      "fingerprint": "3ef355ab"
+      "sha256": "4f5c90d3a00b82d9b76f744f9ba53378c521a3c27c56c6d4c87563d120ced4f1",
+      "fingerprint": "b75d24ed"
     },
     {
       "path": "model-utils.js",
@@ -50,8 +50,8 @@
     },
     {
       "path": "objects.js",
-      "sha256": "62e9c959b3d4779d7f412b60c9f572a91c9a823543369ad154593598baf7d221",
-      "fingerprint": "7a17a9de"
+      "sha256": "9b5938b07585d2b417ca8460051e4e021b7054b11cfeaa5cc9ecc9a2387f3a5b",
+      "fingerprint": "73e671d0"
     },
     {
       "path": "parallel-bots-model.js",
@@ -70,8 +70,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "b4f707c8a61cc452ade696601a422d432d54844331d741c93d8c9b0cf6d81ee5",
-      "fingerprint": "1b72b1c0"
+      "sha256": "5a460bc88d370b1c3c3a282beaa86260c8d36b839645fe0f3dccbc200e70352a",
+      "fingerprint": "3fbb86e7"
     },
     {
       "path": "session.js",

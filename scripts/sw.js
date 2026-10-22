@@ -111,26 +111,45 @@ async function validateManifest(id, manifest) {
   }
 }
 
-async function fetchWithTimeout(request, timeout = NETWORK_TIMEOUT_MS) {
+// Navigation can stream its response; snapshot downloads pass a consumer so their
+// deadline covers the body as well as the headers.
+async function fetchWithTimeout(request, timeout = NETWORK_TIMEOUT_MS, consume = null) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
-  try { return await fetch(request, { signal: controller.signal, cache: 'no-store' }); }
+  try {
+    const response = await fetch(request, { signal: controller.signal, cache: 'no-store' });
+    return consume ? await consume(response) : response;
+  } catch (error) {
+    controller.abort();
+    throw error;
+  }
   finally { clearTimeout(timer); }
 }
 
-async function cleanupSnapshots(id, current) {
-  const retained = new Set([current]);
+async function activeSnapshotCaches(state) {
+  const active = new Set();
+  // If the browser cannot answer, conservatively keep the possibly live snapshot.
+  const alive = async (id) => {
+    try { return Boolean(await self.clients.get(id)); } catch { return true; }
+  };
   for (const [clientId, binding] of clientSnapshots) {
-    if (await self.clients.get(clientId)) retained.add(binding.cache);
+    if (await alive(clientId)) active.add(binding.cache);
     else clientSnapshots.delete(clientId);
   }
-  const state = await caches.open(STATE_CACHE);
   for (const key of await state.keys()) {
     if (!new URL(key.url).pathname.startsWith(new URL('__offline__/clients/', scope).pathname)) continue;
-    const binding = await (await state.match(key)).json();
-    if (await self.clients.get(binding.clientId)) retained.add(binding.cache);
+    let binding;
+    try { binding = await (await state.match(key)).json(); } catch { /* Remove unreadable bindings. */ }
+    if (binding && typeof binding.clientId === 'string' && typeof binding.cache === 'string'
+        && await alive(binding.clientId)) active.add(binding.cache);
     else await state.delete(key);
   }
+  return active;
+}
+
+async function cleanupSnapshots(id, current) {
+  const retained = await activeSnapshotCaches(await caches.open(STATE_CACHE));
+  retained.add(current);
   for (const name of await caches.keys()) {
     if (name.startsWith(coursePrefix(id)) && !retained.has(name)) await caches.delete(name);
   }
@@ -152,15 +171,8 @@ async function evictSnapshotsUnderPressure(keep) {
   try { ({ usage, quota } = await storage.estimate()); } catch { return; }
   if (!quota || usage / quota < QUOTA_HEADROOM) return;
   const state = await caches.open(STATE_CACHE);
-  const active = new Set();
-  for (const binding of clientSnapshots.values()) active.add(binding.cache);
-  const clientPrefix = new URL('__offline__/clients/', scope).pathname;
+  const active = await activeSnapshotCaches(state);
   const coursePrefixPath = new URL('__offline__/courses/', scope).pathname;
-  for (const key of await state.keys()) {
-    if (!new URL(key.url).pathname.startsWith(clientPrefix)) continue;
-    try { active.add((await (await state.match(key)).json()).cache); }
-    catch { /* Ignore unreadable bindings; cleanupSnapshots removes them. */ }
-  }
   const records = [];
   for (const key of await state.keys()) {
     if (!new URL(key.url).pathname.startsWith(coursePrefixPath)) continue;
@@ -175,7 +187,6 @@ async function evictSnapshotsUnderPressure(keep) {
     try {
       await caches.delete(record.cache);
       await state.delete(stateURL('courses', record.id));
-      clientSnapshots.delete(record.id);
     } catch { /* Keep going: the next candidate may still free enough space. */ }
     const next = await storage.estimate().catch(() => null);
     if (next?.quota && next.usage / next.quota < QUOTA_HEADROOM) break;
@@ -187,9 +198,10 @@ async function downloadCourse(id) {
   let pendingCache = null;
   let published = false;
   try {
-    const response = await fetchWithTimeout(new Request(new URL('offline.json', courseBase(id))), 15000);
-    if (response.status !== 200) return;
-    const manifest = await response.json();
+    const manifest = await fetchWithTimeout(new Request(new URL('offline.json', courseBase(id))), 15000, async (response) => {
+      if (response.status !== 200) throw new Error('Offline manifest unavailable');
+      return response.json();
+    });
     await validateManifest(id, manifest);
     const previous = await completeSnapshot(id);
     if (previous?.version === manifest.version) {
@@ -208,9 +220,10 @@ async function downloadCourse(id) {
         const asset = manifest.assets[cursor++];
         try {
           const url = new URL(asset.path, courseBase(id)).href;
-          const result = await fetchWithTimeout(new Request(url), 15000);
-          if (result.status !== 200 || result.type === 'opaque') throw new Error('Incomplete download');
-          const bytes = await result.clone().arrayBuffer();
+          const { result, bytes } = await fetchWithTimeout(new Request(url), 15000, async (result) => {
+            if (result.status !== 200 || result.type === 'opaque') throw new Error('Incomplete download');
+            return { result, bytes: await result.clone().arrayBuffer() };
+          });
           if (await digest(bytes) !== asset.sha256) throw new Error('Asset changed during download');
           await cache.put(url, result);
         } catch (error) { failure = error; }

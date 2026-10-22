@@ -1,7 +1,7 @@
 import { createAudio } from './audio.js';
 import { createEnglishStage } from './scene.js';
 import { createNarration } from './narration.js';
-import { initialState,reduce,restore,serialize,currentWord,practisedCount } from './english-model.js';
+import { initialState,reduce,restore,serialize,currentWord,practisedCount,RULES } from './english-model.js';
 
 export function startEnglish(course,UI,manifest) {
   const $=id=>document.getElementById(id),lang=()=>document.documentElement.lang.startsWith('en')?'en':'zh',t=key=>UI[lang()][key]??key;
@@ -12,12 +12,24 @@ export function startEnglish(course,UI,manifest) {
   const seed=Number.isInteger(requested)&&requested>0&&requested<=0xffffffff?requested:(crypto.getRandomValues(new Uint32Array(1))[0]||1);
   let state=read(key)?restore(course,read(key),seed):initialState(course,seed);
   if(read(key))state={...state,paused:true};
-  let masterMuted=read(muteKey)==='1',unlocked=false,settingsOpen=false,autoId=null,voiceGeneration=0,lastTick=performance.now(),rendering=false;
+  let masterMuted=read(muteKey)==='1',unlocked=false,settingsOpen=false,autoId=null,voiceGeneration=0,lastTick=performance.now(),rendering=false,recoveries=0;
   const audio=createAudio(course.id);audio.setMuted(masterMuted);
   const narration=createNarration({manifest,lang,muted:()=>masterMuted,duck:audio.duck,restore:audio.restore,show:message=>{if(state.phase!=='answer')notice(message);}});
   const stage=createEnglishStage({canvas:$('scene'),course});
   if(!stage){$('nogl').hidden=false;state.paused=true;}
   const save=()=>write(key,JSON.stringify(serialize(state)));
+  /**
+   * A malformed word bank can make the pure model reject a transition
+   * (e.g. not enough unambiguous choices). Without this guard the 200ms timer
+   * would keep throwing and the UI would freeze on the last frame.
+   */
+  function recover(error){
+    console.error('[kidslab] english round could not continue',error);
+    recoveries+=1;
+    if(recoveries>1){state={...state,paused:true};}
+    else state=initialState(course,(state.seed+1)>>>0||1);
+    lastTick=performance.now();save();render();notice(t('recovered'));
+  }
   function unlock(){if(unlocked)return;unlocked=true;audio.unlock().catch(()=>{});audio.setMuted(masterMuted);window.cool?.stage?.('english-round');}
   function stopVoice(){voiceGeneration++;narration.reset();}
   function notice(text){$('notice').textContent=text||'';$('notice').hidden=!text;}
@@ -38,17 +50,26 @@ export function startEnglish(course,UI,manifest) {
   }
   function updateClock(){
     const active=state.phase==='answer';$('timer').textContent=active?`${Math.ceil(state.remainingMs/1000)}s`:'—';$('timer').classList.toggle('urgent',active&&state.remainingMs<=5000);$('timer').setAttribute('aria-label',`${Math.ceil(state.remainingMs/1000)} ${t('seconds')}`);
-    $('timeFill').style.transform=`scaleX(${active?state.remainingMs/20000:0})`;
+    $('timeFill').style.transform=`scaleX(${active?state.remainingMs/RULES.milliseconds:0})`;
   }
-  function tick(){
+  function tick(allowHidden=false){
+    if(rendering||(!allowHidden&&document.hidden)||!stage)return;
     const now=performance.now(),elapsedMs=now-lastTick;lastTick=now;
-    if(rendering||document.hidden||!stage)return;
-    const previousPhase=state.phase,result=reduce(course,state,{type:'tick',elapsedMs,questionId:state.question?.id});
+    const previousPhase=state.phase;
+    let result;
+    try{result=reduce(course,state,{type:'tick',elapsedMs,questionId:state.question?.id});}
+    catch(error){recover(error);return;}
     if(result.changed){state=result.state;save();updateClock();if(state.phase!==previousPhase){stopVoice();audio.error();window.cool?.track?.('word-timeout',{word:state.question.target});render();}}
   }
   function apply(action){
-    if(action.type!=='tick'&&action.type!=='audio-start')tick();
-    const before=state,result=reduce(course,state,action);if(!result.changed)return result;
+    // Settle the old state before every transition, including audio start/resume.
+    // Waiting and paused states reject ticks but still establish the new time origin.
+    tick();
+    const before=state;
+    let result;
+    try{result=reduce(course,state,action);}
+    catch(error){recover(error);return {state,changed:false,error};}
+    if(!result.changed)return result;
     state=result.state;save();
     if(['next','learn-next','retry','new-round','pause','fallback'].includes(action.type))stopVoice();
     if(action.type==='answer'){
@@ -112,7 +133,7 @@ export function startEnglish(course,UI,manifest) {
         controls.append(button(t(state.phase==='roundDone'?'newRound':'next'),()=>apply({type:state.phase==='roundDone'?'new-round':'next'}),'primary','nextBtn'));
       }
       stage?.update(state);
-    }finally{rendering=false;lastTick=performance.now();}
+    }finally{rendering=false;}
     maybeHear();
   }
   $('soundBtn').addEventListener('click',()=>{unlock();masterMuted=!masterMuted;write(muteKey,masterMuted?'1':'0');audio.setMuted(masterMuted);stopVoice();if(masterMuted&&state.phase==='answer'&&state.question.mode==='listen')apply({type:'audio-error',questionId:state.question.id});else render();});
@@ -125,8 +146,8 @@ export function startEnglish(course,UI,manifest) {
   $('panelHandle').addEventListener('click',()=>{unlock();settingsOpen=!settingsOpen;if(settingsOpen)apply({type:'pause'});else{autoId=null;apply({type:'resume'});}render();});
   $('hintBtn').addEventListener('click',()=>{unlock();narration.say(course.hint[lang()]);});
   $('resumeBtn').addEventListener('click',()=>{unlock();autoId=null;apply({type:'resume'});});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden){tick();stopVoice();apply({type:'pause'});}lastTick=performance.now();});
-  addEventListener('pagehide',()=>{tick();save();stopVoice();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){tick(true);stopVoice();apply({type:'pause'});}lastTick=performance.now();});
+  addEventListener('pagehide',()=>{tick(true);save();stopVoice();});
   addEventListener('themechange',()=>{stage?.applyTheme();render();});
   addEventListener('langchange',()=>{stopVoice();autoId=null;render();});
   window.cool?.bindI18n(UI,{onChange:()=>render()});

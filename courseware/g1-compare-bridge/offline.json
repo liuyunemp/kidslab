@@ -1,15 +1,11 @@
 {
   "id": "g1-compare-bridge",
-  "version": "0dadb5495ba111a206b7e5b2ffb66cf2e38d21427f908c598a3f8cdf8aea9166",
+  "version": "cc75305cc4a71cda95a0e108fa8981ad3678ab176956a73d728a53a16cf432cb",
   "assets": [
     {
       "path": "audio.js",
       "sha256": "8060abcb164396ad47fb9f964e810d13969540158cfbe2c13be5f341149274a0",
       "fingerprint": "8dc72d29"
-    },
-    {
-      "path": "audio/bgm.ogg",
-      "sha256": "31d9ccad5d41a7b702ce43140ba10440765a2ef0b512881ffc861b567da0a82c"
     },
     {
       "path": "audio/lab-glow.meta.json",
@@ -260,11 +256,6 @@
       "sha256": "239029eb394b0742fc5e858fce5a060e410338d8e180b51d1df823c97527c294"
     },
     {
-      "path": "config.js",
-      "sha256": "f26f08708a75c233b13c1d840c4a36b0a644e00df551c9f77a68205294f7025f",
-      "fingerprint": "4c23c76b"
-    },
-    {
       "path": "content.js",
       "sha256": "a0bea1ec235407f32547d397de8d292092eedca2e7028de2812b9641506e500e",
       "fingerprint": "59b22be3"
@@ -272,11 +263,6 @@
     {
       "path": "course.json",
       "sha256": "03d66636fa1af2e1f0e67bc7cb14e8fac40e6c97c54fed9b30aa9e37491ba6af"
-    },
-    {
-      "path": "engine.js",
-      "sha256": "047e1b10601fd12ee10207eb6476aeb58c9cab765acccfad810cefe02ad16a56",
-      "fingerprint": "fb0d9d15"
     },
     {
       "path": "exploration-model.js",
@@ -291,11 +277,6 @@
       "path": "main.js",
       "sha256": "ad7447a227d9c25a1772601d33eb99984482c1f39ebf8ff0b7d664fd1c623c4c",
       "fingerprint": "ad401827"
-    },
-    {
-      "path": "model.js",
-      "sha256": "55d5cbf4067be07e3b767a0cbd540a2794151f18618aeeb216a87c2a6d81aa61",
-      "fingerprint": "8777b077"
     },
     {
       "path": "narration.js",

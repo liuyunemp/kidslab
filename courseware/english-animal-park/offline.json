@@ -1,6 +1,6 @@
 {
   "id": "english-animal-park",
-  "version": "36e9ecb51844b7768fbbb9b05402f18001eefcbba26c0cdca327587495cd34a5",
+  "version": "178804e2060320d9543a9c73a9301fd476148393064ffa2e164e3453ab14215e",
   "assets": [
     {
       "path": "audio.js",
@@ -393,8 +393,8 @@
     },
     {
       "path": "content.js",
-      "sha256": "66871e7be30093ef91ebd51315fae757bba1327acc0a6d8a0aac8d478a51c6e6",
-      "fingerprint": "69c6417a"
+      "sha256": "12e70d4787c3cd02997cee93b805bfffb6b3a6a4ef6c5046e3ed3341e28e458c",
+      "fingerprint": "0fe79e81"
     },
     {
       "path": "course.json",
@@ -402,8 +402,8 @@
     },
     {
       "path": "engine.js",
-      "sha256": "92959a82a625f50266ab675c42e078f771400c49028f665c7a1d6dd8e2bc4be6",
-      "fingerprint": "855cf1c5"
+      "sha256": "b9cb2d676d0af9d19cda607937d75655511d553580704ff827bfa8bfff6c3ebb",
+      "fingerprint": "414e8687"
     },
     {
       "path": "english-model.js",
@@ -412,12 +412,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "c9a2f34db693118ac2cf9647e10731a4b8f7b9b1952584298b73f3ceef7c66e3"
+      "sha256": "41194854308d63dd286f6ad7a352ca51af2daa0da3a497f625974c9b9399c454"
     },
     {
       "path": "main.js",
-      "sha256": "3db997d59ecad86877f05dcb596a556bf3db99f62889a17a43fc3ee79f882a5f",
-      "fingerprint": "c6dc44a0"
+      "sha256": "965c5780aab0405a8d1ca7d180495261db0933cc4c373b3cb12ace288fa6c5de",
+      "fingerprint": "861cb10a"
     },
     {
       "path": "narration.js",
