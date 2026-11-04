@@ -1,6 +1,6 @@
 {
   "id": "venn-port",
-  "version": "fcc950ee1255ac8e5bba1487f64c8b121cb32629cdfdfef3b7b78ba72683a478",
+  "version": "92a17dcf0d0b0fd95e0de61b7ad227bda83a89dac1a17c8ac7db9f8a95e9a6ae",
   "assets": [
     {
       "path": "audio.js",
@@ -34,7 +34,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "0cf0e826479956fc84e82b7bbae493d379fd899163aa94b8ac5e03dbd562e8ae"
+      "sha256": "b341f67481f51a46042afa941250a0f3eda68e797e953dca22730d639fa46316"
     },
     {
       "path": "main.js",

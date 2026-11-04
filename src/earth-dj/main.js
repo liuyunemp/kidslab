@@ -657,6 +657,7 @@ import * as THREE from './vendor/three.module.min.js';
   function advanceMission() {
     cancelAutoNext();
     if (state.mission < 7 && state.completed[state.mission]) {
+      window.cool?.stage?.('next-ticket');
       state.mission += 1;
       buildMissionActions();
       render();
@@ -860,6 +861,7 @@ import * as THREE from './vendor/three.module.min.js';
   }
   function completeMission(i) {
     if (state.completed[i]) return;
+    window.cool?.complete?.();
     state.completed[i] = true;
     const old = missionBody.textContent;
     missionBody.textContent = `${t('done')} ${old}`;

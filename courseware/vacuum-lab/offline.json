@@ -1,6 +1,6 @@
 {
   "id": "vacuum-lab",
-  "version": "eb5cab4e66d6c5210f78307f232bfbef63a04dbcfcc4b840716057fc77c2ea6e",
+  "version": "5505f99c941a17635a86cb82f23933d389d2ba59ee299dc2efea0f4a2453e85a",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "8aecf9d5340bdee51fc23ee5c2cfcbb96b867bc2601e689b483814a37ffa887f"
+      "sha256": "ccf3defce04ba026e09990615bcefcac70f3e85ca321e7a15d61fa43b370504c"
     },
     {
       "path": "main.js",

@@ -217,7 +217,7 @@ export function reduce(course, before, action, { replay = false } = {}) {
   if (!replay) s.log.push(clone(action));
   return { ok: true, state: s, discovered, loopCompleted, complete: s.done.length === 8, changed };
 }
-export function serialize(state) { return { version: state.random ? 3 : VERSION, courseId: state.courseId, done: [...state.done], log: state.log,
+export function serialize(state) { return { version: state.random ? 3 : VERSION, courseId: state.courseId, done: [...state.done], log: state.log, savedAt: Date.now(),
   ...(state.random ? {generatorVersion:1,seed:state.random.seed,classic:state.random.classic,instances:state.random.records.map(record=>record.instance)} : {}) }; }
 // 教材入口只选择已有活动；沿用日志恢复，保留进度，不触发玩法或音频。
 export function openActivity(course, state, activityId) {
@@ -228,27 +228,69 @@ export function openActivity(course, state, activityId) {
   if (next.active !== index) next = reduce(course, next, { type: 'select', index }).state;
   return next;
 }
+/* 只保留本课合法的已完成发现：存档结构再破，孩子的 ✓ 也不会被抹掉。
+   存档标着别的课件时一律不用，避免把别人的进度错记到本课。 */
+function salvageDone(course, saved) {
+  if (!saved || (saved.courseId && saved.courseId !== course.id)) return [];
+  const ids = new Set(course.activities.map(a => a.id));
+  const done = [];
+  if (Array.isArray(saved.done)) for (const id of saved.done) if (ids.has(id) && !done.includes(id)) done.push(id);
+  return done;
+}
+/* 多标签/多端写同一份存档时先合并：done 求并集，其余字段取较新的一份。 */
+export function mergeSaved(course, prev, next) {
+  const a = prev && prev.courseId === course.id ? prev : null;
+  const b = next && next.courseId === course.id ? next : null;
+  if (!a) return b;
+  if (!b) return a;
+  const newer = Number(b.savedAt || 0) >= Number(a.savedAt || 0) ? b : a;
+  const older = newer === b ? a : b;
+  return { ...newer, done: [...new Set([...(older.done || []), ...(newer.done || [])])] };
+}
 export function restore(course, saved, options = {}) {
-  const validSave = saved && [VERSION,3].includes(saved.version) && saved.courseId === course.id && Array.isArray(saved.log) && saved.log.length <= 10000;
-  const randomSave = validSave && saved.version===3 && saved.generatorVersion===1 && uint32(saved.seed) && supportsRandom(course);
   const defaults = supportsRandom(course) ? options : {};
-  if (!validSave || (saved.version===3&&!randomSave)) return initialState(course,defaults);
+  const known = Boolean(saved) && saved.courseId === course.id && [VERSION, 3].includes(saved.version);
+  const savedDone = salvageDone(course, saved);
+  /* 未知版本或缺失日志的旧存档：不认识的字段一概不用，但已完成的发现照旧保留。 */
+  if (!known) {
+    const state = initialState(course, defaults);
+    state.done = savedDone;
+    return state;
+  }
+  const randomSave = saved.version === 3 && saved.generatorVersion === 1 && uint32(saved.seed) && supportsRandom(course);
+  if (saved.version === 3 && !randomSave) {
+    const state = initialState(course, defaults);
+    state.done = savedDone;
+    return state;
+  }
   // Legacy actions replay against their original fixed examples before new rounds become random.
   const initialOptions=randomSave?{seed:saved.seed,classic:saved.classic===true}:uint32(defaults.seed)?{seed:defaults.seed,classic:true}:{};
+  const source = Array.isArray(saved.log) ? saved.log : [];
+  const actions = source.slice(0, 10000);
   let state = initialState(course,initialOptions);
+  const accepted = [];
+  let recovered = actions.length < source.length;
   try {
-    for (const action of saved.log) {
+    /* 逐条前进：遇到第一条重放不了的操作就停在最后一个合法状态，
+       而不是像以前那样把整份存档清零。 */
+    for (const action of actions) {
       const result = reduce(course, state, action, {replay:true});
-      if (!result.ok) return initialState(course,defaults);
+      if (!result.ok) { recovered = true; break; }
       state = result.state;
+      accepted.push(action);
     }
-    state.log = clone(saved.log);
-    if(randomSave&&JSON.stringify(saved.instances)!==JSON.stringify(state.random.records.map(record=>record.instance)))return initialState(course,defaults);
-    // 主站聚合卡片读取 done 展示关卡级✓；与日志重放结果合并，缺省或非法 id 时保持不变。
-    if (Array.isArray(saved.done)) {
-      const ids = new Set(course.activities.map(a => a.id));
-      for (const id of saved.done) if (ids.has(id) && !state.done.includes(id)) state.done.push(id);
-    }
-    return state;
-  } catch { return initialState(course,defaults); }
+  } catch { recovered = true; }
+  state.log = clone(accepted);
+  if(randomSave&&JSON.stringify(saved.instances)!==JSON.stringify(state.random.records.map(record=>record.instance))){
+    /* 出题规则升级导致实例对不上：日志作废，但已完成发现、以及当前题面重建照常。 */
+    const fresh = initialState(course,{seed:saved.seed,classic:saved.classic===true});
+    fresh.done = savedDone;
+    fresh.recovered = true;
+    return fresh;
+  }
+  // 主站聚合卡片读取 done 展示关卡级✓；与日志重放结果合并，缺省或非法 id 时保持不变。
+  for (const id of savedDone) if (!state.done.includes(id)) state.done.push(id);
+  /* 只在真的发生过救援时打标记，正常存档的还原结果保持逐字段一致。 */
+  if (recovered) state.recovered = true;
+  return state;
 }

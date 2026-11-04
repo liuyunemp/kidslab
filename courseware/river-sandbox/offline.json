@@ -1,6 +1,6 @@
 {
   "id": "river-sandbox",
-  "version": "43fd15095d7fd5b2fde09d7857b4ec0492109b717a968e65a9e9f1092c0d7263",
+  "version": "d6eecc5c1dd8843e4fc6897de5112b1d75dcbc5dc31785032e97a7a71b527fc0",
   "assets": [
     {
       "path": "audio.js",
@@ -26,7 +26,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "63f823b6a44a1d0e6b9eb179f1654b3b67743b00ede831c96f905922f89205e1"
+      "sha256": "a9269203c89b4d5bb5cbb1fdd9ca59b293a91c51b3a03decbfb257d56ff835d3"
     },
     {
       "path": "levels.js",

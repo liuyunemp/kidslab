@@ -294,6 +294,37 @@ async function snapshotResponse(request, binding, checkVersion = false) {
   const response = await cache.match(canonicalURL(request));
   return response ? rangeResponse(request, response) : null;
 }
+/**
+ * 导航彻底失败时（离线且这个课件还没下完）返回一个能点的兜底页。
+ * 以前这里会抛错，浏览器给一张「无法访问此网站」的白页，孩子只能退出去。
+ * 兜底页只提供「重试」和「返回列表」，绝不自动跳转。
+ */
+function fallbackPage(kind) {
+  const title = kind === 'course' ? '这个课件还没下载完' : '暂时连不上网络';
+  const subtitle = kind === 'course'
+    ? 'This course is not fully saved yet. Reconnect and try again.'
+    : 'You appear to be offline. Reconnect and try again.';
+  const back = kind === 'course'
+    ? '<a class="alt" href="../../index.html">返回列表 / Back to list</a>' : '';
+  return new Response(`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>KidsLab</title>
+<style>html,body{height:100%}body{margin:0;display:flex;align-items:center;justify-content:center;
+background:#fbf6ec;color:#241c36;font:17px/1.55 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;padding:20px}
+.card{max-width:420px;text-align:center}.card h1{margin:0 0 8px;font-size:20px}
+.card p{margin:0 0 18px;font-size:16px;opacity:.75}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.actions button,.actions a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;
+padding:10px 20px;border-radius:12px;border:0;font:700 17px/1.2 inherit;text-decoration:none;cursor:pointer;
+background:#7c5cff;color:#fff}.actions .alt{background:transparent;color:inherit;border:2px solid currentColor}
+@media (prefers-color-scheme:dark){body{background:#1a1726;color:#f2eeff}}</style></head><body>
+<div class="card"><h1>${title}</h1><p>${subtitle}</p>
+<div class="actions"><button type="button" onclick="location.reload()">重试 / Retry</button>${back}</div>
+</div></body></html>`, {
+    status: 200,
+    headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' },
+  });
+}
+
 async function courseRequest(event, id) {
   const { request } = event;
   const navigation = request.mode === 'navigate';
@@ -327,6 +358,7 @@ async function courseRequest(event, id) {
   const legacy = await (await caches.open(LEGACY_CACHE)).match(request);
   if (legacy) return rangeResponse(request, legacy);
   if (networkResponse) return networkResponse;
+  if (navigation) return fallbackPage('course');
   throw networkError || new Error('Offline resource unavailable');
 }
 
@@ -347,6 +379,7 @@ async function shellRequest(request, networkFirst) {
   const cached = await cache.match(request) || (request.mode === 'navigate' && await cache.match(new URL('./', scope).href));
   if (cached) return rangeResponse(request, cached);
   if (response) return response;
+  if (request.mode === 'navigate') return fallbackPage('shell');
   throw error || new Error('Network unavailable');
 }
 

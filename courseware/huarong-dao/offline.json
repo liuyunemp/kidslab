@@ -1,6 +1,6 @@
 {
   "id": "huarong-dao",
-  "version": "19831ebde08870b336e51369b6c851fae1f3cf2ee1dfdc5b8440008fc18d7ce9",
+  "version": "d209031a02165f4ef7be09797389de32361bb9be9d11e70e981732f584cf8460",
   "assets": [
     {
       "path": "audio.js",
@@ -39,7 +39,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "fef1016bab155103e16c92acd7c9ce3c7a6aecb23ed6bf1a77602f8e82a9dfed"
+      "sha256": "33bacb613a472d753dbf6a1ef38c7a8494f9a327ef07abf8c196019d37b57faa"
     },
     {
       "path": "main.js",

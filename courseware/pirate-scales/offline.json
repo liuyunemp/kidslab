@@ -1,6 +1,6 @@
 {
   "id": "pirate-scales",
-  "version": "dbf1ba6a950915810843c3377a36e6684b9fd39a9d1c8d813488e57b9385fe5a",
+  "version": "91c657508c855f0041e0173582749801072eef74ad0b9c0691761b3f289cd3b5",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "69a81d8d5a0bbbaf7aa4c53f6065bfc446805cac798386febb5b0d0e28d1cb51"
+      "sha256": "71e78986fc30d6792aac5dae62cd49a918e8104a05890957493dcfef7fd1f047"
     },
     {
       "path": "main.js",

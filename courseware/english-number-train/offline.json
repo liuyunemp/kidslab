@@ -1,6 +1,6 @@
 {
   "id": "english-number-train",
-  "version": "9caf2af91cc9855abf84af66eb2e835757bc6db7d62f99db2463d8158bfda382",
+  "version": "fd999a22ed60236bae00d7cc620604aea06688ff7dc4cfa2bf44cf612814d06e",
   "assets": [
     {
       "path": "audio.js",
@@ -420,7 +420,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "a3c4a58b3dc090515d9ee774b6526199b941c14348320bfdae3ac2506153bb7e"
+      "sha256": "83b0360409a5b18655244dcb56242df4e8af8f8c378ca1480ffd26aca645fedf"
     },
     {
       "path": "main.js",

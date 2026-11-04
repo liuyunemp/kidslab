@@ -202,9 +202,11 @@ import * as THREE from './vendor/three.module.min.js';
     sfx.good();
   }
   function checkOrder() {
+    window.cool?.stage?.('check-moon');
     const [kind,, emoji] = t('orders')[orderIndex];
     if (angleClose(moonAngle, targetAngle(kind))) {
       if (!wonOrders.has(orderIndex)) { wonOrders.add(orderIndex); const s = document.createElement('span'); s.className = 'sticker'; s.textContent = emoji; stickers.appendChild(s); }
+      if (wonOrders.size === t('orders').length) window.cool?.complete?.();
       speech.textContent = wonOrders.size === t('orders').length ? t('allOrders') : t('right');
       celebrate(kind);
       if (orderIndex < t('orders').length - 1) scheduleAutoNext(nextOrder);
@@ -255,7 +257,7 @@ import * as THREE from './vendor/three.module.min.js';
   canvas.addEventListener('pointerup', (e) => { dragging = false; try { canvas.releasePointerCapture(e.pointerId); } catch {} });
 
   checkBtn.addEventListener('click', checkOrder);
-  function nextOrder() { cancelAutoNext(); orderIndex = Math.min(orderIndex + 1, t('orders').length - 1); updateOrderText(); }
+  function nextOrder() { cancelAutoNext(); window.cool?.stage?.('next-order'); orderIndex = Math.min(orderIndex + 1, t('orders').length - 1); updateOrderText(); }
   nextBtn.addEventListener('click', nextOrder);
   tiltBtn.addEventListener('click', () => { tiltOn = !tiltOn; updateOrbitGeometry(); setMoonAngle(moonAngle); applyLang(); });
   $('#calendarOpen').addEventListener('click', () => { $('#calendarModal').hidden = false; makeCalendar(); });

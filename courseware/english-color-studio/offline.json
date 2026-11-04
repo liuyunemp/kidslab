@@ -1,6 +1,6 @@
 {
   "id": "english-color-studio",
-  "version": "c07c997ad9ba94dc0afb6e22df650726280b7f38408a847b62b489aa830b25ad",
+  "version": "277748d9078bac263c77e544b3d7689370dd09e253d1b67f3b2c5bc615c28bf0",
   "assets": [
     {
       "path": "audio.js",
@@ -340,7 +340,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "876bcf1b5dc8138f258efb6c0694401c8dd514193a73551f350d015661bb296d"
+      "sha256": "fae3f1d0f089ac76b05b054f90e6f742069581d48695df6e2c22d7cbadc6a49b"
     },
     {
       "path": "main.js",

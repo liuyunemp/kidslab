@@ -317,12 +317,14 @@ import { fraction, validFraction } from './random-model.js';
         den = Math.max(1, Math.min(12, den + delta));
         num = Math.min(num, den);
       }
+      window.cool?.stage?.('change-fraction');
       update({ animate: true });
     });
   });
 
   $('#diceBtn').addEventListener('click', () => {
     const next=rounds.next('pizza');num=next.num;den=next.den;
+    window.cool?.stage?.('new-pizza');
     update({ animate: true });
   });
 

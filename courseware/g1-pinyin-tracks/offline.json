@@ -1,6 +1,6 @@
 {
   "id": "g1-pinyin-tracks",
-  "version": "45d54c5a7a9e20a87d2abffab49c369020fad83c1c129336d72adf69b8972e19",
+  "version": "f5a5024101439b5f328848450af070dee74412040524171abdf5af96ceaef1c6",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -266,7 +266,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "47c13c81ccae64813e6ab62975bbee84fc923c21f0b63729c545f4e48524ad4d"
+      "sha256": "d339d15fc6ee50b221e2b0fadf6051f619303f9e12cf33a2bac8f5bd8ed4c628"
     },
     {
       "path": "main.js",

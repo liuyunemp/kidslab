@@ -67,6 +67,270 @@
     document.documentElement.dataset.theme = theme;
   }
 
+  /* ---------- 韧性层：诊断缓冲 + 白屏兜底 + 返回手势 ----------
+     只读排查的结论是：安卓上「玩着玩着白屏」主要来自 WebGL 上下文被系统回收、
+     以及启动期未捕获异常；「跳回主站」来自边缘返回手势与误触悬浮按钮。
+     这里统一兜底：任何一步失败都静默降级，绝不抛出、绝不阻塞玩法。 */
+  const DIAG_KEY = 'kidslab.diag.v1';
+  const DIAG_MAX = 20;
+  const GUARD_STYLE_ID = 'kidslab-guard-style';
+  /* 事件绑定一律走这里：老 WebView 或测试桩缺少某个 API 时不能让 SDK 在加载期崩掉。 */
+  const on = (target, type, fn, opts) => {
+    try { target?.addEventListener?.(type, fn, opts); } catch { /* noop */ }
+  };
+  let diagCache = null;
+  let guardEl = null;
+  let guardKind = '';
+  let noticeEl = null;
+  let noticeTimer = 0;
+
+  const copy = () => (lang === 'en' ? {
+    preparing: 'Getting ready…',
+    errorTitle: 'Something went wrong here',
+    errorHint: 'Tap Restore to reload. Your progress is safe.',
+    lostTitle: 'The system took the picture away',
+    lostHint: 'Tap Restore to bring the stage back. Your progress is safe.',
+    restored: 'The picture is back',
+    retry: 'Restore',
+    leave: 'Back to list',
+    backAgain: 'Press back again to leave',
+    saveFail: 'This device is low on space, so this progress may not be saved.',
+  } : {
+    preparing: '正在准备…',
+    errorTitle: '这里出了点小问题',
+    errorHint: '点「恢复」重新打开，进度不会丢。',
+    lostTitle: '画面被系统收回了',
+    lostHint: '点「恢复」把舞台找回来，进度不会丢。',
+    restored: '画面回来了',
+    retry: '恢复',
+    leave: '返回列表',
+    backAgain: '再按一次返回列表',
+    saveFail: '本机存储空间不足，这次进度可能没存上。',
+  });
+
+  function readDiag() {
+    if (diagCache) return diagCache;
+    try {
+      const parsed = JSON.parse(storage.get(DIAG_KEY, '[]'));
+      diagCache = Array.isArray(parsed) ? parsed.slice(-DIAG_MAX) : [];
+    } catch {
+      diagCache = [];
+    }
+    return diagCache;
+  }
+
+  /* 环形缓冲 + 同签名合并：同一个错误反复出现也只占一条，读写都只有几十字节。 */
+  function logDiag(type, detail) {
+    try {
+      const list = readDiag();
+      const name = String(type || 'event').slice(0, 24);
+      const text = String(detail || '').slice(0, 200);
+      const key = `${name}|${text}`;
+      const last = list[list.length - 1];
+      if (last && last.k === key) {
+        last.n = (last.n || 1) + 1;
+        last.t = Date.now();
+      } else {
+        list.push({ k: key, type: name, detail: text, t: Date.now(), n: 1 });
+        while (list.length > DIAG_MAX) list.shift();
+      }
+      storage.set(DIAG_KEY, JSON.stringify(list));
+    } catch { /* 诊断永不抛错 */ }
+  }
+
+  function ensureGuardStyle() {
+    if (document.getElementById(GUARD_STYLE_ID) || !document.head) return;
+    const style = document.createElement('style');
+    style.id = GUARD_STYLE_ID;
+    style.textContent = `
+.kg-layer{position:fixed;inset:0;z-index:2147482000;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:rgba(16,18,32,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.kg-card{max-width:min(420px,100%);padding:22px 20px;border-radius:18px;text-align:center;
+  background:#fbf6ec;color:#241c36;box-shadow:0 12px 34px rgba(0,0,0,.35);font-size:17px;line-height:1.5;}
+[data-theme="dark"] .kg-card{background:#241f33;color:#f2eeff;}
+.kg-card h2{margin:0 0 6px;font-size:19px;line-height:1.4;}
+.kg-card p{margin:0 0 16px;font-size:16px;opacity:.85;}
+.kg-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.kg-actions button{min-height:44px;min-width:44px;padding:10px 20px;border-radius:12px;border:0;
+  font-size:17px;font-weight:700;cursor:pointer;background:#7c5cff;color:#fff;}
+.kg-actions button[data-act="leave"]{background:transparent;color:inherit;border:2px solid currentColor;}
+.kg-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:2147482100;
+  max-width:min(420px,90vw);padding:12px 18px;border-radius:14px;font-size:16px;line-height:1.45;
+  background:#241f33;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.3);}
+.kg-skeleton{position:fixed;inset:0;z-index:2147481900;display:flex;align-items:center;justify-content:center;
+  font-size:17px;color:#6a6280;background:#fbf6ec;pointer-events:none;transition:opacity .25s;}
+[data-theme="dark"] .kg-skeleton{background:#1a1726;color:#a79ec2;}
+@media (prefers-reduced-motion:reduce){.kg-skeleton{transition:none}}
+`;
+    document.head.appendChild(style);
+  }
+
+  function hideGuard() {
+    if (guardEl) {
+      try { guardEl.remove(); } catch { /* noop */ }
+    }
+    guardEl = null;
+    guardKind = '';
+  }
+
+  /* kind: 'error' | 'lost'。恢复层只提供「恢复 / 返回列表」，不会自动跳转。 */
+  function showGuard(kind) {
+    if (!document.body) {
+      try { document.addEventListener('DOMContentLoaded', () => showGuard(kind), { once: true }); } catch { /* noop */ }
+      return;
+    }
+    /* 已经展示过同一类不再重建，避免错误风暴时反复插 DOM */
+    if (guardEl && guardKind === kind) return;
+    hideGuard();
+    try {
+      ensureGuardStyle();
+      const text = copy();
+      const layer = document.createElement('div');
+      layer.className = 'kg-layer';
+      layer.setAttribute('role', 'alertdialog');
+      layer.setAttribute('aria-live', 'assertive');
+      const card = document.createElement('div');
+      card.className = 'kg-card';
+      const title = document.createElement('h2');
+      const hint = document.createElement('p');
+      const actions = document.createElement('div');
+      actions.className = 'kg-actions';
+      title.textContent = kind === 'lost' ? text.lostTitle : text.errorTitle;
+      hint.textContent = kind === 'lost' ? text.lostHint : text.errorHint;
+      for (const [act, label] of [['retry', text.retry], ['leave', text.leave]]) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.act = act;
+        button.textContent = label;
+        button.addEventListener('click', () => {
+          logDiag('guard', `${kind}:${act}`);
+          if (act === 'retry') { try { location.reload(); } catch { /* noop */ } }
+          else { try { location.href = '../../index.html'; } catch { /* noop */ } }
+        });
+        actions.appendChild(button);
+      }
+      card.append(title, hint, actions);
+      layer.appendChild(card);
+      document.body.appendChild(layer);
+      guardEl = layer;
+      guardKind = kind;
+      try { actions.querySelector('button')?.focus(); } catch { /* noop */ }
+    } catch { /* 恢复层失败也不能影响课件 */ }
+  }
+
+  function notice(text) {
+    try {
+      if (!text || !document.body) return;
+      ensureGuardStyle();
+      if (!noticeEl || !noticeEl.isConnected) {
+        noticeEl = document.createElement('div');
+        noticeEl.className = 'kg-toast';
+        noticeEl.setAttribute('role', 'status');
+        document.body.appendChild(noticeEl);
+      }
+      noticeEl.textContent = text;
+      noticeEl.hidden = false;
+      clearTimeout(noticeTimer);
+      noticeTimer = setTimeout(() => { if (noticeEl) noticeEl.hidden = true; }, 4000);
+    } catch { /* noop */ }
+  }
+
+  /* 首屏「白屏感」：只铺一层不拦点击的底色，load 后淡出，最长 6s 兜底移除。 */
+  function paintSkeleton() {
+    if (!document.body) {
+      try { document.addEventListener('DOMContentLoaded', paintSkeleton, { once: true }); } catch { /* noop */ }
+      return;
+    }
+    try {
+      ensureGuardStyle();
+      const layer = document.createElement('div');
+      layer.className = 'kg-skeleton';
+      layer.setAttribute('aria-hidden', 'true');
+      layer.textContent = copy().preparing;
+      document.body.appendChild(layer);
+      /* 玩法脚本执行完（DOMContentLoaded）就交给真实画面，不等图片/音频把 load 拖住，
+         否则这层遮罩会挡住已经可点的按钮。 */
+      const drop = () => {
+        if (!layer.isConnected) return;
+        const run = () => {
+          try { layer.style.opacity = '0'; setTimeout(() => layer.remove(), 300); } catch { /* noop */ }
+        };
+        try {
+          if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => requestAnimationFrame(run));
+          else setTimeout(run, 32);
+        } catch { run(); }
+      };
+      if (document.readyState === 'loading') on(document, 'DOMContentLoaded', drop, { once: true });
+      else drop();
+      setTimeout(() => { try { layer.remove(); } catch { /* noop */ } }, 6000);
+    } catch { /* noop */ }
+  }
+
+  function blankStage() {
+    try {
+      if (document.querySelector('canvas')) return false;
+      /* 已有明确的「不支持 WebGL」提示时不要叠加恢复层，避免两条提示打架 */
+      const nogl = document.getElementById('nogl');
+      if (nogl && !nogl.hidden) return false;
+      return true;
+    } catch { return false; }
+  }
+
+  /* 只有「确实没有舞台」才升级为白屏级故障：偶发无害异常只记诊断，不吓孩子。 */
+  function fatalIfBlank() {
+    try {
+      if (blankStage()) { showGuard('error'); return; }
+      setTimeout(() => { try { if (blankStage()) showGuard('error'); } catch { /* noop */ } }, 1500);
+    } catch { /* noop */ }
+  }
+
+  function watchFailures() {
+    on(w, 'error', (event) => {
+      const message = event?.message || event?.error?.message || '';
+      if (!message) return;            // 资源加载失败没有 message，不算崩溃
+      logDiag('error', message);
+      fatalIfBlank();
+    });
+    on(w, 'unhandledrejection', (event) => {
+      const reason = event?.reason;
+      const message = typeof reason === 'string' ? reason : reason?.message || String(reason || '');
+      logDiag('rejection', message);
+      fatalIfBlank();
+    });
+
+    /* 安卓切后台/显存紧张会回收 GPU 上下文：three.js 自己会 preventDefault，
+       这里只负责给孩子一个「点一下就回来」的出口，并把事件记进诊断。 */
+    on(document, 'webglcontextlost', (event) => {
+      try { event.preventDefault(); } catch { /* noop */ }
+      logDiag('webgl-lost', String(location.pathname || '').split('/').filter(Boolean).slice(-2, -1)[0] || '');
+      showGuard('lost');
+    }, true);
+    on(document, 'webglcontextrestored', () => {
+      hideGuard();
+      notice(copy().restored);
+    }, true);
+  }
+
+  /* 安卓边缘返回手势会直接把孩子带回列表。第一次返回拦下来提示，1.8s 内再按放行。 */
+  function watchBackGesture() {
+    let blockedAt = 0;
+    let releasing = false;
+    const state = { kidslabGuard: 1 };
+    try { history.pushState(state, '', location.href); } catch { return; }
+    on(w, 'popstate', () => {
+      if (releasing) return;
+      const at = Date.now();
+      if (at - blockedAt < 1800) {
+        releasing = true;
+        try { history.back(); } catch { releasing = false; }
+        return;
+      }
+      blockedAt = at;
+      try { history.pushState(state, '', location.href); } catch { /* noop */ }
+      notice(copy().backAgain);
+    });
+  }
+
   function notify(kind, value) {
     const change = { kind, value };
     for (const listener of [...listeners]) listener(change);
@@ -145,8 +409,13 @@
   }
 
   const progressKey = courseId ? `kidslab.progress.${courseId}` : '';
+  /* 写失败（配额满/隐私模式）不丢记录：先留一份在内存，等下次成功或离开前重试。 */
+  let pendingProgress = null;
+  let warnedSaveFail = false;
+
   function readProgress() {
     if (!progressKey) return null;
+    if (pendingProgress) return pendingProgress;
     try {
       const value = JSON.parse(storage.get(progressKey, 'null'));
       if (!value || !['played', 'completed'].includes(value.status)) return null;
@@ -158,20 +427,45 @@
 
   function writeProgress(status, stage) {
     if (!progressKey) return null;
+    /* 写入前重读并合并：多标签/多端同时玩时不会用旧快照覆盖掉「已完成」。 */
     const current = readProgress() || {};
+    const stamp = Date.now();
+    const completed = status === 'completed' || current.status === 'completed';
     const next = {
-      status: current.status === 'completed' ? 'completed' : status,
+      version: 2,
+      status: completed ? 'completed' : status,
       stage: stage || current.stage || '',
-      updatedAt: Date.now(),
+      lastStage: stage || current.lastStage || current.stage || '',
+      completedAt: current.completedAt || (completed ? stamp : 0),
+      /* 同一 stage 再访也刷新 updatedAt，供主站「最近探索的」排序 */
+      updatedAt: stamp,
     };
-    /* 同一 stage 再访也刷新 updatedAt，供主站「最近探索的」排序 */
-    storage.set(progressKey, JSON.stringify(next));
+    const payload = JSON.stringify(next);
+    if (storage.set(progressKey, payload)) {
+      pendingProgress = null;
+      return next;
+    }
+    pendingProgress = next;
+    logDiag('save-fail', progressKey);
+    if (!warnedSaveFail) {
+      warnedSaveFail = true;
+      notice(copy().saveFail);
+    }
     return next;
   }
+
+  function flushProgress() {
+    if (!progressKey || !pendingProgress) return;
+    if (storage.set(progressKey, JSON.stringify(pendingProgress))) pendingProgress = null;
+  }
+
+  on(document, 'visibilitychange', () => { if (document.hidden) flushProgress(); });
+  on(w, 'pagehide', flushProgress);
 
   const progress = {
     get: readProgress,
     clear() {
+      pendingProgress = null;
       if (!progressKey) return false;
       return storage.remove(progressKey);
     },
@@ -428,13 +722,23 @@
   };
 
   preferences.subscribe(({ kind }) => { if (kind === 'lang') stopSpeech(); });
-  cool.sdkVersion = 4;
+  cool.sdkVersion = 5;
   cool.courseId = courseId;
   cool.storage = storage;
   cool.preferences = preferences;
   cool.bindI18n = bindI18n;
   cool.progress = progress;
   cool.speech = speech;
+  cool.diag = {
+    read: () => readDiag().map(({ type, detail, t, n }) => ({ type, detail, at: t, count: n || 1 })),
+    clear() {
+      diagCache = [];
+      storage.remove(DIAG_KEY);
+    },
+    log: logDiag,
+    /* 供课件在自定义兜底里复用同一套恢复层 */
+    show: showGuard,
+  };
   if (typeof cool.track !== 'function') cool.track = () => {};
   cool.stage = (name) => {
     if (typeof name !== 'string' || !name) return;
@@ -443,4 +747,9 @@
   cool.complete = () => writeProgress('completed');
   w.cool = cool;
   applyDocument();
+
+  /* 韧性层最后挂载：此时 cool 已就绪，任何异常都能被记录并给出恢复入口。 */
+  try { watchFailures(); } catch { /* noop */ }
+  try { paintSkeleton(); } catch { /* noop */ }
+  try { watchBackGesture(); } catch { /* noop */ }
 })();

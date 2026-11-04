@@ -298,6 +298,7 @@ const CourseCatalog = (() => {
     grid: $('#grid'), empty: $('#emptyBox'), search: $('#searchInput'),
     heroTitle: $('#heroTitle'), crumb: $('#crumb'), countText: $('#countText'),
     courseTotal: $('#courseTotal'), clearProgress: $('#clearProgressBtn'),
+    version: $('.sidebar__ver'),
   };
 
   /* ---------- 主题 / 强调色 / 语言 ---------- */
@@ -888,11 +889,136 @@ const CourseCatalog = (() => {
   });
   el.clearProgress.addEventListener('click', () => {
     if (!confirm(t().clearProgressConfirm)) return;
+    /* 关卡 ✓ 存在探索存档里，只清 progress 会出现「徽章没了、勾还在」的错记。 */
     local.keys()
-      .filter((key) => key.startsWith(PROGRESS_PREFIX))
+      .filter((key) => key.startsWith(PROGRESS_PREFIX) || key.startsWith('kidslab.exploration-v2.'))
       .forEach((key) => local.remove(key));
     update();
     closeDrawer();
+  });
+
+  /* ---------- 跨标签同步 / 本机诊断 ---------- */
+  const DIAG_KEY = 'kidslab.diag.v1';
+  const EXPLORATION_PREFIX = 'kidslab.exploration-v2.';
+  const diagText = () => (state.lang === 'en' ? {
+    title: 'On-device diagnostics',
+    hint: 'Only stored on this device to trace crashes and lost progress. Nothing is uploaded.',
+    empty: 'No problems recorded.',
+    close: 'Close',
+    clear: 'Clear records',
+    open: 'View on-device diagnostics',
+  } : {
+    title: '本机诊断记录',
+    hint: '只存在这台设备上，用来排查白屏与进度丢失，不会上传。',
+    empty: '没有记录到问题。',
+    close: '关闭',
+    clear: '清空记录',
+    open: '查看本机诊断记录',
+  });
+
+  function readDiagRecords() {
+    try {
+      const parsed = JSON.parse(local.get(DIAG_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed.slice(-20) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function closeDiag({ restoreFocus = true } = {}) {
+    const layer = $('.diag-layer');
+    if (layer) layer.remove();
+    if (restoreFocus) el.version?.focus();
+  }
+
+  function openDiag() {
+    closeDiag({ restoreFocus: false });
+    const text = diagText();
+    const layer = document.createElement('div');
+    layer.className = 'diag-layer';
+    layer.setAttribute('role', 'dialog');
+    layer.setAttribute('aria-modal', 'true');
+    layer.setAttribute('aria-label', text.title);
+
+    const card = document.createElement('div');
+    card.className = 'diag-card';
+    const h = document.createElement('h2');
+    h.textContent = text.title;
+    const hint = document.createElement('p');
+    hint.className = 'diag-hint';
+    hint.textContent = text.hint;
+
+    const list = document.createElement('ul');
+    list.className = 'diag-list';
+    const records = readDiagRecords();
+    if (!records.length) {
+      const empty = document.createElement('li');
+      empty.className = 'diag-empty';
+      empty.textContent = text.empty;
+      list.appendChild(empty);
+    } else {
+      for (const item of records.slice().reverse()) {
+        const li = document.createElement('li');
+        li.className = 'diag-row';
+        const time = document.createElement('time');
+        const stamp = Number(item.t);
+        time.textContent = Number.isFinite(stamp) ? new Date(stamp).toLocaleTimeString() : '--:--';
+        const type = document.createElement('b');
+        type.textContent = String(item.type || 'event');
+        const detail = document.createElement('span');
+        detail.textContent = String(item.detail || '').slice(0, 200);
+        const count = document.createElement('em');
+        count.textContent = `×${Number(item.n) || 1}`;
+        li.append(time, type, detail, count);
+        list.appendChild(li);
+      }
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'diag-actions';
+    const clear = document.createElement('button');
+    clear.type = 'button';
+    clear.textContent = text.clear;
+    clear.addEventListener('click', () => { local.remove(DIAG_KEY); openDiag(); });
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'diag-close';
+    close.textContent = text.close;
+    close.addEventListener('click', closeDiag);
+    actions.append(clear, close);
+    card.append(h, hint, list, actions);
+    layer.appendChild(card);
+    layer.addEventListener('click', (event) => { if (event.target === layer) closeDiag(); });
+    document.body.appendChild(layer);
+    close.focus();
+  }
+
+  /* 长按版本号打开诊断；键盘可达，避免只能靠触摸才能发现。 */
+  if (el.version) {
+    el.version.setAttribute('tabindex', '0');
+    el.version.setAttribute('role', 'button');
+    el.version.setAttribute('aria-label', diagText().open);
+    let pressTimer = 0;
+    const cancel = () => { clearTimeout(pressTimer); pressTimer = 0; };
+    el.version.addEventListener('pointerdown', () => {
+      cancel();
+      pressTimer = setTimeout(() => { pressTimer = 0; openDiag(); }, 700);
+    });
+    for (const type of ['pointerup', 'pointerleave', 'pointercancel']) el.version.addEventListener(type, cancel);
+    el.version.addEventListener('contextmenu', (event) => event.preventDefault());
+    el.version.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openDiag(); }
+    });
+    addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDiag(); });
+  }
+
+  /* 另一个标签/另一个课件写完进度后，主站即时刷新徽章与关卡 ✓，不用手动重进。 */
+  let progressSyncTimer = 0;
+  addEventListener('storage', (event) => {
+    const key = event.key || '';
+    if (!key.startsWith(PROGRESS_PREFIX) && !key.startsWith(EXPLORATION_PREFIX)) return;
+    clearTimeout(progressSyncTimer);
+    progressSyncTimer = setTimeout(() => { if (state.courses.length) update(); }, 150);
   });
 
   let debounce = 0;

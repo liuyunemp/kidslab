@@ -1,6 +1,6 @@
 {
   "id": "creature-workshop",
-  "version": "d48789a6d163008f7f12f93dedd6f6a738b2ebcb8fa75afd8f1efe06b533e981",
+  "version": "b6167453042546ec62728b80a07838711948d5c09fa7f23b32d94502fb36051e",
   "assets": [
     {
       "path": "course.json",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "284b8a660db94a807d36b6e10362345e6601edb1c455f101fd0825ef3a27a712"
+      "sha256": "51218674bca84f637ed4ad876c4d58b2b083a2b6087fc266f826e651d68d0cfc"
     },
     {
       "path": "main.js",

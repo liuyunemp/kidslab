@@ -538,12 +538,14 @@ import { rolling as generateWheel, validRolling, rollingSetup, validRollingSetup
   }
   function verify() {
     if(answered)return;
+    window.cool?.stage?.('answer-challenge');
     cancelAutoNext();
     startAudio(); const q = questions[qIndex]; const ans = answerFor(q); let ok = false;
     if (q.type === 'forward') ok = Math.abs(Number(els.answer.value) - ans) <= 0.35;
     else ok = Math.abs(Number(els.wheelChoice.value) - ans) <= 0.15;
     if (ok) {
       answered=true;
+      window.cool?.complete?.();
       if(!completedQuestions.includes(qIndex))completedQuestions.push(qIndex);
       score=completedQuestions.length;
       try{localStorage.setItem('kidslab.rolling-park.completed',JSON.stringify(completedQuestions));}catch{}

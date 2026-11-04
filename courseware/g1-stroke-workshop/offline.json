@@ -1,6 +1,6 @@
 {
   "id": "g1-stroke-workshop",
-  "version": "6656d4b88bbc952d1721078a0d035b9d31eb7ce817aa7be71327b9158b6f3888",
+  "version": "b03ec187be2cf6d672e2125101c53f2f69dd7e4232bce2adf9de8c7b76b3a274",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -290,7 +290,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "6ca59407a2ded4e3a7ccd32726ebf1fba2b206372209ff209f31dd975522a9a4"
+      "sha256": "e985a1e7bcae813eb429b532529229c49bf871f9ec10fc7e58aecaa9aa1b2be1"
     },
     {
       "path": "main.js",

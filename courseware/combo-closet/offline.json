@@ -1,6 +1,6 @@
 {
   "id": "combo-closet",
-  "version": "e32cf6eb97885b286afe64545c6222a44c38aeec8b7e1a2882454ccf60e86633",
+  "version": "09b96abbd59e5a0d78893d90480e7b11d78dc97ba154041b49dbf04087dfc31e",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "b66fc9d67e4978c872c46cedfaf61da6625e00a17e662b4893ab9fa8a76a55e9"
+      "sha256": "45ef7fa30834f49b46ea8c7a8530e2f5a16b72b1944776f565db2aa490de2656"
     },
     {
       "path": "main.js",

@@ -1,6 +1,6 @@
 {
   "id": "star-sailor",
-  "version": "c13f60bb280c9c3a6c169db3eb227b82ecbafc88ec00eaf9815f8b82a7014a4c",
+  "version": "fe4656610bd84bf8f308196d9d5ffe1c540f001db4cfd8024aaba80991c30b57",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "82aaac28b27712b856f60039fb3b954f274cb9ac015cf866d9146e216fbe53fb"
+      "sha256": "1fe94465fcd7be39cb5abe859aaf25eae7b26ba7498d5cbb3a2a8cf6445ee60f"
     },
     {
       "path": "main.js",
-      "sha256": "3f665c7e31acc74cc3b20702040a0950f257d548682cc8b4d3b4d1c7dd0f2163",
-      "fingerprint": "dd5e6988"
+      "sha256": "c0f16ba46899f2fa96fa716db473b8ddf8f2d94a7176e82b844349690fd47d58",
+      "fingerprint": "d35819de"
     },
     {
       "path": "style.css",

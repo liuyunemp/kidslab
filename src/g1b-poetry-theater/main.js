@@ -1,7 +1,7 @@
 import { course } from './content.js';
 import { createNarration } from './narration.js';
 import { manifest } from './speech-manifest.js';
-import { initialState, current, reduce, restore, serialize, openActivity, text, valueOf, moneyValue, DENOMINATIONS, EXCHANGES, sentenceFor, speechText } from './exploration-model.js';
+import { initialState, current, reduce, restore, serialize, mergeSaved, openActivity, text, valueOf, moneyValue, DENOMINATIONS, EXCHANGES, sentenceFor, speechText } from './exploration-model.js';
 import { createAudio } from './audio.js';
 import { createScene } from './scene.js';
 import { supportsRandom } from './random-explorations.js';
@@ -13,11 +13,28 @@ let saved=null;try{saved=JSON.parse(localStorage.getItem(key)||'null');}catch{}
 const randomEnabled=supportsRandom(course),requestedSeed=urlSeed();
 const restoreOptions=randomEnabled?{seed:requestedSeed??freshSeed()}:{};
 let state=restore(course,requestedSeed!==null&&saved?.version===3&&saved.seed!==requestedSeed?null:saved,restoreOptions),lang=cool.preferences.lang,lab=null,feedbackTimer=0,strokePoints=null,strokePointer=null,started=false;
+/* 写入前先与磁盘上的存档合并：两个标签同时玩、或另一个标签刚收藏了发现时不会互相覆盖。
+   写失败（配额满/隐私模式）也不丢，留在内存里等下一次落盘机会。 */
+let savePending=false,saveWarned=false;
+function save(){
+  try{
+    const stored=JSON.parse(localStorage.getItem(key)||'null');
+    localStorage.setItem(key,JSON.stringify(mergeSaved(course,stored,serialize(state))));
+    savePending=false;return true;
+  }catch{
+    savePending=true;
+    if(!saveWarned){saveWarned=true;notice(lang==='zh'?'本机存储空间不足，这次进度可能没存上。':'This device is low on space, so this progress may not be saved.');}
+    return false;
+  }
+}
+function flushSave(){if(!savePending)return;try{const stored=JSON.parse(localStorage.getItem(key)||'null');localStorage.setItem(key,JSON.stringify(mergeSaved(course,stored,serialize(state))));savePending=false;}catch{}}
+addEventListener('pagehide',flushSave);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)flushSave();});
 // Persist the question before the first gesture, so a refresh cannot silently change it.
-if(randomEnabled)try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}
+if(randomEnabled)save();
 const entryActivity=new URLSearchParams(location.search).get('activity');
 const entryState=openActivity(course,state,entryActivity);
-if(entryState!==state){state=entryState;try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}}
+if(entryState!==state){state=entryState;save();}
 const audio=createAudio(`kidslab.exploration-v2.${course.id}.audio`);
 const narration=createNarration({manifest,lang:()=>lang,muted:()=>audio.muted,show:notice,duck:()=>audio.duck(true),restore:()=>audio.duck(false)});
 const I18N={zh:{tools:'探索工具',choose:'选择探索关卡',free:'自由玩',undo:'撤销',reset:'重来',discover:'小发现',source:'查看出版社教材',back:'返回平台',no3d:'暂时不能打开 3D 舞台',no3dHint:'请换用支持 WebGL 的浏览器，或打开浏览器的图形加速后重试。',music:'背景音乐',effects:'操作音效',speech:'引导朗读',on:'开',off:'关',theme:'切换主题',language:'切换语言',mute:'关闭全部声音',unmute:'恢复声音',settings:'声音设置',scene:'可拖动的 3D 探索舞台',done:'发现已收藏',allDone:'八个发现都收藏好了！还可以继续探索。',practice:'自由玩：发现不计入关卡',same:'这个状态已经看过了，试着换一种摆法。',invalid:'试试台上的工具。',range:'到边界啦，换一个方向试试。',nothing:'还没有可以撤销的操作。',trace:'从亮点出发，沿着这一笔慢慢写。',place:'先把物件放到台上。',index:'先翻首字母，再找音节。',pieces:'先放好材料，再播放。',play:'先播放一次，再看看课文线索。',drop:'放到桌面上试试，物件会回到原位。',money:'看看手里的钱和托盘，还能换开或取回。',align:'先让相同的数位对齐。',unbundle:'散开的不够拿，试试拆开一个十。',bundle:'捆成一个十',split:'拆开一个十',operate:'合在一起',take:'送走这一批',depart:'再送走一批',alignButton:'对齐数位',playButton:'播放场景',replay:'回放笔顺',dismantle:'拆开看看',placeButton:'放到台上',act:'让它动起来',evidence:'看看课文线索',swap:'交换前后',rotate:'转一转',shift:'移一移',buy:'试着买下',exchangeYuan:'1元换10角',exchangeJiao:'1角换10分',exchangeTen:'10元换10张1元',wallet:'手里',tray:'托盘',price:'价格',spent:'已买下',left:'左边',right:'右边',ones:'个一',tens:'个十',current:'现在',whole:'合起来',difference:'相差',layout:'对齐比较',transfer:'移到另一组',poemAction:'移动景物',writingHint:'只描这一笔，随时可以重写。',original:'课文的先后线索',message:'消息已送到',waiting:'朋友还在等更清楚的信息',who:'主角',where:'地点',verb:'动作',setup:'摆好新的数量',freeA:'第一组',freeB:'第二组',unit:'单元',page:'页',observed:'课文关联',lookup:'本课小字典',letters:'首字母',syllables:'音节',entries:'汉字',soundRead:'朗读操作提示',wordMove:'把物件移到台上',restored:'本版探索',change:'找零后手里',numberLine:'数线',part:'两部分',col:'十位／个位',empty:'尚未操作',selectHint:'所有关卡都可以直接选择。'},
@@ -32,7 +49,7 @@ function notice(message,success=false){clearTimeout(feedbackTimer);$('feedback')
 function act(action){
   unlock();const result=reduce(course,state,action);
   if(!result.ok){audio.tone('error');notice(t(result.reason));narration.encourage(activity().id,t(result.reason));if(action.type==='position')lab?.update(activity(),room(),lang);return false;}
-  state=result.state;try{localStorage.setItem(key,JSON.stringify(serialize(state)));}catch{}
+  state=result.state;save();
   if(['newRound','classic','reset','select','undo','free'].includes(action.type)){
     clearTimeout(feedbackTimer);$('feedback').hidden=true;narration.reset();lab?.cancelDrag?.();
   }

@@ -1,6 +1,6 @@
 {
   "id": "gear-playground",
-  "version": "8ed30348e0e292891bc32d2b6ec21ab233b603779c89ef2006c0458d2df4854d",
+  "version": "227168b2954ffc9eb1e770f7fe471309b50a5546d9ccffa84e34767901b7cccb",
   "assets": [
     {
       "path": "audio.js",
@@ -31,7 +31,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "8cb099e4e9107496fa51276c8948f986249ca1d874d35b277f8cb120bfc50b37"
+      "sha256": "5b2ad43aec700d148d67c057d03f49c85d490e315e4f1c6fad2869f71af97c9b"
     },
     {
       "path": "levels.js",

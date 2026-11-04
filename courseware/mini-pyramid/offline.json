@@ -1,6 +1,6 @@
 {
   "id": "mini-pyramid",
-  "version": "b3a848a7cae4a0f9fec6f5318cbabb0f93a12f0dc1778aa632d5bef02570e711",
+  "version": "a7e726d3f338c8dd766e8c96feb7b4bd86511fc7365cbde378726b5fc80676df",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "3b5eaef509fa428cd3de16146161ab70c1de5790368ee6086c1a5e6f4c0d3fde"
+      "sha256": "8de5f67851983628e2bc004cd77a421fc25e45802818e74d0a4192a3078bdf06"
     },
     {
       "path": "main.js",

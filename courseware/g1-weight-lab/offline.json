@@ -1,6 +1,6 @@
 {
   "id": "g1-weight-lab",
-  "version": "99bda42b7197972788a623a2023989025638200c71281ffdbe5f0928921340d3",
+  "version": "134e87a631902a6d54a25e0e03a9b87012e53dcb54e643cad50f71493cea1393",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -194,7 +194,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "4df68efbace1cb37e0d2b78b90da42649178cdd5d44104f51e811bdd8be77839"
+      "sha256": "982f74d76a43a5bf15ee0d50af465526bbd8109397e44d5cacfeef21f86f96f4"
     },
     {
       "path": "main.js",

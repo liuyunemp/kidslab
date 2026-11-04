@@ -1,6 +1,6 @@
 {
   "id": "pollination-garden",
-  "version": "78b07e7ce644f6737caddb90b00ce0dab9fc730af23a33c081d299739cd75807",
+  "version": "d4fcb413ae405da305807b105c6b07a6ca4d1cca1d2327321583091ee1097a89",
   "assets": [
     {
       "path": "audio.js",
@@ -26,7 +26,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "6a44a04ed5632aca3743762c4ad1075518c181a00bd8533f11b1c740808bf3b2"
+      "sha256": "a60d22a6b8ba277c445eb1d4007da0b63d2bc09459f57143d8966e4032a28609"
     },
     {
       "path": "levels.js",

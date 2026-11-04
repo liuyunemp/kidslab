@@ -1,6 +1,6 @@
 {
   "id": "orchard-orders",
-  "version": "d6f0a41e54cc0b467b9d5590f598ca1b2e592778ab26ef66a93882a73c6c01bc",
+  "version": "a6c36fbb02ed32ea8b842e2f917268eb73a4c9eac68ebb9f9b93251cf3fd670c",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "085b10e73772270247e43eead76e7add2e3e7301396e66e9f167245f01895705"
+      "sha256": "469b46af36c40612809b717cfa42cb3e9d804495d764e173628ac7a5a979e255"
     },
     {
       "path": "main.js",
-      "sha256": "06f2898662495702e3934a383df61421576e62c29c61170cb87c4d58c17face3",
-      "fingerprint": "4a902050"
+      "sha256": "4c990ccedbc3b97dd026703197fcf9620d953e63dacfcc7cbfb2a91bad8032f6",
+      "fingerprint": "23e93f01"
     },
     {
       "path": "random-core.js",

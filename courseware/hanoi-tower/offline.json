@@ -1,6 +1,6 @@
 {
   "id": "hanoi-tower",
-  "version": "88be5aa18c1dd7a65be3c0bb65f1535dbece631ee7422dc0cf17bc7ae2ea4310",
+  "version": "07dbb0a0f0e844acb94e1c758b607c2d2afdec558bdb6fde1ad5fb7eb6b64f47",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "7153f0da5d3ee9bc77e9765a330988e1a5f7eabe66eeeafd4813eb9dca03c325"
+      "sha256": "b97ee27ed576dece6079bcca2990888cb2c6a4340e2d5e996f7db70852bf852f"
     },
     {
       "path": "main.js",

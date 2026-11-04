@@ -124,13 +124,14 @@ import * as THREE from './vendor/three.module.min.js';
   }
   function toastMsg(msg, good = true) { toast.textContent = msg; toast.style.borderColor = good ? 'var(--accent-2)' : 'var(--bad)'; toast.hidden = false; clearTimeout(toast._timer); toast._timer = setTimeout(() => { toast.hidden = true; }, 2600); }
   function badge(icon) { const b = document.createElement('span'); b.className = 'badge'; b.textContent = icon; badges.appendChild(b); sfx.good(); }
-  function nextChapter(icon) { badge(icon); chapter = Math.min(5, chapter + 1); started = false; mainBtn.hidden = false; fastBtn.hidden = true; helm.hidden = true; monthBox.hidden = true; quiz.hidden = true; $('#myth').hidden = true; dragLine = null; renderChapter(); }
+  function nextChapter(icon) { window.cool?.stage?.('next-chapter'); badge(icon); chapter = Math.min(5, chapter + 1); started = false; mainBtn.hidden = false; fastBtn.hidden = true; helm.hidden = true; monthBox.hidden = true; quiz.hidden = true; $('#myth').hidden = true; dragLine = null; renderChapter(); }
 
   function renderChapter() {
     chapterNo.textContent = `${chapter + 1}/6`; chapterTitle.textContent = t('chapters')[chapter]; chapterText.textContent = t('texts')[chapter];
     mainBtn.textContent = t('start'); fastBtn.textContent = t('fast'); redrawOverlay();
   }
   function startChapter() {
+    window.cool?.stage?.('start-chapter');
     started = true; mainBtn.hidden = true;
     if (chapter === 0) { dipperStep = 0; casStep = 0; tracingCas = false; litLines.length = 0; toastMsg(t('texts')[0]); }
     if (chapter === 1) toastMsg(t('texts')[1]);
@@ -204,7 +205,7 @@ import * as THREE from './vendor/three.module.min.js';
     quiz.innerHTML = ''; const q = t('quiz')[quizIndex];
     if (!q) {
       toastMsg(t('quizDone'));
-      if (!finalBadged) { finalBadged = true; badge('💌'); }
+      if (!finalBadged) { finalBadged = true; badge('💌'); window.cool?.complete?.(); }
       mainBtn.hidden = true;
       return;
     }

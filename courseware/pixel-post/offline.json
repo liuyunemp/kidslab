@@ -1,6 +1,6 @@
 {
   "id": "pixel-post",
-  "version": "b47e3ea4a955963d0873095fb95426899f94d77fd4d0d78b837671739d19b30c",
+  "version": "e83b24dc1f621f0166b85cf687c8a7cdbd147e28c1230e118ca955e9c9967ba5",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "fe27d92f8298fd10506fe29b095a27c8e6f5621ad2d90d06b6505cf422d6027a"
+      "sha256": "f03e2cca1b6f36b7d5caa4e5fa8748b75c488c0778db9cd64481373c88bdf5a6"
     },
     {
       "path": "main.js",

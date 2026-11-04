@@ -1,6 +1,6 @@
 {
   "id": "ice-bridges",
-  "version": "7e86efa31879e1de0c95f9f372fa485589d65595b89ff0b6c935b9a3c98b60ee",
+  "version": "9d71372442bb570d0a6b271ff2d25e8da5df09444d28573fee913eb5bb24e711",
   "assets": [
     {
       "path": "classic-maps.js",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "d3bd23979e33e89e8372d0b42dfe0e4fec135e6c85ede6637bbb05a479a96f18"
+      "sha256": "059ddbfe0ffe0b71a0efc737cb21a1d81badcd287b777adc93e2a0fe25cdc172"
     },
     {
       "path": "main.js",

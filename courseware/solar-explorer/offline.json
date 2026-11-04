@@ -1,6 +1,6 @@
 {
   "id": "solar-explorer",
-  "version": "d40c69d4b1c1db8985fa57626fcd9278dc606ff658146d28881f084082eb854a",
+  "version": "296c7282e17736744f7106e7cc930d565b1530b2afe510e23027fcb49c52b125",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "3a56c03d271c39bd952b3df841cb63abb94bb882e3c5ac3b0663beee3d370bf5"
+      "sha256": "2d894002afd75932d646d8fd16097db58409c19765a49122f9980a1f1ee7bc84"
     },
     {
       "path": "main.js",

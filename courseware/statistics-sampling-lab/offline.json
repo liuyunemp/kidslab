@@ -1,6 +1,6 @@
 {
   "id": "statistics-sampling-lab",
-  "version": "e89c1a0b7f2af149f2b8e48a1e7157663306cc2a8bfac9c85dd1d832b08ceaf8",
+  "version": "1758f7ffff51ec6ad35bad0c56f0b3b34e9e8dd1b6d324c75d05d9814c1a8c5a",
   "assets": [
     {
       "path": "audio.js",
@@ -21,7 +21,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "aadcf969569db53a38193d65e0a1c45b5c1b016f4906b1df46cd3596ed35a1e7"
+      "sha256": "3b7691b862613e53373ad7f6bdc9d0a1cd2efcae5d589643a1dda46c98737a9e"
     },
     {
       "path": "lab-model.js",

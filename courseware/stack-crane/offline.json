@@ -1,6 +1,6 @@
 {
   "id": "stack-crane",
-  "version": "789230560683519a5056560c0dc42713a4455e9cc798a569c0fb0b8a0d3eb49f",
+  "version": "09898302133f21976a185a98eee901dc029f9ad0b39be220d7bf4b74fc152a41",
   "assets": [
     {
       "path": "audio.js",
@@ -26,7 +26,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "da93c4ace029d5573debd28f0900110aa6467d09135fd1e5ef093b70e83d3b53"
+      "sha256": "170476c781c10d2e20ad2346ac539a9e058a0b8721885e24dce850b31087d69b"
     },
     {
       "path": "levels.js",

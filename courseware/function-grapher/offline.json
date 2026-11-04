@@ -1,6 +1,6 @@
 {
   "id": "function-grapher",
-  "version": "a93408929c0a052e5d71f8fda4502e753fc84ed4260048f9388112d5bf923050",
+  "version": "66d18f260b96954a16c51f1fa1ae0fa14bfda4dd0424048d621107cb338bb742",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "5d76019f2af78b99f309d80048b68d4ef48869b5d8abb0626163f3f427cfba33"
+      "sha256": "bc72600f77238dbe1dffa5bf8405cf69b6498897fb7a06743d7aafc21de7520e"
     },
     {
       "path": "main.js",
-      "sha256": "fd002b29d18f3d298039a1b4942a93a07e300afd70001e9606162e537717e72e",
-      "fingerprint": "580b39bd"
+      "sha256": "2682495f06284c635be220c017c7ae0b140a540c302325fb4ff654cee342aff4",
+      "fingerprint": "3e301484"
     },
     {
       "path": "random-core.js",

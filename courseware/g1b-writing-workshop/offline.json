@@ -1,6 +1,6 @@
 {
   "id": "g1b-writing-workshop",
-  "version": "a5b60303dc8acde42327ddc1a8132ea169818b2c40eaddec1f99f2f346fa4a7b",
+  "version": "7da77ac50412d0dc12f40304dd92fb8298a4e4d54179a5a1dbbac9dd267b3fa1",
   "assets": [
     {
       "path": "audio.js",
@@ -266,17 +266,17 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "cd7858c8f87bed4b3221e1d18f8bc732ca3b88dedc21d7e7df5b821939babda2",
-      "fingerprint": "1610c8ed"
+      "sha256": "601f26503109b561ae1261a677662ca102bccf4354b28539e4e0f9e7de13371f",
+      "fingerprint": "8a1cfb51"
     },
     {
       "path": "index.html",
-      "sha256": "8e674300b55cb1c235f84d259179263d2d4ddf1dec0ba63bbd288e0c159e32f2"
+      "sha256": "4cef9e346da64d58c935e29dd912aaed08295dd2a3c7c1bbbdecaee38060fc12"
     },
     {
       "path": "main.js",
-      "sha256": "435a11e4184d74827eb0aafca992a62cf8d465977692424ca410cb5082ce5104",
-      "fingerprint": "133ca3fa"
+      "sha256": "14c9d66631e94a4cbe37d3a57855382145cc0f2e757283e3274cfa8e60e62824",
+      "fingerprint": "c932177d"
     },
     {
       "path": "narration.js",
@@ -310,8 +310,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "e3d8ef2fa605db62d2f6a336f68291b5875dcc6e1696c22fb5618de2b78511c5",
-      "fingerprint": "be5182e0"
+      "sha256": "596454be4f9a7a5d56d76980b2dd386a532b2ca074095813a4735dcbd45be93d",
+      "fingerprint": "aa792246"
     },
     {
       "path": "speech-manifest.js",

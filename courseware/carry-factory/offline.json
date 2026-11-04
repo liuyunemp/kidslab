@@ -1,6 +1,6 @@
 {
   "id": "carry-factory",
-  "version": "1482232efbf14ded6a2f9d127b3b043c2a47b19f10423f924500149fe2cdef54",
+  "version": "66b0e59677dd7901f63eff73b84211a0ff828b26809f8c62ace6c6c3da830130",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "9532436605c9b44914e9e8e9a89150f510a0560a2811368f4813d5a9ab53aa80"
+      "sha256": "9edc54e4891563671f34784091b0d004bb8787d77f4c28eec4dd9731c09d31c9"
     },
     {
       "path": "main.js",

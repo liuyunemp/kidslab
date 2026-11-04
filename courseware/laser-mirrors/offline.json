@@ -1,6 +1,6 @@
 {
   "id": "laser-mirrors",
-  "version": "400f87dab11f6b6e13bb3c004f8705395f935a6d394fd68d209d3459a42a1a70",
+  "version": "a5dc4ec7297750ce861e107797ce859fc3f463155af46f7fd3b5250e02a04047",
   "assets": [
     {
       "path": "classic-rooms.js",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "aedad2e47337f3f6706829a003e75a9dd3e2bec316611651050e0eb6143eec94"
+      "sha256": "29f58d05535da6b1c904240025607763b951cdc23fbcdacebf5ff9a8d73c254c"
     },
     {
       "path": "main.js",

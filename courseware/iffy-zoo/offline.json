@@ -1,6 +1,6 @@
 {
   "id": "iffy-zoo",
-  "version": "296efc8d67a96ede1618c0c13a63b0326eae2e6268421b5a97d6c65974557cd4",
+  "version": "a58b3f25f78978f6cda07c1799315ad7fa046e213b82045935f99e75c27e8597",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "a147635d307ad8da5cb6884024904a1cc59d94ce18bc615dc26f78e2f7758728"
+      "sha256": "3786ad7b7acc15827968cf282ec1eb71c137e520a56826f97395b95640224eea"
     },
     {
       "path": "main.js",
-      "sha256": "939163fe341f2d8ad6c8a5811558f1920b434e7682ae59e7d3b8c7b86fbdff90",
-      "fingerprint": "821ca257"
+      "sha256": "ba7ea0cad412e075bd42a836e22e4620afce64c19e7a315f51d4509cebacbf7e",
+      "fingerprint": "f4204f11"
     },
     {
       "path": "style.css",

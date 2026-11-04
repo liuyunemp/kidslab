@@ -1,6 +1,6 @@
 {
   "id": "english-fruit-picnic",
-  "version": "8c42979656162cbe7b279c8d89a77ccc12a93de8fb9bde39ad6703ed665ead96",
+  "version": "6d9d98c0bc7a1b0dd0a3c5551f4f9e8f172f8d624a3a747b5bb28987f83a2248",
   "assets": [
     {
       "path": "audio.js",
@@ -380,7 +380,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "90d70ce56a841d6c9cf2e43d237728e66cf190d07f2a6224480a2fededbaf156"
+      "sha256": "7fba8bd5604ac2d5f677989948f44c93a65dbf9f77142908b26566f50354afb1"
     },
     {
       "path": "main.js",

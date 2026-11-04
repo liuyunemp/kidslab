@@ -54,12 +54,17 @@
   // 匿名设备 id（本地随机串）+ 本课件在此设备的累计游玩次数 → 复玩率
   let did = ls.get('kidslab.did');
   if (!did) { did = rid(); ls.set('kidslab.did', did); }
+  /* 5 秒内重复进入（误触、立刻刷新、返回键抖动）不算一次新的复玩。 */
+  const enterKey = `kidslab.enter.${COURSE}`;
+  const lastEnter = Number(ls.get(enterKey) || 0);
+  const reentry = Number.isFinite(lastEnter) && lastEnter > 0 && Date.now() - lastEnter < 5000;
   let visits = 1;
   try {
     const map = JSON.parse(ls.get('kidslab.visits') || '{}');
-    visits = (map[COURSE] || 0) + 1;
+    visits = (reentry ? map[COURSE] : (map[COURSE] || 0) + 1) || 1;
     map[COURSE] = visits;
     ls.set('kidslab.visits', JSON.stringify(map));
+    if (!reentry) ls.set(enterKey, String(Date.now()));
   } catch { /* 忽略 */ }
 
   const sid = rid();
@@ -80,22 +85,38 @@
   const active = () => activeMs + (visibleSince ? now() - visibleSince : 0);
 
   let queue = [];
+  /* 上一次没送出去的批次留在内存里重试（最多 50 批）：以前失败即丢，
+     弱网/切后台时报表就会「漏记」。 */
+  const retry = [];
+  function payload(events) {
+    return JSON.stringify({ v: 1, c: COURSE, d: did, s: sid, l: lang, p: pointer, e: events });
+  }
+  function send(text) {
+    try {
+      // text/plain 避免 CORS 预检；sendBeacon 保证卸载页面时仍可送达
+      if (navigator.sendBeacon && navigator.sendBeacon(ENDPOINT, new Blob([text], { type: 'text/plain' }))) return true;
+    } catch { /* 继续尝试 fetch */ }
+    try {
+      fetch(ENDPOINT, { method: 'POST', body: text, keepalive: true, headers: { 'content-type': 'text/plain' } })
+        .catch(() => { if (retry.length < 50) retry.push(text); });
+      return true;
+    } catch { return false; }
+  }
   function push(n, g, extra) {
     queue.push(Object.assign({ n, g: g || stage, t: now() - t0 }, extra));
     if (queue.length >= 20) flush();
   }
   function flush() {
-    if (!queue.length) return;
-    const body = JSON.stringify({ v: 1, c: COURSE, d: did, s: sid, l: lang, p: pointer, e: queue });
-    queue = [];
-    try {
-      // text/plain 避免 CORS 预检；sendBeacon 保证卸载页面时仍可送达
-      const sent = navigator.sendBeacon &&
-        navigator.sendBeacon(ENDPOINT, new Blob([body], { type: 'text/plain' }));
-      if (!sent)
-        fetch(ENDPOINT, { method: 'POST', body, keepalive: true, headers: { 'content-type': 'text/plain' } })
-          .catch(() => {});
-    } catch { /* 埋点永不影响课件 */ }
+    if (queue.length) {
+      const text = payload(queue);
+      queue = [];
+      if (!send(text) && retry.length < 50) retry.push(text);
+    }
+    /* 每次最多补发 3 批，避免弱网下把请求堆成雪崩。 */
+    for (let i = 0; i < 3 && retry.length; i++) {
+      if (!send(retry[0])) break;
+      retry.shift();
+    }
   }
   function snapshot(n) {
     push(n, stage, { a: Math.round(active() / 1000), taps });
@@ -103,7 +124,7 @@
   }
 
   // ---- 自动事件 ----
-  push('enter', '', { visits, first: visits === 1 ? 1 : 0 });
+  if (!reentry) push('enter', '', { visits, first: visits === 1 ? 1 : 0 });
   flush();
 
   addEventListener('pointerdown', () => { taps++; }, { capture: true, passive: true });
@@ -115,16 +136,17 @@
     flush();
   }, 30000);
 
+  /* 每次切后台都发 leave 会把平均时长拉低（见 docs/analytics.md）。
+     一个会话只在第一次离开时记 leave，后面切后台按 beat 记时长，退出点仍是第一次。 */
   function onHide() {
-    if (leaveSent) return;
-    leaveSent = true;
     if (visibleSince) { activeMs += now() - visibleSince; visibleSince = 0; }
-    snapshot('leave');
+    snapshot(leaveSent ? 'beat' : 'leave');
+    leaveSent = true;
     flush();
   }
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) onHide();
-    else { leaveSent = false; if (!visibleSince) visibleSince = now(); }
+    else if (!visibleSince) visibleSince = now();
   });
   addEventListener('pagehide', onHide);
 

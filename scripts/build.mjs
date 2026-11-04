@@ -140,7 +140,36 @@ async function loadTracker() {
 /* 注入到每个课件页 <head>：favicon + 「返回星图」悬浮按钮（仅从星图进入时显示） */
 const FAVICON_TAG = '<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">';
 const SDK_SOURCE_TAG_RE = /<script\b(?=[^>]*\bdata-kidslab-sdk\b)[^>]*><\/script>\s*/gi;
-const STARMAP_BACK_TAG = `<script>(function(){try{var s=JSON.parse(sessionStorage.getItem('kidslab.starmap')||'null');if(!s||!s.open)return;var zh=(document.documentElement.lang||'zh').indexOf('zh')===0;var a=document.createElement('a');a.href='../../index.html#starmap';a.className='kidslab-starmap-back';a.title=zh?'\\u8fd4\\u56de\\u661f\\u56fe':'Back to Star Map';a.setAttribute('aria-label',a.title);a.textContent='\\u2726';a.style.cssText='position:fixed;right:14px;bottom:14px;z-index:2147483000;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;border-radius:50%;color:#7ce7ff;background:rgba(16,18,48,.82);border:1px solid rgba(124,231,255,.45);box-shadow:0 4px 14px rgba(0,0,0,.35);text-decoration:none;backdrop-filter:blur(6px)';function add(){document.body.appendChild(a)}if(document.body)add();else document.addEventListener('DOMContentLoaded',add)}catch(e){}})()</script>`;
+/* 星图返回按钮：孩子玩的时候它就是右下角的一块「陷阱」——以前 42px 常驻高亮，
+   安卓上误触一下直接回主站。现在改成 48px 命中区、默认半透明、8s 后更淡，
+   并且第一次点只提示、2.6s 内再点才真的离开。 */
+const STARMAP_BACK_TAG = `<script>(function(){try{
+var s=JSON.parse(sessionStorage.getItem('kidslab.starmap')||'null');if(!s||!s.open)return;
+var zh=(document.documentElement.lang||'zh').indexOf('zh')===0;
+var label=zh?'\\u8fd4\\u56de\\u661f\\u56fe':'Back to Star Map';
+var again=zh?'\\u518d\\u70b9\\u4e00\\u6b21\\u8fd4\\u56de':'Tap again to leave';
+var a=document.createElement('a');a.href='../../index.html#starmap';a.className='kidslab-starmap-back';
+a.title=label;a.setAttribute('aria-label',label);a.textContent='\\u2726';
+a.style.cssText='position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:2147483000;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;border-radius:50%;color:#7ce7ff;background:rgba(16,18,48,.72);border:1px solid rgba(124,231,255,.35);box-shadow:0 4px 14px rgba(0,0,0,.3);text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:.5;transition:opacity .2s';
+var armed=0;
+a.addEventListener('pointerenter',function(){a.style.opacity='.95'});
+a.addEventListener('focus',function(){a.style.opacity='.95'});
+a.addEventListener('pointerleave',function(){if(!armed)a.style.opacity='.4'});
+a.addEventListener('blur',function(){if(!armed)a.style.opacity='.4'});
+a.addEventListener('click',function(e){
+  var now=Date.now();
+  if(now-armed<2600){armed=0;return;}
+  e.preventDefault();armed=now;a.style.opacity='.95';
+  a.setAttribute('aria-label',again);a.title=again;
+  var tip=document.createElement('span');tip.textContent=again;
+  tip.style.cssText='position:fixed;right:18px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:2147483000;padding:8px 12px;border-radius:12px;font-size:15px;line-height:1.4;color:#fff;background:rgba(16,18,48,.9);white-space:nowrap';
+  document.body.appendChild(tip);
+  setTimeout(function(){tip.remove();armed=0;a.setAttribute('aria-label',label);a.title=label;if(!a.matches(':hover'))a.style.opacity='.32'},2600);
+});
+setTimeout(function(){if(!armed)a.style.opacity='.28'},8000);
+function add(){document.body.appendChild(a)}
+if(document.body)add();else document.addEventListener('DOMContentLoaded',add)
+}catch(e){}})()</script>`;
 
 function injectHead(html, tags) {
   const block = tags.join('\n');

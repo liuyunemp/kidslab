@@ -1,6 +1,6 @@
 {
   "id": "railway-dispatch",
-  "version": "a35ddc66cf8172023e1910162699a33ef24630e3e2a4b8ba66937630033baac8",
+  "version": "d411c68e363f4818cb18da3673d1558563f70dfa4a3d2633451f6a0404009661",
   "assets": [
     {
       "path": "audio.js",
@@ -26,7 +26,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "c804566cd58bacf9b756a038dbd1a722c89109b5b2b6da4947198ce2cd0c8bf3"
+      "sha256": "587206b85690a97d26b0b0ac5a28d42250e60755555f99911cd7b5a2d8d67ce4"
     },
     {
       "path": "levels.js",

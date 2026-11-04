@@ -1,6 +1,6 @@
 {
   "id": "number-fireflies",
-  "version": "23c52afcd6e11975be7b2f61cfb3e25bd52ffae8955034ef1b8df9cfdda11cc3",
+  "version": "f01eb2473b58875fc2769130c02b3ead4a70ddef593dfe728b880f3279b495ae",
   "assets": [
     {
       "path": "audio/speech/0168541fadcd1d9457ec4b25fcb507d0a8b64d2a81c6bea002d7408eb74148e0.mp3",
@@ -288,7 +288,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "1327ffcd3f9ce5cf2b5fd2b58aaaac97d49c2dcd12e6c2b4c681ef9457dc4ebf"
+      "sha256": "101120225d27b185afec560d39e6cc3d4c003d463dc9c453da39b862b683b909"
     },
     {
       "path": "main.js",

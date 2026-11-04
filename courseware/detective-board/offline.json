@@ -1,6 +1,6 @@
 {
   "id": "detective-board",
-  "version": "67888baa36c846d8e572dd8d19bf8adb381225639bd03dbdcc8562a59b7e7761",
+  "version": "c63795da46924eb7c3a4c85cbd4abb2fa519a666f44784146a063059f6f670df",
   "assets": [
     {
       "path": "classic-cases.js",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "3f0d548f189f61961120bdd0518fe79af3276898d7aa519573039940d23cb3d9"
+      "sha256": "ebbd458874078d0b10b02bb60c34e46fe7a88a8cc11f9866c34bcad217f01e76"
     },
     {
       "path": "main.js",

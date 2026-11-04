@@ -1,6 +1,6 @@
 {
   "id": "inkblot-monsters",
-  "version": "68482b70ecd0118edc55439c4a1196d2603f1f2ece0c6a10c92a53136f4672af",
+  "version": "e63f6e0a381169ddfe2f994bced8e7b6b2176c09de48584c5e0af97b5ba5679a",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "e9f29d11ab0f52459e5fbb3f6b636afab028a5bbd5fe1d807fefceea477c6b58"
+      "sha256": "ff005dfb2d6fd361f9af171cde0e971f1be74857db825c5e35190e74023eb31b"
     },
     {
       "path": "main.js",

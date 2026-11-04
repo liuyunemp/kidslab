@@ -1,6 +1,6 @@
 {
   "id": "four-color-kingdom",
-  "version": "3e7972fc117c69e043173134eb342dc440d5a68dd4f0b328332f440b94b9c49b",
+  "version": "ab071aea32a7539ffc1b99babf34ac2881d72c660b924882ba59dba35a700e34",
   "assets": [
     {
       "path": "classic-maps.js",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "aedea5c1bb767666766c76021606969aa20d12cd374c4cda4097493c4dae3ceb"
+      "sha256": "4a7a86a30ee0ff27a48593ec493cb81357d511077ff753c4ee8150c956964a3e"
     },
     {
       "path": "main.js",

@@ -1,6 +1,6 @@
 {
   "id": "balance-circus",
-  "version": "0f26461cd1e7fdd829e935bcd8be8bc1af0636b15b25a04b557c923a251e7f94",
+  "version": "83900f8a6fabbc1c738779272630d7b9b5aa2284cb5309e27e525da1b8839e8e",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "c4437cf486098307fde097cc266e0c37ef8dc34782fe84486470039fe365b792"
+      "sha256": "1f40803034282a61a13d35488f9f9eaab80a80770ba7394e36400d11bf11bacb"
     },
     {
       "path": "main.js",

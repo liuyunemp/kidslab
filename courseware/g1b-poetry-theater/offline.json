@@ -1,6 +1,6 @@
 {
   "id": "g1b-poetry-theater",
-  "version": "0a73b5c2cf914ab2f83664ce27029a5d146a157866eb331b0b4b2ee146a0d04e",
+  "version": "ca6d3eca2a76d32b3fcb80f5db5915c6a1d6a241460b0727206503e6bfcf027f",
   "assets": [
     {
       "path": "audio.js",
@@ -266,17 +266,17 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "cd7858c8f87bed4b3221e1d18f8bc732ca3b88dedc21d7e7df5b821939babda2",
-      "fingerprint": "1610c8ed"
+      "sha256": "601f26503109b561ae1261a677662ca102bccf4354b28539e4e0f9e7de13371f",
+      "fingerprint": "8a1cfb51"
     },
     {
       "path": "index.html",
-      "sha256": "3331f78d8e929c62f3765cfd7096344642a8fae54d6d9e750655550a7183f134"
+      "sha256": "0dbe13bc2d81464568260550e4e2dc6e2f1c4aefa1b7beec180027f3c5143abf"
     },
     {
       "path": "main.js",
-      "sha256": "08016167d6de2a3bc652c4da45d5587f7fdc11cb8d15fcbe11129322b0305716",
-      "fingerprint": "f6bf4722"
+      "sha256": "55c5fd7d989b0ccf0161af787ead39bbbda8427e1c101442f7bee855474a4302",
+      "fingerprint": "f21f2df0"
     },
     {
       "path": "narration.js",
@@ -310,8 +310,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "e3d8ef2fa605db62d2f6a336f68291b5875dcc6e1696c22fb5618de2b78511c5",
-      "fingerprint": "be5182e0"
+      "sha256": "596454be4f9a7a5d56d76980b2dd386a532b2ca074095813a4735dcbd45be93d",
+      "fingerprint": "aa792246"
     },
     {
       "path": "speech-manifest.js",

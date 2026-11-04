@@ -1,6 +1,6 @@
 {
   "id": "g1-direction-town",
-  "version": "e50e226697fe3256714bfb33b11905cf8a117f8ebfd348299e6972c936b75828",
+  "version": "1779c01e377560b623c7327e8d9ab34935b5c754d8a892c7eedc40f09ccf394f",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -266,7 +266,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "be2c6865f24c61a5464792d5d728529894246f4053d7bd957e9ea2cc77544f91"
+      "sha256": "99b4ef96e944005649a73a0a031d2300614997e392c39ac7ca4a5a7a450dde25"
     },
     {
       "path": "main.js",

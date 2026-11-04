@@ -1,6 +1,6 @@
 {
   "id": "mass-conservation-lab",
-  "version": "68ff902bed0e6d659a8a3bdb91fa0aa9e5e0fd876b71b809efe2da5d06c40f26",
+  "version": "7cfd1fba89c9e7daa140af057e57e554211e0daa0fd9b56fbb6813671d742997",
   "assets": [
     {
       "path": "audio.js",
@@ -17,7 +17,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "79d1efc609aaeeb84eac67fd4a2b1bf5520fbe9d9a20ff0b044e4293835d63e5"
+      "sha256": "f4b8da5d08457424483746142e14601b41de08e9b19f8f5268edad99b756bdce"
     },
     {
       "path": "main.js",

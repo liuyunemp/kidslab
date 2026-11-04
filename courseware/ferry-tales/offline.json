@@ -1,6 +1,6 @@
 {
   "id": "ferry-tales",
-  "version": "f4c5849aea84956500c93e45cc621afb7e1557ac6d157f2a0515e67c1b03783f",
+  "version": "55ecf2ee92c84cf2660ebd7da386920d0db5b523daa23ffac4c74adce3dcbbcd",
   "assets": [
     {
       "path": "classic-levels.js",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "645c3fd48aa7e40519d392a5ba1578bfcc68593d044e0e4199b7d991cb4bf821"
+      "sha256": "0d71f159766f19d6714dda16ca09d5246f67086a3e13ed2fe2203198a6a01a0d"
     },
     {
       "path": "main.js",

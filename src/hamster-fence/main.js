@@ -176,6 +176,7 @@ import { fence, validFence } from './random-model.js';
 
   function resetLevel() {
     clearTimeout(winTimer);
+    window.cool?.stage?.('enter-level');
     const lv = currentLevel();
     state.shape = { w: lv.start.w, h: lv.start.h, ew: lv.start.ew || 2, eh: lv.start.eh || 3 };
     state.message = goalText(lv);
@@ -253,6 +254,7 @@ import { fence, validFence } from './random-model.js';
       else state.message = t('notHappy')(m.area, lv.goal);
       flop(); render(); return;
     }
+    window.cool?.complete?.();
     state.opened = true;
     state.message = t('success')(levelName(), m.area, m.perimeter);
     cheer(); fireworks(lv.kind === 'wall' ? 110 : 65);
@@ -267,7 +269,7 @@ import { fence, validFence } from './random-model.js';
     winDesc.textContent = last ? t('allDesc') : t('winDesc')(state.stars);
     nextBtn.textContent = last ? t('again') : t('next');
   }
-  function advance() { state.level = (state.level + 1) % LEVELS.length;LEVELS[state.level]=rounds.next(state.level); resetLevel(); }
+  function advance() { state.level = (state.level + 1) % LEVELS.length;LEVELS[state.level]=rounds.next(state.level); window.cool?.stage?.('next-level'); resetLevel(); }
 
   function makeHamsters(n) {
     return Array.from({ length: n }, (_, i) => ({ x: rand(0.1, 0.8), y: rand(0.1, 0.8), vx: rand(-0.18, 0.18), vy: rand(-0.15, 0.15), roll: rand(0, 6), emoji: ['🐹', '🐭', '🐹', '🐰'][i % 4] }));

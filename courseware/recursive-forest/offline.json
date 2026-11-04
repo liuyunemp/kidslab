@@ -1,6 +1,6 @@
 {
   "id": "recursive-forest",
-  "version": "3db0bbe47099fdf72abc09c84004ef03d863d4dceab614e2af848ac921eb57cb",
+  "version": "8813f1b9b4da035080e7341e6e98b93a456fda1d066ac2f6322e8bf18198373c",
   "assets": [
     {
       "path": "audio.js",
@@ -26,7 +26,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "fa931f320b9f12f81dfc1eae12699eb365219bb645e201973138929ce235bc0a"
+      "sha256": "a6120069acda54225ab9860321983b5eb6104d1e209640c85852fa6fecf865e8"
     },
     {
       "path": "levels.js",

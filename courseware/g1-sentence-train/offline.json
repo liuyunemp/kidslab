@@ -1,6 +1,6 @@
 {
   "id": "g1-sentence-train",
-  "version": "8d3a8b5b12c238db46b6f1f486af8db428edfc88754e8b1a262e7abc49c6a346",
+  "version": "99c2bb8a08ceae4597bc06699b3b1c5300463025b235ae6f435f6f40c6ba5547",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -194,7 +194,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "f10a7d266e78329d1389afe4412254e326c62d96ede816aefcc48daf4ecc5058"
+      "sha256": "3bc43332a9ebfd6d5dd0d3e5d34daa48535c468fa0e12ed94bb4d433e96fec38"
     },
     {
       "path": "main.js",

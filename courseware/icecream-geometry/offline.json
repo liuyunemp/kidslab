@@ -1,6 +1,6 @@
 {
   "id": "icecream-geometry",
-  "version": "3c4c490f05bddd942207df01e994d48f4f7ebd36c3e62481ddef7275ece48ee1",
+  "version": "22a987c79fb6b17287c22ff79fbfab3fa78ed2e59c8a4c8e5b2047b777a9e7bd",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "b5cc3094e81bbeacb1176c69dd0efa8662c2f0a7107d8d60bed08b4455418e60"
+      "sha256": "cede333647f865eaef9287c7384ba698fb3185f983677a5a327943649e33fd16"
     },
     {
       "path": "main.js",

@@ -1,6 +1,6 @@
 {
   "id": "g1-character-garden",
-  "version": "bf90abdeefdab7e7c4f6f514a2392033d989368c691e426e34038365c27607ee",
+  "version": "029e371798d9fb7e9e4167af2549ede56f82d403b5891779ea7536000b951ef3",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -266,7 +266,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "08eda429e24ce83054f32d621de9795614e2af30bfedc0f6341e781aaadb16a6"
+      "sha256": "403f59810105dc181c02dbcf472aaad805157f95160fdcccc090dcb055c185d0"
     },
     {
       "path": "main.js",

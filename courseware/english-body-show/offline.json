@@ -1,6 +1,6 @@
 {
   "id": "english-body-show",
-  "version": "8f6cfc5bdf73f1d2d0411a3569c3ffff767e755fc4755bc2ecfc30855cbe2193",
+  "version": "e87458aed90a8b4cfced11d14bcc25bcb10360f87b1c184d43c0436521cee7e3",
   "assets": [
     {
       "path": "audio.js",
@@ -400,7 +400,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "38bccef336bcc6efbbfab1820d87cd19ac5a9ccdb917e7ce9723b7a0ea7e2eb5"
+      "sha256": "a5d4505d4a42a3b7889fadcf76888c527676193511e2a93092fe4c05ec924bbb"
     },
     {
       "path": "main.js",

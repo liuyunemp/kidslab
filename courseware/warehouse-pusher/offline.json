@@ -1,6 +1,6 @@
 {
   "id": "warehouse-pusher",
-  "version": "457892502ffe9cc6d05f4b48e36f8146986bf8c0fb0f27197b231db6242e9258",
+  "version": "ed50f1c5e3ca5ac897bb42371021ca51334b819c1679ff1f3e0c456443908d7d",
   "assets": [
     {
       "path": "audio.js",
@@ -26,7 +26,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "35ddda7be8720ff9cd35689cdb2d23dbc40b97d4669cc6fabeeb47904340b371"
+      "sha256": "de3599e2d45eab0bbaa33ca9afa761225db1ec098265d63cc96ebf5fcf65f18f"
     },
     {
       "path": "levels.js",

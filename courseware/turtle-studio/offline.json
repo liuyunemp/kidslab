@@ -1,6 +1,6 @@
 {
   "id": "turtle-studio",
-  "version": "041e7d782ed6694760b93bcbcf24e41995e95252055b8713921d950d5b1859cc",
+  "version": "442e68398be3ddf66ed01fd708f7d29c184b129832021cc00815cd8d1142e397",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "4d776994c59bd8737db16c9cb6eb25615e6eca6af95f5e5c42a51789ebc9b6c4"
+      "sha256": "c6206f02aff0c29da044109dbec66ea8eec135428423c81900218282c483d3c8"
     },
     {
       "path": "main.js",
-      "sha256": "37f33a77a7bf75a5408c92445912e9a85317624518eeb27a9be7ce86dca10c98",
-      "fingerprint": "6e635b87"
+      "sha256": "42d6a69d214a7fc0bac107b3bf656a28772795b96c4684375d271590d1b6f7e5",
+      "fingerprint": "9f119495"
     },
     {
       "path": "style.css",

@@ -1,6 +1,6 @@
 {
   "id": "hundred-metro",
-  "version": "32e4df5ce882672064da197e71474d07d8d0c477d8ffc3942b2dca98af6bde8c",
+  "version": "8958aa47116a90ddbf555b8bb58f47cc701a2d98c810b3338665b3740362aac9",
   "assets": [
     {
       "path": "audio.js",
@@ -266,17 +266,17 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "cd7858c8f87bed4b3221e1d18f8bc732ca3b88dedc21d7e7df5b821939babda2",
-      "fingerprint": "1610c8ed"
+      "sha256": "601f26503109b561ae1261a677662ca102bccf4354b28539e4e0f9e7de13371f",
+      "fingerprint": "8a1cfb51"
     },
     {
       "path": "index.html",
-      "sha256": "83ff9ba59777b09a987652f549d310acaab2dd2ef0723e785a0df580c667686d"
+      "sha256": "4373f61bfd077912f9d3803234ca3a06e41cf63b8f2a8086383b4658129a32ab"
     },
     {
       "path": "main.js",
-      "sha256": "a0fc211b681883b873d7f9d9ff8df341bfc5189789f45015db6a29d919f1af5c",
-      "fingerprint": "b1bd930b"
+      "sha256": "19d920a8c510e076aa7e1bbd102f3e9e124858728bf18bbc9920d01a29651c51",
+      "fingerprint": "c8076a28"
     },
     {
       "path": "narration.js",
@@ -310,8 +310,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "e3d8ef2fa605db62d2f6a336f68291b5875dcc6e1696c22fb5618de2b78511c5",
-      "fingerprint": "be5182e0"
+      "sha256": "596454be4f9a7a5d56d76980b2dd386a532b2ca074095813a4735dcbd45be93d",
+      "fingerprint": "aa792246"
     },
     {
       "path": "speech-manifest.js",

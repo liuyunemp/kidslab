@@ -1,6 +1,6 @@
 {
   "id": "light-chain-house",
-  "version": "861ad1ae2ff6135cc17b59d0714f13c41e013b39c4c5c775b6b2592571aebf4a",
+  "version": "40fea04b1837b67abdf832936dea1e7aef88f7d2a61604e93e734d2143ea8d1b",
   "assets": [
     {
       "path": "audio.js",
@@ -26,7 +26,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "7d61811c6ae117084d609cf51ebd11bfdc4b76af393cc260f8d39a3ad6b01fa7"
+      "sha256": "5294a66757ee4b83627b81fe83723e071ee866574f6c1a2d3964ee32292e09aa"
     },
     {
       "path": "levels.js",

@@ -1,6 +1,6 @@
 {
   "id": "g1-stroke-order",
-  "version": "bad7709bf197eaba155815f9825c4df636b06d6d9250b7aa97cc73f9cef01a4a",
+  "version": "6bb16dfff43954936b9da0c6e43274927d28ae9c68111555b60cc3815064d79b",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -298,7 +298,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "ace89c520170850e6610d0ac2a7cdeefa97643406b397fe3afb76fd70ad70cc2"
+      "sha256": "fdaf5e80e83671fd5c79a050b711cf3a129ab64d5d731a0050d68159016b0d1a"
     },
     {
       "path": "main.js",

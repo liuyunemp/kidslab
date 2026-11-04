@@ -78,7 +78,7 @@ function harness() {
       return new Response(name === control.tamper ? 'mismatch' : files.get(name));
     },
   });
-  vm.runInContext(`${source}\nglobalThis.api = { prepareCourse, completeSnapshot, rangeResponse, courseRequest, cleanupSnapshots, teardownLegacyCache, evictSnapshotsUnderPressure, shouldDeferDownload, clientSnapshots };`, sandbox);
+  vm.runInContext(`${source}\nglobalThis.api = { prepareCourse, completeSnapshot, rangeResponse, courseRequest, shellRequest, fallbackPage, cleanupSnapshots, teardownLegacyCache, evictSnapshotsUnderPressure, shouldDeferDownload, clientSnapshots };`, sandbox);
   const api = sandbox.api;
   async function request(file, { navigate = false, clientId = '', range } = {}) {
     const request = new Request(base + file, { headers: range ? { range } : {} });
@@ -335,4 +335,27 @@ test('background download is deferred on metered and 2G connections only', async
   await h.api.prepareCourse('demo');
   assert.equal(h.control.fetches, before, 'a deferred course must not fetch anything');
   assert.equal(await (await h.request('main.js')).text(), 'script-old');
+});
+
+test('离线且课件未下完时，导航返回可点的兜底页而不是白屏', async () => {
+  const h = harness();
+  h.control.offline = true;
+  const response = await h.request('index.html', { navigate: true });
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /重试/);
+  assert.match(html, /返回列表/);
+  assert.match(html, /\.\.\/\.\.\/index\.html/, '兜底页必须给一个回列表的入口');
+  assert.doesNotMatch(html, /location\.href\s*=/, '兜底页不允许自动跳转');
+  await assert.rejects(h.request('main.js'), '非导航资源仍应抛错，不能被当成页面');
+});
+
+test('主站壳离线且无缓存时同样返回兜底页', async () => {
+  const h = harness();
+  h.control.offline = true;
+  const request = new Request(`${origin}index.html`);
+  Object.defineProperty(request, 'mode', { value: 'navigate' });
+  const response = await h.api.shellRequest(request, true);
+  assert.equal(response.status, 200);
+  assert.match(await response.text(), /重试/);
 });

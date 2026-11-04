@@ -1,6 +1,6 @@
 {
   "id": "g1-compare-bridge",
-  "version": "cc75305cc4a71cda95a0e108fa8981ad3678ab176956a73d728a53a16cf432cb",
+  "version": "67203ccc2129780519d138bbae18c58f0db0efd7e7062b010114d8b2cac80f3b",
   "assets": [
     {
       "path": "audio.js",
@@ -266,17 +266,17 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "cd7858c8f87bed4b3221e1d18f8bc732ca3b88dedc21d7e7df5b821939babda2",
-      "fingerprint": "1610c8ed"
+      "sha256": "601f26503109b561ae1261a677662ca102bccf4354b28539e4e0f9e7de13371f",
+      "fingerprint": "8a1cfb51"
     },
     {
       "path": "index.html",
-      "sha256": "baf76550c2c3aae6e71e371c549e5af063cb21ea12fa593c5850aa1a359ff841"
+      "sha256": "a7e08998d62ec476e4053e0be21f7791b689838ed0be88d462473b347efd7845"
     },
     {
       "path": "main.js",
-      "sha256": "ad7447a227d9c25a1772601d33eb99984482c1f39ebf8ff0b7d664fd1c623c4c",
-      "fingerprint": "ad401827"
+      "sha256": "609d33f45706e3434eac8c10e7f7ea19d6629c0367a6d97a4d9b672825e0acb1",
+      "fingerprint": "b5abc0c5"
     },
     {
       "path": "narration.js",
@@ -310,8 +310,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "e3d8ef2fa605db62d2f6a336f68291b5875dcc6e1696c22fb5618de2b78511c5",
-      "fingerprint": "be5182e0"
+      "sha256": "596454be4f9a7a5d56d76980b2dd386a532b2ca074095813a4735dcbd45be93d",
+      "fingerprint": "aa792246"
     },
     {
       "path": "speech-manifest.js",

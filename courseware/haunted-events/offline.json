@@ -1,6 +1,6 @@
 {
   "id": "haunted-events",
-  "version": "f76e13406009cd7599c77d57ea7102b6ebfe10a996e94f70dd9cd744f502daf8",
+  "version": "efeed725112978b19544a82478a4ba132c851199b4c704449a17338f5dcfef6f",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "5527fa52bdfe8d5cf2acdc15fed3da4e1fc277b8727abfedd4fbd568c05e8d9a"
+      "sha256": "85080dd21f1033eed46f96af83b4b6c0633de97d2fb4a8556c24a3c2b6f0081b"
     },
     {
       "path": "main.js",

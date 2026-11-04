@@ -1,6 +1,6 @@
 {
   "id": "molecule-disco",
-  "version": "5de9b2532e2729094e8fffa6364f90c9fa42c5fe1b2abdb903bfb9a53deb2bd5",
+  "version": "9840d8b5ada8d2e98ebf67e1d8fcf0b2d51d529c91cf74793c4c665d92406c67",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "c993ba8aac5b8f4bb3fe08ac4ed789d59f09dc5605ecddb52dc1ec57735bb17a"
+      "sha256": "efac9478672843b1dfe8bd8f173eff9066905e3a8985e0f891697d4eee98188e"
     },
     {
       "path": "main.js",
-      "sha256": "2943221cb3abedda10b5232db9401557c8b340b8dd6a87b6576a59b5fb93960e",
-      "fingerprint": "ff75d4cc"
+      "sha256": "295b7094ba44a7e078a70ca865e240dee1d0caf80cd75634d2dc61143bb1876c",
+      "fingerprint": "76929543"
     },
     {
       "path": "style.css",

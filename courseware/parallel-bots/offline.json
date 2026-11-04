@@ -1,6 +1,6 @@
 {
   "id": "parallel-bots",
-  "version": "266f61a325b6e6cfe492fcd0811247c32bb7d0fe36cab836c61abe6caa644ada",
+  "version": "d35398b9efe40386f0f9dd347870169155007b777fff6b06960a52b18cc61703",
   "assets": [
     {
       "path": "audio.js",
@@ -26,7 +26,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "a997920df7ec80737d214c20c1b50e91b958baeda1cd19addaaed2001408086f"
+      "sha256": "0f5d56ee8f9c68cba4f32c7d8f5fe7fdce5d071eb12d5c4fe0efdfae49230ee2"
     },
     {
       "path": "levels.js",

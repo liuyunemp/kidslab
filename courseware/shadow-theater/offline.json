@@ -1,6 +1,6 @@
 {
   "id": "shadow-theater",
-  "version": "cf6440a0218c21fbce37cee170fc3196337cf57089e1bd9f8f8bb5572b17e693",
+  "version": "3432b9ca0fad8fa5e9d34ff3fd629f89efa7cd8906e2ff414112ad8416fa7cb7",
   "assets": [
     {
       "path": "audio/speech/0055759a7acba22cb6e900ef8a0a1a77b4648c27ea466d0e94b8b37dee69b2cc.mp3",
@@ -164,7 +164,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "a2a54b30a4e166a50429e99530e42c5feee62141aa3351e971a13de692617776"
+      "sha256": "456db11bed591af807772e74932553d48d8e70afe0113319722ea29e1f5cda1c"
     },
     {
       "path": "main.js",

@@ -465,6 +465,8 @@ import * as THREE from './vendor/three.module.min.js';
       if (btn) {
         unlockAudio();
         playSound('select');
+        state.touched = true;
+        window.cool?.stage?.('choose-plant');
         resetExperiment(btn.dataset.plant, true);
       }
     });
@@ -488,6 +490,8 @@ import * as THREE from './vendor/three.module.min.js';
     });
     ui.waterBtn.addEventListener('click', () => {
       unlockAudio();
+      state.touched = true;
+      window.cool?.stage?.('water');
       state.humidity = clamp(state.humidity + 16, 0, 100);
       state.waterFlash = 1;
       spawnWaterMist();
@@ -498,6 +502,8 @@ import * as THREE from './vendor/three.module.min.js';
     });
     ui.fertilizeBtn.addEventListener('click', () => {
       unlockAudio();
+      state.touched = true;
+      window.cool?.stage?.('fertilize');
       state.nutrients = clamp(state.nutrients + 22, 0, 100);
       state.fertilizerFlash = 1;
       spawnFertilizer();
@@ -508,6 +514,8 @@ import * as THREE from './vendor/three.module.min.js';
     });
     ui.jumpBtn.addEventListener('click', () => {
       unlockAudio();
+      state.touched = true;
+      window.cool?.stage?.('jump-days');
       const days = Number(ui.jumpDays.value);
       simulateDays(days);
       playSound('grow');
@@ -643,6 +651,8 @@ import * as THREE from './vendor/three.module.min.js';
       state.lastStage = stage;
       playSound('stage');
       log(t('stageLog')(t('stages')[stage]));
+      /* 挂机自己长到开花不算完成：至少要有一次孩子自己的操作（浇水/施肥/快进/选植物）。 */
+      if (stage === 6 && state.touched) window.cool?.complete?.();
     }
   }
 

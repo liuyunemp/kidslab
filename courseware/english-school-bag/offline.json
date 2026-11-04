@@ -1,6 +1,6 @@
 {
   "id": "english-school-bag",
-  "version": "5d6a31e0e39f0547ea2be23f91262920609119f20225cdb39f8d139bb1b60d11",
+  "version": "7e68d59f57b4c23b87cc2153536ed8b8053132fb6c99b82e85a4e8e7b3679346",
   "assets": [
     {
       "path": "audio.js",
@@ -380,7 +380,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "f3e3d168cebc29ca9eee5671774efeb4216890e8b20fcdb279c7cccc040d01cc"
+      "sha256": "971eed9d1b30f0943532c992d12aa1439c86330a75d3be55e53d10251b833153"
     },
     {
       "path": "main.js",

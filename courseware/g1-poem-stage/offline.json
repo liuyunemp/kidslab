@@ -1,6 +1,6 @@
 {
   "id": "g1-poem-stage",
-  "version": "987d68a3ef19a4c8246bf109045cbf92e2967890ba9ecf364e0745408c409235",
+  "version": "00b35eefd2b03469e2a37b11ff03fd807133036d42af9790ebb0fda303c074e9",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -250,7 +250,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "fb66f5ca593be3af7d029852f46161a989bcfc7f2bee7537789f0dd7cb124e79"
+      "sha256": "1770821e03eeff50fa38236b2e739daae71b79d37d534eb82c1b5bcda5e74beb"
     },
     {
       "path": "main.js",

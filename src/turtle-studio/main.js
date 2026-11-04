@@ -175,6 +175,8 @@
 
   /* ---------- 动画绘制 ---------- */
   let anim = null;
+  /* 启动时会自动跑一次范例；只有孩子自己点过运行/范例，画完才算一次完整闭环。 */
+  let userRun = false, completionReported = false;
   function play(segs, endState) {
     cancelAnimationFrame(anim);
     const total = segs.reduce((s, g) => s + Math.hypot(g.x1 - g.x0, g.y1 - g.y0), 0);
@@ -202,6 +204,7 @@
       if (!turtle) turtle = { x: endState.x, y: endState.y, a: (endState.a * Math.PI) / 180 };
       drawTurtle(turtle);
       if (!done) anim = requestAnimationFrame(frame);
+      else if (userRun && !completionReported) { completionReported = true; window.cool?.complete?.(); }
     }
     anim = requestAnimationFrame(frame);
   }
@@ -272,7 +275,7 @@
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = name;
-      b.addEventListener('click', () => { $('#code').value = code; run(); });
+      b.addEventListener('click', () => { $('#code').value = code; userRun = true; window.cool?.stage?.('load-example'); run(); });
       box.appendChild(b);
     }
   }
@@ -293,22 +296,22 @@
     renderDocs();
   }
 
-  $('#runBtn').addEventListener('click', run);
+  $('#runBtn').addEventListener('click', () => { userRun = true; window.cool?.stage?.('run-code'); run(); });
   $('#clearBtn').addEventListener('click', () => { cancelAnimationFrame(anim); drawBase(); drawTurtle({ x: 0, y: 0, a: -Math.PI / 2 }); });
   $('#code').addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); run(); }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); userRun = true; window.cool?.stage?.('run-code'); run(); }
   });
   $('#langBtn').addEventListener('click', () => {
     const prev = I18N[lang];
     const wasExample = Object.values(prev.examples).some(([, code]) => code === $('#code').value);
-    window.cool.preferences.toggleLang();
-    if (wasExample || !$('#code').value.trim()) $('#code').value = Object.values(I18N[window.cool.preferences.lang].examples)[2][1];
+    window.cool?.preferences?.toggleLang();
+    if (wasExample || !$('#code').value.trim()) $('#code').value = Object.values(I18N[window.cool?.preferences?.lang ?? lang].examples)[2][1];
   });
-  $('#themeBtn').addEventListener('click', () => window.cool.preferences.toggleTheme());
-  window.cool.preferences.subscribe(({ kind }) => {
-    $('#themeBtn').textContent = window.cool.preferences.theme === 'light' ? '🌙' : '☀️';
+  $('#themeBtn').addEventListener('click', () => window.cool?.preferences?.toggleTheme());
+  window.cool?.preferences?.subscribe(({ kind }) => {
+    $('#themeBtn').textContent = window.cool?.preferences?.theme === 'light' ? '🌙' : '☀️';
     if (kind === 'theme') { run(); return; }
-    lang = window.cool.preferences.lang;
+    lang = window.cool?.preferences?.lang ?? lang;
     applyLang();
   });
 
@@ -323,7 +326,7 @@
   addEventListener('resize', resize);
 
   applyLang();
-  $('#themeBtn').textContent = window.cool.preferences.theme === 'light' ? '🌙' : '☀️';
+  $('#themeBtn').textContent = window.cool?.preferences?.theme === 'light' ? '🌙' : '☀️';
   $('#code').value = I18N[lang].examples.spiral[1];
   resize();
   run();

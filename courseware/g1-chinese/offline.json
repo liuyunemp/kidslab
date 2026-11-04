@@ -1,6 +1,6 @@
 {
   "id": "g1-chinese",
-  "version": "d8283881ae34967997867d1389bc60f3c28b48b8e66f4ae27ca014441234fb45",
+  "version": "4d6b2e15409da93382fa7788efafe9a59024e5784024f835abc3d61c4d3c4db3",
   "assets": [
     {
       "path": "audio.js",
@@ -13,8 +13,8 @@
     },
     {
       "path": "engine.js",
-      "sha256": "fa2e29733ae0c269391586224af60893a38d7c8170a06846659244a483783c8a",
-      "fingerprint": "fb06f314"
+      "sha256": "9c8c2689914cad3cdb3c27aaba940143d091cfe103e5b8cd1c3bf12ac03d7d24",
+      "fingerprint": "691c53e7"
     },
     {
       "path": "hub.css",
@@ -28,7 +28,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "830e106ee56206cb5657884c8ace56f71db6799e8d91da59342bab17d91f6e0d"
+      "sha256": "549dec6fe17c4df09bd4c294b1b00f475a0b8c88431458389e74a69e2203a49c"
     },
     {
       "path": "level-model.js",
@@ -42,8 +42,8 @@
     },
     {
       "path": "main.js",
-      "sha256": "dbb7b8cd8e3624c8704c38cec7257e5cd26c37fb4f350e0493aa12b1f48f9af7",
-      "fingerprint": "8c6d14da"
+      "sha256": "9100cc73a708cdfdf340c71936b5f0b2a8ae7776b3fe264ec1f6c3f43dbba94e",
+      "fingerprint": "15c467e7"
     },
     {
       "path": "style.css",

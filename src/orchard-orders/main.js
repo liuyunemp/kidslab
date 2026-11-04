@@ -282,6 +282,7 @@ import { orchard, validOrchard } from './random-model.js';
   }
   function plant() {
     startAudio();
+    window.cool?.stage?.('plant-orchard');
     if (!preview || stage !== 'draw') { show(t('empty')); return; }
     const pcs = rectCells(preview);
     if (pcs.some((i) => isStone(i))) { show(t('badStone')); sfx.wrong(); return; }
@@ -337,6 +338,7 @@ import { orchard, validOrchard } from './random-model.js';
     sfx.grow();
   }
   function finishHarvest() {
+    window.cool?.complete?.();
     const o = order();
     stage = 'done';
     coins += 10 + orderIndex;

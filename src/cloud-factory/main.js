@@ -458,6 +458,7 @@
   function precipitate() {
     if (state.completed || state.delivery) return;
     state.idle = 0;
+    window.cool?.stage?.('precipitate');
     const order = ORDERS[state.order];
     if (order.need === 'fog') {
       if (state.fogBank >= FOG_NEED) finish('fog', state.lift);
@@ -486,6 +487,7 @@
       return;
     }
     const stars = state.budget > 68 ? 3 : state.budget > 38 ? 2 : 1;
+    if (!state.completed) window.cool?.complete?.();
     state.totalStars += stars; state.completed = true; ui.next.hidden = false;
     if (type === 'snow' && !state.snowMagicSeen) {
       state.snowMagicSeen = true;
@@ -500,6 +502,7 @@
 
   function nextOrder() {
     if (!state.completed) return;
+    window.cool?.stage?.('next-order');
     if (state.order >= ORDERS.length - 1) {
       ui.winTitle.textContent = t('winTitle'); ui.winDesc.textContent = t('winDesc')(state.totalStars); ui.win.hidden = false; return;
     }

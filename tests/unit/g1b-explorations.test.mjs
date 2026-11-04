@@ -2,7 +2,36 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {courses,journey} from '../g1b-journeys.mjs';
-import {initialState,reduce,restore,serialize,valueOf,moneyValue,columnValues,validTrace,sentenceFor,speechText} from '../../src/g1b-character-lab/exploration-model.js';
+import {initialState,reduce,restore,serialize,mergeSaved,valueOf,moneyValue,columnValues,validTrace,sentenceFor,speechText} from '../../src/g1b-character-lab/exploration-model.js';
+test('存档损坏或跨版本时保留已完成发现，不再整档清零',()=>{
+  const c=courses.find(c=>c.kind==='character');
+  const done=[c.activities[0].id,c.activities[3].id];
+  const salvage=restore(c,{version:2,courseId:c.id,done,log:[{type:'not-an-action'}]});
+  assert.deepEqual(salvage.done,done);
+  assert.equal(salvage.recovered,true);
+  assert.deepEqual(restore(c,{version:9,courseId:c.id,done}).done,done);
+  // 别的课件的存档仍然不认，不能把进度记错到本课
+  assert.equal(restore(c,{version:2,courseId:'someone-else',done}).done.length,0);
+});
+test('多标签存档合并：done 求并集，采用较新的那份快照',()=>{
+  const c=courses[0];
+  const older={version:2,courseId:c.id,done:[c.activities[0].id],log:[],savedAt:1};
+  const newer={version:2,courseId:c.id,done:[c.activities[1].id],log:[{type:'select',index:1}],savedAt:2};
+  const merged=mergeSaved(c,older,newer);
+  assert.deepEqual(new Set(merged.done),new Set([c.activities[0].id,c.activities[1].id]));
+  assert.equal(merged.savedAt,2);
+  assert.equal(merged.log.length,1);
+  assert.equal(mergeSaved(c,null,newer),newer);
+  assert.equal(mergeSaved(c,{...older,courseId:'someone-else'},newer),newer);
+});
+test('课件存档写入先合并再落盘，写失败留待下次重试',async()=>{
+  const src=await readFile('src/g1b-character-lab/main.js','utf8');
+  assert.match(src,/localStorage\.setItem\(key,JSON\.stringify\(mergeSaved\(course,stored,serialize\(state\)\)\)\)/);
+  assert.match(src,/function flushSave/);
+  assert.match(src,/addEventListener\('pagehide',flushSave\)/);
+  // 不允许再出现绕过合并、失败即丢的旧写法
+  assert.doesNotMatch(src,/localStorage\.setItem\(key,JSON\.stringify\(serialize\(state\)\)\)/);
+});
 test('a replayed exploration reports a fresh completion without duplicating saved achievements',()=>{
  const c=courses.find(c=>c.kind==='character');let s=initialState(c);
  const play=()=>{let last;for(const action of journey(c,c.activities[0])){last=reduce(c,s,action);s=last.state;}return last;};
@@ -27,8 +56,10 @@ for(const c of courses){
    s=reduce(c,s,{type:'reset'}).state;assert.equal(s.done.length,8-i,'reset never awards or removes discoveries');
   }
   assert.equal(reduce(c,s,{type:'select',index:8}).ok,false);
-  assert.equal(restore(c,{version:1,done:s.done}).done.length,0);
-  assert.equal(restore(c,{...serialize(s),log:[{type:'operate'},null]}).done.length,0);
+  /* 未知版本的旧存档不再整档丢弃：只信本课合法的已完成发现 */
+  assert.deepEqual(new Set(restore(c,{version:1,done:s.done}).done),new Set(s.done));
+  /* 日志中间出现非法动作时停在最后一个合法状态，已完成发现保留 */
+  assert.deepEqual(new Set(restore(c,{...serialize(s),log:[{type:'operate'},null]}).done),new Set(s.done));
   let free=reduce(c,initialState(c),{type:'free',value:true}).state;
   for(const action of journey(c,c.activities[0])){if(action.type!=='shift')free=reduce(c,free,action).state;}
   assert.equal(free.done.length,0);

@@ -255,6 +255,7 @@
 
   function addBlock(kind, path = selectedPath) {
     startAudio();
+    window.cool?.stage?.('add-note');
     const arr = pathToChildren(path);
     arr.push(kind === 'loop' ? loopBlock() : noteBlock(kind));
     render();
@@ -420,6 +421,8 @@
   function checkScore(fromPlay = false) {
     const flat = flatten(score).map((e) => e.sound);
     if (same(flat, currentTarget())) {
+      /* 只有孩子自己写满关卡并手动检查才算通关：空乐谱、自由模式与自动播放演示都不算。 */
+      if (!fromPlay && mode === 'levels' && flat.length && currentTarget().length) window.cool?.complete?.();
       const stars = starsForScore();
       updateStatus(`${t('perfect')} ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`);
       if (mode === 'bug') showModal('🐞', t('bugWin'), t('perfect'), false);
@@ -452,6 +455,7 @@
 
   function setMode(nextMode) {
     mode = nextMode;
+    window.cool?.stage?.('switch-mode');
     stopPlay();
     selectedPath = 'root';
     if (mode === 'bug') { score = ensureIds(clone(BUG_SCORE)); updateStatus(t('bugTip')); }
@@ -497,7 +501,7 @@
     document.querySelectorAll('.tab').forEach((tab) => tab.addEventListener('click', () => setMode(tab.dataset.mode)));
     levelStrip.addEventListener('click', (e) => {
       const b = e.target.closest('[data-level]'); if (!b) return;
-      levelIndex = Number(b.dataset.level); mode = 'levels'; score = []; selectedPath = 'root'; render();
+      levelIndex = Number(b.dataset.level); mode = 'levels'; score = []; selectedPath = 'root'; window.cool?.stage?.('select-level'); render();
     });
     playBtn.addEventListener('click', () => playing ? stopPlay() : startPlay(flatten(score)));
     targetBtn.addEventListener('click', () => startPlay(targetEvents(), true));

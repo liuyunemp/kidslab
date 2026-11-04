@@ -1,6 +1,6 @@
 {
   "id": "sudoku-zoo",
-  "version": "692d88e276259ae28e0834d6523439d346db82851007ce7568743e6213654bc8",
+  "version": "28221e86e9a87dcbb90860207715fc17a4dd9b1c36859f11c3c4b1f100603427",
   "assets": [
     {
       "path": "classic-puzzles.js",
@@ -13,7 +13,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "2ee02627d864a3add941774ec12f87e6ba48e993299608b69a580b89d54ede2c"
+      "sha256": "36429861abf064543d9808193eebddaeef04038de1ed9ba2642b98a692459d8d"
     },
     {
       "path": "main.js",

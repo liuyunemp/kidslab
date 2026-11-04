@@ -1,6 +1,6 @@
 {
   "id": "robot-breakfast",
-  "version": "7dd068fa13437357af087094c858f5a983190eba2501155793ae4695b32444a3",
+  "version": "1e7de7c530d361c37f476563a53300dc1766cb8d7ba5d16726fd9a42bd21c3ac",
   "assets": [
     {
       "path": "course.json",
@@ -8,12 +8,12 @@
     },
     {
       "path": "index.html",
-      "sha256": "4e9d28fdf33c26d161ac3b86b9a5a66b21184afd16fb26714fdd53545e52a778"
+      "sha256": "8341d6843219be4913b7cfc6a6a136fe96256911a900f3ee0615113a6d30f526"
     },
     {
       "path": "main.js",
-      "sha256": "8240bdcffe50a6c7e5aa130f1a73579584ce2b283642bea1cb0f784c5487051d",
-      "fingerprint": "c51015ac"
+      "sha256": "e8dbfa6a36aabd95f8505ac986bbadd332dc92b167861471c9774df891f3c3b9",
+      "fingerprint": "505a2207"
     },
     {
       "path": "style.css",

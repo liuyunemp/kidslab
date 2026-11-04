@@ -1,6 +1,6 @@
 {
   "id": "drone-post",
-  "version": "16193fc647308821b5304781e8e151131f1dddea62806ad2280a5482a985a445",
+  "version": "93122caddd19f2edb8406a27692b6dc02feadb8814fbe6631082554c8ff9d062",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "301174b9fea17d1247d446963a5bd37b6a7cbf309a36f321caabd36866a349e8"
+      "sha256": "5db81ec553749ab4d70cf653e82bb4314c58a76ae6a364088fed457810ad1a90"
     },
     {
       "path": "main.js",

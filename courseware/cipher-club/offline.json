@@ -1,6 +1,6 @@
 {
   "id": "cipher-club",
-  "version": "e99a6841e19c4055b4c86470d449b2d8f474fc86b4b0832c779f0dbb043dbbb8",
+  "version": "662daa52412a01e7e54b9d17311e8219aec62255002443cc273a30b4aa9f3b78",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "a6b502c8516441bbdf6f3d8b1979d66024c14e2c82e4975fd83312959d5fce31"
+      "sha256": "db90b376dc103e05ab8cdaa1a00baf1d5a90566b954a68ee2c5a2f482bbe182c"
     },
     {
       "path": "main.js",

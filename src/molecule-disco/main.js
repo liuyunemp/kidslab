@@ -182,6 +182,7 @@
   }
 
   function configureMaterial() {
+    window.cool?.stage?.('change-material');
     const m = mat();
     ui.temp.min = String(m.min); ui.temp.max = String(m.max); ui.temp.step = state.material === 'iron' ? '5' : '1';
     state.temp = m.start; state.targetTemp = m.start; ui.temp.value = String(m.start);
@@ -191,6 +192,7 @@
   }
 
   function snapInput(raw) {
+    window.cool?.stage?.('cross-point');
     const m = mat();
     let v = raw;
     const points = m.sublimates ? [{ p: m.boil, k: 'boil' }] : [{ p: m.melt, k: 'melt' }, { p: m.boil, k: 'boil' }];
@@ -255,6 +257,8 @@
     const ch = CHALLENGES[state.challenge];
     if (!state.done.has(state.challenge) && ch.test()) {
       state.done.add(state.challenge); toast(t('done'));
+      /* 第 4 关（切到铁）初始状态就满足，不能算孩子的完成动作；全部完成时一律记完成。 */
+      if (state.challenge !== 3 || state.done.size === CHALLENGES.length) window.cool?.complete?.();
       if (state.done.size === CHALLENGES.length) setTimeout(showWin, 500);
       render();
     }

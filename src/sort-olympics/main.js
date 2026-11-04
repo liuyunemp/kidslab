@@ -116,6 +116,7 @@
   }
   function comparePair(i, j) {
     if (Math.abs(i - j) !== 1) { setNarrator(t('adjacentOnly')); return; }
+    window.cool?.stage?.('compare-pair');
     selected = [i, j].sort((a, b) => a - b); pendingPair = selected.slice(); compareCount++; penguins.forEach((p, k) => p.glow = selected.includes(k));
     setNarrator(t('compared')(penguins[selected[0]].h, penguins[selected[1]].h)); updateHud(); updateControls(); render();
   }
@@ -127,6 +128,7 @@
     if (isSorted()) winManual(); else setNarrator(t('manualReady'));
   }
   function winManual() {
+    window.cool?.complete?.();
     const s = starText(); setNarrator(t('sorted')(compareCount, swapCount, s)); ui.modalEmoji.textContent = '🏅🐧'; ui.modalTitle.textContent = t('judgeWhistle'); ui.modalDesc.textContent = t('sorted')(compareCount, swapCount, s); ui.modal.hidden = false; burst();
   }
 

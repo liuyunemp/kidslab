@@ -294,6 +294,7 @@
 
   async function runProgram() {
     if (state.running) return;
+    window.cool?.stage?.('run-program');
     const program = filledProgram();
     if (!program.length) { setTip(t('disasterMissing')); sfx.bad(); return; }
     state.running = true; state.current = -1; resetStage(); setTip(t('running')); render();
@@ -321,6 +322,7 @@
   }
 
   function win(stepCount) {
+    window.cool?.complete?.();
     const level = LEVELS[state.level];
     const stars = Math.max(1, Math.min(3, 3 - Math.max(0, stepCount - level.best)));
     state.stars[level.key] = Math.max(state.stars[level.key] || 0, stars); persistStars();

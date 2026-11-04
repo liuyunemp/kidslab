@@ -119,7 +119,7 @@ import { parameterSet, validParameters } from './random-model.js';
       b.role = 'tab';
       b.textContent = t.types[key];
       b.classList.toggle('on', key === type);
-      b.addEventListener('click', () => { type = key; renderTabs(); renderSliders(); draw(); });
+      b.addEventListener('click', () => { type = key; window.cool?.stage?.('switch-curve'); renderTabs(); renderSliders(); draw(); });
       box.appendChild(b);
     }
   }
@@ -138,6 +138,7 @@ import { parameterSet, validParameters } from './random-model.js';
       Object.assign(input, { id: `slider-${type}-${p}`, type: 'range', min, max, step, value: values[type][p] });
       input.addEventListener('input', () => {
         values[type][p] = +input.value;
+        window.cool?.stage?.('drag-param');
         $(`#v-${p}`).textContent = fmt(+input.value);
         draw();
       });
@@ -237,9 +238,9 @@ import { parameterSet, validParameters } from './random-model.js';
     $('#info').innerHTML = preset.info(p).map((s) => `<p>${s}</p>`).join('');
   }
 
-  $('#langBtn').addEventListener('click', () => window.cool.preferences.toggleLang());
-  $('#themeBtn').addEventListener('click', () => window.cool.preferences.toggleTheme());
-  window.cool.bindI18n(I18N, {
+  $('#langBtn').addEventListener('click', () => window.cool?.preferences?.toggleLang());
+  $('#themeBtn').addEventListener('click', () => window.cool?.preferences?.toggleTheme());
+  window.cool?.bindI18n(I18N, {
     onChange({ kind, lang: nextLang, theme, t }) {
       $('#themeBtn').textContent = theme === 'light' ? '🌙' : '☀️';
       if (kind === 'theme') { draw(); return; }

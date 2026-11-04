@@ -147,6 +147,7 @@
   function setTip(x) { els.tip.textContent = x; }
 
   function initLevel() {
+    window.cool?.stage?.('new-level');
     const l = LEVELS[state.level];
     state.rules = l.start.map((r) => ({ id: uid(), c1: r.c1, op: r.op || '', c2: r.c2 || l.conds[0], food: r.food }));
     state.elseFood = l.elseFood;
@@ -267,6 +268,7 @@
   }
 
   function win() {
+    window.cool?.complete?.();
     const level = LEVELS[state.level];
     els.winTitle.textContent = t('winTitle'); els.winText.textContent = t('winText')(level.animals.length);
     $('#winEmoji').textContent = state.level === LEVELS.length - 1 ? '🎊' : '🎉';

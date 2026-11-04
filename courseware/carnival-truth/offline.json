@@ -1,6 +1,6 @@
 {
   "id": "carnival-truth",
-  "version": "68e2081af0e9fe0995632955c063932d21aa309f8e3df58e6f3f42f4d2d12219",
+  "version": "7e418afd22314295e2a019f2348dcd74bd444eb5dec5d73fd8a12d0cafe71739",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "07411d67e64a8b92f41a4542e40f90bd56e4b936392a852ed04a3909a0e157dd"
+      "sha256": "c32d0530118eb1fb83400077cb5eb65b96fbc2ee8b391e4c90578a9dfe8974df"
     },
     {
       "path": "main.js",

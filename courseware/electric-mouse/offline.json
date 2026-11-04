@@ -1,6 +1,6 @@
 {
   "id": "electric-mouse",
-  "version": "51706cebf62070bbba92a2023bd88171e203dbfd6bec07fc590d9be19bc3c6ec",
+  "version": "61d22f9f23079c3c1c9ecb17c95309c4c54151165b0507a4a22e1e1cbe9f757f",
   "assets": [
     {
       "path": "circuit-model.js",
@@ -23,7 +23,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "4f4a42487109e6e7f4148f4746ddf2074872ce4f888d315e8596b9c0420269f5"
+      "sha256": "9310ff5089f1e1d771aceafe43dc797ce2140167362010d5acacf7ae4f013410"
     },
     {
       "path": "main.js",

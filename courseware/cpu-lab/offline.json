@@ -1,6 +1,6 @@
 {
   "id": "cpu-lab",
-  "version": "69e9f38074ae6c10c2f6893637334f643766893020595427c5a84eb41154abcb",
+  "version": "8fb83ffa436bb5e74c78cd5d69facd9c72d7077267f482023bbcbe500e939f3f",
   "assets": [
     {
       "path": "course.json",
@@ -8,7 +8,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "a38bae4ec72b587b824d4c7fef1a776eee1f6c1097ed7812a4cae28b0323cbdd"
+      "sha256": "78004d117fa11dcde20490aae75e44ba85d11161f66440447bab10a4ea9966e4"
     },
     {
       "path": "main.js",

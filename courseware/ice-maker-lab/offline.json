@@ -1,6 +1,6 @@
 {
   "id": "ice-maker-lab",
-  "version": "cc464c9c43c7d27ecf8a06f2ecd69c9a9690c270580fbacf0bde87820f97d131",
+  "version": "2dda5742c4df8b5ad858e6ae279464d0fdc04cde9d091229143e55bf6e0ee761",
   "assets": [
     {
       "path": "audio.js",
@@ -27,7 +27,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "9cca79f96a5a8426361ed4e96d7ef3043f6619b309f36e3a2541c802a726d029"
+      "sha256": "5d4ac2663464c2a58bc60043adac197127d85468dbd5a1795347939ac8d8ccb7"
     },
     {
       "path": "main.js",

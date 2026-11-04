@@ -1,6 +1,6 @@
 {
   "id": "ohms-law-lab",
-  "version": "fa4aee65031d5eb0c04e4f876cb84d613cc24409c6237316d06fdc8d44cdcd66",
+  "version": "8da09748ddff52cdd1f456257c81113d79a71e448ffda3fabd1b10a23f6b1a6b",
   "assets": [
     {
       "path": "audio.js",
@@ -17,7 +17,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "76d73f0139a550ff5145bfd62645b8503fcf7dd84194466369bd5d174bbe9506"
+      "sha256": "d2a29f64e4707055864bf759a9352e11b1bb5770315faa4b3c162936ebb9eb14"
     },
     {
       "path": "main.js",

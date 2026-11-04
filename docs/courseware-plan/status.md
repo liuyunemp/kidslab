@@ -414,3 +414,36 @@ Agent 每次完成计划项后必须同步更新：
 | 行为分析埋点 | 中 | 缺口 | 缺口 | 不适用：无用户身份 | 缺口：endpoint 缺失时应空操作 | `docs/analytics.md`、`scripts/track.js`、`cloudflare/analytics/` |
 | GitHub Pages 发布 | 中 | 部分：workflow 运行 `npm run build` | 缺口 | 不适用：GitHub Actions 权限由仓库配置控制 | 缺口：发布失败回滚依赖 Pages 历史版本 | `.github/workflows/deploy.yml` |
 
+## 可靠性修复：漏记 / 错记 / 白屏 / 自动退回主站（2026-11-04）
+
+来源：真实使用者（安卓平板/手机 Chrome 与安装版 PWA）反馈「不好用、漏记、错记、自动关闭」。
+
+| 症状 | 根因 | 修复 | 落点 |
+| --- | --- | --- | --- |
+| 玩着玩着白屏 | 除 `ohms-law-lab` 外没有课件处理 `webglcontextlost`；安卓切后台被系统回收 GPU 后 three.js 停渲 | SDK 捕获上下文丢失，显示「恢复 / 返回列表」层，`webglcontextrestored` 自动收起 | `scripts/sdk/core.js` |
+| 白屏无提示 | 全站无 `window.onerror` / `unhandledrejection` 兜底 | 启动 5 秒内异常或无有效 canvas 时显示恢复层；资源加载失败不打扰 | 同上 |
+| 玩着玩着回主站 | 星图返回按钮 42px 常驻右下角玩法区；安卓边缘返回手势无拦截 | 按钮改 48px、半透明、8 秒淡出、二次点击确认；返回手势首次拦截并提示 | `scripts/build.mjs`、`scripts/sdk/core.js` |
+| 进度漏记 | 16 款课件从不调用 `cool.stage/complete`；关卡 ✓ 只有 17 款会写 | 全部补齐，并新增覆盖门禁测试；主站跨标签 `storage` 同步刷新 | 16 个 `src/<id>/main.js`、`tests/unit/progress-coverage.test.mjs`、`assets/js/app.js` |
+| 进度清零 | 存档重放任一动作失败即 `initialState()` 全清 | 分层降级：先保 `done`，日志停在最后一个合法状态；未知版本只做迁移 | `src/g1b-character-lab/exploration-model.js` + `random:sync` 17 份 |
+| 进度错乱 | 整份快照读写、无多标签合并；清除进度只清 `kidslab.progress.` | `mergeSaved()` 合并写入 + `savedAt`；清除进度同时清关卡 ✓ | 同上、`assets/js/app.js` |
+| 保存失败静默 | `localStorage.setItem` 抛错被 `catch{}` 吞掉 | 内存保留 + `pagehide`/`visibilitychange` 重试 + 只提示一次 | `scripts/sdk/core.js`、17 份 `main.js` |
+| 离线白屏 | SW 导航无缓存时直接抛错，浏览器给网络错误页 | 返回内联兜底页（重试 / 回列表），不自动跳转 | `scripts/sw.js` |
+| 报表失真 | 上报失败即丢；每次切后台都发 `leave`；误触计一次复玩 | 失败入队重试（≤50 批，每次补发 3 批）；`leave` 每会话一次；`enter` 5 秒去重 | `scripts/track.js`、`docs/analytics.md` |
+
+**验收状态**
+
+- `npm run test:unit`：675 通过 / 0 失败（含新增 `sdk-resilience`、`progress-coverage`、`track-reliability`，以及 `g1b-explorations`、`offline-cache` 的新用例）。
+- `npm run build` 与 `npm run test:e2e`：**按用户约定跳过，待用户统一执行**，不计入本轮通过项。
+- 尚需人工真机验收（安卓平板/手机，Chrome 与安装版 PWA）：
+
+  1. 打开任一带 3D 的课件，切到后台 1 分钟再回来：画面能恢复，或给出「恢复」按钮，控制台无报错。
+  2. 玩到一半按系统返回：第一次只提示「再按一次返回列表」，1.8 秒内再按才回主站。
+  3. 进入任一课件后断开网络再刷新：出现「重试 / 返回列表」兜底页，不是浏览器白页。
+  4. 完成一关后回主站：卡片显示「玩过/已完成」，对应关卡有 ✓；另一个标签同时打开主站，徽章自动刷新。
+  5. 连续玩 3 款此前漏报的课件（如 `cloud-factory`、`sort-olympics`、`wolf-calendar`），主站都能记到。
+  6. 在隐私模式/存储将满的设备上玩一关：出现一次「本机存储空间不足」提示，游戏不中断。
+  7. 长按左下角版本号：能看到本机诊断记录（无个人隐私字段），可清空。
+  8. 375px 与 1280px 下顶栏、恢复层按钮均可点，字号不小于 16px。
+
+> 以上 8 项属于人工验收边界，不能写成「已由 E2E 验证」。
+

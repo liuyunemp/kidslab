@@ -887,6 +887,39 @@ button { font-family: inherit; color: inherit; }
   .card__title { font-size: 16px; }
 }
 
+/* ---------- 本机诊断面板（长按版本号打开） ---------- */
+.sidebar__ver { cursor: help; }
+.sidebar__ver:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.diag-layer {
+  position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center;
+  padding: 16px; background: rgba(18, 16, 30, 0.55);
+}
+.diag-card {
+  width: min(560px, 100%); max-height: min(78vh, 640px); overflow: auto;
+  padding: 18px 18px 14px; border-radius: 18px;
+  background: var(--card); color: var(--ink); box-shadow: 6px 6px 0 var(--shadow);
+}
+.diag-card h2 { margin: 0 0 6px; font-size: 19px; line-height: 1.4; }
+.diag-hint { margin: 0 0 12px; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+.diag-list { margin: 0 0 14px; padding: 0; list-style: none; display: grid; gap: 8px; }
+.diag-row {
+  display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 8px; align-items: baseline;
+  padding: 8px 10px; border-radius: 10px; background: var(--seg-bg);
+  font-size: 14px; line-height: 1.45; overflow-wrap: anywhere;
+}
+.diag-row time { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.diag-row b { font-size: 14px; }
+.diag-row em { color: var(--ink-soft); font-style: normal; }
+.diag-empty { padding: 14px 10px; font-size: 16px; color: var(--ink-soft); text-align: center; }
+.diag-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+.diag-actions button {
+  min-height: 44px; padding: 10px 16px; border-radius: 12px; cursor: pointer;
+  border: 2px solid var(--line); background: transparent; color: var(--ink);
+  font-size: 16px; font-weight: 700;
+}
+.diag-actions .diag-close { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+
 /* ---------- 星图模式 star map · 儿童天文台控制台 ---------- */
 .sr-only {
   position: absolute;

@@ -686,6 +686,7 @@ import {zoomTask,zoomFamily,zoomIdentity,validZoom,zoomQuestion} from './random-
     if (!state.quizOpen || state.quizExp !== exp) openQuiz(exp);
   }
   function answerQuiz(exp, choice) {
+    window.cool?.stage?.('answer-quiz');
     const quiz = t('quizzes')[String(exp)];
     $('choices').querySelectorAll('.choice').forEach((btn) => {
       btn.disabled = true;
@@ -694,6 +695,7 @@ import {zoomTask,zoomFamily,zoomIdentity,validZoom,zoomQuestion} from './random-
     });
     if (choice === quiz[2]) {
       state.stamps[exp] = true;
+      window.cool?.complete?.();
       saveStamps();
       sparkleStation(exp);
       sfx('win');

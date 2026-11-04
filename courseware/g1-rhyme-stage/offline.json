@@ -1,6 +1,6 @@
 {
   "id": "g1-rhyme-stage",
-  "version": "d9441421bedea990d71ffdcaa8d364fd8eafc60ff0f09aa11ad43bda3883582c",
+  "version": "6bfdc7a96ffaff780580cd6bd5979db4f550f153fc753e0eb6948ad54b6e0d02",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -266,7 +266,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "a1fe4a78256bc21c58ce7a0b25d19d7a0c7bebf36a5f2e23e82a77cb433fd52d"
+      "sha256": "05f80c437988d337f29ead5f731cb650c16083687d92786b9ee352c9bb9d2b37"
     },
     {
       "path": "main.js",

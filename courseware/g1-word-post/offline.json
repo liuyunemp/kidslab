@@ -1,6 +1,6 @@
 {
   "id": "g1-word-post",
-  "version": "d0cb170e24f8d2007a81e948a138438d224630466d4d975dd32977310c072375",
+  "version": "7ae907734acd2bbc8b07c72491e197dc8faed4134f49f2274da1b7d284fc4563",
   "assets": [
     {
       "path": "audio/bgm.ogg",
@@ -194,7 +194,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "4886add2f2bdff1733ea8e97a2834729a4035e107fb3ac3ed014c028b27f4b3d"
+      "sha256": "f6aaffdde89339f0698999b67b97aed0da5cca3be9ebf2f818996c7604179c5c"
     },
     {
       "path": "main.js",

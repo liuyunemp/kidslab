@@ -54,6 +54,18 @@ const off = window.cool.speech.subscribe(({ enabled }) => {});
 - `speak()` 返回 `SpeechSynthesisUtterance` 或 `null`；调用方可以挂 `onEnd`。**不要用 `onend` 决定游戏流程**——部分浏览器不触发，应把它当作纯旁白，并在调用方另设兜底计时。
 - 课件朗读失败显示“暂时没能播放，点一下再试”，不影响当前操作。不会主动在首次手势前朗读，也不会在重载完成存档时自动夸奖。
 
+## 韧性层与可观测性（2026-11-04）
+
+SDK 在注入时额外挂一层兜底，目标是「不再白屏、不再丢记录、不再误退出」。全部逻辑自包含、幂等、失败静默，绝不阻塞或打断玩法。
+
+- `cool.diag.read()` 返回本机最近 20 条问题记录（`{ type, detail, at, count }`），`cool.diag.clear()` 清空，`cool.diag.log(type, detail)` 手动记一条，`cool.diag.show('error'|'lost')` 可复用同一套恢复层。记录键为 `kidslab.diag.v1`，只存时间、类型、错误名前 200 字符与次数，不含 UA、堆栈、坐标或任何个人信息。
+- **全局错误兜底**：`error`（仅带 `message` 的运行时异常）与 `unhandledrejection` 会写诊断；若发生在启动 5 秒内，或页面已经没有任何 canvas 且没有 `#nogl` 提示，则显示「恢复 / 返回列表」恢复层。资源（图片/脚本）加载失败不弹层。
+- **WebGL 上下文丢失**：捕获 `webglcontextlost` 时 `preventDefault()` 并显示恢复层，`webglcontextrestored` 自动收起并轻提示。安卓切后台被系统回收 GPU 后，孩子点一下即可回来，不用退出重进。
+- **返回手势**：进入课件先压一条 `history` 哨兵；第一次返回只提示「再按一次返回列表」，1.8 秒内再返回才真的离开。与教材活动入口的 `history.replaceState` 兼容。
+- **首屏骨架**：`load` 后淡出、最长 6 秒自动移除的一层不拦点击的底色，避免慢网络下的「白屏感」。
+- **进度写入 v2**：`kidslab.progress.<id>` 现在带 `version: 2`、`completedAt`、`lastStage`；写入前重读合并，`completed` 只进不退；`localStorage` 写失败（配额满、隐私模式）时保留在内存，于 `visibilitychange`/`pagehide`/下次成功写入时重试，并只提示一次「本机存储空间不足，这次进度可能没存上」。主站监听 `storage` 事件，另一个标签写完立刻刷新徽章与关卡 ✓。
+- 主站长按（或键盘聚焦后回车）左下角版本号可打开「本机诊断记录」，用于现场排查，不上传。
+
 ## 本地语音资源维护
 
 - `npm run speech:generate`：从题面纯函数、明确的提示白名单和反馈文案生成录音清单。新增录音在 Windows 使用 Huihui Desktop / Zira Desktop，英文句中的汉字使用中文音色，编码器由开发依赖 `@ffmpeg-installer/ffmpeg` 提供；普通 build 和 CI 不生成录音，也不调用在线 TTS。

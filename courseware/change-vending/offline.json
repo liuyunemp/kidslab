@@ -1,6 +1,6 @@
 {
   "id": "change-vending",
-  "version": "7ef14d937b7ac91cc5ff13f0c154ea0276880ac4e27d3397c480ef1c66e1aad7",
+  "version": "f7ae6df6a84df272e150b5fa08d82e6f2eaae037ce3687dca66b97e01e3b03e1",
   "assets": [
     {
       "path": "audio.js",
@@ -266,17 +266,17 @@
     },
     {
       "path": "exploration-model.js",
-      "sha256": "cd7858c8f87bed4b3221e1d18f8bc732ca3b88dedc21d7e7df5b821939babda2",
-      "fingerprint": "1610c8ed"
+      "sha256": "601f26503109b561ae1261a677662ca102bccf4354b28539e4e0f9e7de13371f",
+      "fingerprint": "8a1cfb51"
     },
     {
       "path": "index.html",
-      "sha256": "3f6e677618ea6671d99062240cee0c834127b1051e44d489c01f62d18837bbcf"
+      "sha256": "d0f0b9663001484a0c14d28469dc5993638cef1d8c01d69c6067f801e17a34da"
     },
     {
       "path": "main.js",
-      "sha256": "3fbeef1cb5f9547ff2c2d0688e702bd89941f4a474d2cfa77c0e69c74849cb73",
-      "fingerprint": "28165323"
+      "sha256": "13d46823dde7fcf1ca2aa90dc9e6ad761b663d0d517bafb46619c03d5fe14cfd",
+      "fingerprint": "ece3ad3b"
     },
     {
       "path": "narration.js",
@@ -310,8 +310,8 @@
     },
     {
       "path": "scene.js",
-      "sha256": "e3d8ef2fa605db62d2f6a336f68291b5875dcc6e1696c22fb5618de2b78511c5",
-      "fingerprint": "be5182e0"
+      "sha256": "596454be4f9a7a5d56d76980b2dd386a532b2ca074095813a4735dcbd45be93d",
+      "fingerprint": "aa792246"
     },
     {
       "path": "speech-manifest.js",

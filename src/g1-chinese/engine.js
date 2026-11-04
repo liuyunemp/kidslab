@@ -309,6 +309,7 @@ export function initGame({ levels, messages }) {
     if (ok) {
       audio.correct(); audio.star();
       completed[current] = true; saveDone();
+      cool.complete?.();
       rewards = award(rewards, true); saveRewards();
       elMascot.classList.add('cheer'); setTimeout(() => elMascot.classList.remove('cheer'), 700);
       btn.classList.add('opt--ok');
